@@ -1,0 +1,130 @@
+<html>
+<head>
+<title>layout template</title>
+<link rel="stylesheet" href="layout.css">
+<link rel="stylesheet" href="data.css">
+<script src="jquery.js"></script>
+<script src="jquery.touchSwipe.js"></script>
+
+<script>
+
+$(document).ready(function(){
+	$('.article').click(function(){
+		var name = $(this).attr('id')
+		return setPageTo(name)
+	})
+
+	$('.viewer')
+		.swipe({
+			swipeLeft: nextPage,
+			swipeRight: prevPage,
+			swipeUp: showIndex,
+			swipeDown: hideIndex
+		})
+})
+
+
+
+function getPages(){
+	return $('.article').map(function(e, v){return v.id}).toArray()
+}
+
+function curPageIndex(){
+	var cur = $('.article.current').attr('id')
+	return getPages().indexOf(cur)
+}
+
+function setPageTo(name){
+	$('.view.current, .article.current').removeClass('current')
+	$('#'+name).addClass('current')
+	$('.view.'+name).addClass('current')
+	return false
+}
+
+function nextPage(){
+	var i = curPageIndex()
+	var PAGES = getPages()
+
+	if(i+1 >= PAGES.length){
+		return
+	}
+
+	setPageTo(PAGES[i+1])
+}
+
+function prevPage(){
+	var i = curPageIndex()
+
+	if(i <= 0){
+		return
+	}
+
+	setPageTo(getPages()[i-1])
+}
+
+function showIndex(){
+	//$('.previews').fadeIn()
+	$('.previews').slideDown()
+}
+
+function hideIndex(){
+	//$('.previews').fadeOut()
+	$('.previews').slideUp()
+}
+
+
+</script>
+</head>
+<body>
+	<div class="container">
+		<div class="content">
+			<div class="section main current">
+				<div class="viewer">
+					<div class="view A current">
+						<h1>Page A</h1>
+						<p>
+						some text...
+						</p>
+					</div>
+					<div class="view B">
+						<h2>Page B</h2>
+					</div>
+					<div class="view C">
+						<h2>Page C</h2>
+					</div>
+					<div class="view D">
+						<h2>Page D</h2>
+					</div>
+				</div>
+				<div class="previews">
+					<div class="article current" id="A">
+						<div class="preview"></div>
+						<div class="text">
+							Article A Title
+						</div>
+					</div>
+					<div class="article" id="B">
+						<div class="preview"></div>
+						<div class="text">
+							Article B Title
+						</div>
+					</div>
+					<div class="article" id="C">
+						<div class="preview"></div>
+						<div class="text">
+							Article C Title
+						</div>
+					</div>
+					<div class="article" id="D">
+						<div class="preview"></div>
+						<div class="text">
+							Article D Title
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- vim:set ts=4 sw=4 spell : -->
+</body>
+</html>
