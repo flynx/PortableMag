@@ -1,0 +1,43 @@
+Priority work
+	[_] 7% basic features
+		[_] real previews
+		| use zoom to show a ribbon...
+		[_] 0% default page templates
+		| a template is a class and predefined content...
+			[_] template examples
+			| this should include CSS docs
+			[_] simgle image with caption
+				[_] Elements
+					[_] image fit to screen
+					[_] caption overlay
+			[_] grid of blocks
+			| might be good to use a table here...
+				[_] Elements
+					[_] list of blocks
+					[_] number of columns
+				[_] block types
+					[_] text
+					[_] viewable image
+					| on click show big version in overlay
+					[_] page
+					| a scaled version of a page...
+			[_] text with title
+			[_] text with image
+			[_] plain
+		[_] 0% default actions
+			[_] show in overlay
+		[_] global navigation bar
+		[_] 42% basic article navigation
+			[X] next page
+			[X] prev page
+			[X] show previews
+			[_] show global navigation bar
+			[_] go home
+			[_] go to article start
+			[_] go to article end
+
+				
+
+
+.
+| vim:set spell :
