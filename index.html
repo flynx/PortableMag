@@ -43,13 +43,13 @@ function setPageTo(name){
 
 function nextPage(){
 	var i = curPageIndex()
-	var PAGES = getPages()
+	var pages = getPages()
 
-	if(i+1 >= PAGES.length){
+	if(i+1 >= pages.length){
 		return
 	}
 
-	setPageTo(PAGES[i+1])
+	setPageTo(pages[i+1])
 }
 
 function prevPage(){
@@ -100,7 +100,7 @@ function toggleIndex(){
 						</p>
 					</div>
 					<div class="view B">
-						<div style="height: 95%; width: 95%; margin: 2%; border: 5px dashed gray;">
+						<div style="height: 95%; width: 95%; margin: 2%; border: 5px dotted gray;">
 							<h2>Page B</h2>
 						</div>
 
@@ -112,6 +112,7 @@ function toggleIndex(){
 						<h2>Page D</h2>
 					</div>
 				</div>
+				<!-- remove this... -->
 				<div class="previews">
 					<div class="article current" id="A">
 						<div class="preview"></div>
