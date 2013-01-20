@@ -5,6 +5,58 @@
 <script src="jquery.js"></script>
 <script>
 
+$(document).ready(function(){
+	$('.page').click(function(){
+		var pages = $('.page')
+		setCurrentPage(pages.index(this))
+	})
+})
+
+function setCurrentPage(n){
+	var pages = $('.page')
+	var cur = $(pages[n])
+
+	$('.current.page').removeClass('current')
+	cur.addClass('current')
+
+	$('.magazine').css({left: -n*pages.width()})
+
+	return cur
+}
+
+function nextPage(){
+	var pages = $('.page')
+	var cur = $('.current.page')
+	return setCurrentPage(Math.min(pages.index(cur)+1, pages.length-1))
+}
+
+function prevPage(){
+	var pages = $('.page')
+	var cur = $('.current.page')
+	return setCurrentPage(Math.max(pages.index(cur)-1, 0))
+}
+
+function setElementScale(elem, scale){
+	return elem.css({
+		'transform': 'scale('+scale+')',
+		'-moz-transform': 'scale('+scale+')',
+		'-o-transform': 'scale('+scale+')',
+		'-ms-transform': 'scale('+scale+')',
+		'-webkit-transform': 'scale('+scale+')',
+	})
+}
+
+function fitNPages(n){
+	if(n==null){
+		n = 1
+	}
+	var pages = $('.page')
+	var scale = $('.viewer').width()/(pages.width()*n)
+
+	setElementScale($('.scaler'), scale)
+}
+
+
 // XXX create magazine...
 function createMagazine(){
 }
@@ -23,88 +75,94 @@ function createPage(article, template){
 </head>
 <body>
 
-<div class="magazine">
-	<div class="cover">
-		Magazine Cover
+<div class="viewer">
+<div class="scaler">
+<div class="aligner">
+	<div class="magazine">
+		<div class="cover page current">
+			Magazine Cover
+		</div>
+
+		<!-- XXX do we need a Magazine Credits page??? -->
+
+		<div class="article">
+			<div class="cover page">
+				Article Cover<br>
+				some more text...
+			</div>
+
+			<!-- XXX do we need an Article Credits page??? -->
+
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+		</div>
+		<div class="article">
+			<div class="cover page">
+				Article Cover
+			</div>
+
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+		</div>
+		<div class="article">
+			<div class="cover page">
+				Article Cover
+			</div>
+
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+		</div>
+		<div class="article">
+			<div class="cover page">
+				Article Cover
+			</div>
+
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+		</div>
 	</div>
-
-	<!-- XXX do we need a Magazine Credits page??? -->
-
-	<div class="article">
-		<div class="cover">
-			Article Cover<br>
-			some more text...
-		</div>
-
-		<!-- XXX do we need an Article Credits page??? -->
-
-		<div class="page">
-			Page
-		</div>
-		<div class="page">
-			Page
-		</div>
-		<div class="page">
-			Page
-		</div>
-	</div>
-	<div class="article">
-		<div class="cover">
-			Article Cover
-		</div>
-
-		<div class="page">
-			Page
-		</div>
-		<div class="page">
-			Page
-		</div>
-		<div class="page">
-			Page
-		</div>
-		<div class="page">
-			Page
-		</div>
-		<div class="page">
-			Page
-		</div>
-	</div>
-	<div class="article">
-		<div class="cover">
-			Article Cover
-		</div>
-
-		<div class="page">
-			Page
-		</div>
-		<div class="page">
-			Page
-		</div>
-		<div class="page">
-			Page
-		</div>
-		<div class="page">
-			Page
-		</div>
-	</div>
-	<div class="article">
-		<div class="cover">
-			Article Cover
-		</div>
-
-		<div class="page">
-			Page
-		</div>
-		<div class="page">
-			Page
-		</div>
-		<div class="page">
-			Page
-		</div>
-		<div class="page">
-			Page
-		</div>
-	</div>
+</div>
+</div>
 </div>
 
 
