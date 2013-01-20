@@ -1,0 +1,48 @@
+
+/* all elements that will behave like a page */
+.cover, .page {
+	width: 200px;
+	height: 150px;
+	display: inline-block;
+	vertical-align: bottom;
+
+	border: solid blue 1px;
+
+	font-size: 12px
+}
+
+
+/* general layout */
+
+.magazine {
+	/* this makes the magazine behave like a ribbon */
+	width: auto;
+	overflow: visible;
+	white-space: nowrap;
+	font-size: 0px;
+
+	/* default styles */
+	background: gray;
+}
+
+.magazine > .cover {
+	background: white;
+}
+
+.article {
+	width: auto;
+	overflow: visible;
+	white-space: nowrap;
+	font-size: 0px;
+
+	display: inline-block;
+}
+
+.article > .cover {
+	background: white;
+}
+
+.page {
+	background: silver;
+}
+

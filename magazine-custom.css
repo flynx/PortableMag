@@ -1,0 +1,16 @@
+/* magazine customization */
+.magazine {
+	background: gray;
+}
+
+.magazine > .cover {
+	background: white;
+}
+
+.article > .cover {
+	background: white;
+}
+
+.page {
+	background: silver;
+}
