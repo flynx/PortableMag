@@ -3,13 +3,25 @@
 <title>Magazine</title>
 <link rel="stylesheet" href="magazine.css">
 <script src="jquery.js"></script>
+<script src="jquery.touchSwipe.js"></script>
 <script>
 
 $(document).ready(function(){
-	$('.page').click(function(){
-		var pages = $('.page')
-		setCurrentPage(pages.index(this))
-	})
+	$('.viewer')
+		.swipe({
+			/* for some reason these do not work within pages... */
+			swipeLeft: nextPage,
+			swipeRight: prevPage,
+			swipeUp: function(){fitNPages(6)},
+			swipeDown: function(){fitNPages(1)},
+			click: function(evt, elem){
+				if($(elem).hasClass('page')){
+					var pages = $('.page')
+					setCurrentPage(pages.index(elem))
+				}
+				return true
+			}
+		})
 })
 
 function setCurrentPage(n){
