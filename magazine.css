@@ -1,14 +1,22 @@
 
 /* all elements that will behave like a page */
 .cover, .page {
-	width: 200px;
-	height: 150px;
+	/* XXX make this browser-sized... */
 	display: inline-block;
 	vertical-align: bottom;
 
-	border: solid blue 1px;
+	overflow: auto;
 
-	font-size: 12px
+	/* XXX need these to be the same as the magazine, for some reason does not work...
+	 *	one way to go is to use a fixed page layout and scale things manually.
+	 */
+	
+	width: 400px;
+	height: 300px;
+
+	font-size: 12px;
+
+	border: solid blue 1px;
 }
 
 
@@ -16,13 +24,15 @@
 
 .magazine {
 	/* this makes the magazine behave like a ribbon */
-	width: auto;
+	width: 100%;
+	height: 100%;
 	overflow: visible;
 	white-space: nowrap;
 	font-size: 0px;
 
-	/* default styles */
 	background: gray;
+
+	border: solid blue 1px;
 }
 
 .magazine > .cover {
