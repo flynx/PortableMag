@@ -1,151 +1,310 @@
 <html>
 <head>
-<title>layout template</title>
-<link rel="stylesheet" href="layout.css">
+<title>Magazine</title>
+<link rel="stylesheet" href="magazine.css">
 <script src="jquery.js"></script>
 <script src="jquery.touchSwipe.js"></script>
-<script src="jquery.exif.js"></script>
-
 <script>
 
 $(document).ready(function(){
-	$('.article').click(function(){
-		var name = $(this).attr('id')
-		return setPageTo(name)
-	})
-
 	$('.viewer')
-		//.click(toggleIndex)
 		.swipe({
-			swipeLeft: nextPage,
-			swipeRight: prevPage,
-			swipeUp: showIndex,
-			swipeDown: hideIndex
+			//swipeLeft: nextPage,
+			//swipeRight: prevPage,
+			swipeStatus: swipeUpdate,
+			// XXX change this to pinch...
+			swipeUp: function(){fitNPages(6)},
+			// XXX change this to pinch...
+			swipeDown: function(){
+				fitNPages(1)
+				// to prevent drag while zooming to affect
+				// the resulting position set it to current 
+				// page...
+				setCurrentPage()
+			},
+			click: function(evt, elem){
+				if($(elem).hasClass('page')){
+					setCurrentPage(elem)
+				}
+				return true
+			}
 		})
+
+	// XXX add splash screen...
+
+	fitNPages(1)
 })
 
+function swipeUpdate(evt, phase, direction, distance){
+	var pages = $('.page')
+	var cur = $('.current.page')
+	var n = pages.index(cur)
+	var scale = getElementScale($('.scaler'))
+	var mag = $('.magazine')
 
+	if( phase=='move' && (direction=='left' || direction=='right') ){
+		// XXX set the transition time to 0...
+		var orig_duration = mag.css('-webkit-transition-duration')
+		mag.css({'-webkit-transition-duration': 0})
+		if (direction == 'left'){
+			//$('.magazine').css({left: -n*cur.width()-distance/scale})
+			$('.magazine').css({left: -n*800-distance/scale})
+		} else if (direction == 'right') {
+			//$('.magazine').css({left: -n*cur.width()+distance/scale})
+			$('.magazine').css({left: -n*800+distance/scale})
+		}
+		mag.css({'-webkit-transition-duration': orig_duration})
 
-function getPages(){
-	return $('.article').map(function(e, v){return v.id}).toArray()
+	} else if ( phase == 'cancel') {
+		setCurrentPage()
+
+	} else if ( phase =='end' ) {
+		// see which page is closer to the middle of the screen and set it...
+		var p = Math.ceil((distance/scale)/cur.width())
+
+		if(direction == 'right') {
+			// prev page...
+			setCurrentPage(Math.max(n-p, 0))
+		} else if (direction == 'left'){
+			// next page...
+			setCurrentPage(Math.min(n+p, pages.length-1))
+		}
+	}
 }
 
-function curPageIndex(){
-	var cur = $('.article.current').attr('id')
-	return getPages().indexOf(cur)
+
+function setCurrentPage(n){
+	var cur
+	if(n == null){
+		cur = $('.current.page')
+		n = $('.page').index(cur) 
+	} else if(typeof(n) == typeof(1)) {
+		cur = $($('.page')[n])
+	} else {
+		cur = n
+		n = $('.page').index(cur) 
+	}
+
+	$('.current.page').removeClass('current')
+	cur.addClass('current')
+
+	$('.magazine').css({left: -n*cur.width()})
+
+	return cur
 }
 
-function setPageTo(name){
-	$('.view.current, .article.current').removeClass('current')
-	$('#'+name).addClass('current')
-	$('.view.'+name).addClass('current')
-	return false
-}
+
 
 function nextPage(){
-	var i = curPageIndex()
-	var pages = getPages()
-
-	if(i+1 >= pages.length){
-		return
-	}
-
-	setPageTo(pages[i+1])
+	var pages = $('.page')
+	var cur = $('.current.page')
+	return setCurrentPage(Math.min(pages.index(cur)+1, pages.length-1))
 }
-
 function prevPage(){
-	var i = curPageIndex()
+	var pages = $('.page')
+	var cur = $('.current.page')
+	return setCurrentPage(Math.max(pages.index(cur)-1, 0))
+}
 
-	if(i <= 0){
-		return
+
+function goToMagazineCover(){
+	setCurrentPage(0)
+}
+function goToArticleCover(){
+	setCurrentPage($('.current.page').parents('.article').children('.page').first())
+}
+
+
+function nextArticle(){
+	var cur = $('.current.page').parents('.article')
+	// we are at the magazine cover cover...
+	if(cur.length == 0){
+		return setCurrentPage(
+			$('.article .page:first-child').first())
 	}
+	// just find the next one...
+	var articles = $('.article')
+	return setCurrentPage(
+		$(articles[Math.min(articles.index(cur)+1, articles.length-1)])
+			.children('.page')
+			.first())
 
-	setPageTo(getPages()[i-1])
 }
-
-function showIndex(){
-	//$('.previews').fadeIn()
-	$('.previews').slideDown(100)
-}
-
-function hideIndex(){
-	//$('.previews').fadeOut()
-	$('.previews').slideUp(100)
-}
-
-function toggleIndex(){
-	if($('.previews').css('display') == 'none'){
-		showIndex()
-	} else {
-		hideIndex()
+// XXX this is almost exactly the same as nextArticle...
+function prevArticle(){
+	var cur = $('.current.page').parents('.article')
+	// we are at the magazine cover cover...
+	if(cur.length == 0){
+		return $('.current.page')
 	}
-	return false
+	// just find the prev one...
+	var articles = $('.article')
+	return setCurrentPage(
+		$(articles[Math.max(articles.index(cur)-1, 0)])
+			.children('.page')
+			.first())
 }
+
+
+
+// Return a scale value for the given element(s).
+// NOTE: this will only return a single scale value...
+function getElementScale(elem){
+	//var transform = elem.css('transform')
+	var vendors = ['o', 'moz', 'ms', 'webkit']
+	var transform = elem.css('transform')
+	var res
+
+	// go through vendor prefixes... (hate this!)
+	if(!transform || transform == 'none'){
+		for(var i in vendors){
+			transform = elem.css('-' + vendors[i] + '-transform')
+			if(transform && transform != 'none'){
+				break
+			}
+		}
+	}
+	// no transform is set...
+	if(!transform || transform == 'none'){
+		return 1
+	}
+	// get the scale value -- first argument of scale/matrix...
+	return parseFloat((/(scale|matrix)\(([^,]*),.*\)/).exec(transform)[2])
+}
+
+function setElementScale(elem, scale){
+	return elem.css({
+		'transform': 'scale('+scale+')',
+		'-moz-transform': 'scale('+scale+')',
+		'-o-transform': 'scale('+scale+')',
+		'-ms-transform': 'scale('+scale+')',
+		'-webkit-transform': 'scale('+scale+')',
+	})
+}
+
+
+
+function fitNPages(n){
+	if(n==null){
+		n = 1
+	}
+	var pages = $('.page')
+	var scale = $('.viewer').width()/(pages.width()*n)
+
+	setElementScale($('.scaler'), scale)
+}
+
+
+
+
+// XXX create magazine...
+function createMagazine(){
+}
+
+// XXX create article (magazine, title, position)...
+function createArticle(magazine, title){
+}
+
+// XXX create page (article, template, position)...
+function createPage(article, template){
+}
+
 
 
 </script>
 </head>
 <body>
-	<div class="container">
-		<div class="content">
-			<div class="section main current">
-				<div class="viewer">
-					<div class="view A current">
-						<h1>Page A</h1>
-						<p>
-						The basic actions here are:<br>
-						<br><b>swipe right</b> &ndash; show next page.
-						<br><b>swipe left</b> &ndash; show previous page.
-						<br><b>swipe up</b> &ndash; show page index.
-						<br><b>swipe down</b> &ndash; hide page index.
-						</p>
-					</div>
-					<div class="view B">
-						<div style="height: 95%; width: 95%; margin: 2%; border: 5px dotted gray;">
-							<h2>Page B</h2>
-						</div>
 
-					</div>
-					<div class="view C">
-						<h2>Page C</h2>
-						<!-- images need caching... -->
-						<!--img src="img.jpg" exif="true" onclick="alert($(this).exifPretty())"/-->
-						<img src="img.jpg"/>
-					</div>
-					<div class="view D">
-						<h2>Page D</h2>
-					</div>
-				</div>
-				<!-- remove this... -->
-				<div class="previews">
-					<div class="article current" id="A">
-						<div class="preview"></div>
-						<div class="text">
-							Article A Title
-						</div>
-					</div>
-					<div class="article" id="B">
-						<div class="preview"></div>
-						<div class="text">
-							Article B Title
-						</div>
-					</div>
-					<div class="article" id="C">
-						<div class="preview"></div>
-						<div class="text">
-							Article C Title
-						</div>
-					</div>
-					<div class="article" id="D">
-						<div class="preview"></div>
-						<div class="text">
-							Article D Title
-						</div>
-					</div>
-				</div>
+<div class="viewer">
+<div class="scaler">
+<div class="aligner">
+	<div class="magazine">
+		<div class="cover page current">
+			Magazine Cover
+		</div>
+
+		<!-- XXX do we need a Magazine Credits page??? -->
+
+		<div class="article">
+			<div class="cover page">
+				Article Cover<br>
+				some more text...
+			</div>
+
+			<!-- XXX do we need an Article Credits page??? -->
+
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+		</div>
+		<div class="article">
+			<div class="cover page">
+				Article Cover
+			</div>
+
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+		</div>
+		<div class="article">
+			<div class="cover page">
+				Article Cover
+			</div>
+
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+		</div>
+		<div class="article">
+			<div class="cover page">
+				Article Cover
+			</div>
+
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
+			</div>
+			<div class="page">
+				Page
 			</div>
 		</div>
 	</div>
-<!-- vim:set ts=4 sw=4 spell : -->
+</div>
+</div>
+</div>
+
+
 </body>
 </html>
