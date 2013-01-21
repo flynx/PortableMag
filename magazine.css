@@ -10,6 +10,7 @@ body {
 	display: inline-block;
 	vertical-align: bottom;
 	text-align: center;
+	overflow: hidden;
 
 	/* XXX need these to be the same as the magazine, for some reason does not work...
 	 *	one way to go is to use a fixed page layout and scale things manually.
@@ -33,6 +34,7 @@ body {
 	display: inline-block;
 	text-align: left;
 	position: relative;
+	overflow: visible;
 
 	/* these set the "safe" marks for page content */
 	width: 800px;
@@ -134,7 +136,6 @@ body {
 
 /* modes */
 .page-view-mode.viewer {
-	background: white;
 }
 
 .page-view-mode .page .content {
@@ -144,9 +145,6 @@ body {
 
 
 .page-view-mode.viewer.dragging {
-	/*
-	background: silver;
-	*/
 }
 .page-view-mode.dragging .page .content {
 }

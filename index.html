@@ -272,8 +272,9 @@ function fitPagesTo(elem, n){
 	//		and if CSS transitions are at play new samples will be off...
 
 
-	// XXX fitting works ONLY in wone direction, if both sides need 
+	// XXX fitting works ONLY in one direction, if both sides need 
 	//		to be adjusted the this breaks everything...
+
 	// do the fitting...
 	if(W-cW/H-cH > 1){
 		rW = W * (cH/H) 
@@ -293,6 +294,7 @@ function fitPagesTo(elem, n){
 	}
 
 	// scale horizontally...
+	// NOTE: this is done so as to keep the scale within the content constant...
 	var scale = vW/(rW*n)
 	// or scale vertically if needed...
 	// XXX broken
@@ -487,7 +489,7 @@ function createPage(article, template){
 			</div>
 			<div class="page">
 				<div class="content">
-					Page
+					<img src="img.jpg" width="200%" style="margin-left: -50%; margin-top: -20%"/>
 				</div>
 			</div>
 		</div>
