@@ -133,9 +133,53 @@ body {
 	background: silver;
 }
 
+.top-toolbar, .bottom-toolbar {
+	display: block;
+	position: absolute;
+	z-index: 1000;
+	text-align: center;
+	overflow: hidden;
+
+	background: black;
+	opacity: 0.4;
+
+	height: 50px;
+	left: 0px;
+}
+
+.top-toolbar {
+	top: 0px;
+	width: 100%;
+}
+
+.bottom-toolbar {
+	bottom: 0px;
+	width: 100%;
+}
+
+.button {
+	display: inline-block;
+	color: white;
+	font-size: 25px;
+	font-weight: bold;
+
+	cursor: hand;
+
+	vertical-align: center;
+
+	width: auto;
+
+	margin-left: 20px;
+	margin-right: 20px;
+}
 
 /* modes */
 .page-view-mode.viewer {
+}
+
+.page-view-mode .top-toolbar,
+.page-view-mode .bottom-toolbar {
+	height: 0px;
 }
 
 .page-view-mode .page .content {

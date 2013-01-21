@@ -36,6 +36,9 @@ $(document).ready(function(){
 				return true
 			}
 		})
+	$('.button.cover').click(goToMagazineCover)
+	$('.button.next-article').click(nextArticle)
+	$('.button.prev-article').click(prevArticle)
 
 	// XXX add splash screen...
 	// XXX
@@ -454,6 +457,14 @@ function createPage(article, template){
 <div class="viewer">
 
 	<!-- XXX add toolbars here... -->
+	<div class="top-toolbar">
+		mooo
+		<div class="button cover">Issue Cover</div>
+		<div class="button prev-article">Prev Article</div>
+		<div class="button next-article">Next Article</div>
+	</div>
+	<div class="bottom-toolbar">
+	</div>
 
 <div class="scaler">
 <div class="aligner">
