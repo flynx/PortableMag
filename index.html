@@ -221,14 +221,18 @@ function fitNPages(n){
 	fitPagesTo(null, n)
 }
 
-// XXX this is a single big function because we need to thread data 
+// NOTE: this is a single big function because we need to thread data 
 //		through to avoid sampling while animating...
+// XXX try and do the fitting with pure CSS...
+// XXX BUG: changing width when content is constrained only horizontally
+//		breaks this...
 function fitPagesTo(elem, n){
 	if(n==null){
 		n = 1
 	}
 	var pages = $('.page')
 	var view = $('.viewer')
+	var content = $('.content')
 	if(elem == null){
 		elem = view
 	} else {
@@ -238,35 +242,49 @@ function fitPagesTo(elem, n){
 	// sample data...
 	var vW = view.width()
 	var vH = view.height()
+	var cW = content.width()
+	var cH = content.height()
 	var W = elem.width()
 	var H = elem.height()
 	var w = pages.width()
 	var h = pages.height()
 	var rW = w
+	var rH = h
 
 	// NOTE: there must be no data sampling after this point...
 	//		this is due to the fact that we will start changing stuff next
 	//		and if CSS transitions are at play new samples will be off...
 
+
+	// XXX fitting works ONLY in wone direction, if both sides need 
+	//		to be adjusted the this breaks everything...
 	// do the fitting...
-	if(W-w/H-h > 1){
-		rW = W * (h/H) 
+	if(W-cW/H-cH > 1){
+		rW = W * (cH/H) 
 		pages.width(rW)
+		pages.height(cH)
 		$('.magazine').css({
-			// NOTE: we can't use direct .width() here because of the transitions...
 			'margin-left': -rW/2
 		})
-	}
-	if(W-w/H-h < 1){
-		pages.height(H * (w/W))
+	} 
+	if(W-cW/H-cH < 1){
+		rH = H * (cW/W)
+		pages.height(rH)
+		pages.width(cW)
+		$('.page').css({
+			'margin-top': -rH/2
+		})
 	}
 
 	// scale horizontally...
 	var scale = vW/(rW*n)
 	// or scale vertically if needed...
-	if(h*scale > vH){
-		scale = vH/h
+	// XXX broken
+	/*
+	if(rH*scale > vH){
+		scale = vH/rH
 	}
+	*/
 
 	setElementScale($('.scaler'), scale)
 	// update position using the new width...

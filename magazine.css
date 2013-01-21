@@ -38,6 +38,10 @@ body {
 	width: 800px;
 	height: 600px;
 
+	top: 50%;
+	/* change to relative units... */
+	margin-top: -300px;
+
 	border: solid red 1px;
 }
 
