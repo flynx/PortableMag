@@ -169,6 +169,11 @@ function setElementScale(elem, scale){
 
 /*********************************************************************/
 
+togglePageDragging = createCSSClassToggler(
+	'.viewer',
+	'dragging')
+
+
 togglePageView = createCSSClassToggler(
 	'.viewer', 
 	'page-view-mode',
@@ -316,10 +321,15 @@ function swipeUpdate(evt, phase, direction, distance){
 		}
 		setTimeout(function(){mag.removeClass('unanimated')}, 5)
 
+	} else if ( phase == 'start') {
+		togglePageDragging('on')
+
 	} else if ( phase == 'cancel') {
+		togglePageDragging('off')
 		setCurrentPage()
 
 	} else if ( phase =='end' ) {
+		togglePageDragging('off')
 		// see which page is closer to the middle of the screen and set it...
 		// do this based on how much we dragged...
 		var p = Math.ceil((distance/scale)/cur.width())
@@ -435,7 +445,9 @@ function createPage(article, template){
 <div class="aligner">
 	<div class="magazine">
 		<div class="cover page current">
-			Magazine Cover
+			<div class="content">
+				Magazine Cover
+			</div>
 		</div>
 
 		<!-- XXX do we need a Magazine Credits page??? -->
@@ -451,70 +463,85 @@ function createPage(article, template){
 			<!-- XXX do we need an Article Credits page??? -->
 
 			<div class="page">
-				Page
+				<div class="content">
+					Page
+				</div>
 			</div>
 			<div class="page">
-				Page
+				<div class="content">
+					Page
+				</div>
 			</div>
 			<div class="page">
-				Page
+				<div class="content">
+					Page
+				</div>
 			</div>
 		</div>
 		<div class="article">
 			<div class="cover page">
-				Article Cover
+				<div class="content">
+					Article Cover
+				</div>
 			</div>
 
 			<div class="page">
-				Page
+				<div class="content">
+					Page
+				</div>
 			</div>
 			<div class="page">
-				Page
+				<div class="content">
+					Page
+				</div>
 			</div>
 			<div class="page">
-				Page
+				<div class="content">
+					Page
+				</div>
 			</div>
 			<div class="page">
-				Page
+				<div class="content">
+					Page
+				</div>
 			</div>
 			<div class="page">
-				Page
+				<div class="content">
+					Page
+				</div>
 			</div>
 		</div>
 		<div class="article">
 			<div class="cover page">
-				Article Cover
+				<div class="content">
+					Article Cover
+				</div>
 			</div>
 
 			<div class="page">
-				Page
+				<div class="content">
+					Page
+				</div>
 			</div>
 			<div class="page">
-				Page
+				<div class="content">
+					Page
+				</div>
 			</div>
 			<div class="page">
-				Page
+				<div class="content">
+					Page
+				</div>
 			</div>
 			<div class="page">
-				Page
-			</div>
-		</div>
-		<div class="article">
-			<div class="cover page">
-				Article Cover
-			</div>
-
-			<div class="page">
-				Page
+				<div class="content">
+					Page
+				</div>
 			</div>
 			<div class="page">
-				Page
-			</div>
-			<div class="page">
-				Page
-			</div>
-			<div class="page">
-				Page
+				<div class="content">
+					Page
+				</div>
 			</div>
 		</div>
 	</div>

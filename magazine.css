@@ -42,7 +42,12 @@ body {
 	/* change to relative units... */
 	margin-top: -300px;
 
-	border: solid red 1px;
+
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;	
+	transition: all 0.2s ease;
 }
 
 /* general layout */
@@ -58,6 +63,11 @@ body {
 
 	background: gray;
 
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;	
+	transition: all 0.2s ease;
 }
 
 .scaler {
@@ -123,13 +133,22 @@ body {
 
 
 /* modes */
-.page-view-mode .viewer {
+.page-view-mode.viewer {
+	background: white;
 }
-.page-view-mode .page {
+.page-view-mode .page .content {
+	opacity: 0;
 }
-.page-view-mode .current.page {
+.page-view-mode .current.page .content {
+	opacity: 1;
 }
 
+.page-view-mode.viewer.dragging {
+	background: silver;
+}
+.page-view-mode.dragging .page .content {
+	opacity: 0.5;
+}
 
 
 
