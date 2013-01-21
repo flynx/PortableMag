@@ -24,6 +24,8 @@ $(document).ready(function(){
 		})
 })
 
+
+
 function setCurrentPage(n){
 	var pages = $('.page')
 	var cur = $(pages[n])
@@ -36,17 +38,56 @@ function setCurrentPage(n){
 	return cur
 }
 
+
+
 function nextPage(){
 	var pages = $('.page')
 	var cur = $('.current.page')
 	return setCurrentPage(Math.min(pages.index(cur)+1, pages.length-1))
 }
-
 function prevPage(){
 	var pages = $('.page')
 	var cur = $('.current.page')
 	return setCurrentPage(Math.max(pages.index(cur)-1, 0))
 }
+
+
+
+function nextArticle(){
+	var pages = $('.page')
+	var cur = $('.current.page').parents('.article')
+	// we are at the magazine cover cover...
+	if(cur.length == 0){
+		var a = $('.article .page:first-child').first()
+		return setCurrentPage(pages.index(a))
+	}
+	// just find the next one...
+	var articles = $('.article')
+	return setCurrentPage(
+		pages.index(
+			$(articles[Math.min(articles.index(cur)+1, articles.length-1)])
+				.children('.page')
+				.first()))
+
+}
+// XXX this is almost exactly the same as nextArticle...
+function prevArticle(){
+	var pages = $('.page')
+	var cur = $('.current.page').parents('.article')
+	// we are at the magazine cover cover...
+	if(cur.length == 0){
+		return $('.current.page')
+	}
+	// just find the prev one...
+	var articles = $('.article')
+	return setCurrentPage(
+		pages.index(
+			$(articles[Math.max(articles.index(cur)-1, 0)])
+				.children('.page')
+				.first()))
+}
+
+
 
 function setElementScale(elem, scale){
 	return elem.css({
