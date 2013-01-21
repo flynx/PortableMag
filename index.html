@@ -16,17 +16,7 @@ $(document).ready(function(){
 
 	$('.viewer')
 		.swipe({
-			//swipeLeft: nextPage,
-			//swipeRight: prevPage,
 			swipeStatus: swipeUpdate,
-			//swipeStatus: unanimated($('.magazine'), swipeUpdate),
-			/*
-			swipeStatus: function(evt, phase, direction, distance){
-				doWithoutTransitions(
-					$('.magazine'), 
-					function(){swipeUpdate(evt, phase, direction, distance)})
-			},
-			*/
 			// XXX change this to pinch...
 			swipeUp: function(){
 				PAGES_VISIBLE = 6
@@ -78,13 +68,14 @@ function swipeUpdate(evt, phase, direction, distance){
 
 	} else if ( phase =='end' ) {
 		// see which page is closer to the middle of the screen and set it...
+		// do this based on how much we dragged...
 		var p = Math.ceil((distance/scale)/cur.width())
 
+		// prev page...
 		if(direction == 'right') {
-			// prev page...
 			setCurrentPage(Math.max(n-p, 0))
+		// next page...
 		} else if (direction == 'left'){
-			// next page...
 			setCurrentPage(Math.min(n+p, pages.length-1))
 		}
 	}
@@ -150,12 +141,14 @@ function prevPage(){
 }
 
 
+
 function goToMagazineCover(){
 	setCurrentPage(0)
 }
 function goToArticleCover(){
 	setCurrentPage($('.current.page').parents('.article').children('.page').first())
 }
+
 
 
 function nextArticle(){

@@ -1,21 +1,25 @@
-Priority work
-	[_] 10% basic features
-		[_] 85% basic article navigation
+[_] 12% Priority work
+	[_] 0% general todo
+		[_] use modes (CSS) for thumbnail/page views...
+	[_] 50% stage 1 - basic features
+		[X] real magazine structure
+		[_] issue browser structure
+		[_] global navigation bar
+		[X] 100% basic article navigation
 			[X] next page
 			[X] prev page
 			[X] show previews
-			[_] show global navigation bar
 			[X] go home
 			[X] go to prev article
 			[X] go to next article
-		[_] global navigation bar
-		[_] real previews
+		[X] real previews
 		| use zoom to show a ribbon...
 		[_] 0% issue navigation
 			[_] issue list
 			[_] 0% issue download
 				[_] whole edition dowload and update (primary mode)
 				[_] seporate issue download (secondary)
+	[_] 0% stage 2 - templates and examples
 		[_] 0% default cover templates
 		[_] 0% default page templates
 		| a template is a class and predefined content...
@@ -42,7 +46,7 @@ Priority work
 			[_] plain
 		[_] 0% default actions
 			[_] show in overlay
-	[_] 0% advanced features
+	[_] 0% stage 3 - advanced features
 		[_] 0% edition editor / publisher
 			[_] create/delete edition
 			[_] cover
