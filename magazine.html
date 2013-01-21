@@ -35,32 +35,32 @@ function swipeUpdate(evt, phase, direction, distance){
 	var n = pages.index(cur)
 	var scale = getElementScale($('.scaler'))
 
-	if( phase=="move" && (direction=="left" || direction=="right") ){
+	if( phase=='move' && (direction=='left' || direction=='right') ){
 		// XXX set the transition time to 0...
-		// XXX
-		if (direction == "left"){
+		var orig_duration = $('.magazine').css('-webkit-transition-duration')
+		$('.magazine').css({'-webkit-transition-duration': 0})
+		if (direction == 'left'){
 			//$('.magazine').css({left: -n*cur.width()-distance/scale})
 			$('.magazine').css({left: -n*800-distance/scale})
-		} else if (direction == "right") {
+		} else if (direction == 'right') {
 			//$('.magazine').css({left: -n*cur.width()+distance/scale})
 			$('.magazine').css({left: -n*800+distance/scale})
 		}
-	} else if ( phase == "cancel") {
+		$('.magazine').css({'-webkit-transition-duration': orig_duration})
+	} else if ( phase == 'cancel') {
 		setCurrentPage(pages.index($('.current.page')))
-	} else if ( phase =="end" ) {
+	} else if ( phase =='end' ) {
 		// see which page is closer to the middle of the screen and set it...
 		var p = Math.ceil((distance/scale)/cur.width())
 
-		if(direction == "right") {
+		if(direction == 'right') {
 			//prevPage()
 			setCurrentPage(Math.max(n-p, 0))
-		} else if (direction == "left"){
+		} else if (direction == 'left'){
 			//nextPage()
 			setCurrentPage(Math.min(n+p, pages.length-1))
 		}
 	}
-	
-
 }
 
 
