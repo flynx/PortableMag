@@ -6,17 +6,27 @@
 <script src="jquery.touchSwipe.js"></script>
 <script>
 
+/* this is needed only for live resize... */
+var PAGES_VISIBLE = 1
+
 $(document).ready(function(){
+	$(window).resize(function() {
+		fitNPages(PAGES_VISIBLE)
+	})
 	$('.viewer')
 		.swipe({
 			//swipeLeft: nextPage,
 			//swipeRight: prevPage,
 			swipeStatus: swipeUpdate,
 			// XXX change this to pinch...
-			swipeUp: function(){fitNPages(6)},
+			swipeUp: function(){
+				PAGES_VISIBLE = 6
+				fitNPages(PAGES_VISIBLE)
+			},
 			// XXX change this to pinch...
 			swipeDown: function(){
-				fitNPages(1)
+				PAGES_VISIBLE = 1
+				fitNPages(PAGES_VISIBLE)
 				// to prevent drag while zooming to affect
 				// the resulting position set it to current 
 				// page...
@@ -32,7 +42,8 @@ $(document).ready(function(){
 
 	// XXX add splash screen...
 
-	fitNPages(1)
+	fitNPages(PAGES_VISIBLE)
+
 })
 
 function swipeUpdate(evt, phase, direction, distance){
@@ -74,14 +85,13 @@ function swipeUpdate(evt, phase, direction, distance){
 
 
 function setCurrentPage(n){
-	var cur
 	if(n == null){
-		cur = $('.current.page')
+		var cur = $('.current.page')
 		n = $('.page').index(cur) 
 	} else if(typeof(n) == typeof(1)) {
-		cur = $($('.page')[n])
+		var cur = $($('.page')[n])
 	} else {
-		cur = n
+		var cur = $(n)
 		n = $('.page').index(cur) 
 	}
 
@@ -190,6 +200,11 @@ function fitNPages(n){
 	}
 	var pages = $('.page')
 	var scale = $('.viewer').width()/(pages.width()*n)
+
+	// fit vertically if needed...
+	if(pages.height()*scale > $('.viewer').height()){
+		scale = $('.viewer').height()/pages.height()
+	}
 
 	setElementScale($('.scaler'), scale)
 }
