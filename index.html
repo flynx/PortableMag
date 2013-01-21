@@ -13,11 +13,20 @@ $(document).ready(function(){
 	$(window).resize(function() {
 		fitNPages(PAGES_VISIBLE)
 	})
+
 	$('.viewer')
 		.swipe({
 			//swipeLeft: nextPage,
 			//swipeRight: prevPage,
 			swipeStatus: swipeUpdate,
+			//swipeStatus: unanimated($('.magazine'), swipeUpdate),
+			/*
+			swipeStatus: function(evt, phase, direction, distance){
+				doWithoutTransitions(
+					$('.magazine'), 
+					function(){swipeUpdate(evt, phase, direction, distance)})
+			},
+			*/
 			// XXX change this to pinch...
 			swipeUp: function(){
 				PAGES_VISIBLE = 6
@@ -54,9 +63,7 @@ function swipeUpdate(evt, phase, direction, distance){
 	var mag = $('.magazine')
 
 	if( phase=='move' && (direction=='left' || direction=='right') ){
-		// XXX set the transition time to 0...
-		var orig_duration = mag.css('-webkit-transition-duration')
-		mag.css({'-webkit-transition-duration': 0})
+		mag.addClass('unanimated')
 		if (direction == 'left'){
 			//$('.magazine').css({left: -n*cur.width()-distance/scale})
 			$('.magazine').css({left: -n*800-distance/scale})
@@ -64,7 +71,7 @@ function swipeUpdate(evt, phase, direction, distance){
 			//$('.magazine').css({left: -n*cur.width()+distance/scale})
 			$('.magazine').css({left: -n*800+distance/scale})
 		}
-		mag.css({'-webkit-transition-duration': orig_duration})
+		setTimeout(function(){mag.removeClass('unanimated')}, 5)
 
 	} else if ( phase == 'cancel') {
 		setCurrentPage()
@@ -84,6 +91,31 @@ function swipeUpdate(evt, phase, direction, distance){
 }
 
 
+// XXX might be good to use apply here...
+function doWithoutTransitions(obj, func, time){
+	if(time == null){
+		time = 5
+	}	
+	obj.addClass('unanimated')
+	var res = func()
+	setTimeout(function(){obj.removeClass('unanimated')}, time)
+	return res
+}
+
+function unanimated(obj, func, time){
+	return function(){
+		if(time == null){
+			time = 5
+		}	
+		obj.addClass('unanimated')
+		var res = func.apply(func, arguments)
+		setTimeout(function(){obj.removeClass('unanimated')}, time)
+		return res
+	}
+}
+
+
+
 function setCurrentPage(n){
 	if(n == null){
 		var cur = $('.current.page')
@@ -98,7 +130,8 @@ function setCurrentPage(n){
 	$('.current.page').removeClass('current')
 	cur.addClass('current')
 
-	$('.magazine').css({left: -n*cur.width()})
+	var mag = $('.magazine')
+	mag.css({left: -n*cur.width()})
 
 	return cur
 }
