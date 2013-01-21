@@ -136,19 +136,21 @@ body {
 .page-view-mode.viewer {
 	background: white;
 }
+
 .page-view-mode .page .content {
-	opacity: 0;
 }
 .page-view-mode .current.page .content {
-	opacity: 1;
 }
 
+
 .page-view-mode.viewer.dragging {
+	/*
 	background: silver;
+	*/
 }
 .page-view-mode.dragging .page .content {
-	opacity: 1;
 }
+
 
 
 

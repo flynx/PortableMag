@@ -1,10 +1,12 @@
-[_] 12% Priority work
-	[_] 0% general todo
-		[_] use modes (CSS) for thumbnail/page views...
+[_] 25% Priority work
+	[_] 50% general todo
+		[X] use modes (CSS) for thumbnail/page views...
+		[_] vanquish opacity effects
+		| they slow everything down considerably!
 	[_] 50% stage 1 - basic features
-		[X] real magazine structure
 		[_] issue browser structure
 		[_] global navigation bar
+		[X] real magazine structure
 		[X] 100% basic article navigation
 			[X] next page
 			[X] prev page

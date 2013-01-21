@@ -26,9 +26,12 @@ $(document).ready(function(){
 			swipeDown: function(){
 				togglePageView('on')
 			},
+			// XXX for some reason this deos not bubble up the nested elements...
 			click: function(evt, elem){
 				if($(elem).hasClass('page')){
 					setCurrentPage(elem)
+				} else if($(elem).hasClass('content')){
+					setCurrentPage($(elem).parents('.page').first())
 				}
 				return true
 			}
@@ -174,6 +177,8 @@ togglePageDragging = createCSSClassToggler(
 	'dragging')
 
 
+var FIT_PAGE_TO_VIEW = true
+
 togglePageView = createCSSClassToggler(
 	'.viewer', 
 	'page-view-mode',
@@ -182,18 +187,24 @@ togglePageView = createCSSClassToggler(
 	function(){
 		if(togglePageView('?') == 'on'){
 			PAGES_VISIBLE = 1
-			//fitPagesToViewer(PAGES_VISIBLE)
-			fitNPages(PAGES_VISIBLE)
-			// to prevent drag while zooming to affect
-			// the resulting position set it to current 
-			// page...
-			// XXX now this is done by fitNPages
-			setCurrentPage()
+			if(FIT_PAGE_TO_VIEW){
+				fitPagesToViewer(PAGES_VISIBLE)
+			} else {
+				fitNPages(PAGES_VISIBLE)
+				// to prevent drag while zooming to affect
+				// the resulting position set it to current 
+				// page...
+				// XXX now this is done by fitNPages
+				setCurrentPage()
+			}
 		} else {
 			PAGES_VISIBLE = PAGES_IN_RIBBON
-			// XXX this needs to be done before transitions...
-			//fitPagesToContent(PAGES_VISIBLE)
-			fitNPages(PAGES_VISIBLE)
+			if(FIT_PAGE_TO_VIEW){
+				// XXX this needs to be done before transitions...
+				fitPagesToContent(PAGES_VISIBLE)
+			} else {
+				fitNPages(PAGES_VISIBLE)
+			}
 		}
 	})
 
@@ -221,12 +232,11 @@ function fitNPages(n){
 
 	setElementScale($('.scaler'), scale)
 
-	/*
+	/* XXX
 	fitPagesTo(null, n)
 	*/
 }
 
-/*
 // NOTE: this is a single big function because we need to thread data 
 //		through to avoid sampling while animating...
 // XXX try and do the fitting with pure CSS...
@@ -294,7 +304,6 @@ function fitPagesTo(elem, n){
 	// update position using the new width...
 	setCurrentPage(null, rW)
 }
-*/
 
 
 function fitPagesToViewer(n){
@@ -441,6 +450,9 @@ function createPage(article, template){
 <body>
 
 <div class="viewer">
+
+	<!-- XXX add toolbars here... -->
+
 <div class="scaler">
 <div class="aligner">
 	<div class="magazine">
@@ -463,7 +475,7 @@ function createPage(article, template){
 			<!-- XXX do we need an Article Credits page??? -->
 
 			<div class="page">
-				<div class="content">
+				<div class="content" style="border:solid red 1px">
 					Page
 				</div>
 			</div>
