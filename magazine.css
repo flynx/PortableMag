@@ -9,8 +9,7 @@ body {
 	/* XXX make this browser-sized... */
 	display: inline-block;
 	vertical-align: bottom;
-
-	overflow: auto;
+	text-align: center;
 
 	/* XXX need these to be the same as the magazine, for some reason does not work...
 	 *	one way to go is to use a fixed page layout and scale things manually.
@@ -22,15 +21,30 @@ body {
 	margin-top: -300px;
 
 	font-size: 12px;
+
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;	
+	transition: all 0.2s ease;
 }
 
-.current.page {
-}
+.page .content {
+	display: inline-block;
+	text-align: left;
+	position: relative;
 
+	/* these set the "safe" marks for page content */
+	width: 800px;
+	height: 600px;
+
+	border: solid red 1px;
+}
 
 /* general layout */
 
 .viewer {
+	position: relative;
 	/* this makes the magazine behave like a ribbon */
 	width: 100%;
 	height: 100%;
@@ -104,7 +118,18 @@ body {
 }
 
 
+/* modes */
+.page-view-mode .viewer {
+}
+.page-view-mode .page {
+}
+.page-view-mode .current.page {
+}
 
+
+
+
+/* keep this at the end... */
 .unanimated {
 	-webkit-transition: none;
 	-moz-transition: none;
