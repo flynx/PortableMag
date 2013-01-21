@@ -1,4 +1,9 @@
 
+body {
+	padding: 0;
+	margin: 0;
+}
+
 /* all elements that will behave like a page */
 .page {
 	/* XXX make this browser-sized... */
