@@ -9,12 +9,19 @@
 $(document).ready(function(){
 	$('.viewer')
 		.swipe({
-			/* for some reason these do not work within pages... */
 			//swipeLeft: nextPage,
 			//swipeRight: prevPage,
 			swipeStatus: swipeUpdate,
+			// XXX change this to pinch...
 			swipeUp: function(){fitNPages(6)},
-			swipeDown: function(){fitNPages(1)},
+			// XXX change this to pinch...
+			swipeDown: function(){
+				fitNPages(1)
+				// to prevent drag while zooming to affect
+				// the resulting position set it to current 
+				// page...
+				setCurrentPage()
+			},
 			click: function(evt, elem){
 				if($(elem).hasClass('page')){
 					var pages = $('.page')
@@ -34,11 +41,12 @@ function swipeUpdate(evt, phase, direction, distance){
 	var cur = $('.current.page')
 	var n = pages.index(cur)
 	var scale = getElementScale($('.scaler'))
+	var mag = $('.magazine')
 
 	if( phase=='move' && (direction=='left' || direction=='right') ){
 		// XXX set the transition time to 0...
-		var orig_duration = $('.magazine').css('-webkit-transition-duration')
-		$('.magazine').css({'-webkit-transition-duration': 0})
+		var orig_duration = mag.css('-webkit-transition-duration')
+		mag.css({'-webkit-transition-duration': 0})
 		if (direction == 'left'){
 			//$('.magazine').css({left: -n*cur.width()-distance/scale})
 			$('.magazine').css({left: -n*800-distance/scale})
@@ -46,18 +54,20 @@ function swipeUpdate(evt, phase, direction, distance){
 			//$('.magazine').css({left: -n*cur.width()+distance/scale})
 			$('.magazine').css({left: -n*800+distance/scale})
 		}
-		$('.magazine').css({'-webkit-transition-duration': orig_duration})
+		mag.css({'-webkit-transition-duration': orig_duration})
+
 	} else if ( phase == 'cancel') {
 		setCurrentPage(pages.index($('.current.page')))
+
 	} else if ( phase =='end' ) {
 		// see which page is closer to the middle of the screen and set it...
 		var p = Math.ceil((distance/scale)/cur.width())
 
 		if(direction == 'right') {
-			//prevPage()
+			// prev page...
 			setCurrentPage(Math.max(n-p, 0))
 		} else if (direction == 'left'){
-			//nextPage()
+			// next page...
 			setCurrentPage(Math.min(n+p, pages.length-1))
 		}
 	}
@@ -65,13 +75,17 @@ function swipeUpdate(evt, phase, direction, distance){
 
 
 function setCurrentPage(n){
-	var pages = $('.page')
-	var cur = $(pages[n])
+	if(n == null){
+		cur = $('.current.page')
+	} else {
+		var pages = $('.page')
+		var cur = $(pages[n])
+	}
 
 	$('.current.page').removeClass('current')
 	cur.addClass('current')
 
-	$('.magazine').css({left: -n*pages.width()})
+	$('.magazine').css({left: -n*cur.width()})
 
 	return cur
 }
