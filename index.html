@@ -36,9 +36,9 @@ $(document).ready(function(){
 				return true
 			}
 		})
-	$('.button.cover').click(goToMagazineCover)
-	$('.button.next-article').click(nextArticle)
-	$('.button.prev-article').click(prevArticle)
+	$('.button.cover').swipe({click: goToMagazineCover})
+	$('.button.next-article').swipe({click: nextArticle})
+	$('.button.prev-article').swipe({click: prevArticle})
 
 	// XXX add splash screen...
 	// XXX
