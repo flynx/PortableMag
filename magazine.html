@@ -24,8 +24,7 @@ $(document).ready(function(){
 			},
 			click: function(evt, elem){
 				if($(elem).hasClass('page')){
-					var pages = $('.page')
-					setCurrentPage(pages.index(elem))
+					setCurrentPage(elem)
 				}
 				return true
 			}
@@ -57,7 +56,7 @@ function swipeUpdate(evt, phase, direction, distance){
 		mag.css({'-webkit-transition-duration': orig_duration})
 
 	} else if ( phase == 'cancel') {
-		setCurrentPage(pages.index($('.current.page')))
+		setCurrentPage()
 
 	} else if ( phase =='end' ) {
 		// see which page is closer to the middle of the screen and set it...
@@ -75,11 +74,15 @@ function swipeUpdate(evt, phase, direction, distance){
 
 
 function setCurrentPage(n){
+	var cur
 	if(n == null){
 		cur = $('.current.page')
+		n = $('.page').index(cur) 
+	} else if(typeof(n) == typeof(1)) {
+		cur = $($('.page')[n])
 	} else {
-		var pages = $('.page')
-		var cur = $(pages[n])
+		cur = n
+		n = $('.page').index(cur) 
 	}
 
 	$('.current.page').removeClass('current')
@@ -104,27 +107,31 @@ function prevPage(){
 }
 
 
+function goToMagazineCover(){
+	setCurrentPage(0)
+}
+function goToArticleCover(){
+	setCurrentPage($('.current.page').parents('.article').children('.page').first())
+}
+
 
 function nextArticle(){
-	var pages = $('.page')
 	var cur = $('.current.page').parents('.article')
 	// we are at the magazine cover cover...
 	if(cur.length == 0){
-		var a = $('.article .page:first-child').first()
-		return setCurrentPage(pages.index(a))
+		return setCurrentPage(
+			$('.article .page:first-child').first())
 	}
 	// just find the next one...
 	var articles = $('.article')
 	return setCurrentPage(
-		pages.index(
-			$(articles[Math.min(articles.index(cur)+1, articles.length-1)])
-				.children('.page')
-				.first()))
+		$(articles[Math.min(articles.index(cur)+1, articles.length-1)])
+			.children('.page')
+			.first())
 
 }
 // XXX this is almost exactly the same as nextArticle...
 function prevArticle(){
-	var pages = $('.page')
 	var cur = $('.current.page').parents('.article')
 	// we are at the magazine cover cover...
 	if(cur.length == 0){
@@ -133,10 +140,9 @@ function prevArticle(){
 	// just find the prev one...
 	var articles = $('.article')
 	return setCurrentPage(
-		pages.index(
-			$(articles[Math.max(articles.index(cur)-1, 0)])
-				.children('.page')
-				.first()))
+		$(articles[Math.max(articles.index(cur)-1, 0)])
+			.children('.page')
+			.first())
 }
 
 
@@ -187,6 +193,8 @@ function fitNPages(n){
 
 	setElementScale($('.scaler'), scale)
 }
+
+
 
 
 // XXX create magazine...

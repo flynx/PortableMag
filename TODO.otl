@@ -1,13 +1,13 @@
 Priority work
-	[_] 5% basic features
-		[_] 42% basic article navigation
+	[_] 10% basic features
+		[_] 85% basic article navigation
 			[X] next page
 			[X] prev page
 			[X] show previews
 			[_] show global navigation bar
-			[_] go home
-			[_] go to article start
-			[_] go to article end
+			[X] go home
+			[X] go to prev article
+			[X] go to next article
 		[_] global navigation bar
 		[_] real previews
 		| use zoom to show a ribbon...
