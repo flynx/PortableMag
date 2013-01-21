@@ -3,6 +3,8 @@
 		[X] use modes (CSS) for thumbnail/page views...
 		[_] vanquish opacity effects
 		| they slow everything down considerably!
+		[_] add state saving to local storage
+		[_] add page urls
 	[_] 50% stage 1 - basic features
 		[_] issue browser structure
 		[_] global navigation bar
