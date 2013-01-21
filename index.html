@@ -177,18 +177,18 @@ togglePageView = createCSSClassToggler(
 	function(){
 		if(togglePageView('?') == 'on'){
 			PAGES_VISIBLE = 1
-			fitPagesToViewer(PAGES_VISIBLE)
-			//fitNPages(PAGES_VISIBLE)
+			//fitPagesToViewer(PAGES_VISIBLE)
+			fitNPages(PAGES_VISIBLE)
 			// to prevent drag while zooming to affect
 			// the resulting position set it to current 
 			// page...
 			// XXX now this is done by fitNPages
-			//setCurrentPage()
+			setCurrentPage()
 		} else {
 			PAGES_VISIBLE = PAGES_IN_RIBBON
 			// XXX this needs to be done before transitions...
-			fitPagesToContent(PAGES_VISIBLE)
-			//fitNPages(PAGES_VISIBLE)
+			//fitPagesToContent(PAGES_VISIBLE)
+			fitNPages(PAGES_VISIBLE)
 		}
 	})
 
@@ -197,7 +197,6 @@ function getPageScale(){
 }
 
 function fitNPages(n){
-	/*
 	if(n==null){
 		n = 1
 	}
@@ -216,11 +215,13 @@ function fitNPages(n){
 	}
 
 	setElementScale($('.scaler'), scale)
-	*/
 
+	/*
 	fitPagesTo(null, n)
+	*/
 }
 
+/*
 // NOTE: this is a single big function because we need to thread data 
 //		through to avoid sampling while animating...
 // XXX try and do the fitting with pure CSS...
@@ -280,16 +281,16 @@ function fitPagesTo(elem, n){
 	var scale = vW/(rW*n)
 	// or scale vertically if needed...
 	// XXX broken
-	/*
-	if(rH*scale > vH){
-		scale = vH/rH
-	}
-	*/
+	//if(rH*scale > vH){
+	//	scale = vH/rH
+	//}
 
 	setElementScale($('.scaler'), scale)
 	// update position using the new width...
 	setCurrentPage(null, rW)
 }
+*/
+
 
 function fitPagesToViewer(n){
 	fitPagesTo('.viewer', n)
