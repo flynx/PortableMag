@@ -10,8 +10,9 @@ $(document).ready(function(){
 	$('.viewer')
 		.swipe({
 			/* for some reason these do not work within pages... */
-			swipeLeft: nextPage,
-			swipeRight: prevPage,
+			//swipeLeft: nextPage,
+			//swipeRight: prevPage,
+			swipeStatus: swipeUpdate,
 			swipeUp: function(){fitNPages(6)},
 			swipeDown: function(){fitNPages(1)},
 			click: function(evt, elem){
@@ -22,8 +23,45 @@ $(document).ready(function(){
 				return true
 			}
 		})
+
+	// XXX add splash screen...
+
+	fitNPages(1)
 })
 
+function swipeUpdate(evt, phase, direction, distance){
+	var pages = $('.page')
+	var cur = $('.current.page')
+	var n = pages.index(cur)
+	var scale = getElementScale($('.scaler'))
+
+	if( phase=="move" && (direction=="left" || direction=="right") ){
+		// XXX set the transition time to 0...
+		// XXX
+		if (direction == "left"){
+			//$('.magazine').css({left: -n*cur.width()-distance/scale})
+			$('.magazine').css({left: -n*800-distance/scale})
+		} else if (direction == "right") {
+			//$('.magazine').css({left: -n*cur.width()+distance/scale})
+			$('.magazine').css({left: -n*800+distance/scale})
+		}
+	} else if ( phase == "cancel") {
+		setCurrentPage(pages.index($('.current.page')))
+	} else if ( phase =="end" ) {
+		// see which page is closer to the middle of the screen and set it...
+		var p = Math.ceil((distance/scale)/cur.width())
+
+		if(direction == "right") {
+			//prevPage()
+			setCurrentPage(Math.max(n-p, 0))
+		} else if (direction == "left"){
+			//nextPage()
+			setCurrentPage(Math.min(n+p, pages.length-1))
+		}
+	}
+	
+
+}
 
 
 function setCurrentPage(n){
@@ -89,6 +127,31 @@ function prevArticle(){
 
 
 
+// Return a scale value for the given element(s).
+// NOTE: this will only return a single scale value...
+function getElementScale(elem){
+	//var transform = elem.css('transform')
+	var vendors = ['o', 'moz', 'ms', 'webkit']
+	var transform = elem.css('transform')
+	var res
+
+	// go through vendor prefixes... (hate this!)
+	if(!transform || transform == 'none'){
+		for(var i in vendors){
+			transform = elem.css('-' + vendors[i] + '-transform')
+			if(transform && transform != 'none'){
+				break
+			}
+		}
+	}
+	// no transform is set...
+	if(!transform || transform == 'none'){
+		return 1
+	}
+	// get the scale value -- first argument of scale/matrix...
+	return parseFloat((/(scale|matrix)\(([^,]*),.*\)/).exec(transform)[2])
+}
+
 function setElementScale(elem, scale){
 	return elem.css({
 		'transform': 'scale('+scale+')',
@@ -98,6 +161,8 @@ function setElementScale(elem, scale){
 		'-webkit-transform': 'scale('+scale+')',
 	})
 }
+
+
 
 function fitNPages(n){
 	if(n==null){
