@@ -378,7 +378,6 @@ function setCurrentPage(n, W){
 	var W = W == null ? cur.width() : W
 	mag.css({left: -n*W})
 
-	window.location.hash = n
 	// XXX should this be here???
 	saveState()
 
@@ -448,18 +447,49 @@ function prevArticle(){
 
 
 
-// XXX
-function loadState(){
-	setCurrentPage(parseInt($.jStorage.get('current_page'), 0))
+/*********************************************************************/
+// XXX make these magazine-specific...
+// URL state managers...
+function loadURLState(){
+	if(window.location.hash == ''){
+		return 0
+	}
+	var n = parseInt(window.location.hash.split('#')[1])
+	if(n != null){
+		return n
+	} else {
+		alert('textual anchors not yet supported...')
+		return
+	}
+}
+function saveURLState(){
+	window.location.hash = getPageNumber()
 }
 
-// XXX
-function saveState(){
-	// XXX make this magazine-specific...
+// local storage state managers...
+function loadStorageState(){
+	return parseInt($.jStorage.get('current_page'), 0)
+}
+function saveStorageState(){
 	$.jStorage.set('current_page', getPageNumber())
 }
 
+// generic state managers...
+function loadState(){
+	var n = loadURLState()
+	if(n != null){
+		setCurrentPage(n)
+	} else {
+		setCurrentPage(loadStorageState())
+	}
+}
+function saveState(){
+	saveURLState()
+	saveStorageState()
+}
 
+
+/*********************************************************************/
 
 // XXX create magazine...
 function createMagazine(){
@@ -485,13 +515,7 @@ $(document).ready(function(){
 			fitNPages(PAGES_VISIBLE)
 		})
 		.bind('hashchange', function(){
-			// XXX this is the same as the init code below...
-			var n = parseInt(window.location.hash.split('#')[1])
-			if(n != null){
-				setCurrentPage(n)
-			} else {
-				alert('textual anchors not yet supported...')
-			}
+			setCurrentPage(loadURLState())
 		})
 
 	$('.viewer')
@@ -519,16 +543,7 @@ $(document).ready(function(){
 	$('.button.next-article').swipe({click: nextArticle})
 	$('.button.prev-article').swipe({click: prevArticle})
 
-	if(window.location.hash == ''){
-		loadState()
-	} else {
-		var n = parseInt(window.location.hash.split('#')[1])
-		if(n != null){
-			setCurrentPage(n)
-		} else {
-			alert('textual anchors not yet supported...')
-		}
-	}
+	loadState()
 
 	togglePageView('on')
 
@@ -538,7 +553,6 @@ $(document).ready(function(){
 			$('.splash').fadeOut()
 		})
 })
-
 
 
 </script>
