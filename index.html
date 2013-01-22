@@ -11,48 +11,6 @@
 /* this is needed only for live resize... */
 var PAGES_VISIBLE = 1
 var PAGES_IN_RIBBON = 6
-
-$(document).ready(function(){
-	$(window).resize(function() {
-		fitNPages(PAGES_VISIBLE)
-	})
-
-	$('.viewer')
-		.swipe({
-			swipeStatus: swipeUpdate,
-			// XXX change this to pinch...
-			swipeUp: function(){
-				togglePageView('off')
-			},
-			// XXX change this to pinch...
-			swipeDown: function(){
-				togglePageView('on')
-			},
-			// XXX for some reason this deos not bubble up the nested elements...
-			click: function(evt, elem){
-				if($(elem).hasClass('page')){
-					setCurrentPage(elem)
-				} else if($(elem).hasClass('content')){
-					setCurrentPage($(elem).parents('.page').first())
-				}
-				return true
-			}
-		})
-	$('.button.cover').swipe({click: goToMagazineCover})
-	$('.button.next-article').swipe({click: nextArticle})
-	$('.button.prev-article').swipe({click: prevArticle})
-
-	loadState()
-
-	togglePageView('on')
-
-
-	// XXX add splash screen...
-	// XXX
-
-})
-
-
 /*********************************************************************/
 // XXX move to generic lib...
 
@@ -116,6 +74,42 @@ function createCSSClassToggler(elem, css_class, callback_a, callback_b){
 		'depending on the current state.'
 	return func
 }
+
+
+// show a jQuary opject in viewer overlay...
+// XXX need to set .scrollTop(0) when showing different UI... 
+// 		...and not set it when the UI is the same
+// XXX this must create it's own overlay...
+function showInOverlay(obj){
+	obj.click(function(){ return false })
+	// XXX 
+	$('.viewer').addClass('overlay-mode')
+	// clean things up...
+	$('.overlay .content').children().remove()
+	// put it in the overlay...
+	$('.overlay .content').append(obj)
+	// prepare the overlay...
+	$('.overlay')
+		.one('click', function(){
+			$('.overlay')
+				.fadeOut(function(){
+					$('.overlay .content')
+						.children()
+							.remove()
+					$('.overlay-mode').removeClass('overlay-mode')
+				})
+		})
+		.fadeIn()
+	return obj
+}
+
+
+
+function overlayMessage(text){
+	return showInOverlay($('<div class="overlay-message">' +text+ '</div>'))
+}
+
+
 
 
 // XXX might be good to use apply here...
@@ -479,12 +473,67 @@ function createPage(article, template){
 }
 
 
+</script>
+<script>
+
+$(document).ready(function(){
+	$(window).resize(function() {
+		fitNPages(PAGES_VISIBLE)
+	})
+
+	$('.viewer')
+		.swipe({
+			swipeStatus: swipeUpdate,
+			// XXX change this to pinch...
+			swipeUp: function(){
+				togglePageView('off')
+			},
+			// XXX change this to pinch...
+			swipeDown: function(){
+				togglePageView('on')
+			},
+			// XXX for some reason this deos not bubble up the nested elements...
+			click: function(evt, elem){
+				if($(elem).hasClass('page')){
+					setCurrentPage(elem)
+				} else if($(elem).hasClass('content')){
+					setCurrentPage($(elem).parents('.page').first())
+				}
+				return true
+			}
+		})
+	$('.button.cover').swipe({click: goToMagazineCover})
+	$('.button.next-article').swipe({click: nextArticle})
+	$('.button.prev-article').swipe({click: prevArticle})
+
+	loadState()
+
+	togglePageView('on')
+
+
+	// hide the splash screen...
+	$(window).one('webkitTransitionEnd oTransitionEnd msTransitionEnd transitionend',
+		function(){
+			$('.splash').fadeOut()
+		})
+})
+
+
 
 </script>
 </head>
 <body>
 
 <div class="viewer">
+
+	<!-- Splash screen -->
+	<div class="splash noSwipe">
+		<!-- XXX replace this with a background-image logo... -->
+		<table width="100%" height="100%"><tr><td align="center" valign="middle">
+			<h2><i>loading...</i></h2>
+		</td></tr></table>
+	</div>
+
 
 	<!-- XXX Magazine title... -->
 
