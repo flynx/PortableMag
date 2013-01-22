@@ -378,6 +378,7 @@ function setCurrentPage(n, W){
 	var W = W == null ? cur.width() : W
 	mag.css({left: -n*W})
 
+	window.location.hash = n
 	// XXX should this be here???
 	saveState()
 
@@ -474,12 +475,24 @@ function createPage(article, template){
 
 
 </script>
+
+
 <script>
 
 $(document).ready(function(){
-	$(window).resize(function() {
-		fitNPages(PAGES_VISIBLE)
-	})
+	$(window)
+		.resize(function() {
+			fitNPages(PAGES_VISIBLE)
+		})
+		.bind('hashchange', function(){
+			// XXX this is the same as the init code below...
+			var n = parseInt(window.location.hash.split('#')[1])
+			if(n != null){
+				setCurrentPage(n)
+			} else {
+				alert('textual anchors not yet supported...')
+			}
+		})
 
 	$('.viewer')
 		.swipe({
@@ -506,10 +519,18 @@ $(document).ready(function(){
 	$('.button.next-article').swipe({click: nextArticle})
 	$('.button.prev-article').swipe({click: prevArticle})
 
-	loadState()
+	if(window.location.hash == ''){
+		loadState()
+	} else {
+		var n = parseInt(window.location.hash.split('#')[1])
+		if(n != null){
+			setCurrentPage(n)
+		} else {
+			alert('textual anchors not yet supported...')
+		}
+	}
 
 	togglePageView('on')
-
 
 	// hide the splash screen...
 	$(window).one('webkitTransitionEnd oTransitionEnd msTransitionEnd transitionend',
