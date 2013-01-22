@@ -8,6 +8,8 @@
 
 <script>
 
+var USE_URLS = false
+
 /* this is needed only for live resize... */
 var PAGES_VISIBLE = 1
 var PAGES_IN_RIBBON = 6
@@ -476,7 +478,7 @@ function saveStorageState(){
 
 // generic state managers...
 function loadState(){
-	var n = loadURLState()
+	var n = USE_URLS ? loadURLState() : null
 	if(n != null){
 		setCurrentPage(n)
 	} else {
@@ -484,7 +486,7 @@ function loadState(){
 	}
 }
 function saveState(){
-	saveURLState()
+	USE_URLS ? saveURLState() : null 
 	saveStorageState()
 }
 
@@ -514,11 +516,12 @@ $(document).ready(function(){
 		.resize(function() {
 			fitNPages(PAGES_VISIBLE)
 		})
-		/*
-		.bind('hashchange', function(){
-			setCurrentPage(loadURLState())
-		})
-		*/
+	if(USE_URLS){
+		$(window)
+			.bind('hashchange', function(){
+				setCurrentPage(loadURLState())
+			})
+	}
 
 	$('.viewer')
 		.swipe({
