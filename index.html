@@ -4,6 +4,8 @@
 <link rel="stylesheet" href="magazine.css">
 <script src="jquery.js"></script>
 <script src="jquery.touchSwipe.js"></script>
+<script src="jstorage.js"></script>
+
 <script>
 
 /* this is needed only for live resize... */
@@ -40,10 +42,14 @@ $(document).ready(function(){
 	$('.button.next-article').swipe({click: nextArticle})
 	$('.button.prev-article').swipe({click: prevArticle})
 
+	loadState()
+
+	togglePageView('on')
+
+
 	// XXX add splash screen...
 	// XXX
 
-	togglePageView('on')
 })
 
 
@@ -359,6 +365,7 @@ function swipeUpdate(evt, phase, direction, distance){
 }
 
 
+// XXX store the current page...
 function setCurrentPage(n, W){
 	if(n == null){
 		var cur = $('.current.page')
@@ -377,7 +384,17 @@ function setCurrentPage(n, W){
 	var W = W == null ? cur.width() : W
 	mag.css({left: -n*W})
 
+	// XXX should this be here???
+	saveState()
+
 	return cur
+}
+
+function getPageNumber(page){
+	if(page == null){
+		page = $('.current.page')
+	}
+	return $('.page').index(page) 
 }
 
 
@@ -436,6 +453,19 @@ function prevArticle(){
 
 
 
+// XXX
+function loadState(){
+	setCurrentPage(parseInt($.jStorage.get('current_page'), 0))
+}
+
+// XXX
+function saveState(){
+	// XXX make this magazine-specific...
+	$.jStorage.set('current_page', getPageNumber())
+}
+
+
+
 // XXX create magazine...
 function createMagazine(){
 }
@@ -456,7 +486,8 @@ function createPage(article, template){
 
 <div class="viewer">
 
-	<!-- XXX add toolbars here... -->
+	<!-- XXX Magazine title... -->
+
 	<div class="top-toolbar">
 		mooo
 		<div class="button home">Home</div>

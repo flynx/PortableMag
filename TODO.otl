@@ -1,10 +1,13 @@
-[_] 25% Priority work
-	[_] 50% general todo
-		[X] use modes (CSS) for thumbnail/page views...
+[_] 22% Priority work
+	[_] 40% general todo
+		[_] add page urls
+		[_] time transitions
+		| the goal is for slow devices to seem not to have animations at
+		| all and faster ones to seem to have fast animations...
 		[_] vanquish opacity effects
 		| they slow everything down considerably!
-		[_] add state saving to local storage
-		[_] add page urls
+		[X] add state saving to local storage
+		[X] use modes (CSS) for thumbnail/page views...
 	[_] 50% stage 1 - basic features
 		[_] issue browser structure
 		[_] global navigation bar
