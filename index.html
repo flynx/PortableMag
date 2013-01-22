@@ -8,6 +8,8 @@
 
 <script>
 
+var DEBUG = true
+
 var USE_URLS = true
 
 /* this is needed only for live resize... */
@@ -512,6 +514,14 @@ function createPage(article, template){
 <script>
 
 $(document).ready(function(){
+
+	if(DEBUG){
+		$('.splash').click(function(){
+			$('.splash').fadeOut()
+		})
+	}
+
+
 	$(window)
 		.resize(function() {
 			fitNPages(PAGES_VISIBLE)
@@ -547,12 +557,6 @@ $(document).ready(function(){
 	$('.button.cover').swipe({click: goToMagazineCover})
 	$('.button.next-article').swipe({click: nextArticle})
 	$('.button.prev-article').swipe({click: prevArticle})
-
-	// XXX STUB: for device debugging reasons...
-	$('.splash').click(function(){
-		$('.splash').fadeOut()
-	})
-
 
 	loadState()
 
