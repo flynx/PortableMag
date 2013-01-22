@@ -549,10 +549,9 @@ $(document).ready(function(){
 	$('.button.prev-article').swipe({click: prevArticle})
 
 	// XXX STUB: for device debugging reasons...
-	$('.splash')
-		.swipe({click: function(){
-			$('.splash').fadeOut()
-		}})
+	$('.splash').click(function(){
+		$('.splash').fadeOut()
+	})
 
 
 	loadState()
