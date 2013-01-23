@@ -41,6 +41,15 @@ $(document).ready(function(){
 				//togglePageView('on')
 				togglePageView()
 			},
+
+			pinchIn: function(event, direction, distance, duration, fingerCount, pinchZoom) {
+				togglePageView('on')
+			},
+			pinchOut: function(event, direction, distance, duration, fingerCount, pinchZoom) {
+				togglePageView('off')
+			},
+
+
 			// XXX for some reason this deos not bubble up the nested elements...
 			click: function(evt, elem){
 				if($(elem).hasClass('page')){
