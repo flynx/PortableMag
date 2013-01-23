@@ -444,26 +444,48 @@ function prevArticle(){
 
 /*********************************************************************/
 // XXX make these magazine-specific...
+// XXX BUG: if the hach url part coresponds to a real anchor the browser 
+// 		shifts the page, need to disable this...
 // URL state managers...
 function loadURLState(){
 	if(window.location.hash == ''){
 		return null
 	}
-	var n = parseInt(window.location.hash.split('#')[1])
-	if(n != null){
+	var anchor = window.location.hash.split('#')[1]
+	var n = parseInt(anchor)
+	if(typeof(n) == typeof(1) && n >= 0){
 		return n
+	// XXX add real external aliases...
+	} else if(anchor == 'thumbnails') {
+		togglePageView('off')
+		return getPageNumber()
+	} else if(anchor == 'home') {
+		return 0
+	} else if(anchor == 'end') {
+		return $('.page').length-1
 	} else {
-		alert('textual anchors not yet supported...')
-		return
+		return getPageNumber($('[name='+anchor+']').parents('.page'))
 	}
 }
 function saveURLState(){
+	var anchor = window.location.hash.split('#')[1]
+	var page = $('[name='+anchor+']')
+	if(!page.hasClass('page')){
+		page = page.parents('.page')
+	}
+	var n = getPageNumber()
+	// XXX use real aliases...
+	if(n == getPageNumber(page)
+			|| (anchor == 'home' && n == 0)
+			|| (anchor == 'end' && n == $('.page').length-1)){
+		return
+	}
 	window.location.hash = getPageNumber()
 }
 
 // local storage state managers...
 function loadStorageState(){
-	return parseInt($.jStorage.get('current_page'), 0)
+	return parseInt($.jStorage.get('current_page', 0))
 }
 function saveStorageState(){
 	$.jStorage.set('current_page', getPageNumber())

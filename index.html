@@ -9,10 +9,6 @@
 <script src="magazine.js"></script>
 
 <script>
-</script>
-
-
-<script>
 
 $(document).ready(function(){
 
@@ -29,6 +25,7 @@ $(document).ready(function(){
 		})
 		.bind('hashchange', function(){
 			setCurrentPage(loadURLState())
+			return false
 		})
 
 	$('.viewer')
@@ -46,8 +43,10 @@ $(document).ready(function(){
 			click: function(evt, elem){
 				if($(elem).hasClass('page')){
 					setCurrentPage(elem)
+					//togglePageView('on')
 				} else if($(elem).hasClass('content')){
 					setCurrentPage($(elem).parents('.page').first())
+					//togglePageView('on')
 				}
 				return true
 			}
@@ -100,7 +99,18 @@ $(document).ready(function(){
 	<div class="magazine">
 		<div class="cover page current">
 			<div class="content">
-				Magazine Cover
+				<h1>Magazine Cover</h1>
+				<br><br><br>
+				<a href="#1">Article 1</a><br>
+				<a href="#ArticleAnchorExample">Article 2</a><br>
+				<a href="#11">Article 3</a><br>
+
+				<br><br><br>
+
+				<h3>Special anchors</h3>
+				<a href="#home">Magazine cover</a><br>
+				<a href="#end">Last Page</a><br>
+				<a href="#thumbnails">Thumbnail view</a><br>
 			</div>
 		</div>
 
@@ -109,7 +119,8 @@ $(document).ready(function(){
 		<div class="article">
 			<div class="cover page">
 				<div class="content">
-					Article Cover<br>
+					<h1>Article Cover</h1>
+					<a href="#home">home</a><br>
 					some more text...
 				</div>
 			</div>
@@ -135,8 +146,10 @@ $(document).ready(function(){
 		</div>
 		<div class="article">
 			<div class="cover page">
-				<div class="content">
-					Article Cover
+				<div class="content" name="ArticleAnchorExample">
+					<!--a name="ArticleAnchorExample"></a-->
+					<h1>Article Cover</h1>
+					<a href="#home">home</a><br>
 				</div>
 			</div>
 
@@ -169,7 +182,8 @@ $(document).ready(function(){
 		<div class="article">
 			<div class="cover page">
 				<div class="content">
-					Article Cover
+					<h1>Article Cover</h1>
+					<a href="#home">home</a><br>
 				</div>
 			</div>
 
@@ -195,7 +209,8 @@ $(document).ready(function(){
 			</div>
 			<div class="page">
 				<div class="content">
-					Page
+					Page<br>
+					<a href="#home">home</a><br>
 				</div>
 			</div>
 		</div>
