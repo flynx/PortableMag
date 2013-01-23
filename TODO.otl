@@ -27,8 +27,7 @@
 		[X] add page urls
 		[X] add state saving to local storage
 		[X] use modes (CSS) for thumbnail/page views...
-	[_] 66% stage 1 - basic features
-		[_] issue browser structure
+	[X] 100% stage 1 - basic features
 		[X] global navigation bar
 		[X] real magazine structure
 		[X] 100% basic article navigation
@@ -40,11 +39,6 @@
 			[X] go to next article
 		[X] real previews
 		| use zoom to show a ribbon...
-		[_] 0% issue navigation
-			[_] issue list
-			[_] 0% issue download
-				[_] whole edition dowload and update (primary mode)
-				[_] seporate issue download (secondary)
 	[_] 25% stage 2 - templates and examples
 		[_] 0% default cover templates
 		[_] 0% default page templates
@@ -72,7 +66,14 @@
 			[_] plain
 		[X] 100% default actions
 			[X] show/hide layer
-	[_] 0% stage 3 - advanced features
+	[_] 0% stage 3 - issue browser
+		[_] issue browser structure
+		[_] 0% issue navigation
+			[_] issue list
+			[_] 0% issue download
+				[_] whole edition dowload and update (primary mode)
+				[_] seporate issue download (secondary)
+	[_] 0% stage 4 - advanced features
 		[_] 0% edition editor / publisher
 			[_] create/delete edition
 			[_] cover
