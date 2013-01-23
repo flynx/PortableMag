@@ -10,7 +10,7 @@
 
 
 	<description>
-		Portable Magazine demo.
+		Portable Magazine tech-demo.
 	</description>
 
 
@@ -19,7 +19,7 @@
 	</author>
 
 
-	<!--preference name="orientation" value="landscape" /-->
+	<preference name="orientation" value="landscape" />
 	<preference name="fullscreen" value="true" />
 
 

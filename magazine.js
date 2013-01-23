@@ -8,6 +8,7 @@ var PAGES_VISIBLE = 1
 var PAGES_IN_RIBBON = 6
 
 
+
 /*********************************************************************/
 togglePageDragging = createCSSClassToggler(
 	'.viewer',
