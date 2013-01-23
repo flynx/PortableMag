@@ -1,5 +1,5 @@
-[_] 27% Priority work
-	[_] 45% general todo
+[_] 29% Priority work
+	[_] 50% general todo
 		[_] populate an example issue
 		[_] test for stability
 		[_] cleanup code
@@ -11,6 +11,7 @@
 		[_] BUG: href to existing anchors will mess up layout...
 		| need to find out how can we disable anchor links from actually
 		| going to the anchor...
+		[X] added pinch events...
 		[X] #URL "layers"
 		| navigation to a hidden layer will show the layer, any other 
 		| navigation will hide it...

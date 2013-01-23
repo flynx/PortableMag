@@ -314,7 +314,7 @@ function fitPagesToContent(n){
 }
 
 
-function swipeUpdate(evt, phase, direction, distance){
+function swipeUpdate(evt, phase, direction, distance, duration, fingers){
 	var pages = $('.page')
 	var cur = $('.current.page')
 	var n = pages.index(cur)
@@ -345,10 +345,20 @@ function swipeUpdate(evt, phase, direction, distance){
 
 		// prev page...
 		if(direction == 'right') {
-			setCurrentPage(Math.max(n-p, 0))
+			// two+ fingers moves to closest article...
+			if(fingers >= 2){
+				prevArticle()
+			} else {
+				setCurrentPage(Math.max(n-p, 0))
+			}
 		// next page...
 		} else if (direction == 'left'){
-			setCurrentPage(Math.min(n+p, pages.length-1))
+			// two+ fingers moves to closest article...
+			if(fingers >= 2){
+				nextArticle()
+			} else {
+				setCurrentPage(Math.min(n+p, pages.length-1))
+			}
 		}
 	}
 }
