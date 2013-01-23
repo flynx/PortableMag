@@ -23,9 +23,9 @@ $(document).ready(function(){
 		.resize(function() {
 			fitNPages(PAGES_VISIBLE)
 		})
-		.bind('hashchange', function(){
+		.bind('hashchange', function(e){
+			e.preventDefault()
 			setCurrentPage(loadURLState())
-			return false
 		})
 
 	$('.viewer')
@@ -108,14 +108,16 @@ $(document).ready(function(){
 			<div class="content">
 				<h1>Magazine Cover</h1>
 				<h2>Navigation via #URLs</h2>
-				<p><i>BUG: currently navigation via existing anchors
-					will break the layout, so use the name attribute
-					on any other tags (see example).
-				</i></p>
 				<h3>The basics</h3>
 				<a href="#1">Page #1</a><br>
-				<a href="#3">Page #3</a><br>
 				<a href="#ArticleAnchorExample">Named page</a><br>
+				<p>
+					<a href="#page-3-anchor">Anchor on page #3</a><br>
+					<i>BUG: currently navigation via existing anchors
+						will break the layout, so use the name attribute
+						on any other tags (see example).
+					</i>
+				</p>
 
 				<h3>Special anchors</h3>
 				<p>These show up in the page URL</p>
@@ -134,7 +136,7 @@ $(document).ready(function(){
 				<a href="#nextArticle">Next article</a><br>
 				<a href="#prevArticle">Previous article</a><br>
 
-				<div name="example-layer" class="hidden" onclick="window.location.hash='example-layer'" style="position:absolute; left:400px; top:150px; width: 250px; height:50px; text-align: center; padding: 15px; border: solid gray 5px; background: silver; color: white">
+				<div name="example-layer" class="hidden" onclick="window.location.hash='example-layer'" style="position:absolute; left:400px; top:250px; width: 250px; height:50px; text-align: center; padding: 15px; border: solid gray 5px; background: silver; color: white">
 					This is an example layer<br><br>
 					<i>click or tap to hide</i>
 				</div>
@@ -161,6 +163,7 @@ $(document).ready(function(){
 			</div>
 			<div class="page">
 				<div class="content">
+					<a name="page-3-anchor"></a>
 					Page
 					<img src="img.jpg" height="100%"/>
 				</div>
