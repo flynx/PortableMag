@@ -1,4 +1,10 @@
 /**********************************************************************
+* JavaScript Lib
+* at this point this is just a place I put most of the generic stuff I 
+* use.
+* 
+* P.S. the name "jli" just stands for Java script LIb, like how it 
+* looks...
 **********************************************************************/
 
 var DEBUG = true
@@ -164,7 +170,25 @@ function setElementScale(elem, scale){
 }
 
 
+/************************************************ jQuery extensions **/
 
 
-/*********************************************************************/
+jQuery.fn.reverseChildren = function(){
+	return $(this).each(function(_, e){
+		return $(e).append($(e).children().detach().get().reverse())
+	})
+}
 
+
+
+jQuery.fn.sortChildren = function(func){
+	return $(this).each(function(_, e){
+		return $(e).append($(e).children().detach().get().sort(func))
+	})
+}
+
+
+
+
+/**********************************************************************
+* vim:set ts=4 sw=4 :                                                */
