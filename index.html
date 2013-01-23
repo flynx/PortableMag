@@ -128,37 +128,49 @@ $(document).ready(function(){
 		<div class="cover page current">
 			<div class="content">
 				<h1>Magazine Cover</h1>
-				<h2>Navigation via #URLs</h2>
-				<h3>The basics</h3>
-				<a href="#1">Page #1</a><br>
-				<a href="#ArticleAnchorExample">Named page</a><br>
-				<p>
-					<a href="#page-3-anchor">Anchor on page #3</a><br>
-					<i>BUG: currently navigation via existing anchors
-						will break the layout, so use the name attribute
-						on any other tags (see example).
-					</i>
-				</p>
+				<div style="float:left; width: 40%; height: 100%; margin: 10px;">
+					<h2>Finger controls</h2>
+					<ul>
+						<li> Single finger swipe left/right &ndash; prev/next page.
+						<li> Two finger swipe left/right &ndash; prev/next article.
+						<li> Single finger swipe up/down &ndash; toggle thumbnail view.
+						<li> Pinch in/out &ndash; go in/out of thumbnail view.
+					</ul>
+					<h2>Navigation via #URLs</h2>
+					<h3>The basics</h3>
+					<a href="#1">Page #1</a><br>
+					<a href="#ArticleAnchorExample">Named page</a><br>
+					<p>
+						<a href="#page-3-anchor">Anchor on page #3</a><br>
+						<i>BUG: currently navigation via existing anchors
+							will break the layout, so use the name attribute
+							on any other tags (see example).
+						</i>
+					</p>
+				</div>
 
-				<h3>Special anchors</h3>
-				<p>These show up in the page URL</p>
-				<a href="#home">Magazine cover</a><br>
-				<a href="#end">Last page</a><br>
-				<a href="#thumbnails">Thumbnail view</a><br>
-				<a href="#example-layer">Toggle a hidden layer</a><br>
-				<span name="example-layer" class="hidden">
-					<a href="#hideLayers">Hide all layers</a><br>
-				</span>
+				<div style="float:left; width: 40%; height: 100%; padding: 10px;">
+					<h3>Special anchors</h3>
+					<p>These show up in the page URL</p>
+					<a href="#home">Magazine cover</a><br>
+					<a href="#end">Last page</a><br>
+					<a href="#thumbnails">Thumbnail view</a><br>
+					<a href="#example-layer">Toggle a hidden layer</a><br>
+					<span name="example-layer" class="hidden">
+						<a href="#hideLayers">Hide all layers</a><br>
+					</span>
 
-				<h3>Relative special anchors</h3>
-				<p>These will get replaced by corresponding page numbers in the URL</p>
-				<a href="#next">Next page</a><br>
-				<a href="#prev">Previous page</a><br>
-				<a href="#nextArticle">Next article</a><br>
-				<a href="#prevArticle">Previous article</a><br>
+					<h3>Relative special anchors</h3>
+					<p>These will get replaced by corresponding page numbers in the URL</p>
+					<a href="#next">Next page</a><br>
+					<a href="#prev">Previous page</a><br>
+					<a href="#nextArticle">Next article</a><br>
+					<a href="#prevArticle">Previous article</a><br>
+				</div>
 
-				<div name="example-layer" class="hidden" onclick="window.location.hash='example-layer'" style="position:absolute; left:400px; top:250px; width: 250px; height:50px; text-align: center; padding: 15px; border: solid gray 5px; background: silver; color: white">
-					This is an example layer<br><br>
+
+				<div name="example-layer" class="hidden" onclick="window.location.hash='example-layer'" style="position:absolute; left:100px; top:400px; width: 300px; height:50px; text-align: center; padding: 15px; border: solid gray 5px; background: silver; color: white">
+					<h3>This is an example layer</h3>
 					<i>click or tap to hide</i>
 				</div>
 			</div>
