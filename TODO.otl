@@ -1,5 +1,9 @@
 [_] 29% Priority work
-	[_] 53% general todo
+	[_] 50% general todo
+		[_] make layer default state configurable...
+		| e.g. setting "shown"/"hidden" classes in HTML and adding 
+		| something like a page reset that will restore the default state,
+		| rather than the current "hideLayers"
 		[_] populate an example issue
 		[_] test for stability
 		[_] cleanup code
