@@ -43,10 +43,14 @@ $(document).ready(function(){
 			},
 
 			pinchIn: function(event, direction, distance, duration, fingerCount, pinchZoom) {
-				togglePageView('on')
+				if(fingerCount == 2){
+					togglePageView('on')
+				}
 			},
 			pinchOut: function(event, direction, distance, duration, fingerCount, pinchZoom) {
-				togglePageView('off')
+				if(fingerCount == 2){
+					togglePageView('off')
+				}
 			},
 
 
@@ -60,7 +64,9 @@ $(document).ready(function(){
 					//togglePageView('on')
 				}
 				return true
-			}
+			},
+
+			fingers: $.fn.swipe.fingers.ALL
 		})
 	$('.button.cover').swipe({click: goToMagazineCover})
 	$('.button.next-article').swipe({click: nextArticle})
