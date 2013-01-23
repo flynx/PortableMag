@@ -33,11 +33,13 @@ $(document).ready(function(){
 			swipeStatus: swipeUpdate,
 			// XXX change this to pinch...
 			swipeUp: function(){
-				togglePageView('off')
+				//togglePageView('off')
+				togglePageView()
 			},
 			// XXX change this to pinch...
 			swipeDown: function(){
-				togglePageView('on')
+				//togglePageView('on')
+				togglePageView()
 			},
 			// XXX for some reason this deos not bubble up the nested elements...
 			click: function(evt, elem){
@@ -85,13 +87,18 @@ $(document).ready(function(){
 	<!-- XXX Magazine title... -->
 
 	<div class="top-toolbar">
-		mooo
-		<div class="button home">Home</div>
 		<div class="button cover">Issue Cover</div>
 		<div class="button prev-article">Prev Article</div>
 		<div class="button next-article">Next Article</div>
 	</div>
 	<div class="bottom-toolbar">
+		<!-- this is just an example-->
+		<a href="#home">Cover</a> |
+		<a href="#prevArticle">Previous article</a> |
+		<a href="#prev">Previous page</a> |
+		<a href="#next">Next page</a> | 
+		<a href="#nextArticle">Next article</a> |
+		<a href="#end">End</a>
 	</div>
 
 <div class="scaler">
@@ -100,17 +107,36 @@ $(document).ready(function(){
 		<div class="cover page current">
 			<div class="content">
 				<h1>Magazine Cover</h1>
-				<br><br><br>
-				<a href="#1">Article 1</a><br>
-				<a href="#ArticleAnchorExample">Article 2</a><br>
-				<a href="#11">Article 3</a><br>
-
-				<br><br><br>
+				<h2>Navigation via #URLs</h2>
+				<p><i>BUG: currently navigation via existing anchors
+					will break the layout, so use the name attribute
+					on any other tags (see example).
+				</i></p>
+				<h3>The basics</h3>
+				<a href="#1">Page #1</a><br>
+				<a href="#3">Page #3</a><br>
+				<a href="#ArticleAnchorExample">Named page</a><br>
 
 				<h3>Special anchors</h3>
+				<p>These show up in the page URL</p>
 				<a href="#home">Magazine cover</a><br>
-				<a href="#end">Last Page</a><br>
+				<a href="#end">Last page</a><br>
 				<a href="#thumbnails">Thumbnail view</a><br>
+				<a href="#example-layer">Toggle a hidden layer</a><br>
+				<span name="example-layer" class="hidden">
+					<a href="#hideLayers">Hide all layers</a><br>
+				</span>
+
+				<h3>Relative special anchors</h3>
+				<p>These will get replaced by corresponding page numbers in the URL</p>
+				<a href="#next">Next page</a><br>
+				<a href="#prev">Previous page</a><br>
+				<a href="#nextArticle">Next article</a><br>
+				<a href="#prevArticle">Previous article</a><br>
+
+				<div name="example-layer" class="hidden" onclick="window.location.hash='example-layer'" style="position:absolute; left:400px; top:150px; width: 250px; height:50px; text-align: center; padding: 15px; border: solid gray 5px; background: silver; color: white">
+					This is an example
+				</div>
 			</div>
 		</div>
 

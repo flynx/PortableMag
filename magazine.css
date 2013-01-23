@@ -4,6 +4,14 @@ body {
 	margin: 0;
 }
 
+.hidden {
+	display: none;
+}
+/* keep this empty... */
+.shown {
+}
+
+
 /* all elements that will behave like a page */
 .page {
 	/* XXX make this browser-sized... */
@@ -145,6 +153,13 @@ body {
 
 	height: 50px;
 	left: 0px;
+
+	font-size: 14px;
+	color: white;
+}
+.top-toolbar a, .bottom-toolbar a {
+	color: white;
+	text-decoration: none;
 }
 
 .top-toolbar {

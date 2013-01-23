@@ -354,7 +354,6 @@ function swipeUpdate(evt, phase, direction, distance){
 }
 
 
-// XXX store the current page...
 function setCurrentPage(n, W){
 	if(n == null){
 		var cur = $('.current.page')
@@ -444,7 +443,7 @@ function prevArticle(){
 
 /*********************************************************************/
 // XXX make these magazine-specific...
-// XXX BUG: if the hach url part coresponds to a real anchor the browser 
+// XXX BUG: if the hash url part coresponds to a real anchor the browser 
 // 		shifts the page, need to disable this...
 // URL state managers...
 function loadURLState(){
@@ -455,32 +454,80 @@ function loadURLState(){
 	var n = parseInt(anchor)
 	if(typeof(n) == typeof(1) && n >= 0){
 		return n
+
 	// XXX add real external aliases...
 	} else if(anchor == 'thumbnails') {
 		togglePageView('off')
 		return getPageNumber()
+
 	} else if(anchor == 'home') {
 		return 0
+
 	} else if(anchor == 'end') {
 		return $('.page').length-1
+
+	// relative URLs...
+	} else if(anchor == 'next') {
+		nextPage()
+		return getPageNumber()
+
+	} else if(anchor == 'prev') {
+		prevPage()
+		return getPageNumber()
+
+	} else if(anchor == 'nextArticle') {
+		nextArticle()
+		return getPageNumber()
+
+	} else if(anchor == 'prevArticle') {
+		prevArticle()
+		return getPageNumber()
+
+	// hide all visible layers on current page...
+	} else if(anchor == 'hideLayers') {
+		$('.current.page .shown')
+			.addClass('hidden')
+			.removeClass('shown')
+		return getPageNumber()
+
 	} else {
-		return getPageNumber($('[name='+anchor+']').parents('.page'))
+		var elem = $('[name='+anchor+']')
+		n = getPageNumber(elem.parents('.page'))
+		// toggle hidden/shown elements...
+		if(elem.hasClass('hidden')){
+			elem
+				.addClass('shown')
+				.removeClass('hidden')
+		} else if(elem.hasClass('shown')){
+			elem
+				.addClass('hidden')
+				.removeClass('shown')
+		}
+		return n
 	}
 }
 function saveURLState(){
 	var anchor = window.location.hash.split('#')[1]
-	var page = $('[name='+anchor+']')
+	var elem = $('[name='+anchor+']')
+	var page = elem
 	if(!page.hasClass('page')){
 		page = page.parents('.page')
 	}
 	var n = getPageNumber()
-	// XXX use real aliases...
-	if(n == getPageNumber(page)
-			|| (anchor == 'home' && n == 0)
-			|| (anchor == 'end' && n == $('.page').length-1)){
-		return
+
+	// decide which #URLs stay in the URL and which get replaces with a
+	// page number...
+	if(!elem.hasClass('shown') && !elem.hasClass('hidden')){
+		// XXX use real aliases...
+		// do not replace these urls with page numbers...
+		if( n == getPageNumber(page)
+				|| (anchor == 'home' && n == 0)
+				|| (anchor == 'end' && n == $('.page').length-1)){
+			return anchor
+		}
 	}
-	window.location.hash = getPageNumber()
+	window.location.hash = n
+	return n
 }
 
 // local storage state managers...
