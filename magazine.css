@@ -125,6 +125,51 @@ body {
 	background: white;
 }
 
+.magazine:before {
+	position: absolute;
+	display: inline-block;
+	text-align: center;
+
+	height: 300px;
+	width: 600px;
+	left: -300px;
+	top: -50%;
+
+	content: 'COVER';
+	font-weight: bold;
+	font-size: 150px;
+
+	color: #888;
+
+	-webkit-transform: rotate(-90deg);
+	-moz-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+}
+.magazine:after {
+	position: absolute;
+	display: inline-block;
+	text-align: center;
+
+	height: 300px;
+	width: 600px;
+	right: -450px;
+	top: -50%;
+
+	content: 'END';
+	font-weight: bold;
+	font-size: 150px;
+
+	color: #888;
+
+	-webkit-transform: rotate(-90deg);
+	-moz-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+}
+
 .article {
 	width: auto;
 	overflow: visible;

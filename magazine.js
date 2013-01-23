@@ -314,7 +314,7 @@ function fitPagesToContent(n){
 }
 
 
-function swipeUpdate(evt, phase, direction, distance, duration, fingers){
+function swipeHandler(evt, phase, direction, distance, duration, fingers){
 	var pages = $('.page')
 	var cur = $('.current.page')
 	var n = pages.index(cur)
@@ -421,7 +421,7 @@ function goToArticleCover(){
 
 function nextArticle(){
 	var cur = $('.current.page').parents('.article')
-	// we are at the magazine cover cover...
+	// we are at the magazine cover...
 	if(cur.length == 0){
 		return setCurrentPage(
 			$('.article .page:first-child').first())
@@ -437,9 +437,10 @@ function nextArticle(){
 // XXX this is almost exactly the same as nextArticle...
 function prevArticle(){
 	var cur = $('.current.page').parents('.article')
-	// we are at the magazine cover cover...
+	// we are at the magazine cover...
 	if(cur.length == 0){
-		return $('.current.page')
+		//return $('.current.page')
+		return setCurrentPage()
 	}
 	// just find the prev one...
 	var articles = $('.article')

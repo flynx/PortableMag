@@ -30,7 +30,7 @@ $(document).ready(function(){
 
 	$('.viewer')
 		.swipe({
-			swipeStatus: swipeUpdate,
+			swipeStatus: swipeHandler,
 			// XXX change this to pinch...
 			swipeUp: function(){
 				//togglePageView('off')
@@ -74,6 +74,8 @@ $(document).ready(function(){
 
 			fingers: $.fn.swipe.fingers.ALL
 		})
+
+	// XXX do we need these here??
 	$('.button.cover').swipe({click: goToMagazineCover})
 	$('.button.next-article').swipe({click: nextArticle})
 	$('.button.prev-article').swipe({click: prevArticle})
@@ -141,8 +143,8 @@ $(document).ready(function(){
 					<a href="#1">Page #1</a><br>
 					<a href="#ArticleAnchorExample">Named page</a><br>
 					<p>
-						<a href="#page-3-anchor">Anchor on page #3</a><br>
-						<i>BUG: currently navigation via existing anchors
+						<a href="#page-3-anchor" style="pointer-events:none">Anchor on page #3</a><br>
+						<i> currently navigation via existing anchors
 							will break the layout, so use the name attribute
 							on any other tags (see example).
 						</i>
