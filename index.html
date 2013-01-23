@@ -43,11 +43,17 @@ $(document).ready(function(){
 			},
 
 			pinchIn: function(event, direction, distance, duration, fingerCount, pinchZoom) {
+				if(pinchZoom < distance){
+					return
+				}
 				if(fingerCount == 2){
 					togglePageView('on')
 				}
 			},
 			pinchOut: function(event, direction, distance, duration, fingerCount, pinchZoom) {
+				if(pinchZoom < distance){
+					return
+				}
 				if(fingerCount == 2){
 					togglePageView('off')
 				}
