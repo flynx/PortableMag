@@ -31,7 +31,8 @@ body {
 
 	/* XXX change to relative units... */
 	font-size: 12px;
-	background: silver;
+
+	background: white;
 
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
@@ -139,7 +140,6 @@ body {
 
 /* magazine cover */
 .magazine > .cover {
-	background: white;
 }
 
 /* user hints, visible when user draggs past the cover or the last page
@@ -185,7 +185,6 @@ body {
 }
 
 .article > .cover {
-	background: white;
 }
 
 
@@ -246,7 +245,7 @@ body {
 	height: 100%;
 	z-index: 9000;
 
-	background-color: white;
+	background: white;
 }
 .splash * {
 	color: gray;
