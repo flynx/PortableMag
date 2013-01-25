@@ -1,5 +1,8 @@
 [_] 34% Priority work
-	[_] 47% general todo
+	[_] 45% general todo
+		[_] BUG: something odd going on with window.onResize event...
+		| on android it sometimes fires and sometimes does not -- rotating
+		| the screen does not always scale things correctly...
 		[_] make layer default state configurable...
 		| e.g. setting "shown"/"hidden" classes in HTML and adding 
 		| something like a page reset that will restore the default state,
