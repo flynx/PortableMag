@@ -3,20 +3,27 @@
 
 var DEBUG = true
 
-/* this is needed only for live resize... */
-var PAGES_VISIBLE = 1
+// number of pages to display in ribbon...
 var PAGES_IN_RIBBON = 6
+
+// if true, expand a page to fit the whole view in single page mode...
+var FIT_PAGE_TO_VIEW = false
+
 
 
 
 /*********************************************************************/
+// toggles .dragging CSS class on the viewer while dragging is in 
+// progress.
+// NOTE: this is used mostly for styling and drag assisting...
 togglePageDragging = createCSSClassToggler(
 	'.viewer',
 	'dragging')
 
 
-var FIT_PAGE_TO_VIEW = false
-
+// toggle between the two main modes:
+// 	- single page mode (.page-view-mode)
+// 	- thumbnail/ribbon mode
 togglePageView = createCSSClassToggler(
 	'.viewer', 
 	'page-view-mode',
@@ -24,19 +31,85 @@ togglePageView = createCSSClassToggler(
 	// post-change callback...
 	function(){
 		if(togglePageView('?') == 'on'){
-			PAGES_VISIBLE = 1
-			fitNPages(PAGES_VISIBLE)
+			fitNPages(1)
 		} else {
-			PAGES_VISIBLE = PAGES_IN_RIBBON
-			fitNPages(PAGES_VISIBLE)
+			fitNPages(PAGES_IN_RIBBON)
 		}
 	})
 
+
+
+
+/********************************************************* helpers ***/
 
 function getPageScale(){
 	return getElementScale($('.scaler'))
 }
 
+
+function getPageNumber(page){
+	if(page == null){
+		page = $('.current.page')
+	}
+	return $('.page').index(page) 
+}
+
+
+
+/************************************************** event handlers ***/
+
+function swipeHandler(evt, phase, direction, distance, duration, fingers){
+	var pages = $('.page')
+	var cur = $('.current.page')
+	var n = pages.index(cur)
+	var scale = getPageScale()
+	var mag = $('.magazine')
+
+	if(phase=='move' && (direction=='left' || direction=='right')){
+		mag.addClass('unanimated')
+		if(direction == 'left'){
+			$('.magazine').css({left: -n*cur.width()-distance/scale})
+		} else if(direction == 'right') {
+			$('.magazine').css({left: -n*cur.width()+distance/scale})
+		}
+		setTimeout(function(){mag.removeClass('unanimated')}, 5)
+
+	} else if(phase == 'start') {
+		togglePageDragging('on')
+
+	} else if(phase == 'cancel') {
+		togglePageDragging('off')
+		setCurrentPage()
+
+	} else if(phase =='end' ) {
+		togglePageDragging('off')
+		// see which page is closer to the middle of the screen and set it...
+		// do this based on how much we dragged...
+		var p = Math.ceil((distance/scale)/cur.width())
+
+		// prev page...
+		if(direction == 'right') {
+			// two+ fingers moves to closest article...
+			if(fingers >= 2){
+				prevArticle()
+			} else {
+				setCurrentPage(Math.max(n-p, 0))
+			}
+		// next page...
+		} else if(direction == 'left'){
+			// two+ fingers moves to closest article...
+			if(fingers >= 2){
+				nextArticle()
+			} else {
+				setCurrentPage(Math.min(n+p, pages.length-1))
+			}
+		}
+	}
+}
+
+
+
+/********************************************************** layout ***/
 
 // XXX for some magical reason this is not called...
 function fitNPages(n, fit_to_content){
@@ -101,55 +174,8 @@ function fitNPages(n, fit_to_content){
 }
 
 
-function swipeHandler(evt, phase, direction, distance, duration, fingers){
-	var pages = $('.page')
-	var cur = $('.current.page')
-	var n = pages.index(cur)
-	var scale = getPageScale()
-	var mag = $('.magazine')
 
-	if( phase=='move' && (direction=='left' || direction=='right') ){
-		mag.addClass('unanimated')
-		if (direction == 'left'){
-			$('.magazine').css({left: -n*cur.width()-distance/scale})
-		} else if (direction == 'right') {
-			$('.magazine').css({left: -n*cur.width()+distance/scale})
-		}
-		setTimeout(function(){mag.removeClass('unanimated')}, 5)
-
-	} else if ( phase == 'start') {
-		togglePageDragging('on')
-
-	} else if ( phase == 'cancel') {
-		togglePageDragging('off')
-		setCurrentPage()
-
-	} else if ( phase =='end' ) {
-		togglePageDragging('off')
-		// see which page is closer to the middle of the screen and set it...
-		// do this based on how much we dragged...
-		var p = Math.ceil((distance/scale)/cur.width())
-
-		// prev page...
-		if(direction == 'right') {
-			// two+ fingers moves to closest article...
-			if(fingers >= 2){
-				prevArticle()
-			} else {
-				setCurrentPage(Math.max(n-p, 0))
-			}
-		// next page...
-		} else if (direction == 'left'){
-			// two+ fingers moves to closest article...
-			if(fingers >= 2){
-				nextArticle()
-			} else {
-				setCurrentPage(Math.min(n+p, pages.length-1))
-			}
-		}
-	}
-}
-
+/********************************************************* actions ***/
 
 function setCurrentPage(n, W){
 	if(n == null){
@@ -175,11 +201,13 @@ function setCurrentPage(n, W){
 	return cur
 }
 
-function getPageNumber(page){
-	if(page == null){
-		page = $('.current.page')
-	}
-	return $('.page').index(page) 
+
+
+function goToMagazineCover(){
+	setCurrentPage(0)
+}
+function goToArticleCover(){
+	setCurrentPage($('.current.page').parents('.article').children('.page').first())
 }
 
 
@@ -193,15 +221,6 @@ function prevPage(){
 	var pages = $('.page')
 	var cur = $('.current.page')
 	return setCurrentPage(Math.max(pages.index(cur)-1, 0))
-}
-
-
-
-function goToMagazineCover(){
-	setCurrentPage(0)
-}
-function goToArticleCover(){
-	setCurrentPage($('.current.page').parents('.article').children('.page').first())
 }
 
 
@@ -238,7 +257,8 @@ function prevArticle(){
 
 
 
-/*********************************************************************/
+/*********************************************************** state ***/
+
 // XXX make these magazine-specific...
 // XXX BUG: if the hash url part coresponds to a real anchor the browser 
 // 		shifts the page, need to disable this...
@@ -317,7 +337,7 @@ function saveURLState(){
 	if(!elem.hasClass('shown') && !elem.hasClass('hidden')){
 		// XXX use real aliases...
 		// do not replace these urls with page numbers...
-		if( n == getPageNumber(page)
+		if(n == getPageNumber(page)
 				|| (anchor == 'home' && n == 0)
 				|| (anchor == 'end' && n == $('.page').length-1)){
 			return anchor
@@ -327,6 +347,8 @@ function saveURLState(){
 	return n
 }
 
+
+
 // local storage state managers...
 function loadStorageState(){
 	return parseInt($.jStorage.get('current_page', 0))
@@ -334,6 +356,8 @@ function loadStorageState(){
 function saveStorageState(){
 	$.jStorage.set('current_page', getPageNumber())
 }
+
+
 
 // generic state managers...
 function loadState(){
@@ -350,19 +374,25 @@ function saveState(){
 }
 
 
-/*********************************************************************/
+
+/********************************************************** editor ***/
 
 // XXX create magazine...
 function createMagazine(){
 }
 
+
+
 // XXX create article (magazine, title, position)...
 function createArticle(magazine, title){
 }
 
+
+
 // XXX create page (article, template, position)...
 function createPage(article, template){
 }
+
 
 
 /*********************************************************************/
