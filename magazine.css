@@ -1,9 +1,12 @@
+/*********************************************************************/
+/*********************************************************************/
 
 body {
 	padding: 0;
 	margin: 0;
 }
 
+/************************************* layers and hidable elements ***/
 .hidden {
 	display: none;
 }
@@ -12,7 +15,8 @@ body {
 }
 
 
-/* all elements that will behave like a page */
+
+/*********************************************************** pages ***/
 .page {
 	/* XXX make this browser-sized... */
 	display: inline-block;
@@ -20,16 +24,14 @@ body {
 	text-align: left;
 	overflow: hidden;
 
-	/* XXX need these to be the same as the magazine, for some reason does not work...
-	 *	one way to go is to use a fixed page layout and scale things manually.
-	 */
-	
 	width: auto;
 	height: auto;
-	/* change to relative units... */
+	/* XXX change to relative units... */
 	margin-top: -300px;
 
+	/* XXX change to relative units... */
 	font-size: 12px;
+	background: silver;
 
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
@@ -46,6 +48,7 @@ body {
 	white-space: normal;
 
 	/* these set the "safe" marks for page content */
+	/* XXX change to relative units... */
 	width: 800px;
 	height: 600px;
 
@@ -59,14 +62,18 @@ body {
 .page-view-mode .page {
 	text-align: center;
 
+	/* XXX change to relative units... */
 	width: 800px;
 }
 
 .page-view-mode .page .content {
 }
 
-/* general layout */
 
+
+/************************************************** general layout ***/
+
+/* top most element, relative to this everything is sized */
 .viewer {
 	position: relative;
 	/* this makes the magazine behave like a ribbon */
@@ -85,6 +92,7 @@ body {
 	transition: all 0.5s ease;
 }
 
+/* element used to scale the magazine... */
 .scaler {
 	position: relative;
 	overflow: visible;
@@ -102,20 +110,23 @@ body {
 	transition: all 0.2s ease;
 }
 
+/* element used to center and align the magazine... */
 .aligner {
 	position: relative;
 	left: 50%;
 	height: 100%;
 }
 
+
+/* magazine container, this contains a cover and a set of articles */
 .magazine {
 	position: relative;
 	display: inline-block;
 	vertical-align: bottom;
 	top: 50%;
 
-	/* XXX change to relative units... */
 	/* this is minus half the page width */
+	/* XXX change to relative units... */
 	margin-left: -400px;
 
 	-webkit-transition: all 0.2s ease;
@@ -126,21 +137,23 @@ body {
 }
 
 
+/* magazine cover */
 .magazine > .cover {
 	background: white;
 }
 
-.magazine:before {
+/* user hints, visible when user draggs past the cover or the last page
+ * of the mag... */
+.magazine:before, .magazine:after {
 	position: absolute;
 	display: inline-block;
 	text-align: center;
 
-	height: 300px;
-	width: 600px;
-	left: -300px;
 	top: -50%;
 
-	content: 'COVER';
+	height: 300px;
+	width: 600px;
+
 	font-weight: bold;
 	font-size: 150px;
 
@@ -151,47 +164,34 @@ body {
 	-o-transform: rotate(-90deg);
 	-ms-transform: rotate(-90deg);
 	transform: rotate(-90deg);
+}
+.magazine:before {
+	content: 'COVER';
+	left: -300px;
 }
 .magazine:after {
-	position: absolute;
-	display: inline-block;
-	text-align: center;
-
-	height: 300px;
-	width: 600px;
-	right: -450px;
-	top: -50%;
-
 	content: 'END';
-	font-weight: bold;
-	font-size: 150px;
-
-	color: #888;
-
-	-webkit-transform: rotate(-90deg);
-	-moz-transform: rotate(-90deg);
-	-o-transform: rotate(-90deg);
-	-ms-transform: rotate(-90deg);
-	transform: rotate(-90deg);
+	right: -450px;
 }
 
+
+/* magazine article, this can contain a cover and a number of pages */
 .article {
+	display: inline-block;
 	width: auto;
 	overflow: visible;
 	white-space: nowrap;
 	font-size: 0px;
-
-	display: inline-block;
 }
 
 .article > .cover {
 	background: white;
 }
 
-.page {
-	background: silver;
-}
 
+/************************************************ utility elements ***/
+
+/* toolbars... */
 .top-toolbar, .bottom-toolbar {
 	display: block;
 	position: absolute;
@@ -212,17 +212,14 @@ body {
 	color: white;
 	text-decoration: none;
 }
-
 .top-toolbar {
 	top: 0px;
 	width: 100%;
 }
-
 .bottom-toolbar {
 	bottom: 0px;
 	width: 100%;
 }
-
 .button {
 	display: inline-block;
 	color: white;
@@ -239,6 +236,8 @@ body {
 	margin-right: 20px;
 }
 
+
+/* splash screen. used to hide loading and aligning elements */
 .splash {
 	position: absolute;
 	top: 0px;
@@ -249,13 +248,14 @@ body {
 
 	background-color: white;
 }
-
 .splash * {
 	color: gray;
 }
 
 
-/* modes */
+/*********************************************************** modes ***/
+
+/* page view mode -- fullscreen, single page view */
 .page-view-mode.viewer {
 }
 
@@ -276,7 +276,7 @@ body {
 }
 
 
-/* templates */
+/******************************************************* templates ***/
 .caption {
 	display: block;
 	position: absolute;
@@ -305,6 +305,7 @@ body {
 
 
 
+/*********************************************************************/
 /* keep this at the end... */
 .unanimated {
 	-webkit-transition: none;
@@ -313,3 +314,6 @@ body {
 	-ms-transition: none;	
 	transition: none;
 }
+
+
+/*********************************************************************/
