@@ -17,15 +17,15 @@ body {
 	/* XXX make this browser-sized... */
 	display: inline-block;
 	vertical-align: bottom;
-	text-align: center;
+	text-align: left;
 	overflow: hidden;
 
 	/* XXX need these to be the same as the magazine, for some reason does not work...
 	 *	one way to go is to use a fixed page layout and scale things manually.
 	 */
 	
-	width: 800px;
-	height: 600px;
+	width: auto;
+	height: auto;
 	/* change to relative units... */
 	margin-top: -300px;
 
@@ -49,16 +49,20 @@ body {
 	width: 800px;
 	height: 600px;
 
-	top: 50%;
-	/* change to relative units... */
-	margin-top: -300px;
-
-
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-o-transition: all 0.2s ease;
 	-ms-transition: all 0.2s ease;	
 	transition: all 0.2s ease;
+}
+
+.page-view-mode .page {
+	text-align: center;
+
+	width: 800px;
+}
+
+.page-view-mode .page .content {
 }
 
 /* general layout */
@@ -110,7 +114,8 @@ body {
 	vertical-align: bottom;
 	top: 50%;
 
-	/* change to relative units... */
+	/* XXX change to relative units... */
+	/* this is minus half the page width */
 	margin-left: -400px;
 
 	-webkit-transition: all 0.2s ease;

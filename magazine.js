@@ -15,7 +15,7 @@ togglePageDragging = createCSSClassToggler(
 	'dragging')
 
 
-var FIT_PAGE_TO_VIEW = true
+var FIT_PAGE_TO_VIEW = false
 
 togglePageView = createCSSClassToggler(
 	'.viewer', 
@@ -25,24 +25,10 @@ togglePageView = createCSSClassToggler(
 	function(){
 		if(togglePageView('?') == 'on'){
 			PAGES_VISIBLE = 1
-			if(FIT_PAGE_TO_VIEW){
-				fitPagesToViewer(PAGES_VISIBLE)
-			} else {
-				fitNPages(PAGES_VISIBLE)
-				// to prevent drag while zooming to affect
-				// the resulting position set it to current 
-				// page...
-				// XXX now this is done by fitNPages
-				setCurrentPage()
-			}
+			fitNPages(PAGES_VISIBLE)
 		} else {
 			PAGES_VISIBLE = PAGES_IN_RIBBON
-			if(FIT_PAGE_TO_VIEW){
-				// XXX this needs to be done before transitions...
-				fitPagesToContent(PAGES_VISIBLE)
-			} else {
-				fitNPages(PAGES_VISIBLE)
-			}
+			fitNPages(PAGES_VISIBLE)
 		}
 	})
 
@@ -50,107 +36,67 @@ function getPageScale(){
 	return getElementScale($('.scaler'))
 }
 
-function fitNPages(n){
-	if(n==null){
+
+// XXX for some magical reason this is not called...
+function fitNPages(n, fit_to_content){
+	if(n == null){
 		n = 1
 	}
-	var pages = $('.page')
+	if(n > 1 && fit_to_content == null){
+		fit_to_content = true
+	}
 	var view = $('.viewer')
+	var page = $('.page')
+	var content = $('.content')
+
 	var W = view.width()
 	var H = view.height()
-	var w = pages.width()
-	var h = pages.height()
-
-	var scale = W/(w*n)
-
-	// fit vertically if needed...
-	if(h*scale > H){
-		scale = H/h
-	}
-
-	setElementScale($('.scaler'), scale)
-
-	/* XXX
-	fitPagesTo(null, n)
-	*/
-}
-
-// NOTE: this is a single big function because we need to thread data 
-//		through to avoid sampling while animating...
-// XXX try and do the fitting with pure CSS...
-// XXX BUG: changing width when content is constrained only horizontally
-//		breaks this...
-function fitPagesTo(elem, n){
-	if(n==null){
-		n = 1
-	}
-	var pages = $('.page')
-	var view = $('.viewer')
-	var content = $('.content')
-	if(elem == null){
-		elem = view
-	} else {
-		elem = $(elem)
-	}
-
-	// sample data...
-	var vW = view.width()
-	var vH = view.height()
 	var cW = content.width()
 	var cH = content.height()
-	var W = elem.width()
-	var H = elem.height()
-	var w = pages.width()
-	var h = pages.height()
-	var rW = w
-	var rH = h
 
-	// NOTE: there must be no data sampling after this point...
-	//		this is due to the fact that we will start changing stuff next
-	//		and if CSS transitions are at play new samples will be off...
+	var rW = cW
+	var scale = getPageScale()
 
-
-	// XXX fitting works ONLY in one direction, if both sides need 
-	//		to be adjusted the this breaks everything...
-
-	// do the fitting...
-	if(W-cW/H-cH > 1){
-		rW = W * (cH/H) 
-		pages.width(rW)
-		pages.height(cH)
-		$('.magazine').css({
-			'margin-left': -rW/2
-		})
-	} 
-	if(W-cW/H-cH < 1){
-		rH = H * (cW/W)
-		pages.height(rH)
-		pages.width(cW)
-		$('.page').css({
-			'margin-top': -rH/2
-		})
+	if(fit_to_content){
+		// resulting page width...
+		page.width(cW)
+		page.height(cH)
+		if(W/H > (cW*n)/cH){
+			scale = H/cH
+		} else {
+			scale = W/(cW*n)
+		}
+		var rW = cW
+	} else {
+		// need to calc width only...
+		if(W/H > (cW*n)/cH){
+			scale = H/cH
+			page.width(W/scale)
+			page.height(cH)
+		// need to calc height only...
+		} else if(W/H > (cW*n)/cH){
+			scale = W/(cW*n)
+			page.height(H/scale)
+			page.width(cW)
+		// set both width and height to defaults (content and page ratios match)...
+		} else {
+			scale = W/(cW*n)
+			page.height(cH)
+			page.width(cW)
+		}
+		// resulting page width...
+		var rW = W/scale
 	}
 
-	// scale horizontally...
-	// NOTE: this is done so as to keep the scale within the content constant...
-	var scale = vW/(rW*n)
-	// or scale vertically if needed...
-	// XXX broken
-	//if(rH*scale > vH){
-	//	scale = vH/rH
-	//}
+	// position the pages correctly...
+	$('.magazine').css({
+		'margin-left': -rW/2
+	})
 
+	// do the scaling... 
 	setElementScale($('.scaler'), scale)
-	// update position using the new width...
+	// fix position...
 	setCurrentPage(null, rW)
-}
-
-
-function fitPagesToViewer(n){
-	fitPagesTo('.viewer', n)
-}
-function fitPagesToContent(n){
-	fitPagesTo('.page .content', n)
 }
 
 
