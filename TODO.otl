@@ -1,6 +1,24 @@
 [_] 35% Priority work
-	[_] 50% general todo
-		try a slightly different layout...
+	[_] 52% general todo
+		[_] make layer default state configurable...
+		| e.g. setting "shown"/"hidden" classes in HTML and adding 
+		| something like a page reset that will restore the default state,
+		| rather than the current "hideLayers"
+		[_] populate an example issue
+		[_] test for stability
+		[_] cleanup code
+		[_] time transitions
+		| the goal is for slow devices to seem not to have animations at
+		| all and faster ones to seem to have fast animations...
+		[_] vanquish opacity effects
+		| they slow everything down considerably!
+		[_] BUG: href to existing anchors will mess up layout...
+		| need to find out how can we disable anchor links from actually
+		| going to the anchor...
+		[_] make pages of different formats work...
+		[X] BUG: unstable page fitting.
+		| also broken for portrait layouts...
+		[X] try a slightly different layout...
 		| 
 		| 	+-page--------------+
 		| 	|+-content---+		|
@@ -54,21 +72,6 @@
 		| 	+-------------------+
 		|
 		|
-		[_] make layer default state configurable...
-		| e.g. setting "shown"/"hidden" classes in HTML and adding 
-		| something like a page reset that will restore the default state,
-		| rather than the current "hideLayers"
-		[_] populate an example issue
-		[_] test for stability
-		[_] cleanup code
-		[_] time transitions
-		| the goal is for slow devices to seem not to have animations at
-		| all and faster ones to seem to have fast animations...
-		[_] vanquish opacity effects
-		| they slow everything down considerably!
-		[_] BUG: href to existing anchors will mess up layout...
-		| need to find out how can we disable anchor links from actually
-		| going to the anchor...
 		[X] add two finger swipes to navigate between articles...
 		[X] add pinch events...
 		[X] #URL "layers"
