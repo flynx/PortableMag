@@ -6,6 +6,8 @@ body {
 	margin: 0;
 }
 
+
+
 /************************************* layers and hidable elements ***/
 .hidden {
 	display: none;
@@ -93,6 +95,7 @@ body {
 	transition: all 0.5s ease;
 }
 
+
 /* element used to scale the magazine... */
 .scaler {
 	position: relative;
@@ -110,7 +113,6 @@ body {
 	-ms-transition: all 0.2s ease;	
 	transition: all 0.2s ease;
 }
-
 /* element used to center and align the magazine... */
 .aligner {
 	position: relative;
@@ -136,12 +138,6 @@ body {
 	-ms-transition: all 0.2s ease;	
 	transition: all 0.2s ease;
 }
-
-
-/* magazine cover */
-.magazine > .cover {
-}
-
 /* user hints, visible when user draggs past the cover or the last page
  * of the mag... */
 .magazine:before, .magazine:after {
@@ -174,6 +170,10 @@ body {
 	right: -450px;
 }
 
+/* magazine cover */
+.magazine > .cover {
+}
+
 
 /* magazine article, this can contain a cover and a number of pages */
 .article {
@@ -186,6 +186,7 @@ body {
 
 .article > .cover {
 }
+
 
 
 /************************************************ utility elements ***/
@@ -234,6 +235,10 @@ body {
 	margin-left: 20px;
 	margin-right: 20px;
 }
+.page-view-mode .top-toolbar,
+.page-view-mode .bottom-toolbar {
+	height: 0px;
+}
 
 
 /* splash screen. used to hide loading and aligning elements */
@@ -260,7 +265,6 @@ body {
 
 .page-view-mode .top-toolbar,
 .page-view-mode .bottom-toolbar {
-	height: 0px;
 }
 
 .page-view-mode .page .content {
@@ -276,6 +280,7 @@ body {
 
 
 /******************************************************* templates ***/
+/* XXX split these into seporate files... */
 .caption {
 	display: block;
 	position: absolute;
