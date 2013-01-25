@@ -32,6 +32,7 @@ togglePageView = createCSSClassToggler(
 		}
 	})
 
+
 function getPageScale(){
 	return getElementScale($('.scaler'))
 }
@@ -58,7 +59,6 @@ function fitNPages(n, fit_to_content){
 	var scale = getPageScale()
 
 	if(fit_to_content){
-		// resulting page width...
 		page.width(cW)
 		page.height(cH)
 		if(W/H > (cW*n)/cH){
@@ -66,6 +66,7 @@ function fitNPages(n, fit_to_content){
 		} else {
 			scale = W/(cW*n)
 		}
+		// resulting page width...
 		var rW = cW
 	} else {
 		// need to calc width only...
@@ -220,7 +221,6 @@ function nextArticle(){
 			.first())
 
 }
-// XXX this is almost exactly the same as nextArticle...
 function prevArticle(){
 	var cur = $('.current.page').parents('.article')
 	// we are at the magazine cover...
