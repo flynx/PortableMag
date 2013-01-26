@@ -105,23 +105,24 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 			&& (DRAG_FULL_PAGE || !_PAGE_VIEW)
 			&& (direction=='left' || direction=='right')){
 		// using the "unanimated" trick we will make the drag real-time...
-		mag.addClass('unanimated')
 		if(direction == 'left'){
 			mag.css({left: -n*cur.width()-distance/scale})
 		} else if(direction == 'right') {
 			mag.css({left: -n*cur.width()+distance/scale})
 		}
-		setTimeout(function(){mag.removeClass('unanimated')}, 5)
 
 	} else if(phase == 'start') {
 		togglePageDragging('on')
+		mag.addClass('unanimated')
 
 	} else if(phase == 'cancel') {
 		togglePageDragging('off')
 		setCurrentPage()
+		mag.removeClass('unanimated')
 
 	} else if(phase =='end' ) {
 		togglePageDragging('off')
+		mag.removeClass('unanimated')
 		// see which page is closer to the middle of the screen and set it...
 		// do this based on how much we dragged...
 		var p = Math.ceil((distance/scale)/cur.width())
