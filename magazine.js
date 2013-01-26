@@ -132,16 +132,16 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 			mag.css({left: -n*cur.width()+distance/scale})
 		}
 
-	} else if(phase == 'start') {
+	} else if(phase == 'start'){
 		togglePageDragging('on')
 		mag.addClass('unanimated')
 
-	} else if(phase == 'cancel') {
+	} else if(phase == 'cancel'){
 		togglePageDragging('off')
 		setCurrentPage()
 		mag.removeClass('unanimated')
 
-	} else if(phase =='end' ) {
+	} else if(phase =='end' ){
 		togglePageDragging('off')
 		mag.removeClass('unanimated')
 		// see which page is closer to the middle of the screen and set it...
@@ -149,7 +149,7 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 		var p = Math.ceil((distance/scale)/cur.width())
 
 		// prev page...
-		if(direction == 'right') {
+		if(direction == 'right'){
 			// two+ fingers moves to closest article...
 			if(fingers >= 2){
 				prevArticle()
