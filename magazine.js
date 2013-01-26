@@ -297,6 +297,23 @@ function loadURLState(){
 	} else if(anchor == 'end') {
 		return $('.page').length-1
 
+	// history...
+	} else if(anchor == 'back') {
+		//window.history.back()
+		//setTimeout(function(win){ return function(){ win.history.back() } }(window), 100)
+		// NOTE: if we do not do this we'll endup in an infinite history loop...
+		//window.location.hash = ''
+		//return getPageNumber()
+		return anchor
+
+	} else if(anchor == 'forward') {
+		//window.history.forward()
+		//setTimeout(function(win){ return function(){ win.history.forward() } }(window), 100)
+		// NOTE: if we do not do this we'll endup in an infinite history loop...
+		//window.location.hash = ''
+		//return getPageNumber()
+		return anchor
+
 	// relative URLs...
 	} else if(anchor == 'next') {
 		nextPage()

@@ -42,7 +42,18 @@ $(document).ready(function(){
 		})
 		.bind('hashchange', function(e){
 			e.preventDefault()
-			setCurrentPage(loadURLState())
+			var r = loadURLState()
+			// if we are dealing with history actions the browser will 
+			// do the work for us...
+			if(r == 'back'){
+				window.history.go(-2)
+				return
+			} else if(r == 'forward'){
+				window.history.go(2)
+				return
+			} else {
+				setCurrentPage(r)
+			}
 		})
 
 	$('.viewer')
@@ -179,7 +190,7 @@ $(document).ready(function(){
 						<a href="#1">Page #1</a><br>
 						<a href="#ArticleAnchorExample">Named page</a><br>
 						<p>
-							<a href="#page-3-anchor" style="pointer-events:none">Anchor on page #3</a><br>
+							<s><a href="#page-3-anchor" style="pointer-events:none">Anchor on page #3</a></s><br>
 							<i> currently navigation via existing anchors
 								will break the layout, so use the name attribute
 								on any other tags (see example).
@@ -204,13 +215,17 @@ $(document).ready(function(){
 						<a href="#prev">Previous page</a><br>
 						<a href="#nextArticle">Next article</a><br>
 						<a href="#prevArticle">Previous article</a><br>
+						<h3>History support</h3>
+						<i>NOTE: this is still a bit flaky...</i><br>
+						<a href="#back">Go back</a><br>
+						<a href="#forward">Go forward</a><br>
 					</div>
 					<div style="position:absolute; width:100%; bottom:10px; text-align: right;">
-						<a href="#next">next page...</a><br>
+						<a href="#config">configuration demo</a> <a href="#next">next page...</a><br>
 					</div>
 
 
-					<div name="example-layer" class="hidden" onclick="window.location='#example-layer'" style="position:absolute; left:100px; top:400px; width: 300px; height:50px; text-align: center; padding: 15px; border: solid gray 5px; background: white; color: gray; cursor: hand">
+					<div name="example-layer" class="hidden" onclick="window.location='#example-layer'" style="position:absolute; left:100px; top:400px; width: 300px; height:50px; text-align: center; padding: 15px; border: solid gray 5px; background: white; color: gray; cursor: hand; opacity: 0.8">
 						<h3>This is an example layer</h3>
 						<i>click or tap to hide</i>
 					</div>
@@ -349,7 +364,7 @@ $(document).ready(function(){
 		<div class="article">
 			<div class="cover page">
 				<div class="content">
-					<h1>Configuration demo</h1>
+					<h1 name="config">Configuration demo</h1>
 
 					<div>
 						Pages in ribbon: <input id="PAGES_IN_RIBBON" type="text"><button onclick="saveSettings()">save</button>
@@ -365,7 +380,7 @@ $(document).ready(function(){
 					</div>
 
 					<div style="position:absolute; width:100%; bottom:10px; text-align: right;">
-						<a href="#home">magazine cover...</a><br>
+						<a href="#back">go back</a>, or return to <a href="#home">magazine cover...</a><br>
 					</div>
 
 					<script>
