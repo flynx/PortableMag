@@ -40,21 +40,7 @@ $(document).ready(function(){
 			}
 			//$('.splash').fadeOut()
 		})
-		.bind('hashchange', function(e){
-			e.preventDefault()
-			var r = loadURLState()
-			// if we are dealing with history actions the browser will 
-			// do the work for us...
-			if(r == 'back'){
-				window.history.go(-2)
-				return
-			} else if(r == 'forward'){
-				window.history.go(2)
-				return
-			} else {
-				setCurrentPage(r)
-			}
-		})
+		.bind('hashchange', hashChangeHandler)
 
 	$('.viewer')
 		.swipe({

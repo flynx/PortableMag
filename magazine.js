@@ -66,6 +66,22 @@ function getPageNumber(page){
 
 /************************************************** event handlers ***/
 
+function hashChangeHandler(e){
+	e.preventDefault()
+	var r = loadURLState()
+	// if we are dealing with history actions the browser will 
+	// do the work for us...
+	// XXX revise...
+	if(r == 'back'){
+		window.history.go(-2)
+	} else if(r == 'forward'){
+		window.history.go(2)
+	} else {
+		setCurrentPage(r)
+	}
+}
+
+
 // swipe state handler
 // this handles single and double finger swipes and dragging
 function swipeHandler(evt, phase, direction, distance, duration, fingers){
@@ -298,20 +314,11 @@ function loadURLState(){
 		return $('.page').length-1
 
 	// history...
+	// NOTE: these are handled by hashChangeHandler()
+	// XXX revise...
 	} else if(anchor == 'back') {
-		//window.history.back()
-		//setTimeout(function(win){ return function(){ win.history.back() } }(window), 100)
-		// NOTE: if we do not do this we'll endup in an infinite history loop...
-		//window.location.hash = ''
-		//return getPageNumber()
 		return anchor
-
 	} else if(anchor == 'forward') {
-		//window.history.forward()
-		//setTimeout(function(win){ return function(){ win.history.forward() } }(window), 100)
-		// NOTE: if we do not do this we'll endup in an infinite history loop...
-		//window.location.hash = ''
-		//return getPageNumber()
 		return anchor
 
 	// relative URLs...
