@@ -24,6 +24,11 @@ var DRAG_FULL_PAGE = false
 togglePageDragging = createCSSClassToggler('.viewer', 'dragging')
 
 
+
+// this is here only for speed, helps with dragging...
+// DO NOT USE DIRECTLY!
+var _PAGE_VIEW
+
 // toggle between the two main modes:
 // 	- single page mode (.page-view-mode)
 // 	- thumbnail/ribbon mode
@@ -35,8 +40,10 @@ togglePageView = createCSSClassToggler(
 	function(action){
 		if(action == 'on'){
 			fitNPages(1, !FIT_PAGE_TO_VIEW)
+			_PAGE_VIEW = true
 		} else {
 			fitNPages(PAGES_IN_RIBBON)
+			_PAGE_VIEW = false
 		}
 	})
 
@@ -66,6 +73,8 @@ function getPageNumber(page){
 
 /************************************************** event handlers ***/
 
+// hash url handler...
+// NOTE: most of the handling actually happens in loadURLState...
 function hashChangeHandler(e){
 	e.preventDefault()
 	var r = loadURLState()
@@ -93,14 +102,14 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 
 	if(phase=='move' 
 			// see if wee need to drag the page and allways drag the ribbon...
-			&& (DRAG_FULL_PAGE || togglePageView('?') == 'off')
+			&& (DRAG_FULL_PAGE || !_PAGE_VIEW)
 			&& (direction=='left' || direction=='right')){
 		// using the "unanimated" trick we will make the drag real-time...
 		mag.addClass('unanimated')
 		if(direction == 'left'){
-			$('.magazine').css({left: -n*cur.width()-distance/scale})
+			mag.css({left: -n*cur.width()-distance/scale})
 		} else if(direction == 'right') {
-			$('.magazine').css({left: -n*cur.width()+distance/scale})
+			mag.css({left: -n*cur.width()+distance/scale})
 		}
 		setTimeout(function(){mag.removeClass('unanimated')}, 5)
 
