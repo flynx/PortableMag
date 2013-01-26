@@ -25,7 +25,22 @@ $(document).ready(function(){
 
 	$(window)
 		.resize(function() {
-			fitNPages(PAGES_VISIBLE)
+			// XXX might be good to compensate for document zoom...
+			if(document.width/$(document).width() != 1){
+				// XXX scale the page...
+				console.log('>>> Page Zoom:', document.width/$(document).width())
+			}
+			//$('.splash').show()
+			if(ANIMATE_WINDOW_RESIZE){
+				togglePageView(togglePageView('?'))
+			} else {
+				unanimated(
+					$('.scaler'), 
+					togglePageView,
+					30
+				)(togglePageView('?'))
+			}
+			//$('.splash').fadeOut()
 		})
 		.bind('hashchange', function(e){
 			e.preventDefault()
@@ -134,52 +149,12 @@ $(document).ready(function(){
 	<div class="magazine">
 		<div class="cover page current">
 			<div class="content">
-				<h1>Magazine Cover</h1>
-				<div style="float:left; width: 40%; height: 100%; margin: 10px;">
-					<h2>Finger controls</h2>
-					<ul>
-						<li> Single finger swipe left/right &ndash; prev/next page.
-						<li> Two finger swipe left/right &ndash; prev/next article.
-						<li> Single finger swipe up/down &ndash; toggle thumbnail view.
-						<li> Pinch in/out &ndash; go in/out of thumbnail view.
-					</ul>
-					<h2>Navigation via #URLs</h2>
-					<h3>The basics</h3>
-					<a href="#1">Page #1</a><br>
-					<a href="#ArticleAnchorExample">Named page</a><br>
-					<p>
-						<a href="#page-3-anchor" style="pointer-events:none">Anchor on page #3</a><br>
-						<i> currently navigation via existing anchors
-							will break the layout, so use the name attribute
-							on any other tags (see example).
-						</i>
-					</p>
-				</div>
-
-				<div style="float:left; width: 40%; height: 100%; padding: 10px;">
-					<h3>Special anchors</h3>
-					<p>These show up in the page URL</p>
-					<a href="#home">Magazine cover</a><br>
-					<a href="#end">Last page</a><br>
-					<a href="#thumbnails">Thumbnail view</a><br>
-					<a href="#example-layer">Toggle a hidden layer</a><br>
-					<span name="example-layer" class="hidden">
-						<a href="#hideLayers">Hide all layers</a><br>
-					</span>
-
-					<h3>Relative special anchors</h3>
-					<p>These will get replaced by corresponding page numbers in the URL</p>
-					<a href="#next">Next page</a><br>
-					<a href="#prev">Previous page</a><br>
-					<a href="#nextArticle">Next article</a><br>
-					<a href="#prevArticle">Previous article</a><br>
-				</div>
-
-
-				<div name="example-layer" class="hidden" onclick="window.location='#example-layer'" style="position:absolute; left:100px; top:400px; width: 300px; height:50px; text-align: center; padding: 15px; border: solid gray 5px; background: silver; color: white; cursor: hand">
-					<h3>This is an example layer</h3>
-					<i>click or tap to hide</i>
-				</div>
+				<h1 style="color:gray;font-size:125px;">PortableMag</h1>
+				<p>
+				[PROJECT DESCRIPTION]
+				</p>
+				<a href="#navigation">The navigation...</a><br>
+				<a href="#anatomy">The anatomy...</a><br>
 			</div>
 		</div>
 
@@ -188,36 +163,130 @@ $(document).ready(function(){
 		<div class="article">
 			<div class="cover page">
 				<div class="content">
-					<h1>Article Cover</h1>
-					<a href="#home">home</a><br>
-					some more text...
+					<h1 name="basics" style="color:gray;font-size:100px;">The Basics...</h1>
+					<div style="position:absolute; width:100%; bottom:10px; text-align: right;">
+						<a href="#next">get started...</a><br>
+					</div>
+				</div>
+			</div>
+			<div class="page">
+				<div class="content">
+					<h1 name="navigation">PortableMag Navigation and Linking</h1>
+					<div style="float:left; width: 40%; height: 100%; margin: 10px;">
+						<h2>Finger controls</h2>
+						<ul>
+							<li> Single finger swipe left/right &ndash; prev/next page.
+							<li> Two finger swipe left/right &ndash; prev/next article.
+							<li> Single finger swipe up/down &ndash; toggle thumbnail view.
+							<li> Pinch in/out &ndash; go in/out of thumbnail view.
+						</ul>
+						<h2>Navigation via #URLs</h2>
+						<h3>The basics</h3>
+						<a href="#1">Page #1</a><br>
+						<a href="#ArticleAnchorExample">Named page</a><br>
+						<p>
+							<a href="#page-3-anchor" style="pointer-events:none">Anchor on page #3</a><br>
+							<i> currently navigation via existing anchors
+								will break the layout, so use the name attribute
+								on any other tags (see example).
+							</i>
+						</p>
+					</div>
+
+					<div style="float:left; width: 40%; height: 100%; padding: 10px;">
+						<h3>Special anchors</h3>
+						<p>These show up in the page URL</p>
+						<a href="#home">Magazine cover</a><br>
+						<a href="#end">Last page</a><br>
+						<a href="#thumbnails">Thumbnail view</a><br>
+						<a href="#example-layer">Toggle a hidden layer</a><br>
+						<span name="example-layer" class="hidden">
+							<a href="#hideLayers">Hide all layers</a><br>
+						</span>
+
+						<h3>Relative special anchors</h3>
+						<p>These will get replaced by corresponding page numbers in the URL</p>
+						<a href="#next">Next page</a><br>
+						<a href="#prev">Previous page</a><br>
+						<a href="#nextArticle">Next article</a><br>
+						<a href="#prevArticle">Previous article</a><br>
+					</div>
+					<div style="position:absolute; width:100%; bottom:10px; text-align: right;">
+						<a href="#next">next page...</a><br>
+					</div>
+
+
+					<div name="example-layer" class="hidden" onclick="window.location='#example-layer'" style="position:absolute; left:100px; top:400px; width: 300px; height:50px; text-align: center; padding: 15px; border: solid gray 5px; background: silver; color: white; cursor: hand">
+						<h3>This is an example layer</h3>
+						<i>click or tap to hide</i>
+					</div>
 				</div>
 			</div>
 
 			<!-- XXX do we need an Article Credits page??? -->
 
 			<div class="page">
-				<div class="content" style="border:solid red 1px">
-					Page
+				<div class="content">
+					<h1 name="anatomy">PortableMag Anatomy</h1>
+					<p>
+					The magazine consists of:
+					<ul>
+						<li>Magazine cover
+						<li>Articles:
+						<ul>
+							<li>Article cover
+							<li>Pages
+						</ul>
+					</ul>
+					Each of these elements can be styled separately...
+					</p>
+				</div>
+			</div>
+			<div class="page">
+				<div class="content" style="background: black; color: gray; padding-left: 20px; padding-right: 20px;">
+					<h1>The Page <i>content</i> has a fixed size...</h1>
 				</div>
 			</div>
 			<div class="page">
 				<div class="content">
 					<a name="page-3-anchor"></a>
-					<img src="img.jpg" height="100%"/>
+					<img src="img.jpg" height="100%" align="left" style="margin-right: 15px"/>
+					<h1>Using the content block...</h1>
+					<p>
+					The content block can contain any HTML.
+					</p>
+					<p>
+					The contents will allways fit the screen, the aspect ratio 
+					of the content block is fixed regardless of the viewer.
+					</p>
+					<p>
+					Contents will not get clipped as long as they are within the block.
+					</p>
+					<p>
+					NOTE: by default the overflow is visible (see <a href="#next">next page</a>), so be carefull.
+					</p>
 				</div>
 			</div>
 			<div class="page">
 				<div class="content">
-					<img src="img.jpg" width="200%" style="margin-left: -50%; margin-top: -20%"/>
+					<img src="img.jpg" width="200%" style="position: absolute; left: -50%; top: -20%"/>
+					<div style="position:absolute; width:100%; height: 100%; color: white;">
+						<h1>You can still use the full page area...</h1>
+						<p>
+						Though anything outside the content block can and will get clipped,
+						depending on viewer aspect ratio...
+						</p>
+						<p>
+						You can see this by resizing the page in browser or rotating the device.
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="article">
 			<div class="cover page">
 				<div class="content" name="ArticleAnchorExample">
-					<!--a name="ArticleAnchorExample"></a-->
-					<h1>Article Cover</h1>
+					<h1>Page Templates</h1>
 					<a href="#home">home</a><br>
 				</div>
 			</div>

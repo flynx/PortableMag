@@ -18,10 +18,24 @@
 
 .page {
 	background: silver;
+
+	font-family: Arial;
 }
 
 
 /*********************************************************************/
+body {
+	font-family: arial;
+}
+
+.page a, 
+.page a:visited, 
+.page a:active {
+	color: blue;
+}
+.page a:hover {
+	color: red;
+}
 
 
 

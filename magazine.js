@@ -9,6 +9,8 @@ var PAGES_IN_RIBBON = 6
 // if true, expand a page to fit the whole view in single page mode...
 var FIT_PAGE_TO_VIEW = false
 
+// if true will make page resizes after window resize animated...
+var ANIMATE_WINDOW_RESIZE = true
 
 
 
@@ -29,8 +31,8 @@ togglePageView = createCSSClassToggler(
 	'page-view-mode',
 	null,
 	// post-change callback...
-	function(){
-		if(togglePageView('?') == 'on'){
+	function(action){
+		if(action == 'on'){
 			fitNPages(1)
 		} else {
 			fitNPages(PAGES_IN_RIBBON)
