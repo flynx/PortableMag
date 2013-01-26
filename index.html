@@ -32,13 +32,9 @@ $(document).ready(function(){
 			}
 			//$('.splash').show()
 			if(ANIMATE_WINDOW_RESIZE){
-				togglePageView(togglePageView('?'))
+				updateView()
 			} else {
-				unanimated(
-					$('.scaler'), 
-					togglePageView,
-					30
-				)(togglePageView('?'))
+				unanimated($('.scaler'), updateView, 30)()
 			}
 			//$('.splash').fadeOut()
 		})
@@ -149,12 +145,8 @@ $(document).ready(function(){
 	<div class="magazine">
 		<div class="cover page current">
 			<div class="content">
-				<h1 style="color:gray;font-size:125px;">PortableMag</h1>
-				<p>
-				[PROJECT DESCRIPTION]
-				</p>
-				<a href="#navigation">The navigation...</a><br>
-				<a href="#anatomy">The anatomy...</a><br>
+					<h1 style="color:gray;font-size:125px;margin-bottom:-35px; margin-top: 160px">PortableMag</h1>
+					<h1 style="color:silver; font-size: 20px; margin-left:10px">A suit for publishing portable periodic magazines on mobile platforms.</h1>
 			</div>
 		</div>
 

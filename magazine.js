@@ -18,9 +18,7 @@ var ANIMATE_WINDOW_RESIZE = true
 // toggles .dragging CSS class on the viewer while dragging is in 
 // progress.
 // NOTE: this is used mostly for styling and drag assisting...
-togglePageDragging = createCSSClassToggler(
-	'.viewer',
-	'dragging')
+togglePageDragging = createCSSClassToggler('.viewer', 'dragging')
 
 
 // toggle between the two main modes:
@@ -39,6 +37,11 @@ togglePageView = createCSSClassToggler(
 		}
 	})
 
+
+// this will simply refresh the current view...
+function updateView(){
+	return togglePageView(togglePageView('?'))
+}
 
 
 
