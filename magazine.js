@@ -1,16 +1,19 @@
 /**********************************************************************
 **********************************************************************/
 
-var DEBUG = true
+//var DEBUG = DEBUG != null ? DEBUG : true
 
 // number of pages to display in ribbon...
 var PAGES_IN_RIBBON = 6
 
 // if true, expand a page to fit the whole view in single page mode...
-var FIT_PAGE_TO_VIEW = false
+var FIT_PAGE_TO_VIEW = true
 
 // if true will make page resizes after window resize animated...
 var ANIMATE_WINDOW_RESIZE = true
+
+// if true will disable page dragging in single page mode...
+var DRAG_FULL_PAGE = false
 
 
 
@@ -31,7 +34,7 @@ togglePageView = createCSSClassToggler(
 	// post-change callback...
 	function(action){
 		if(action == 'on'){
-			fitNPages(1)
+			fitNPages(1, !FIT_PAGE_TO_VIEW)
 		} else {
 			fitNPages(PAGES_IN_RIBBON)
 		}
@@ -63,6 +66,8 @@ function getPageNumber(page){
 
 /************************************************** event handlers ***/
 
+// swipe state handler
+// this handles single and double finger swipes and dragging
 function swipeHandler(evt, phase, direction, distance, duration, fingers){
 	var pages = $('.page')
 	var cur = $('.current.page')
@@ -70,7 +75,11 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 	var scale = getPageScale()
 	var mag = $('.magazine')
 
-	if(phase=='move' && (direction=='left' || direction=='right')){
+	if(phase=='move' 
+			// see if wee need to drag the page and allways drag the ribbon...
+			&& (DRAG_FULL_PAGE || togglePageView('?') == 'off')
+			&& (direction=='left' || direction=='right')){
+		// using the "unanimated" trick we will make the drag real-time...
 		mag.addClass('unanimated')
 		if(direction == 'left'){
 			$('.magazine').css({left: -n*cur.width()-distance/scale})
