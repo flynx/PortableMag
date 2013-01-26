@@ -1,4 +1,7 @@
 /**********************************************************************
+*
+* XXX add copyright and licence info...
+*
 **********************************************************************/
 
 //var DEBUG = DEBUG != null ? DEBUG : true
@@ -82,6 +85,7 @@ function hashChangeHandler(e){
 	// do the work for us...
 	// XXX revise...
 	if(r == 'back'){
+		// we shift by 2 to combensate for the back/forward URL itself...
 		window.history.go(-2)
 	} else if(r == 'forward'){
 		window.history.go(2)
@@ -90,6 +94,8 @@ function hashChangeHandler(e){
 	}
 }
 
+
+// window resize event handler...
 function viewResizeHandler(){
 	// XXX might be good to compensate for document zoom...
 	if(document.width/$(document).width() != 1){
@@ -166,7 +172,6 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 
 /********************************************************** layout ***/
 
-// XXX for some magical reason this is not called...
 function fitNPages(n, fit_to_content){
 	if(n == null){
 		n = 1
@@ -185,6 +190,9 @@ function fitNPages(n, fit_to_content){
 
 	var rW = cW
 	var scale = getPageScale()
+
+	// to compensate for transitions, to data sampling should be beyound
+	// this point, as next we will start changing things...
 
 	if(fit_to_content){
 		page.width(cW)
@@ -293,7 +301,6 @@ function nextArticle(){
 		$(articles[Math.min(articles.index(cur)+1, articles.length-1)])
 			.children('.page')
 			.first())
-
 }
 function prevArticle(){
 	var cur = $('.current.page').parents('.article')
@@ -340,7 +347,6 @@ function loadURLState(){
 
 	// history...
 	// NOTE: these are handled by hashChangeHandler()
-	// XXX revise...
 	} else if(anchor == 'back') {
 		return anchor
 	} else if(anchor == 'forward') {
@@ -441,18 +447,24 @@ function saveState(){
 /********************************************************** editor ***/
 
 // XXX create magazine...
+// 		- magazine
+// 		- cover
 function createMagazine(){
 }
 
 
 
 // XXX create article (magazine, title, position)...
+// 		- article
+// 		- cover
 function createArticle(magazine, title){
 }
 
 
 
 // XXX create page (article, template, position)...
+// 		- page
+// 		- content
 function createPage(article, template){
 }
 
