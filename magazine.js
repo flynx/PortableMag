@@ -90,6 +90,21 @@ function hashChangeHandler(e){
 	}
 }
 
+function viewResizeHandler(){
+	// XXX might be good to compensate for document zoom...
+	if(document.width/$(document).width() != 1){
+		// XXX scale the page...
+		console.log('>>> Page Zoom:', document.width/$(document).width())
+	}
+	//$('.splash').show()
+	if(ANIMATE_WINDOW_RESIZE){
+		updateView()
+	} else {
+		unanimated($('.scaler'), updateView, 30)()
+	}
+	//$('.splash').fadeOut()
+}
+
 
 // swipe state handler
 // this handles single and double finger swipes and dragging
