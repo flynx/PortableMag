@@ -110,18 +110,6 @@ function overlayMessage(text){
 
 
 
-
-// XXX might be good to use apply here...
-function doWithoutTransitions(obj, func, time){
-	if(time == null){
-		time = 5
-	}	
-	obj.addClass('unanimated')
-	var res = func()
-	setTimeout(function(){obj.removeClass('unanimated')}, time)
-	return res
-}
-
 function unanimated(obj, func, time){
 	return function(){
 		if(time == null){
@@ -133,6 +121,8 @@ function unanimated(obj, func, time){
 		return res
 	}
 }
+
+
 
 // Return a scale value for the given element(s).
 // NOTE: this will only return a single scale value...
@@ -171,7 +161,6 @@ function setElementScale(elem, scale){
 
 
 /************************************************ jQuery extensions **/
-
 
 jQuery.fn.reverseChildren = function(){
 	return $(this).each(function(_, e){
