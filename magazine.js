@@ -22,8 +22,9 @@ var DRAG_FULL_PAGE = false
 // XXX this produces a funny animation that gets more ampletude the farther 
 // 		we get to the right from the no-resize element...
 // 		...think the reason is .no-resize page centering...
-var _USE_REAL_SIZES = true
-//var _USE_REAL_SIZES = false
+// XXX still buggy on togglePageView to TN after funny sized pages...
+//var _USE_REAL_SIZES = true
+var _USE_REAL_SIZES = false
 
 
 /*********************************************************************/
@@ -219,8 +220,13 @@ function fitNPages(n, fit_to_content){
 	// this point, as we will start changing things next...
 
 	if(fit_to_content){
-		page.width(cW)
-		page.height(cH)
+		if(_USE_REAL_SIZES){
+			page.width('auto')
+			page.height('auto')
+		} else {
+			page.width(cW)
+			page.height(cH)
+		}
 		if(W/H > (cW*n)/cH){
 			scale = H/cH
 		} else {
@@ -266,6 +272,7 @@ function fitNPages(n, fit_to_content){
 		var offset = rW * i-1
 		// now do the unresized elements...
 		if(_USE_REAL_SIZES){
+			$('.page.no-resize').width('auto')
 			var nrpages = $('.page.no-resize, .current.page')
 			i = nrpages.index(cur) 
 			nrpages.splice(i)
