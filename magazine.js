@@ -27,7 +27,6 @@ var DRAG_FULL_PAGE = false
 togglePageDragging = createCSSClassToggler('.viewer', 'dragging')
 
 
-
 // this is here only for speed, helps with dragging...
 // DO NOT USE DIRECTLY!
 var _PAGE_VIEW
@@ -286,7 +285,6 @@ function setCurrentPage(n, W){
 }
 
 
-
 function goToMagazineCover(){
 	setCurrentPage(0)
 }
@@ -296,7 +294,6 @@ function goToMagazineEnd(){
 function goToArticleCover(){
 	setCurrentPage($('.current.page').parents('.article').children('.page').first())
 }
-
 
 
 function nextPage(){
@@ -309,7 +306,6 @@ function prevPage(){
 	var cur = $('.current.page')
 	return setCurrentPage(Math.max(pages.index(cur)-1, 0))
 }
-
 
 
 function nextArticle(){
@@ -441,7 +437,6 @@ function saveURLState(){
 }
 
 
-
 // local storage state managers...
 function loadStorageState(){
 	return parseInt($.jStorage.get('current_page', 0))
@@ -449,7 +444,6 @@ function loadStorageState(){
 function saveStorageState(){
 	$.jStorage.set('current_page', getPageNumber())
 }
-
 
 
 // generic state managers...
@@ -565,13 +559,11 @@ function createMagazine(){
 }
 
 
-
 // XXX create article (magazine, title, position)...
 // 		- article
 // 		- cover
 function createArticle(magazine, title){
 }
-
 
 
 // XXX create page (article, template, position)...
