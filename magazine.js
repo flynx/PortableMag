@@ -18,6 +18,12 @@ var ANIMATE_WINDOW_RESIZE = true
 // if true will disable page dragging in single page mode...
 var DRAG_FULL_PAGE = false
 
+// XXX make this default and remove the option...
+// XXX this produces a funny animation that gets more ampletude the farther 
+// 		we get to the right from the no-resize element...
+// 		...think the reason is .no-resize page centering...
+var _USE_REAL_SIZES = true
+//var _USE_REAL_SIZES = false
 
 
 /*********************************************************************/
@@ -127,9 +133,17 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 			&& (direction=='left' || direction=='right')){
 		// using the "unanimated" trick we will make the drag real-time...
 		if(direction == 'left'){
-			mag.css({left: -n*cur.width()-distance/scale})
+			if(_USE_REAL_SIZES){
+				mag.css({left: -cur.position()['left']/scale-distance/scale})
+			} else {
+				mag.css({left: -n*cur.width()-distance/scale})
+			}
 		} else if(direction == 'right') {
-			mag.css({left: -n*cur.width()+distance/scale})
+			if(_USE_REAL_SIZES){
+				mag.css({left: -cur.position()['left']/scale+distance/scale})
+			} else {
+				mag.css({left: -n*cur.width()+distance/scale})
+			}
 		}
 
 		$('.viewer').trigger('magazineDragging')
@@ -185,8 +199,13 @@ function fitNPages(n, fit_to_content){
 		fit_to_content = true
 	}
 	var view = $('.viewer')
-	var page = $('.page')
+	if(_USE_REAL_SIZES){
+		var page = $('.page:not(.no-resize)')
+	} else {
+		var page = $('.page')
+	}
 	var content = $('.content')
+	var cur = $('.current.page')
 
 	var W = view.width()
 	var H = view.height()
@@ -233,15 +252,43 @@ function fitNPages(n, fit_to_content){
 		var rW = W/scale
 	}
 
+	// XXX revise...
+	if(fit_to_content){
+		var offset = rW * getPageNumber()-1
+	} else {
+		// calculate the target offset...
+		if(_USE_REAL_SIZES){
+			var rpages = $('.page:not(.no-resize), .current.page')
+		} else {
+			var rpages = page 
+		}
+		var i = rpages.index(cur) 
+		var offset = rW * i-1
+		// now do the unresized elements...
+		if(_USE_REAL_SIZES){
+			var nrpages = $('.page.no-resize, .current.page')
+			i = nrpages.index(cur) 
+			nrpages.splice(i)
+			nrpages.each(function(_, e){
+				offset += $(e).width()
+			})
+		}
+	}
+
+	/*
 	// position the pages correctly...
 	$('.magazine').css({
 		'margin-left': -rW/2
 	})
+	*/
+	if(cur.hasClass('no-resize')){
+		rW = cur.width()
+	}
 
 	// do the scaling... 
 	setElementScale($('.scaler'), scale)
 	// fix position...
-	setCurrentPage(null, rW)
+	setCurrentPage(null, offset, rW)
 }
 
 
@@ -255,7 +302,12 @@ function fitNPages(n, fit_to_content){
 // 		- page element
 // NOTE: this will fire a 'pageChanged' event on the viewer each time 
 // 		it is called...
-function setCurrentPage(n, W){
+// XXX make this work for pages of different width...
+// 		use markers -- a marker is any element that will be used to 
+// 		allign the magazine so that the marker is at the left edge of 
+// 		the viewer...
+// 		by default a page is a marker.
+function setCurrentPage(n, offset, width){
 	if(n == null){
 		var cur = $('.current.page')
 		n = $('.page').index(cur) 
@@ -265,13 +317,25 @@ function setCurrentPage(n, W){
 		var cur = $(n)
 		n = $('.page').index(cur) 
 	}
+	if(width == null){
+		width = cur.width()
+	}
 
 	$('.current.page').removeClass('current')
 	cur.addClass('current')
 
 	var mag = $('.magazine')
-	var W = W == null ? cur.width() : W
-	mag.css({left: -n*W})
+	if(_USE_REAL_SIZES){
+		var offset = offset == null ? cur.position()['left']/getPageScale() : offset
+	} else {
+		var offset = offset == null ? cur.width()*n : offset
+	}
+	mag.css({left: -offset})
+
+	// center the pages correctly...
+	$('.magazine').css({
+		'margin-left': -width/2
+	})
 
 	// XXX should this be here???
 	saveState()

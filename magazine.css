@@ -89,11 +89,11 @@ body {
 
 	background: gray;
 
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
-	-ms-transition: all 0.5s ease;	
-	transition: all 0.5s ease;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;	
+	transition: all 0.2s ease;
 }
 
 
@@ -296,7 +296,7 @@ body {
 .dragging .navigator .bar .indicator {
 	-webkit-transition: none;
 	-moz-transition: none;
-	-o-transition: none;
+	-o-transition: all 0 ease;
 	-ms-transition: none;	
 	transition: none;
 }
