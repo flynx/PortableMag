@@ -290,6 +290,9 @@ function setCurrentPage(n, W){
 function goToMagazineCover(){
 	setCurrentPage(0)
 }
+function goToMagazineEnd(){
+	setCurrentPage($('.page').length-1)
+}
 function goToArticleCover(){
 	setCurrentPage($('.current.page').parents('.article').children('.page').first())
 }

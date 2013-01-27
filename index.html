@@ -12,6 +12,11 @@
 <script src="jli.js"></script>
 <script src="magazine.js"></script>
 
+<script src="keybindings.js"></script>
+
+<!-- configuration, keep this last... -->
+<script src="config.js"></script>
+
 <script>
 
 var DEBUG = true
@@ -28,6 +33,10 @@ $(document).ready(function(){
 	$(window)
 		.resize(viewResizeHandler)
 		.bind('hashchange', hashChangeHandler)
+
+	$(document)
+		.keydown(makeKeyboardHandler(keybindings))
+
 
 	$('.viewer')
 		.swipe({

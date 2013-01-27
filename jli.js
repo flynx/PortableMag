@@ -160,6 +160,158 @@ function setElementScale(elem, scale){
 }
 
 
+
+/************************************************* keyboard handler **/
+
+// NOTE: don't understand why am I the one who has to write this...
+var SPECIAL_KEYS = {
+	9:		'Tab',
+	13:		'Enter',
+	16:		'Shift',
+	17:		'Ctrl',
+	18:		'Alt',
+	20:		'Caps Lock',
+	27:		'Esc',
+	32:		'Space',
+	33:		'PgUp',
+	34:		'PgDown',	
+	35:		'End',
+	36:		'Home',
+	37:		'Right',
+	38:		'Up',
+	39:		'Left',
+	40:		'Down',
+	45:		'Ins',
+	46:		'Del',
+	80:		'Backspace',
+	91:		'Win',
+	93:		'Menu',
+	
+	112:	'F1',
+	113:	'F2',
+	114:	'F3',
+	115:	'F4',
+	116:	'F5',
+	117:	'F6',
+	118:	'F7',
+	119:	'F8',
+	120:	'F9',
+	121:	'F10',
+	122:	'F11',
+	123:	'F12',
+}
+
+// XXX some keys look really wrong...
+function toKeyName(code){
+	// check for special keys...
+	var k = SPECIAL_KEYS[code]
+	if(k != null){
+		return k
+	}
+	// chars...
+	k = String.fromCharCode(code)
+	if(k != ''){
+		return k.toLowerCase()
+	}
+	return null
+}
+
+
+// if set to false the event handlers will always return false...
+var KEYBOARD_HANDLER_PROPAGATE = false
+
+/* Basic key format:
+ * 		<key-code> : <callback>,
+ * 		<key-code> : {
+ * 			'default': <callback>,
+ *			// a modifier can be any single modifier, like shift or a 
+ *			// combination of modifers like 'ctrl+shift', given in order 
+ *			// of priority.
+ *			// supported modifiers are (in order of priority):
+ *			//	- ctrl
+ *			//	- alt
+ *			//	- shift
+ * 			<modifer>: [...]
+ * 		},
+ * 		<key-code> : [
+ *			// this can be any type of handler except for an alias...
+ * 			<handler>, 
+ * 			<doc>
+ * 		],
+ *		// alias...
+ * 		<key-code-a> : <key-code-b>,
+ *
+ * XXX might need to add meta information to generate sensible help...
+ */
+function makeKeyboardHandler(keybindings, unhandled){
+	if(unhandled == null){
+		unhandled = function(){return false}
+	}
+	return function(evt){
+		var did_handling = false
+		var res = null
+		for(var mode in keybindings){
+			if($(mode).length > 0){
+				var bindings = keybindings[mode]
+
+				var key = evt.keyCode
+				if(bindings.ignore != null && bindings.ignore.indexOf(key) != -1){
+					// return true
+					did_handling = true
+					continue
+				}
+				// XXX ugly...
+				var modifers = evt.ctrlKey ? 'ctrl' : ''
+				modifers += evt.altKey ? (modifers != '' ? '+alt' : 'alt') : ''
+				modifers += evt.shiftKey ? (modifers != '' ? '+shift' : 'shift') : ''
+
+				var handler = bindings[key]
+
+				// alias...
+				while (typeof(handler) == typeof(123)) {
+					handler = bindings[handler]
+				}
+				// no handler...
+				if(handler == null){
+					continue
+				}
+				// Array, lisp style with docs...
+				// XXX for some odd reason in chrome typeof([]) == typeof({})!!!
+				if(typeof(handler) == typeof([]) && handler.constructor.name == 'Array'){
+					// we do not care about docs here, so just get the handler...
+					handler = handler[0]
+				}
+				// complex handler...
+				if(typeof(handler) == typeof({})){
+					var callback = handler[modifers]
+					if(callback == null){
+						callback = handler['default']
+					}
+					if(callback != null){
+						res = callback()
+						did_handling = true
+						continue
+					}
+				} else {
+					// simple callback...
+					res = handler() 
+					did_handling = true
+					continue
+				}
+			}
+		}
+		if(!did_handling){
+			// key is unhandled by any modes...
+			return unhandled(key)
+		} else {
+			// XXX should we handle multiple hits???
+			return KEYBOARD_HANDLER_PROPAGATE&&res?true:false
+		}
+	}
+}
+
+
+
 /************************************************ jQuery extensions **/
 
 jQuery.fn.reverseChildren = function(){
