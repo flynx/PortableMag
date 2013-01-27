@@ -16,7 +16,7 @@ var FIT_PAGE_TO_VIEW = true
 var ANIMATE_WINDOW_RESIZE = true
 
 // if true will disable page dragging in single page mode...
-var DRAG_FULL_PAGE = false
+var DRAG_FULL_PAGE = true
 
 // XXX make this default and remove the option...
 // XXX this produces a funny animation that gets more ampletude the farther 
@@ -282,14 +282,10 @@ function fitNPages(n, fit_to_content){
 		}
 	}
 
-	/*
-	// position the pages correctly...
-	$('.magazine').css({
-		'margin-left': -rW/2
-	})
-	*/
-	if(cur.hasClass('no-resize')){
-		rW = cur.width()
+	if(_USE_REAL_SIZES){
+		if(cur.hasClass('no-resize')){
+			rW = cur.width()
+		}
 	}
 
 	// do the scaling... 
