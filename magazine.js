@@ -240,6 +240,8 @@ function fitNPages(n, fit_to_content){
 
 /********************************************************* actions ***/
 
+// NOTE: this will fire a 'pageChanged' event on the viewer each time 
+// 		it is called...
 function setCurrentPage(n, W){
 	if(n == null){
 		var cur = $('.current.page')
@@ -261,7 +263,7 @@ function setCurrentPage(n, W){
 	// XXX should this be here???
 	saveState()
 
-	mag.trigger('pageChanged', n)
+	$('.viewer').trigger('pageChanged', n)
 	
 	return cur
 }
@@ -493,7 +495,7 @@ function setupNavigator(){
 	updateNavigator()
 	
 	// setup event handlers...
-	mag.on('pageChanged', function(e, n){updateNavigator(n)})
+	$('.viewer').on('pageChanged', function(e, n){updateNavigator(n)})
 }
 
 
