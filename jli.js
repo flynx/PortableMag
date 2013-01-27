@@ -218,7 +218,7 @@ function toKeyName(code){
 
 
 // if set to false the event handlers will always return false...
-var KEYBOARD_HANDLER_PROPAGATE = false
+var KEYBOARD_HANDLER_PROPAGATE = true
 
 /* Basic key format:
  * 		<key-code> : <callback>,

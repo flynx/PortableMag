@@ -10,6 +10,7 @@ var keybindings = {
 
 		ignore: [
 			116,												//	F5
+			122,												//	F11
 			123,												//	F12
 		],
 
