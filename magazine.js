@@ -83,7 +83,6 @@ function hashChangeHandler(e){
 	var r = loadURLState()
 	// if we are dealing with history actions the browser will 
 	// do the work for us...
-	// XXX revise...
 	if(r == 'back'){
 		// we shift by 2 to combensate for the back/forward URL itself...
 		window.history.go(-2)
@@ -96,9 +95,9 @@ function hashChangeHandler(e){
 
 
 // window resize event handler...
+// XXX might be good to compensate for document zoom...
 function viewResizeHandler(){
 	/*
-	// XXX might be good to compensate for document zoom...
 	if(document.width/$(document).width() != 1){
 		// XXX scale the page...
 		console.log('>>> Page Zoom:', document.width/$(document).width())
@@ -116,6 +115,7 @@ function viewResizeHandler(){
 
 // swipe state handler
 // this handles single and double finger swipes and dragging
+// while draggign this triggers magazineDragging event on the viewer...
 function swipeHandler(evt, phase, direction, distance, duration, fingers){
 	var pages = $('.page')
 	var cur = $('.current.page')
@@ -134,8 +134,8 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 		} else if(direction == 'right') {
 			mag.css({left: -n*cur.width()+distance/scale})
 		}
-		// XXX should this be here...
-		updateNavigator()
+
+		$('.viewer').trigger('magazineDragging')
 
 	} else if(phase == 'start'){
 		togglePageDragging('on')
@@ -484,12 +484,15 @@ function _makeArticleIndicator(i, article, width){
 	return article
 }
 
+
 function setupArticleIndicators(W){
 	var articles = $('.magazine .article')
 	// cleanup...
 	$('.indicator .bar .article').remove()
-	// set article positions...
-	articles.each(function(i, e){return _makeArticleIndicator(i, e, W)})
+	// set article indicator positions...
+	articles.each(function(i, e){
+		return _makeArticleIndicator(i, e, W)
+	})
 }
 	
 
@@ -512,7 +515,9 @@ function setupNavigator(){
 	updateNavigator()
 	
 	// setup event handlers...
-	$('.viewer').on('pageChanged', function(e, n){updateNavigator(n)})
+	$('.viewer')
+		.on('pageChanged', function(e, n){updateNavigator(n)})
+		.on('magazineDragging', function(){updateNavigator()})
 }
 
 
