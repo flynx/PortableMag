@@ -97,11 +97,13 @@ function hashChangeHandler(e){
 
 // window resize event handler...
 function viewResizeHandler(){
+	/*
 	// XXX might be good to compensate for document zoom...
 	if(document.width/$(document).width() != 1){
 		// XXX scale the page...
 		console.log('>>> Page Zoom:', document.width/$(document).width())
 	}
+	*/
 	//$('.splash').show()
 	if(ANIMATE_WINDOW_RESIZE){
 		updateView()
@@ -172,6 +174,12 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 
 /********************************************************** layout ***/
 
+// NOTE: special cases:
+// 	- if n is not given then it defaults to 1
+// 	- if n > 1 and fit_to_content is not given it defaults to true
+// 	- if n is 1 then fit_to_content bool argument controls wether:
+// 		- the page will be stretched to viewer (false)
+// 		- or to content (true)
 function fitNPages(n, fit_to_content){
 	if(n == null){
 		n = 1
@@ -191,8 +199,8 @@ function fitNPages(n, fit_to_content){
 	var rW = cW
 	var scale = getPageScale()
 
-	// to compensate for transitions, to data sampling should be beyound
-	// this point, as next we will start changing things...
+	// to compensate for transitions, no data sampling should be beyound
+	// this point, as we will start changing things next...
 
 	if(fit_to_content){
 		page.width(cW)
@@ -204,17 +212,20 @@ function fitNPages(n, fit_to_content){
 		}
 		// resulting page width...
 		var rW = cW
+
 	} else {
 		// need to calc width only...
 		if(W/H > (cW*n)/cH){
 			scale = H/cH
 			page.width(W/scale)
 			page.height(cH)
+
 		// need to calc height only...
 		} else if(W/H > (cW*n)/cH){
 			scale = W/(cW*n)
 			page.height(H/scale)
 			page.width(cW)
+
 		// set both width and height to defaults (content and page ratios match)...
 		} else {
 			scale = W/(cW*n)
@@ -240,6 +251,11 @@ function fitNPages(n, fit_to_content){
 
 /********************************************************* actions ***/
 
+// NOTE: if n is not given it will be set to current page number
+// NOTE: if width is not given it will be set to current page width.
+// NOTE: n can be:
+// 		- page number
+// 		- page element
 // NOTE: this will fire a 'pageChanged' event on the viewer each time 
 // 		it is called...
 function setCurrentPage(n, W){
@@ -263,6 +279,7 @@ function setCurrentPage(n, W){
 	// XXX should this be here???
 	saveState()
 
+	// trigger the page cange event...
 	$('.viewer').trigger('pageChanged', n)
 	
 	return cur
@@ -450,7 +467,7 @@ function saveState(){
 
 /******************************************************* navigator ***/
 
-function makeArticleIndicator(i, article, width){
+function _makeArticleIndicator(i, article, width){
 	var bar = $('.navigator .bar')
 	var article = $(article)
 	var n = getPageNumber(article.children('.cover').first())
@@ -472,7 +489,7 @@ function setupArticleIndicators(W){
 	// cleanup...
 	$('.indicator .bar .article').remove()
 	// set article positions...
-	articles.each(function(i, e){return makeArticleIndicator(i, e, W)})
+	articles.each(function(i, e){return _makeArticleIndicator(i, e, W)})
 }
 	
 
@@ -513,11 +530,7 @@ function updateNavigator(n){
 	var pW = bar.width()/pn
 
 	if(n == null){
-		// XXX something is wrong with this...
-		// 		some times the indicator height gets set to the same value
-		// 		as its length and it works, at other times it gets the
-		// 		correct height and stops working...
-		// 		NOTE: this does not depend on source state.
+		// XXX this behaves erratically if the page is zoomed...
 		var res = (-parseFloat(mag.css('left'))/(mW-PW)) * (bW-pW)
 	} else {
 		res = pW*n
