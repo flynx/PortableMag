@@ -131,6 +131,8 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 		} else if(direction == 'right') {
 			mag.css({left: -n*cur.width()+distance/scale})
 		}
+		// XXX should this be here...
+		updateNavigator()
 
 	} else if(phase == 'start'){
 		togglePageDragging('on')
@@ -261,6 +263,8 @@ function setCurrentPage(n, W){
 	// XXX should this be here???
 	saveState()
 
+	mag.trigger('pageChanged', n)
+	
 	return cur
 }
 
@@ -293,10 +297,10 @@ function nextArticle(){
 	// we are at the magazine cover...
 	if(cur.length == 0){
 		return setCurrentPage(
-			$('.article .page:first-child').first())
+			$('.magazine .article .page:first-child').first())
 	}
 	// just find the next one...
-	var articles = $('.article')
+	var articles = $('.magazine .article')
 	return setCurrentPage(
 		$(articles[Math.min(articles.index(cur)+1, articles.length-1)])
 			.children('.page')
@@ -310,7 +314,7 @@ function prevArticle(){
 		return setCurrentPage()
 	}
 	// just find the prev one...
-	var articles = $('.article')
+	var articles = $('.magazine .article')
 	return setCurrentPage(
 		$(articles[Math.max(articles.index(cur)-1, 0)])
 			.children('.page')
@@ -440,6 +444,95 @@ function loadState(){
 function saveState(){
 	saveURLState()
 	saveStorageState()
+}
+
+
+
+/******************************************************* navigator ***/
+
+function makeArticleIndicator(i, article, width){
+	var bar = $('.navigator .bar')
+	var article = $(article)
+	var n = getPageNumber(article.children('.cover').first())
+	$('<div/>')
+		.prependTo($('.navigator .bar'))
+		.addClass('article')
+		.css({
+			width: width,
+			left: width*n
+		})
+	return article
+}
+
+function setupArticleIndicators(W){
+	var articles = $('.magazine .article')
+	// cleanup...
+	$('.indicator .bar .article').remove()
+	// set article positions...
+	articles.each(function(i, e){return makeArticleIndicator(i, e, W)})
+}
+	
+
+function setupNavigator(){
+	var bar = $('.navigator .bar')
+	var elems = $('.navigator .indicator, .navigator .article')
+	var pos = $('.navigator .indicator')
+	var pages = $('.page').length
+	var mag = $('.magazine')
+
+	var W = bar.width()/pages
+
+	setupArticleIndicators(W)
+
+	// set navigator element sizes...
+	elems.css({
+		width: W
+	})
+
+	updateNavigator()
+	
+	// setup event handlers...
+	mag.on('pageChanged', function(e, n){updateNavigator(n)})
+	bar.swipe({
+		click: function(evt){
+			
+		}
+	})
+}
+
+
+function updateNavigator(n){
+	var mag = $('.magazine')
+	var page = $('.page')
+	var bar = $('.navigator .bar')
+	var pos = $('.navigator .indicator')
+
+	var pn = page.length
+
+	var bW = bar.width()
+	var mW = mag.width()
+	var PW = page.width()
+	var pW = bar.width()/pn
+
+	if(n == null){
+		// XXX something is wrong with this...
+		// 		some times the indicator height gets set to the same value
+		// 		as its length and it works, at other times it gets the
+		// 		correct height and stops working...
+		// 		NOTE: this does not depend on source state.
+		var res = (-parseFloat(mag.css('left'))/(mW-PW)) * (bW-pW)
+	} else {
+		res = pW*n
+	}
+
+	// normalize the position...
+	res = res > 0 ? res: 0
+	res = res < (bW-pW) ? res: (bW-pW)
+
+	// set indicator position...
+	pos.css({
+		left: res 
+	})
 }
 
 

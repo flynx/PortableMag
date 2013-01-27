@@ -203,7 +203,7 @@ body {
 	background: black;
 	opacity: 0.4;
 
-	height: 50px;
+	height: 70px;
 	left: 0px;
 
 	font-size: 14px;
@@ -239,6 +239,38 @@ body {
 .page-view-mode .top-toolbar,
 .page-view-mode .bottom-toolbar {
 	height: 0px;
+}
+
+/* navigator... */
+.navigator {
+}
+.navigator .bar {
+	position: relative;
+	display: inline-block;
+	margin: 10px;
+	width: 50%;
+	height: 5px;
+	background: silver;
+	overflow: visible;
+
+	cursor: hand;
+}
+.navigator .bar .article,
+.navigator .bar .indicator {
+	position: absolute;
+	/* set this to the percentage of a page from magazine length */
+	width: 1%;
+	min-width: 10px;
+	height: 100%;
+}
+.navigator .bar .article {
+	background: white;
+}
+.navigator .bar .indicator {
+	background: yellow;
+	height: 200%;
+
+	opacity: 0.7;
 }
 
 
