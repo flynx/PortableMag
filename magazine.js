@@ -120,6 +120,7 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 	var n = pages.index(cur)
 	var scale = getPageScale()
 	var mag = $('.magazine')
+	var pos = $('.navigator .bar .indicator')
 
 	if(phase=='move' 
 			// see if wee need to drag the page and allways drag the ribbon...
@@ -136,16 +137,13 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 
 	} else if(phase == 'start'){
 		togglePageDragging('on')
-		mag.addClass('unanimated')
 
 	} else if(phase == 'cancel'){
 		togglePageDragging('off')
 		setCurrentPage()
-		mag.removeClass('unanimated')
 
 	} else if(phase =='end' ){
 		togglePageDragging('off')
-		mag.removeClass('unanimated')
 		// see which page is closer to the middle of the screen and set it...
 		// do this based on how much we dragged...
 		var p = Math.ceil((distance/scale)/cur.width())
@@ -461,6 +459,9 @@ function makeArticleIndicator(i, article, width){
 			width: width,
 			left: width*n
 		})
+		.click(function(){
+			setCurrentPage(n)
+		})
 	return article
 }
 
@@ -493,11 +494,6 @@ function setupNavigator(){
 	
 	// setup event handlers...
 	mag.on('pageChanged', function(e, n){updateNavigator(n)})
-	bar.swipe({
-		click: function(evt){
-			
-		}
-	})
 }
 
 

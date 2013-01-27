@@ -139,6 +139,13 @@ body {
 	-ms-transition: all 0.2s ease;	
 	transition: all 0.2s ease;
 }
+.dragging .magazine {
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	-ms-transition: none;	
+	transition: none;
+}
 /* user hints, visible when user draggs past the cover or the last page
  * of the mag... */
 .magazine:before, .magazine:after {
@@ -203,7 +210,7 @@ body {
 	background: black;
 	opacity: 0.4;
 
-	height: 70px;
+	height: 50px;
 	left: 0px;
 
 	font-size: 14px;
@@ -212,6 +219,10 @@ body {
 .top-toolbar a, .bottom-toolbar a {
 	color: white;
 	text-decoration: none;
+}
+.top-toolbar .controls, .bottom-toolbar .controls {
+	margin-top: 10px;
+	font-size: small;
 }
 .top-toolbar {
 	top: 0px;
@@ -241,6 +252,8 @@ body {
 	height: 0px;
 }
 
+
+
 /* navigator... */
 .navigator {
 }
@@ -248,12 +261,10 @@ body {
 	position: relative;
 	display: inline-block;
 	margin: 10px;
-	width: 50%;
-	height: 5px;
+	width: 400px;
+	height: 2px;
 	background: silver;
 	overflow: visible;
-
-	cursor: hand;
 }
 .navigator .bar .article,
 .navigator .bar .indicator {
@@ -265,14 +276,30 @@ body {
 }
 .navigator .bar .article {
 	background: white;
+	height: 300%;
+	cursor: hand;
 }
 .navigator .bar .indicator {
 	background: yellow;
-	height: 200%;
+	height: 500%;
+	top:-50%;
 
 	opacity: 0.7;
+
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;	
+	transition: all 0.2s ease;
 }
 
+.dragging .navigator .bar .indicator {
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	-ms-transition: none;	
+	transition: none;
+}
 
 /* splash screen. used to hide loading and aligning elements */
 .splash {
