@@ -29,14 +29,12 @@ $(document).ready(function(){
 		})
 	}
 
-
 	$(window)
 		.resize(viewResizeHandler)
 		.bind('hashchange', hashChangeHandler)
 
 	$(document)
 		.keydown(makeKeyboardHandler(keybindings))
-
 
 	$('.viewer')
 		.swipe({

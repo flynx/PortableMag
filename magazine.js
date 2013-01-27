@@ -102,13 +102,11 @@ function viewResizeHandler(){
 		console.log('>>> Page Zoom:', document.width/$(document).width())
 	}
 	*/
-	//$('.splash').show()
 	if(ANIMATE_WINDOW_RESIZE){
 		updateView()
 	} else {
 		unanimated($('.scaler'), updateView, 30)()
 	}
-	//$('.splash').fadeOut()
 }
 
 
@@ -443,6 +441,18 @@ function loadStorageState(){
 }
 function saveStorageState(){
 	$.jStorage.set('current_page', getPageNumber())
+}
+
+
+// JSON format state managers...
+function loadJSONState(data){
+	// XXX
+}
+function buildJSONState(){
+	// XXX
+}
+function dumpJSONState(){
+	// XXX
 }
 
 
