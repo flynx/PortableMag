@@ -77,6 +77,8 @@ body {
 	margin-top: -50px;
 	margin-left: 750px;
 
+	cursor: hand;
+
 	z-index: 9999;
 	opacity: 0,5;
 
@@ -335,6 +337,8 @@ body {
 	top: -250%;
 
 	background: red;
+
+	cursor: hand;
 
 	-webkit-transform: rotate(45deg);
 	-moz-transform: rotate(45deg);

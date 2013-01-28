@@ -5,16 +5,7 @@
 		| touchdown point.
 		[_] BUG: no drag threshold on excludedElements (TouchSwipe)
 		| stalled...
-	[_] 80% general todo
-		[_] 75% bookmarks
-			[_] add next/prev bookmark actions
-			[_] bookmark indicators in page view
-			[X] #bookmark anchor
-			[X] bookmark indicators in navigator
-			[X] bookmark indicators in thumbnails
-			[X] bookmark persistence
-			[X] set bookmark from keyboard...
-			[X] set bookmark touch control
+	[_] 81% general todo
 		[_] magazine loader and data format...
 		| this is simple, just use a restyled magazine viewer...
 		[_] 0% populate an example issue
@@ -28,6 +19,14 @@
 		| e.g. setting "shown"/"hidden" classes in HTML and adding 
 		| something like a page reset that will restore the default state,
 		| rather than the current "hideLayers"
+		[X] 100% bookmarks
+			[X] add next/prev bookmark actions
+			[X] #bookmark anchor
+			[X] bookmark indicators in navigator
+			[X] bookmark indicators in thumbnails
+			[X] bookmark persistence
+			[X] set bookmark from keyboard...
+			[X] set bookmark touch control
 		[X] vanquish opacity effects
 		| they slow everything down considerably!
 		[X] add keyboard navigation...

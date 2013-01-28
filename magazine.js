@@ -666,7 +666,7 @@ function makeBookmarkIndicator(n){
 		.prependTo($('.navigator .bar'))
 		.addClass('bookmark')
 		.css({
-			left: width*n
+			left: width*n + width*0.75
 		})
 		.attr({
 			page: n
@@ -735,10 +735,20 @@ function toggleBookmark(n){
 
 // XXX move this to actions...
 function nextBookmark(){
-	// XXX
+	var pages = $('.page')
+	pages = $(pages.splice(getPageNumber()+1))
+	page = pages.children('.bookmark').first().parents('.page')
+	if(page.length != 0){
+		return setCurrentPage(page)
+	}
 }
 function prevBookmark(){
-	// XXX
+	var pages = $('.page')
+	pages.splice(getPageNumber())
+	page = pages.children('.bookmark').last().parents('.page')
+	if(page.length != 0){
+		return setCurrentPage(page)
+	}
 }
 
 

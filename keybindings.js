@@ -62,14 +62,14 @@ var keybindings = {
 		37:	{
 			'default': prevPage,								//	Right
 			'ctrl': prevArticle,								//	ctrl-Right
-			'alt': prevArticle,									//	alt-Right
+			'shift': prevBookmark								//	shift-Right
 		},
 		8: 		37, 											// 	BkSp
 		188:	37,												//	<
 		39:	{
 			'default': nextPage,								//	Left
 			'ctrl': nextArticle,								//	ctrl-Left
-			'alt': nextArticle,									//	alt-Left
+			'shift': nextBookmark								//	shift-Left
 		},
 		32:		39,												//	Space
 		190:	39,												//	>
