@@ -271,8 +271,8 @@ body {
 .navigator .bar .indicator {
 	position: absolute;
 	/* set this to the percentage of a page from magazine length */
-	width: 1%;
 	min-width: 10px;
+	width: 1%;
 	height: 100%;
 }
 .navigator .bar .article {
@@ -300,6 +300,22 @@ body {
 	-o-transition: all 0 ease;
 	-ms-transition: none;	
 	transition: none;
+}
+.navigator .bar .bookmark {
+	position: absolute;
+	font-size: 0px;
+	width: 5px;
+	height: 5px;
+
+	top: -250%;
+
+	background: red;
+
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
 }
 
 /* splash screen. used to hide loading and aligning elements */

@@ -78,6 +78,9 @@ function getPageNumber(page){
 	return $('.page').index(page) 
 }
 
+function getPageAt(n){
+	return $($('.page')[n])
+}
 
 
 /************************************************** event handlers ***/
@@ -315,7 +318,7 @@ function setCurrentPage(n, offset, width){
 		var cur = $('.current.page')
 		n = $('.page').index(cur) 
 	} else if(typeof(n) == typeof(1)) {
-		var cur = $($('.page')[n])
+		var cur = getPageAt(n)
 	} else {
 		var cur = $(n)
 		n = $('.page').index(cur) 
@@ -504,10 +507,14 @@ function saveURLState(){
 
 // local storage state managers...
 function loadStorageState(){
-	return parseInt($.jStorage.get('current_page', 0))
+	return {
+		current_page: parseInt($.jStorage.get('current_page', 0)),
+		bookmarks: $.jStorage.get('bookmarks', [])
+	}
 }
 function saveStorageState(){
 	$.jStorage.set('current_page', getPageNumber())
+	$.jStorage.set('bookmarks', getBookmarkList())
 }
 
 
@@ -526,11 +533,13 @@ function dumpJSONState(){
 // generic state managers...
 function loadState(){
 	var n = loadURLState()
+	var state = loadStorageState() 
 	if(n != null){
 		setCurrentPage(n)
 	} else {
-		setCurrentPage(loadStorageState())
+		setCurrentPage(state.current_page)
 	}
+	loadBookmarks(state.bookmarks)
 }
 function saveState(){
 	saveURLState()
@@ -562,7 +571,7 @@ function _makeArticleIndicator(i, article, width){
 function setupArticleIndicators(W){
 	var articles = $('.magazine .article')
 	// cleanup...
-	$('.indicator .bar .article').remove()
+	$('.navigator .bar .article').remove()
 	// set article indicator positions...
 	articles.each(function(i, e){
 		return _makeArticleIndicator(i, e, W)
@@ -625,6 +634,56 @@ function updateNavigator(n){
 	})
 }
 
+
+// XXX store bookmarks in a seporate place...
+// NOTE: this depends on the indicator bar...
+function makeBookmarkIndicator(n){
+	if(n == null){
+		n = getPageNumber()
+	} else if(typeof(n) != typeof(1)){
+		n = getPageNumber(n)
+	}
+	var bar = $('.navigator .bar')
+	var pages = $('.page').length
+	var width = bar.width()/pages
+	var res = $('<div/>')
+		.prependTo($('.navigator .bar'))
+		.addClass('bookmark')
+		.css({
+			left: width*n
+		})
+		.attr({
+			page: n
+		})
+		.click(function(){
+			setCurrentPage(n)
+		})
+
+	// XXX should this be here???
+	saveState()
+
+	return res
+}
+
+function loadBookmarks(lst){
+	$(lst).each(function(i, e){makeBookmarkIndicator(e)})
+}
+function getBookmarkList(){
+	var res = []
+	$('.navigator .bar .bookmark').each(function(_, e){res.push(parseInt($(e).attr('page')))})
+	return res
+}
+function clearBookmarkIndicators(){
+	$('.navigator .bar .bookmark').remove()
+}
+
+// XXX move this to actions...
+function nextBookmark(){
+	// XXX
+}
+function prevBookmark(){
+	// XXX
+}
 
 
 /********************************************************** editor ***/
