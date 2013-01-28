@@ -168,16 +168,20 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 		// prev page...
 		if(direction == 'right'){
 			// two+ fingers moves to closest article...
-			if(fingers >= 2){
+			if(fingers == 2){
 				prevArticle()
+			} else if(fingers >= 3){
+				prevBookmark()
 			} else {
 				setCurrentPage(Math.max(n-p, 0))
 			}
 		// next page...
 		} else if(direction == 'left'){
 			// two+ fingers moves to closest article...
-			if(fingers >= 2){
+			if(fingers == 2){
 				nextArticle()
+			} else if(fingers >= 3){
+				nextBookmark()
 			} else {
 				setCurrentPage(Math.min(n+p, pages.length-1))
 			}
@@ -457,6 +461,18 @@ function loadURLState(){
 		prevArticle()
 		return getPageNumber()
 
+	} else if(anchor == 'nextBookmark') {
+		nextBookmark()
+		return getPageNumber()
+
+	} else if(anchor == 'prevBookmark') {
+		prevBookmark()
+		return getPageNumber()
+
+	} else if(anchor == 'bookmark'){
+		toggleBookmark()
+		return getPageNumber()
+
 	// hide all visible layers on current page...
 	} else if(anchor == 'hideLayers') {
 		$('.current.page .shown')
@@ -514,7 +530,7 @@ function loadStorageState(){
 }
 function saveStorageState(){
 	$.jStorage.set('current_page', getPageNumber())
-	$.jStorage.set('bookmarks', getBookmarkList())
+	$.jStorage.set('bookmarks', buildBookmarkList())
 }
 
 
@@ -659,23 +675,63 @@ function makeBookmarkIndicator(n){
 			setCurrentPage(n)
 		})
 
+	return res
+}
+
+function clearBookmarkIndicators(){
+	$('.navigator .bar .bookmark').remove()
+}
+function removeBookmarkIndicator(n){
+	$('.navigator .bar .bookmark[page="'+n+'"]').remove()
+}
+
+// XXX move to actions...
+function loadBookmarks(lst){
+	clearBookmarks()
+	$(lst).each(function(i, e){toggleBookmark(e)})
+}
+function clearBookmarks(){
+	$('.magazine .page .bookmark').remove()
+	clearBookmarkIndicators()
+}
+
+function buildBookmarkList(){
+	var res = []
+	$('.magazine .page .bookmark').each(function(_, e){
+		res.push(getPageNumber($(e).parents('.page')))
+	})
+	return res
+}
+
+function toggleBookmark(n){
+	if(n == null){
+		n = getPageNumber()
+	} else if(typeof(n) != typeof(1)){
+		n = getPageNumber(n)
+	}
+	var res
+	var cur = getPageAt(n)
+
+	if(cur.children('.bookmark').length == 0){
+		var res = $('<div/>')
+			.prependTo(cur)
+			.addClass('bookmark')
+			.click(function(){
+				toggleBookmark(n)
+			})
+
+		makeBookmarkIndicator(n)
+	} else {
+		cur.children('.bookmark').remove()
+		removeBookmarkIndicator(n)
+	}
+
 	// XXX should this be here???
 	saveState()
 
 	return res
 }
 
-function loadBookmarks(lst){
-	$(lst).each(function(i, e){makeBookmarkIndicator(e)})
-}
-function getBookmarkList(){
-	var res = []
-	$('.navigator .bar .bookmark').each(function(_, e){res.push(parseInt($(e).attr('page')))})
-	return res
-}
-function clearBookmarkIndicators(){
-	$('.navigator .bar .bookmark').remove()
-}
 
 // XXX move this to actions...
 function nextBookmark(){

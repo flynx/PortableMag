@@ -88,6 +88,7 @@ $(document).ready(function(){
 	$('.button.cover').swipe({click: goToMagazineCover})
 	$('.button.next-article').swipe({click: nextArticle})
 	$('.button.prev-article').swipe({click: prevArticle})
+	$('.button.bookmark').swipe({click: function(){toggleBookmark()}})
 
 	loadState()
 	setupNavigator()
@@ -123,6 +124,7 @@ $(document).ready(function(){
 		<div class="button cover">Issue Cover</div>
 		<div class="button prev-article">Prev Article</div>
 		<div class="button next-article">Next Article</div>
+		<div class="button bookmark">Bookmark</div>
 	</div>
 	<div class="bottom-toolbar">
 		<!-- this is just an example-->
@@ -197,6 +199,7 @@ $(document).ready(function(){
 						<span name="example-layer" class="hidden">
 							<a href="#hideLayers">Hide all layers</a><br>
 						</span>
+						<a href="#bookmark">Toggle bookmark</a><br>
 
 						<h3>Relative special anchors</h3>
 						<p>These will get replaced by corresponding page numbers in the URL</p>

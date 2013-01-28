@@ -65,6 +65,28 @@ body {
 	transition: all 0.2s ease;
 }
 
+.page .bookmark {
+	position: absolute;
+	font-size: 0px;
+	width: 50px;
+	height: 50px;
+
+	background: red;
+
+	/* XXX make this relative... */
+	margin-top: -50px;
+	margin-left: 750px;
+
+	z-index: 9999;
+	opacity: 0,5;
+
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
 .page-view-mode .page {
 
 	/* XXX change to relative units... */
@@ -74,6 +96,9 @@ body {
 .page-view-mode .page .content {
 }
 
+.page-view-mode .page .bookmark {
+	display: none;
+}
 
 
 /************************************************** general layout ***/

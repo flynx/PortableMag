@@ -6,6 +6,15 @@
 		[_] BUG: no drag threshold on excludedElements (TouchSwipe)
 		| stalled...
 	[_] 80% general todo
+		[_] 75% bookmarks
+			[_] add next/prev bookmark actions
+			[_] bookmark indicators in page view
+			[X] #bookmark anchor
+			[X] bookmark indicators in navigator
+			[X] bookmark indicators in thumbnails
+			[X] bookmark persistence
+			[X] set bookmark from keyboard...
+			[X] set bookmark touch control
 		[_] magazine loader and data format...
 		| this is simple, just use a restyled magazine viewer...
 		[_] 0% populate an example issue

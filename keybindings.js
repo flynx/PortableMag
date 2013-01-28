@@ -74,6 +74,8 @@ var keybindings = {
 		32:		39,												//	Space
 		190:	39,												//	>
 
+		66:		toggleBookmark,									//	B
+
 		// combined navigation with actions..
 		38: function(){togglePageView()},						//	Up
 		40: function(){togglePageView()},						//	Down
