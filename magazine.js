@@ -651,8 +651,7 @@ function updateNavigator(n){
 }
 
 
-// XXX store bookmarks in a seporate place...
-// NOTE: this depends on the indicator bar...
+
 function makeBookmarkIndicator(n){
 	if(n == null){
 		n = getPageNumber()
@@ -685,16 +684,16 @@ function removeBookmarkIndicator(n){
 	$('.navigator .bar .bookmark[page="'+n+'"]').remove()
 }
 
-// XXX move to actions...
+
+
+/******************************************************* bookmarks ***/
+
+// load bookmarks from list...
 function loadBookmarks(lst){
 	clearBookmarks()
 	$(lst).each(function(i, e){toggleBookmark(e)})
 }
-function clearBookmarks(){
-	$('.magazine .page .bookmark').remove()
-	clearBookmarkIndicators()
-}
-
+// build bookmark list...
 function buildBookmarkList(){
 	var res = []
 	$('.magazine .page .bookmark').each(function(_, e){
@@ -702,6 +701,12 @@ function buildBookmarkList(){
 	})
 	return res
 }
+
+function clearBookmarks(){
+	$('.magazine .page .bookmark').remove()
+	clearBookmarkIndicators()
+}
+
 
 function toggleBookmark(n){
 	if(n == null){
@@ -732,8 +737,6 @@ function toggleBookmark(n){
 	return res
 }
 
-
-// XXX move this to actions...
 function nextBookmark(){
 	var pages = $('.page')
 	pages = $(pages.splice(getPageNumber()+1))
@@ -750,6 +753,7 @@ function prevBookmark(){
 		return setCurrentPage(page)
 	}
 }
+
 
 
 /********************************************************** editor ***/
