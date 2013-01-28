@@ -720,10 +720,14 @@ function toggleBookmark(n){
 	if(cur.children('.bookmark').length == 0){
 		var res = $('<div/>')
 			.prependTo(cur)
-			.addClass('bookmark')
+			.addClass('bookmark justcreated')
 			.click(function(){
 				toggleBookmark(n)
 			})
+
+		setTimeout(function(){
+			res.removeClass('justcreated')
+		}, 1000)
 
 		makeBookmarkIndicator(n)
 	} else {

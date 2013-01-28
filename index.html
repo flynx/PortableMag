@@ -40,14 +40,20 @@ $(document).ready(function(){
 		.swipe({
 			swipeStatus: swipeHandler,
 			// XXX change this to pinch...
-			swipeUp: function(){
-				//togglePageView('off')
-				togglePageView()
+			swipeUp: function(event, direction, distance, duration, fingerCount){
+				if(fingerCount == 2){
+					toggleBookmark()
+				} else {
+					togglePageView()
+				}
 			},
 			// XXX change this to pinch...
-			swipeDown: function(){
-				//togglePageView('on')
-				togglePageView()
+			swipeDown: function(event, direction, distance, duration, fingerCount){
+				if(fingerCount == 2){
+					toggleBookmark()
+				} else {
+					togglePageView()
+				}
 			},
 
 			pinchIn: function(event, direction, distance, duration, fingerCount, pinchZoom) {
