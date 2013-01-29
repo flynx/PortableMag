@@ -59,7 +59,7 @@ togglePageView = createCSSClassToggler(
 	})
 
 
-// this will simply refresh the current view...
+// this will simply update the current view...
 function updateView(){
 	return togglePageView(togglePageView('?'))
 }
@@ -127,6 +127,10 @@ function viewResizeHandler(){
 // swipe state handler
 // this handles single and double finger swipes and dragging
 // while draggign this triggers magazineDragging event on the viewer...
+// NOTE: this will trigger 'magazineDragging' event on the viewer on 
+// 		each call while dragging...
+// XXX for some reason with finger count of 3 and greater, touchSwipe
+// 		dies on	android...
 function swipeHandler(evt, phase, direction, distance, duration, fingers){
 	var pages = $('.page')
 	var cur = $('.current.page')
@@ -191,13 +195,12 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 
 /********************************************************** layout ***/
 
-// NOTE: special cases:
-// 	- if n is not given then it defaults to 1
-// 	- if n > 1 and fit_to_content is not given it defaults to true
-// 	- if n is 1 then fit_to_content bool argument controls wether:
-// 		- the page will be stretched to viewer (false)
-// 		- or to content (true)
-// XXX on USE_REAL_PAGE_SIZES offset is calculated incorrectly...
+// NOTE: if n is not given then it defaults to 1
+// NOTE: if n > 1 and fit_to_content is not given it defaults to true
+// NOTE: if n is 1 then fit_to_content bool argument controls wether:
+// 			- the page will be stretched to viewer (false)
+// 			- or to content (true)
+// XXX on USE_REAL_PAGE_SIZES offset is a bit off...
 function fitNPages(n, fit_to_content){
 	if(n == null){
 		n = 1
@@ -269,7 +272,7 @@ function fitNPages(n, fit_to_content){
 
 	// NOTE: we need to calculate the offset as the actual widths during 
 	// 		the anumation are not correct...
-	// XXX in general this is correct, but still there is some error...
+	// XXX in general this is correct, but still there is some error (rounding?)...
 	if(!USE_REAL_PAGE_SIZES && fit_to_content){
 		var offset = rW * getPageNumber()-1
 	} else {
@@ -309,14 +312,13 @@ function fitNPages(n, fit_to_content){
 
 /********************************************************* actions ***/
 
-// Argument width is used ONLY to center the page.
-//
+// NOTE: "width" is used ONLY to center the page.
 // NOTE: if n is not given it will be set to current page number
 // NOTE: if width is not given it will be set to current page width.
 // NOTE: n can be:
 // 		- page number
 // 		- page element
-// NOTE: this will fire a 'pageChanged' event on the viewer each time 
+// NOTE: this will fire a 'pageChanged(n)' event on the viewer each time 
 // 		it is called...
 function setCurrentPage(n, offset, width){
 	if(n == null){
@@ -343,9 +345,6 @@ function setCurrentPage(n, offset, width){
 	$('.magazine').css({
 		'margin-left': -width/2
 	})
-
-	// XXX should this be here???
-	saveState()
 
 	// trigger the page cange event...
 	$('.viewer').trigger('pageChanged', n)
@@ -404,6 +403,84 @@ function prevArticle(){
 		$(articles[Math.max(articles.index(cur)-1, 0)])
 			.children('.page')
 			.first())
+}
+
+
+
+/******************************************************* bookmarks ***/
+
+// load bookmarks from list...
+function loadBookmarks(lst){
+	clearBookmarks()
+	$(lst).each(function(i, e){toggleBookmark(e)})
+}
+// build bookmark list...
+function buildBookmarkList(){
+	var res = []
+	$('.magazine .page .bookmark').each(function(_, e){
+		res.push(getPageNumber($(e).parents('.page')))
+	})
+	return res
+}
+
+// NOTE: will trigger 'bookmarksCleared' event on the viewer
+function clearBookmarks(){
+	$('.magazine .page .bookmark').remove()
+
+	$('.viewer').trigger('bookmarksCleared')
+}
+
+
+// NOTE: this will trigger events on the viewer:
+// 		- bookmarkAdded(n)
+// 		- bookmarkRemoved(n)
+function toggleBookmark(n){
+	if(n == null){
+		n = getPageNumber()
+	} else if(typeof(n) != typeof(1)){
+		n = getPageNumber(n)
+	}
+	var res
+	var cur = getPageAt(n)
+
+	if(cur.children('.bookmark').length == 0){
+		var res = $('<div/>')
+			.prependTo(cur)
+			.addClass('bookmark justcreated')
+			.click(function(){
+				toggleBookmark(n)
+			})
+
+		$('.viewer').trigger('bookmarkAdded', n)
+
+		setTimeout(function(){
+			res.removeClass('justcreated')
+		}, 1000)
+
+	} else {
+		cur.children('.bookmark').remove()
+
+		$('.viewer').trigger('bookmarkRemoved', n)
+	}
+
+	return res
+}
+
+function nextBookmark(){
+	var pages = $('.page')
+	pages = $(pages.splice(getPageNumber()+1))
+	page = pages.children('.bookmark').first().parents('.page')
+	if(page.length != 0){
+		return setCurrentPage(page)
+	}
+}
+function prevBookmark(){
+	var pages = $('.page')
+	pages.splice(getPageNumber())
+	page = pages.children('.bookmark').last().parents('.page')
+	if(page.length != 0){
+		return setCurrentPage(page)
+	}
 }
 
 
@@ -584,18 +661,22 @@ function _makeArticleIndicator(i, article, width){
 function setupArticleIndicators(W){
 	var articles = $('.magazine .article')
 	// cleanup...
-	$('.navigator .bar .article').remove()
+	clearArticleIndicators()
 	// set article indicator positions...
 	articles.each(function(i, e){
 		return _makeArticleIndicator(i, e, W)
 	})
+}
+
+function clearArticleIndicators(){
+	$('.navigator .bar .article').remove()
 }
 	
 
 function setupNavigator(){
 	var bar = $('.navigator .bar')
 	var elems = $('.navigator .indicator, .navigator .article')
-	var pos = $('.navigator .indicator')
+	var pos = $('.navigator .indicator').fadeIn()
 	var pages = $('.page').length
 	var mag = $('.magazine')
 
@@ -614,6 +695,12 @@ function setupNavigator(){
 	$('.viewer')
 		.on('pageChanged', function(e, n){updateNavigator(n)})
 		.on('magazineDragging', function(){updateNavigator()})
+}
+
+function clearNavigator(){
+	$('.navigator .indicator').hide()
+	clearBookmarkIndicators()
+	clearArticleIndicators()
 }
 
 
@@ -683,81 +770,13 @@ function removeBookmarkIndicator(n){
 
 
 
-/******************************************************* bookmarks ***/
-
-// load bookmarks from list...
-function loadBookmarks(lst){
-	clearBookmarks()
-	$(lst).each(function(i, e){toggleBookmark(e)})
-}
-// build bookmark list...
-function buildBookmarkList(){
-	var res = []
-	$('.magazine .page .bookmark').each(function(_, e){
-		res.push(getPageNumber($(e).parents('.page')))
-	})
-	return res
-}
-
-function clearBookmarks(){
-	$('.magazine .page .bookmark').remove()
-	clearBookmarkIndicators()
-}
-
-
-function toggleBookmark(n){
-	if(n == null){
-		n = getPageNumber()
-	} else if(typeof(n) != typeof(1)){
-		n = getPageNumber(n)
-	}
-	var res
-	var cur = getPageAt(n)
-
-	if(cur.children('.bookmark').length == 0){
-		var res = $('<div/>')
-			.prependTo(cur)
-			.addClass('bookmark justcreated')
-			.click(function(){
-				toggleBookmark(n)
-			})
-
-		setTimeout(function(){
-			res.removeClass('justcreated')
-		}, 1000)
-
-		makeBookmarkIndicator(n)
-	} else {
-		cur.children('.bookmark').remove()
-		removeBookmarkIndicator(n)
-	}
-
-	// XXX should this be here???
-	saveState()
-
-	return res
-}
-
-function nextBookmark(){
-	var pages = $('.page')
-	pages = $(pages.splice(getPageNumber()+1))
-	page = pages.children('.bookmark').first().parents('.page')
-	if(page.length != 0){
-		return setCurrentPage(page)
-	}
-}
-function prevBookmark(){
-	var pages = $('.page')
-	pages.splice(getPageNumber())
-	page = pages.children('.bookmark').last().parents('.page')
-	if(page.length != 0){
-		return setCurrentPage(page)
-	}
-}
-
-
-
 /********************************************************** editor ***/
+
+function clearMagazine(){
+	// XXX do we remove the whole magazine or only it's contents?
+	$('.magazine').remove()
+	clearNavigator()
+}
 
 // XXX create magazine...
 // 		- magazine

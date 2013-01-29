@@ -39,6 +39,13 @@ $(document).ready(function(){
 		.keydown(makeKeyboardHandler(keybindings))
 
 	$('.viewer')
+		// setup internal events...
+		.on('pageChanged bookmarkAdded bookmarkRemoved bookmarksCleared', saveState)
+		.on('bookmarksCleared', clearBookmarkIndicators)
+		.on('bookmarkAdded', function(_, n){makeBookmarkIndicator(n)})
+		.on('bookmarkRemoved', function(_, n){removeBookmarkIndicator(n)})
+
+		// user interactions...
 		.swipe({
 			swipeStatus: swipeHandler,
 
