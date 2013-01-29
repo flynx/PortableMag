@@ -2,7 +2,7 @@
 <!--DOCTYPE html-->
 <html>
 <head>
-<title>Magazine</title>
+<title>PortableMag</title>
 
 <link rel="stylesheet" href="magazine.css">
 <link rel="stylesheet" href="magazine-custom.css">
@@ -41,6 +41,7 @@ $(document).ready(function(){
 	$('.viewer')
 		// setup internal events...
 		.on('pageChanged bookmarkAdded bookmarkRemoved bookmarksCleared', saveState)
+		.on('pageChanged', updatePageNumberIndicator)
 		.on('bookmarksCleared', clearBookmarkIndicators)
 		.on('bookmarkAdded', function(_, n){makeBookmarkIndicator(n)})
 		.on('bookmarkRemoved', function(_, n){removeBookmarkIndicator(n)})
@@ -195,6 +196,7 @@ $(document).ready(function(){
 				<div class="indicator"></div>
 			</div>
 		</div>
+		<div class="page-number">0/0</div>
 	</div>
 
 <div class="scaler">

@@ -254,10 +254,21 @@ body {
 	font-size: 14px;
 	color: silver;
 }
+.top-toolbar {
+	top: 0px;
+	width: 100%;
+}
+
+.bottom-toolbar {
+	bottom: 0px;
+	width: 100%;
+}
+/* title */
 .top-toolbar .title,
 .bottom-toolbar .title {
 	font-size: 40px;
 }
+/* toolbar element sets */
 .top-toolbar .left-set,
 .bottom-toolbar .left-set {
 	float: left;
@@ -268,22 +279,16 @@ body {
 	float: right;
 	text-align: right;
 }
+/* toolbar links */
 .top-toolbar a, .bottom-toolbar a {
 	color: silver;
 	text-decoration: none;
 }
+/* toolbar controls */
 .top-toolbar .controls, .bottom-toolbar .controls {
 	margin-top: 10px;
 }
-.top-toolbar {
-	top: 0px;
-	width: 100%;
-}
-
-.bottom-toolbar {
-	bottom: 0px;
-	width: 100%;
-}
+/* toolbar buttons */
 .button {
 	display: inline-block;
 	font-size: 25px;
@@ -298,9 +303,18 @@ body {
 	margin-left: 20px;
 	margin-right: 20px;
 }
+/* page view mode */
 .page-view-mode .top-toolbar,
 .page-view-mode .bottom-toolbar {
 	height: 0px;
+}
+
+/* page indicator */
+.bottom-toolbar .page-number {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	color: gray;
 }
 
 
