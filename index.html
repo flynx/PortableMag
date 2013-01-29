@@ -100,8 +100,9 @@ $(document).ready(function(){
 	// XXX do we need these here??
 	$('.button.cover').swipe({click: goToMagazineCover})
 
-	$('.button.prev-bookmark').swipe({click: prevBookmark})
 	$('.button.toggle-bookmark').swipe({click: function(){toggleBookmark()}})
+	// XXX for some reason these are not animated...
+	$('.button.prev-bookmark').swipe({click: prevBookmark})
 	$('.button.next-bookmark').swipe({click: nextBookmark})
 
 	loadState()
@@ -136,14 +137,14 @@ $(document).ready(function(){
 
 	<div class="top-toolbar">
 		<div class="left-set">
-			<div class="button cover">PortableMag</div>
+			<div class="button cover title">PortableMag</div>
 		</div>
 		<div class="right-set">
 			<div class="button prev-bookmark">
 				<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
 				 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
 				 <g>
-				  <title>prev</title>
+				  <title>Previous page (S-Left)</title>
 				  <path transform="rotate(-180 18.9697 20.1122)" id="svg_13" stroke="#ffffff" d="m20.467497,20.112247l-8.773763,-14.254913l5.778195,0l8.773788,14.254913l-8.773788,14.25491l-5.778195,0l8.773763,-14.25491z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
 				 </g>
 				</svg>
@@ -152,7 +153,7 @@ $(document).ready(function(){
 				<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
 				 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
 				 <g>
-				  <title>bookmark</title>
+				  <title>Bookmark this page (B)</title>
 				  <rect stroke="#ffffff" id="svg_1" height="28.604868" width="24.052915" y="5.858955" x="8.807377" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
 				  <path stroke="#ffffff" id="svg_4" d="m21.762226,3.651895l8.416584,0l0,14.510554l-4.124887,-2.792193l-4.291697,2.792193l0,-14.510554l0,0z" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" fill="#ff0000"/>
 				 </g>
@@ -162,7 +163,7 @@ $(document).ready(function(){
 				<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
 				 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
 				 <g>
-				  <title>next</title>
+				  <title>Next page (S-Right)</title>
 				  <path stroke="#ffffff" id="svg_11" d="m23.175751,20.132858l-8.773797,-14.254913l5.77823,0l8.773788,14.254913l-8.773788,14.254913l-5.77823,0l8.773797,-14.254913z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
 				 </g>
 				</svg>
@@ -442,8 +443,8 @@ $(document).ready(function(){
 					var toggleViewerAnimation = function(){
 						var toggler = createCSSClassToggler(
 							// XXX this will turn off magazine animations...
-							//'.scaler, .page, .magazine',
-							'.scaler, .page',
+							'.scaler, .page, .magazine',
+							//'.scaler, .page',
 							'unanimated',
 							function(action){
 								$('#viewer_transition_state').text(action == 'on' ? 'off' : 'on')

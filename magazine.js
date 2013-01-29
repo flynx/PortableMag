@@ -195,6 +195,7 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 // 	- if n is 1 then fit_to_content bool argument controls wether:
 // 		- the page will be stretched to viewer (false)
 // 		- or to content (true)
+// XXX on USE_REAL_PAGE_SIZES offset is calculated incorrectly...
 function fitNPages(n, fit_to_content){
 	if(n == null){
 		n = 1
@@ -260,9 +261,14 @@ function fitNPages(n, fit_to_content){
 		// resulting page width...
 		var rW = W/scale
 	}
+	if(USE_REAL_PAGE_SIZES){
+		$('.page.no-resize').width('auto')
+	}
 
-	// XXX revise...
-	if(fit_to_content){
+	// NOTE: we need to calculate the offset as the actual widths during 
+	// 		the anumation are not correct...
+	// XXX in general this is correct, but still there is some error...
+	if(!USE_REAL_PAGE_SIZES && fit_to_content){
 		var offset = rW * getPageNumber()-1
 	} else {
 		// calculate the target offset...
@@ -273,21 +279,21 @@ function fitNPages(n, fit_to_content){
 		}
 		var i = rpages.index(cur) 
 		var offset = rW * i-1
-		// now do the unresized elements...
+		// now do the no-resize elements...
+		// XXX this still generates slightly incorrect values...
 		if(USE_REAL_PAGE_SIZES){
-			$('.page.no-resize').width('auto')
 			var nrpages = $('.page.no-resize, .current.page')
 			i = nrpages.index(cur) 
 			nrpages.splice(i)
 			nrpages.each(function(_, e){
-				offset += $(e).width()
+				offset += $(e).children('.content').width()
 			})
 		}
 	}
 
 	if(USE_REAL_PAGE_SIZES){
 		if(cur.hasClass('no-resize')){
-			rW = cur.width()
+			rW = cur.children('.content').width()
 		}
 	}
 
@@ -301,6 +307,8 @@ function fitNPages(n, fit_to_content){
 
 /********************************************************* actions ***/
 
+// Argument width is used ONLY to center the page.
+//
 // NOTE: if n is not given it will be set to current page number
 // NOTE: if width is not given it will be set to current page width.
 // NOTE: n can be:
@@ -308,11 +316,6 @@ function fitNPages(n, fit_to_content){
 // 		- page element
 // NOTE: this will fire a 'pageChanged' event on the viewer each time 
 // 		it is called...
-// XXX make this work for pages of different width...
-// 		use markers -- a marker is any element that will be used to 
-// 		allign the magazine so that the marker is at the left edge of 
-// 		the viewer...
-// 		by default a page is a marker.
 function setCurrentPage(n, offset, width){
 	if(n == null){
 		var cur = $('.current.page')

@@ -254,6 +254,10 @@ body {
 	font-size: 14px;
 	color: white;
 }
+.top-toolbar .title,
+.bottom-toolbar .title {
+	font-size: 40px;
+}
 .top-toolbar .left-set,
 .bottom-toolbar .left-set {
 	float: left;
