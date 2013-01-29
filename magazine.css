@@ -68,7 +68,6 @@ body {
 
 .page .bookmark {
 	position: absolute;
-	font-size: 0px;
 	width: 100px;
 	height: 100px;
 
@@ -82,11 +81,11 @@ body {
 	z-index: 9999;
 	opacity: 0,5;
 
-	-webkit-transform: rotate(45deg);
-	-moz-transform: rotate(45deg);
-	-o-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	transform: rotate(45deg);
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	transform: rotate(-45deg);
 
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;

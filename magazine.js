@@ -78,9 +78,11 @@ function getPageNumber(page){
 	return $('.page').index(page) 
 }
 
+
 function getPageAt(n){
 	return $($('.page')[n])
 }
+
 
 
 /************************************************** event handlers ***/
@@ -137,17 +139,11 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 			&& (direction=='left' || direction=='right')){
 		// using the "unanimated" trick we will make the drag real-time...
 		if(direction == 'left'){
-			if(_USE_REAL_SIZES){
-				mag.css({left: -cur.position()['left']/scale-distance/scale})
-			} else {
-				mag.css({left: -n*cur.width()-distance/scale})
-			}
+			mag.css({left: -cur.position()['left']/scale - distance/scale})
+			//mag.css({left: -n*cur.width()-distance/scale})
 		} else if(direction == 'right') {
-			if(_USE_REAL_SIZES){
-				mag.css({left: -cur.position()['left']/scale+distance/scale})
-			} else {
-				mag.css({left: -n*cur.width()+distance/scale})
-			}
+			mag.css({left: -cur.position()['left']/scale + distance/scale})
+			//mag.css({left: -n*cur.width()+distance/scale})
 		}
 
 		$('.viewer').trigger('magazineDragging')
@@ -335,11 +331,7 @@ function setCurrentPage(n, offset, width){
 	cur.addClass('current')
 
 	var mag = $('.magazine')
-	if(_USE_REAL_SIZES){
-		var offset = offset == null ? cur.position()['left']/getPageScale() : offset
-	} else {
-		var offset = offset == null ? cur.width()*n : offset
-	}
+	var offset = offset == null ? cur.position()['left']/getPageScale() : offset
 	mag.css({left: -offset})
 
 	// center the pages correctly...

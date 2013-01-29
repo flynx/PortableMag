@@ -1,3 +1,5 @@
+<!-- XXX for some reason a doctype kills the layout, need to investigate -->
+<!--DOCTYPE html-->
 <html>
 <head>
 <title>Magazine</title>
@@ -87,7 +89,8 @@ $(document).ready(function(){
 			},
 
 			//excludedElements: '.noSwipe',
-			fingers: $.fn.swipe.fingers.ALL
+			//fingers: $.fn.swipe.fingers.ALL
+			fingers: $.fn.swipe.fingers.THREE
 		})
 
 	// XXX do we need these here??
