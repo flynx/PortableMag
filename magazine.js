@@ -30,7 +30,8 @@ var USE_REAL_PAGE_SIZES = false
 
 
 
-/*********************************************************************/
+/*********************************************************** modes ***/
+
 // toggles .dragging CSS class on the viewer while dragging is in 
 // progress.
 // NOTE: this is used mostly for styling and drag assisting...
@@ -448,6 +449,9 @@ function toggleBookmark(n){
 		var res = $('<div/>')
 			.prependTo(cur)
 			.addClass('bookmark justcreated')
+			.attr({
+				title: 'Toggle bookmark (B)'
+			})
 			.click(function(){
 				toggleBookmark(n)
 			})

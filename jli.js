@@ -221,7 +221,9 @@ function toKeyName(code){
 var KEYBOARD_HANDLER_PROPAGATE = true
 
 /* Basic key format:
+ *
  * 		<key-code> : <callback>,
+ *
  * 		<key-code> : {
  * 			'default': <callback>,
  *			// a modifier can be any single modifier, like shift or a 
@@ -233,11 +235,13 @@ var KEYBOARD_HANDLER_PROPAGATE = true
  *			//	- shift
  * 			<modifer>: [...]
  * 		},
+ *
  * 		<key-code> : [
  *			// this can be any type of handler except for an alias...
  * 			<handler>, 
  * 			<doc>
  * 		],
+ *
  *		// alias...
  * 		<key-code-a> : <key-code-b>,
  *
