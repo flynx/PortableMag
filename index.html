@@ -99,8 +99,6 @@ $(document).ready(function(){
 
 	// XXX do we need these here??
 	$('.button.cover').swipe({click: goToMagazineCover})
-	$('.button.next-article').swipe({click: nextArticle})
-	$('.button.prev-article').swipe({click: prevArticle})
 
 	$('.button.prev-bookmark').swipe({click: prevBookmark})
 	$('.button.toggle-bookmark').swipe({click: function(){toggleBookmark()}})
@@ -408,19 +406,28 @@ $(document).ready(function(){
 					<h1 name="config">Configuration demo</h1>
 
 					<div>
-						Pages in ribbon: <input id="PAGES_IN_RIBBON" type="text"><button onclick="saveSettings()">save</button>
+						Pages in ribbon: 
+						<input id="PAGES_IN_RIBBON" type="text"><button onclick="saveSettings()">save</button>
 					</div>
 					<div>
-						Fit page to view: <button id="FIT_PAGE_TO_VIEW" onclick="toggleSetting(this)"></button>
+						Fit page to view: 
+						<button id="FIT_PAGE_TO_VIEW" onclick="toggleSetting(this)"></button>
 					</div>
 					<div>
-						Animate window resize: <button id="ANIMATE_WINDOW_RESIZE" onclick="toggleSetting(this)"></button>
+						Animate window resize: 
+						<button id="ANIMATE_WINDOW_RESIZE" onclick="toggleSetting(this)"></button>
 					</div>
 					<div>
-						Drag in full page view: <button id="DRAG_FULL_PAGE" onclick="toggleSetting(this)"></button>
+						Drag in full page view: 
+						<button id="DRAG_FULL_PAGE" onclick="toggleSetting(this)"></button>
 					</div>
 					<div>
-						Enable different size pages (still flaky): <button id="USE_REAL_PAGE_SIZES" onclick="toggleSetting(this)"></button>
+						Toggle viewer animation (affects transition to and from full page view): 
+						<button id="viewer_transition_state" onclick="toggleViewerAnimation()"></button>
+					</div>
+					<div>
+						Enable different size pages (still flaky): 
+						<button id="USE_REAL_PAGE_SIZES" onclick="toggleSetting(this)"></button>
 					</div>
 					<p>
 					NOTE: this is not an actual configuration page, just a live demo 
@@ -432,6 +439,25 @@ $(document).ready(function(){
 					</div>
 
 					<script>
+					var toggleViewerAnimation = function(){
+						var toggler = createCSSClassToggler(
+							// XXX this will turn off magazine animations...
+							//'.scaler, .page, .magazine',
+							'.scaler, .page',
+							'unanimated',
+							function(action){
+								$('#viewer_transition_state').text(action == 'on' ? 'off' : 'on')
+							})
+						return function(action){
+							if(action == null || action == '?'){
+								var res = toggler(action)
+							} else {
+								var res = toggler(action == 'on' ? 'off' : 'on')
+							}
+							return res == 'on' ? 'off' : 'on'
+						}
+					}()
+					toggleViewerAnimation('on')
 
 					function saveSettings(){
 						var v = parseInt($('#PAGES_IN_RIBBON').attr('value'))
