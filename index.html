@@ -453,7 +453,7 @@ $(document).ready(function(){
 						}
 						.settings button, .settings input {
 							background: white;
-							height: 20px;
+							height: 25px;
 						}
 						.settings input {
 							border: solid silver 1px;
@@ -465,6 +465,11 @@ $(document).ready(function(){
 							padding-bottom: 3px;
 							padding-left: 15px;
 							padding-right: 15px;
+						}
+						#RESET {
+							background: red;
+							color: white;
+							font-weight: bold;
 						}
 					</style>
 
@@ -517,6 +522,14 @@ $(document).ready(function(){
 							</td>
 							<td>
 								<button id="USE_REAL_PAGE_SIZES" onclick="toggleSetting(this)"></button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Reset stored data:
+							</td>
+							<td>
+								<button id="RESET" onclick="confirm('You really want to reset?')&&resetState()">Reset</button>
 							</td>
 						</tr>
 					<table/>

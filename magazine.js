@@ -779,6 +779,9 @@ function saveStorageState(){
 	$.jStorage.set('current_page', getPageNumber())
 	$.jStorage.set('bookmarks', buildBookmarkList())
 }
+function resetStorageState(){
+	$.jStorage.flush()
+}
 
 
 // JSON format state managers...
@@ -807,6 +810,11 @@ function loadState(){
 function saveState(){
 	saveURLState()
 	saveStorageState()
+}
+
+function resetState(){
+	resetStorageState()
+	loadState()
 }
 
 
