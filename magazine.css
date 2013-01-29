@@ -245,14 +245,14 @@ body {
 	text-align: center;
 	overflow: hidden;
 
-	background: black;
-	opacity: 0.4;
+	background: #555;
+	opacity: 0.9;
 
 	height: 50px;
 	left: 0px;
 
 	font-size: 14px;
-	color: white;
+	color: silver;
 }
 .top-toolbar .title,
 .bottom-toolbar .title {
@@ -269,7 +269,7 @@ body {
 	text-align: right;
 }
 .top-toolbar a, .bottom-toolbar a {
-	color: white;
+	color: silver;
 	text-decoration: none;
 }
 .top-toolbar .controls, .bottom-toolbar .controls {
@@ -287,7 +287,6 @@ body {
 }
 .button {
 	display: inline-block;
-	color: white;
 	font-size: 25px;
 	font-weight: bold;
 
@@ -309,6 +308,7 @@ body {
 
 /* navigator... */
 .navigator {
+	opacity: 0.6;
 }
 .navigator .bar {
 	position: relative;

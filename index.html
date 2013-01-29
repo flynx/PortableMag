@@ -406,34 +406,91 @@ $(document).ready(function(){
 				<div class="content">
 					<h1 name="config">Configuration demo</h1>
 
-					<div>
-						Pages in ribbon: 
-						<input id="PAGES_IN_RIBBON" type="text"><button onclick="saveSettings()">save</button>
-					</div>
-					<div>
-						Fit page to view: 
-						<button id="FIT_PAGE_TO_VIEW" onclick="toggleSetting(this)"></button>
-					</div>
-					<div>
-						Animate window resize: 
-						<button id="ANIMATE_WINDOW_RESIZE" onclick="toggleSetting(this)"></button>
-					</div>
-					<div>
-						Drag in full page view: 
-						<button id="DRAG_FULL_PAGE" onclick="toggleSetting(this)"></button>
-					</div>
-					<div>
-						Toggle viewer animation (affects transition to and from full page view): 
-						<button id="viewer_transition_state" onclick="toggleViewerAnimation()"></button>
-					</div>
-					<div>
-						Enable different size pages (still flaky): 
-						<button id="USE_REAL_PAGE_SIZES" onclick="toggleSetting(this)"></button>
-					</div>
 					<p>
 					NOTE: this is not an actual configuration page, just a live demo 
 					of some of the available configuration option effects.
 					</p>
+
+					<hr noshade color="silver">
+
+					<style>
+						.settings tr td:first-child {
+							text-align: right;
+							vertical-align: middle;
+							padding-right: 10px;
+						}
+						.settings tr {
+							height: 30px;
+						}
+						.settings button, .settings input {
+							background: white;
+							height: 20px;
+						}
+						.settings input {
+							border: solid silver 1px;
+						}
+						.settings button {
+							border: solid gray 1px;
+							cursor: hand;
+							padding-left: 15px;
+							padding-right: 15px;
+						}
+					</style>
+
+					<table class="settings" width="100%">
+						<tr>
+							<td width="50%">
+								Pages in ribbon: 
+							</td>
+							<td>
+								<input id="PAGES_IN_RIBBON" type="text" size="8" style="text-align:center" disabled>
+								<button onclick="$('#PAGES_IN_RIBBON').attr('value', parseInt($('#PAGES_IN_RIBBON').attr('value'))+1); saveSettings()">+</button>
+								<button onclick="$('#PAGES_IN_RIBBON').attr('value', parseInt($('#PAGES_IN_RIBBON').attr('value'))-1); saveSettings()">-</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Fit page to view: 
+							</td>
+							<td>
+								<button id="FIT_PAGE_TO_VIEW" onclick="toggleSetting(this)"></button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Animate window resize: 
+							</td>
+							<td>
+								<button id="ANIMATE_WINDOW_RESIZE" onclick="toggleSetting(this)"></button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Drag in full page view: 
+							</td>
+							<td>
+								<button id="DRAG_FULL_PAGE" onclick="toggleSetting(this)"></button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Toggle viewer animation (affects transition to and from full page view): 
+							</td>
+							<td>
+								<button id="viewer_transition_state" onclick="toggleViewerAnimation()"></button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Enable different size pages (still flaky): 
+							</td>
+							<td>
+								<button id="USE_REAL_PAGE_SIZES" onclick="toggleSetting(this)"></button>
+							</td>
+						</tr>
+					<table/>
+
+					<hr noshade color="silver">
 
 					<div style="position:absolute; width:100%; bottom:10px; text-align: right;">
 						<a href="#back">go back</a>, or return to <a href="#home">magazine cover...</a><br>
@@ -462,7 +519,14 @@ $(document).ready(function(){
 
 					function saveSettings(){
 						var v = parseInt($('#PAGES_IN_RIBBON').attr('value'))
-						PAGES_IN_RIBBON = v == null ? PAGES_IN_RIBBON : v
+						// ignore bad values...
+						v = v == null ? PAGES_IN_RIBBON : v
+						// can't be less that 1...
+						v = v < 1 ? 1 : v
+						PAGES_IN_RIBBON = v
+						// we need to reset the visible value in case it was wrong...
+						$('#PAGES_IN_RIBBON').attr('value', PAGES_IN_RIBBON)
+
 						FIT_PAGE_TO_VIEW = $('#FIT_PAGE_TO_VIEW').text() == 'true' ? true : false
 						ANIMATE_WINDOW_RESIZE = $('#ANIMATE_WINDOW_RESIZE').text() == 'true' ? true : false
 						DRAG_FULL_PAGE = $('#DRAG_FULL_PAGE').text() == 'true' ? true : false
