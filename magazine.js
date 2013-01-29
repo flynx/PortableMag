@@ -411,9 +411,27 @@ function prevArticle(){
 
 /******************************************************* bookmarks ***/
 
+// setup bookmarking active zones in page...
+function setupBookmarkTouchZones(){
+	$('.bookmark-toggler').remove()
+	var page = $('.page')
+	page.each(function(i, e){
+		$('<div/>')
+			.prependTo(e)
+			.addClass('bookmark-toggler')
+			.attr({
+				title: 'Toggle bookmark (B)'
+			})
+			.click(function(){
+				toggleBookmark(i)
+			})
+	})	
+}
+
 // load bookmarks from list...
 function loadBookmarks(lst){
 	clearBookmarks()
+	// setup set bookmarks...
 	$(lst).each(function(i, e){toggleBookmark(e)})
 }
 // build bookmark list...

@@ -78,7 +78,7 @@ body {
 
 	cursor: hand;
 
-	z-index: 9999;
+	z-index: 8888;
 	opacity: 0,5;
 
 	-webkit-transform: rotate(-45deg);
@@ -92,6 +92,18 @@ body {
 	-o-transition: all 0.2s ease;
 	-ms-transition: all 0.2s ease;	
 	transition: all 0.2s ease;
+}
+.page .bookmark-toggler {
+	position: absolute;
+	width: 40px;
+	height: 40px;
+
+	right: 0px;
+	top: 0px;
+
+	cursor: hand;
+
+	z-index: 9999;
 }
 .page-view-mode .page {
 
