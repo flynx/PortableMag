@@ -97,9 +97,12 @@ $(document).ready(function(){
 			//fingers: $.fn.swipe.fingers.THREE
 		})
 
+
+	// load state and setup everything that depends on it...
 	loadState()
 	setupNavigator()
 
+	// set default view...
 	togglePageView('on')
 
 	// hide the splash screen...
@@ -431,6 +434,8 @@ $(document).ready(function(){
 						.settings button {
 							border: solid gray 1px;
 							cursor: hand;
+							padding-top: 3px;
+							padding-bottom: 3px;
 							padding-left: 15px;
 							padding-right: 15px;
 						}
@@ -443,8 +448,8 @@ $(document).ready(function(){
 							</td>
 							<td>
 								<input id="PAGES_IN_RIBBON" type="text" size="8" style="text-align:center" disabled>
-								<button onclick="$('#PAGES_IN_RIBBON').attr('value', parseInt($('#PAGES_IN_RIBBON').attr('value'))+1); saveSettings()">+</button>
-								<button onclick="$('#PAGES_IN_RIBBON').attr('value', parseInt($('#PAGES_IN_RIBBON').attr('value'))-1); saveSettings()">-</button>
+								<button onclick="$('#PAGES_IN_RIBBON').attr('value', parseFloat($('#PAGES_IN_RIBBON').attr('value'))+0.5); saveSettings()">+</button>
+								<button onclick="$('#PAGES_IN_RIBBON').attr('value', parseFloat($('#PAGES_IN_RIBBON').attr('value'))-0.5); saveSettings()">-</button>
 							</td>
 						</tr>
 						<tr>
@@ -517,7 +522,7 @@ $(document).ready(function(){
 					toggleViewerAnimation('on')
 
 					function saveSettings(){
-						var v = parseInt($('#PAGES_IN_RIBBON').attr('value'))
+						var v = parseFloat($('#PAGES_IN_RIBBON').attr('value'))
 						// ignore bad values...
 						v = v == null ? PAGES_IN_RIBBON : v
 						// can't be less that 1...

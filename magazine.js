@@ -7,7 +7,9 @@
 //var DEBUG = DEBUG != null ? DEBUG : true
 
 // number of pages to display in ribbon...
-var PAGES_IN_RIBBON = 6
+// NOTE: it is best to keep this odd-ish, so as to give the user the 
+// 		impession of pages continuing off-screen...
+var PAGES_IN_RIBBON = 4.0
 
 // if true, expand a page to fit the whole view in single page mode...
 var FIT_PAGE_TO_VIEW = true
