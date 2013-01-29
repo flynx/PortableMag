@@ -115,15 +115,19 @@ $(document).ready(function(){
 	// hide the splash screen...
 	$(window).one('webkitTransitionEnd oTransitionEnd msTransitionEnd transitionend',
 		function(){
-			// XXX try and fix the android bug...
+			// NOTE: this will fix a bug on android -- the pages appear 
+			//		to rendering quite a bit longer than loading, so on
+			//		loadState() above the current page is set well before
+			//		it is alligned correctly, so this will reset the 
+			//		current page after everything is aligned...
 			setTimeout(function(){
 				//updateView()
 				setCurrentPage()
-			}, 200)
+			}, 300)
 			// hide the splash...
 			setTimeout(function(){
 				$('.splash').fadeOut()
-			}, 200)
+			}, 350)
 		})
 })
 
