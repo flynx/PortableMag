@@ -29,6 +29,7 @@ var DRAG_FULL_PAGE = true
 var USE_REAL_PAGE_SIZES = false
 
 
+
 /*********************************************************************/
 // toggles .dragging CSS class on the viewer while dragging is in 
 // progress.

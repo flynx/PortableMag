@@ -12,6 +12,7 @@ var keybindings = {
 			116,												//	F5
 			122,												//	F11
 			123,												//	F12
+			8													//	BkSp
 		],
 
 		// togglable modes and options...
