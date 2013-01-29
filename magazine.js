@@ -424,8 +424,10 @@ function setupBookmarkTouchZones(){
 			.attr({
 				title: 'Toggle bookmark (B)'
 			})
-			.click(function(){
-				toggleBookmark($(e))
+			.swipe({
+				click: function(){
+					toggleBookmark($(e))
+				}
 			})
 	})	
 }
@@ -472,8 +474,10 @@ function toggleBookmark(n){
 			.attr({
 				title: 'Toggle bookmark (B)'
 			})
-			.click(function(){
-				toggleBookmark(cur)
+			.swipe({
+				click: function(){
+					toggleBookmark(cur)
+				}
 			})
 
 		$('.viewer').trigger('bookmarkAdded', n)
@@ -526,8 +530,10 @@ function makeArticleIndicator(i, article, width){
 			width: width,
 			left: width*n
 		})
-		.click(function(){
-			setCurrentPage(n)
+		.swipe({
+			click: function(){
+				setCurrentPage(n)
+			}
 		})
 	return article
 }
@@ -628,8 +634,10 @@ function makeBookmarkIndicator(n){
 		.attr({
 			page: n
 		})
-		.click(function(){
-			setCurrentPage(n)
+		.swipe({
+			click: function(){
+				setCurrentPage(n)
+			}
 		})
 
 	return res
