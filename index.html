@@ -97,14 +97,6 @@ $(document).ready(function(){
 			//fingers: $.fn.swipe.fingers.THREE
 		})
 
-	// XXX do we need these here??
-	$('.button.cover').swipe({click: goToMagazineCover})
-
-	$('.button.toggle-bookmark').swipe({click: function(){toggleBookmark()}})
-	// XXX for some reason these are not animated...
-	$('.button.prev-bookmark').swipe({click: prevBookmark})
-	$('.button.next-bookmark').swipe({click: nextBookmark})
-
 	loadState()
 	setupNavigator()
 
@@ -137,47 +129,54 @@ $(document).ready(function(){
 
 	<div class="top-toolbar">
 		<div class="left-set">
-			<div class="button cover title">PortableMag</div>
+			<div class="button cover title"><a href="#home">PortableMag</a></div>
 		</div>
 		<div class="right-set">
 			<div class="button prev-bookmark">
-				<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-				 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
-				 <g>
-				  <title>Previous page (S-Left)</title>
-				  <path transform="rotate(-180 18.9697 20.1122)" id="svg_13" stroke="#ffffff" d="m20.467497,20.112247l-8.773763,-14.254913l5.778195,0l8.773788,14.254913l-8.773788,14.25491l-5.778195,0l8.773763,-14.25491z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
-				 </g>
-				</svg>
+				<a href="#prevBookmark">
+					<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+					 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+					 <g>
+					  <title>Previous page (S-Left)</title>
+					  <path transform="rotate(-180 18.9697 20.1122)" id="svg_13" stroke="#ffffff" d="m20.467497,20.112247l-8.773763,-14.254913l5.778195,0l8.773788,14.254913l-8.773788,14.25491l-5.778195,0l8.773763,-14.25491z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
+					 </g>
+					</svg>
+				</a>
 			</div>
 			<div class="button toggle-bookmark">
-				<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-				 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
-				 <g>
-				  <title>Bookmark this page (B)</title>
-				  <rect stroke="#ffffff" id="svg_1" height="28.604868" width="24.052915" y="5.858955" x="8.807377" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
-				  <path stroke="#ffffff" id="svg_4" d="m21.762226,3.651895l8.416584,0l0,14.510554l-4.124887,-2.792193l-4.291697,2.792193l0,-14.510554l0,0z" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" fill="#ff0000"/>
-				 </g>
-				</svg>
+				<a href="#bookmark">
+					<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+					 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+					 <g>
+					  <title>Bookmark this page (B)</title>
+					  <rect stroke="#ffffff" id="svg_1" height="28.604868" width="24.052915" y="5.858955" x="8.807377" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
+					  <path stroke="#ffffff" id="svg_4" d="m21.762226,3.651895l8.416584,0l0,14.510554l-4.124887,-2.792193l-4.291697,2.792193l0,-14.510554l0,0z" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" fill="#ff0000"/>
+					 </g>
+					</svg>
+				</a>
 			</div>
 			<div class="button next-bookmark">
-				<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-				 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
-				 <g>
-				  <title>Next page (S-Right)</title>
-				  <path stroke="#ffffff" id="svg_11" d="m23.175751,20.132858l-8.773797,-14.254913l5.77823,0l8.773788,14.254913l-8.773788,14.254913l-5.77823,0l8.773797,-14.254913z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
-				 </g>
-				</svg>
+				<a href="#nextBookmark">
+					<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+					 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+					 <g>
+					  <title>Next page (S-Right)</title>
+					  <path stroke="#ffffff" id="svg_11" d="m23.175751,20.132858l-8.773797,-14.254913l5.77823,0l8.773788,14.254913l-8.773788,14.254913l-5.77823,0l8.773797,-14.254913z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
+					 </g>
+					</svg>
+				</a>
 			</div>
 		</div>
 	</div>
 	<div class="bottom-toolbar">
 		<!-- this is just an example-->
 		<div class="controls">
-			<a href="#home">Cover</a> |
-			<a href="#prevArticle">Previous article</a> |
-			<a href="#prev">Previous page</a> |
-			<a href="#next">Next page</a> | 
-			<a href="#nextArticle">Next article</a> |
+			<a href="#home">Cover</a>
+			<a href="#prevBookmark">&lt; Bookmark</a>
+			<a href="#prevArticle">&lt; Article</a>
+			<a href="#prev" alt="Previous page (Left)">&lt; Pa</a><a href="#next" alt="Next page (Right)">ge &gt;</a>
+			<a href="#nextArticle">Article &gt;</a>
+			<a href="#nextBookmark">Bookmark &gt;</a>
 			<a href="#end">End</a>
 		</div>
 		<!-- position indicator -->
