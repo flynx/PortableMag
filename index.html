@@ -92,10 +92,8 @@ $(document).ready(function(){
 			click: function(evt, elem){
 				if($(elem).hasClass('page')){
 					setCurrentPage(elem)
-					//togglePageView('on')
 				} else if($(elem).hasClass('content')){
 					setCurrentPage($(elem).parents('.page').first())
-					//togglePageView('on')
 				}
 				return true
 			},
@@ -525,6 +523,24 @@ $(document).ready(function(){
 
 					<hr noshade color="silver">
 
+					<table class="settings" width="100%">
+						<tr>
+							<td width="50%">
+								Fingers supported: 
+							</td>
+							<td id="FingersSupported">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Browser info: 
+							</td>
+							<td id="BrowserInfo">
+							</td>
+						</tr>
+					<table/>
+
+
 					<div style="position:absolute; width:100%; bottom:10px; text-align: right;">
 						<a href="#back">go back</a>, or return to <a href="#home">magazine cover...</a><br>
 					</div>
@@ -571,6 +587,10 @@ $(document).ready(function(){
 						$('#ANIMATE_WINDOW_RESIZE').text(ANIMATE_WINDOW_RESIZE)
 						$('#DRAG_FULL_PAGE').text(DRAG_FULL_PAGE)
 						$('#USE_REAL_PAGE_SIZES').text(USE_REAL_PAGE_SIZES)
+
+						$('#FingersSupported').text($.fn.swipe.fingers.ALL)
+						var b = $('#BrowserInfo')
+						$.each($.browser, function(i, e){$('<div>'+i+': '+e+'</div>').appendTo(b)})
 					}
 					function toggleSetting(obj){
 						obj = $(obj)

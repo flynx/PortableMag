@@ -203,6 +203,7 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 // 			- the page will be stretched to viewer (false)
 // 			- or to content (true)
 // XXX on USE_REAL_PAGE_SIZES offset is a bit off...
+// 		this is most noticable when going into full page mode...
 function fitNPages(n, fit_to_content){
 	if(n == null){
 		n = 1
@@ -418,7 +419,7 @@ function setupBookmarkTouchZones(){
 	var page = $('.page')
 	page.each(function(i, e){
 		$('<div/>')
-			.prependTo(e)
+			.prependTo($(e))
 			.addClass('bookmark-toggler')
 			.attr({
 				title: 'Toggle bookmark (B)'
@@ -514,7 +515,7 @@ function prevBookmark(){
 // 		each magazine edit...
 
 // XXX make this attach to page instead of it's number number...
-function _makeArticleIndicator(i, article, width){
+function makeArticleIndicator(i, article, width){
 	var bar = $('.navigator .bar')
 	var article = $(article)
 	var n = getPageNumber(article.children('.cover').first())
@@ -538,7 +539,7 @@ function setupArticleIndicators(W){
 	clearArticleIndicators()
 	// set article indicator positions...
 	articles.each(function(i, e){
-		return _makeArticleIndicator(i, e, W)
+		return makeArticleIndicator(i, e, W)
 	})
 }
 
