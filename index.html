@@ -420,7 +420,7 @@ $(document).ready(function(){
 						Drag in full page view: <button id="DRAG_FULL_PAGE" onclick="toggleSetting(this)"></button>
 					</div>
 					<div>
-						Enable different size pages (still flaky): <button id="_USE_REAL_SIZES" onclick="toggleSetting(this)"></button>
+						Enable different size pages (still flaky): <button id="USE_REAL_PAGE_SIZES" onclick="toggleSetting(this)"></button>
 					</div>
 					<p>
 					NOTE: this is not an actual configuration page, just a live demo 
@@ -439,14 +439,14 @@ $(document).ready(function(){
 						FIT_PAGE_TO_VIEW = $('#FIT_PAGE_TO_VIEW').text() == 'true' ? true : false
 						ANIMATE_WINDOW_RESIZE = $('#ANIMATE_WINDOW_RESIZE').text() == 'true' ? true : false
 						DRAG_FULL_PAGE = $('#DRAG_FULL_PAGE').text() == 'true' ? true : false
-						_USE_REAL_SIZES = $('#_USE_REAL_SIZES').text() == 'true' ? true : false
+						USE_REAL_PAGE_SIZES = $('#USE_REAL_PAGE_SIZES').text() == 'true' ? true : false
 					}
 					function loadSettings(){
 						$('#PAGES_IN_RIBBON').attr('value', PAGES_IN_RIBBON)
 						$('#FIT_PAGE_TO_VIEW').text(FIT_PAGE_TO_VIEW)
 						$('#ANIMATE_WINDOW_RESIZE').text(ANIMATE_WINDOW_RESIZE)
 						$('#DRAG_FULL_PAGE').text(DRAG_FULL_PAGE)
-						$('#_USE_REAL_SIZES').text(_USE_REAL_SIZES)
+						$('#USE_REAL_PAGE_SIZES').text(USE_REAL_PAGE_SIZES)
 					}
 					function toggleSetting(obj){
 						obj = $(obj)

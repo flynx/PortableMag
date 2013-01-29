@@ -23,8 +23,8 @@ var DRAG_FULL_PAGE = true
 // 		we get to the right from the no-resize element...
 // 		...think the reason is .no-resize page centering...
 // XXX still buggy on togglePageView to TN after funny sized pages...
-//var _USE_REAL_SIZES = true
-var _USE_REAL_SIZES = false
+//var USE_REAL_PAGE_SIZES = true
+var USE_REAL_PAGE_SIZES = false
 
 
 /*********************************************************************/
@@ -203,7 +203,7 @@ function fitNPages(n, fit_to_content){
 		fit_to_content = true
 	}
 	var view = $('.viewer')
-	if(_USE_REAL_SIZES){
+	if(USE_REAL_PAGE_SIZES){
 		var page = $('.page:not(.no-resize)')
 	} else {
 		var page = $('.page')
@@ -223,7 +223,7 @@ function fitNPages(n, fit_to_content){
 	// this point, as we will start changing things next...
 
 	if(fit_to_content){
-		if(_USE_REAL_SIZES){
+		if(USE_REAL_PAGE_SIZES){
 			page.width('auto')
 			page.height('auto')
 		} else {
@@ -266,7 +266,7 @@ function fitNPages(n, fit_to_content){
 		var offset = rW * getPageNumber()-1
 	} else {
 		// calculate the target offset...
-		if(_USE_REAL_SIZES){
+		if(USE_REAL_PAGE_SIZES){
 			var rpages = $('.page:not(.no-resize), .current.page')
 		} else {
 			var rpages = page 
@@ -274,7 +274,7 @@ function fitNPages(n, fit_to_content){
 		var i = rpages.index(cur) 
 		var offset = rW * i-1
 		// now do the unresized elements...
-		if(_USE_REAL_SIZES){
+		if(USE_REAL_PAGE_SIZES){
 			$('.page.no-resize').width('auto')
 			var nrpages = $('.page.no-resize, .current.page')
 			i = nrpages.index(cur) 
@@ -285,7 +285,7 @@ function fitNPages(n, fit_to_content){
 		}
 	}
 
-	if(_USE_REAL_SIZES){
+	if(USE_REAL_PAGE_SIZES){
 		if(cur.hasClass('no-resize')){
 			rW = cur.width()
 		}
