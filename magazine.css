@@ -254,6 +254,16 @@ body {
 	font-size: 14px;
 	color: white;
 }
+.top-toolbar .left-set,
+.bottom-toolbar .left-set {
+	float: left;
+	text-align: left;
+}
+.top-toolbar .right-set,
+.bottom-toolbar .right-set {
+	float: right;
+	text-align: right;
+}
 .top-toolbar a, .bottom-toolbar a {
 	color: white;
 	text-decoration: none;
@@ -266,6 +276,7 @@ body {
 	top: 0px;
 	width: 100%;
 }
+
 .bottom-toolbar {
 	bottom: 0px;
 	width: 100%;

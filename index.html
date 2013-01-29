@@ -97,7 +97,10 @@ $(document).ready(function(){
 	$('.button.cover').swipe({click: goToMagazineCover})
 	$('.button.next-article').swipe({click: nextArticle})
 	$('.button.prev-article').swipe({click: prevArticle})
-	$('.button.bookmark').swipe({click: function(){toggleBookmark()}})
+
+	$('.button.prev-bookmark').swipe({click: prevBookmark})
+	$('.button.toggle-bookmark').swipe({click: function(){toggleBookmark()}})
+	$('.button.next-bookmark').swipe({click: nextBookmark})
 
 	loadState()
 	setupNavigator()
@@ -130,10 +133,39 @@ $(document).ready(function(){
 	<!-- XXX Magazine title... -->
 
 	<div class="top-toolbar">
-		<div class="button cover">Issue Cover</div>
-		<div class="button prev-article">Prev Article</div>
-		<div class="button next-article">Next Article</div>
-		<div class="button bookmark">Bookmark</div>
+		<div class="left-set">
+			<div class="button cover">PortableMag</div>
+		</div>
+		<div class="right-set">
+			<div class="button prev-bookmark">
+				<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+				 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+				 <g>
+				  <title>prev</title>
+				  <path transform="rotate(-180 18.9697 20.1122)" id="svg_13" stroke="#ffffff" d="m20.467497,20.112247l-8.773763,-14.254913l5.778195,0l8.773788,14.254913l-8.773788,14.25491l-5.778195,0l8.773763,-14.25491z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
+				 </g>
+				</svg>
+			</div>
+			<div class="button toggle-bookmark">
+				<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+				 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+				 <g>
+				  <title>bookmark</title>
+				  <rect stroke="#ffffff" id="svg_1" height="28.604868" width="24.052915" y="5.858955" x="8.807377" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
+				  <path stroke="#ffffff" id="svg_4" d="m21.762226,3.651895l8.416584,0l0,14.510554l-4.124887,-2.792193l-4.291697,2.792193l0,-14.510554l0,0z" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" fill="#ff0000"/>
+				 </g>
+				</svg>
+			</div>
+			<div class="button next-bookmark">
+				<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+				 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+				 <g>
+				  <title>next</title>
+				  <path stroke="#ffffff" id="svg_11" d="m23.175751,20.132858l-8.773797,-14.254913l5.77823,0l8.773788,14.254913l-8.773788,14.254913l-5.77823,0l8.773797,-14.254913z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
+				 </g>
+				</svg>
+			</div>
+		</div>
 	</div>
 	<div class="bottom-toolbar">
 		<!-- this is just an example-->
@@ -164,7 +196,7 @@ $(document).ready(function(){
 				<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
 				 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
 				 <g>
-				  <title>Layer 1</title>
+				  <title>PortableMag cover</title>
 				  <defs>
 				   <path id="circle_path" d="m177.720383,238.333344c0,-82.290771 66.655533,-148.946304 148.946304,-148.946304c82.290771,0 148.946289,66.655533 148.946289,148.946304c0,82.290771 -66.655518,148.946289 -148.946289,148.946289c-82.290771,0 -148.946304,-66.655518 -148.946304,-148.946289z"/>
 				  </defs>
