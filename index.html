@@ -115,7 +115,15 @@ $(document).ready(function(){
 	// hide the splash screen...
 	$(window).one('webkitTransitionEnd oTransitionEnd msTransitionEnd transitionend',
 		function(){
-			setTimeout(function(){$('.splash').fadeOut()}, 50)
+			// XXX try and fix the android bug...
+			setTimeout(function(){
+				//updateView()
+				setCurrentPage()
+			}, 50)
+			// hide the splash...
+			setTimeout(function(){
+				$('.splash').fadeOut()
+			}, 100)
 		})
 })
 
