@@ -115,6 +115,7 @@ $(document).ready(function(){
 	// hide the splash screen...
 	$(window).one('webkitTransitionEnd oTransitionEnd msTransitionEnd transitionend',
 		function(){
+			setCurrentPage()
 			$('.splash').fadeOut()
 		})
 })
