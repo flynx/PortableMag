@@ -64,14 +64,16 @@ var keybindings = {
 			'ctrl': prevArticle,								//	ctrl-Right
 			'shift': prevBookmark								//	shift-Right
 		},
-		8: 		37, 											// 	BkSp
 		188:	37,												//	<
 		39:	{
 			'default': nextPage,								//	Left
 			'ctrl': nextArticle,								//	ctrl-Left
 			'shift': nextBookmark								//	shift-Left
 		},
-		32:		39,												//	Space
+		32:	{
+			'default': nextPage,								//	Space
+			'shift': prevPage									//	shift-Space
+		},
 		190:	39,												//	>
 
 		66:		toggleBookmark,									//	B

@@ -772,6 +772,8 @@ function removeBookmarkIndicator(n){
 
 /********************************************************** editor ***/
 
+// XXX some things get really surprized when this is called, make things 
+// 		work with the mag cleared...
 function clearMagazine(){
 	// XXX do we remove the whole magazine or only it's contents?
 	$('.magazine').remove()
