@@ -41,7 +41,8 @@ $(document).ready(function(){
 	$('.viewer')
 		.swipe({
 			swipeStatus: swipeHandler,
-			// XXX change this to pinch...
+
+			// XXX these get called instead of pinches...
 			swipeUp: function(event, direction, distance, duration, fingerCount){
 				if(fingerCount == 2){
 					toggleBookmark()
@@ -49,7 +50,7 @@ $(document).ready(function(){
 					togglePageView()
 				}
 			},
-			// XXX change this to pinch...
+			// XXX these get called instead of pinches...
 			swipeDown: function(event, direction, distance, duration, fingerCount){
 				if(fingerCount == 2){
 					toggleBookmark()
@@ -58,6 +59,8 @@ $(document).ready(function(){
 				}
 			},
 
+
+			// XXX for some reasons these lose the competition with swipes...
 			pinchIn: function(event, direction, distance, duration, fingerCount, pinchZoom) {
 				if(pinchZoom < distance){
 					return
@@ -66,6 +69,7 @@ $(document).ready(function(){
 					togglePageView('on')
 				}
 			},
+			// XXX for some reasons these lose the competition with swipes...
 			pinchOut: function(event, direction, distance, duration, fingerCount, pinchZoom) {
 				if(pinchZoom < distance){
 					return
