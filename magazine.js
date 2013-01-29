@@ -412,6 +412,7 @@ function prevArticle(){
 /******************************************************* bookmarks ***/
 
 // setup bookmarking active zones in page...
+// XXX make this attach to page instead of it's number number...
 function setupBookmarkTouchZones(){
 	$('.bookmark-toggler').remove()
 	var page = $('.page')
@@ -423,7 +424,7 @@ function setupBookmarkTouchZones(){
 				title: 'Toggle bookmark (B)'
 			})
 			.click(function(){
-				toggleBookmark(i)
+				toggleBookmark($(e))
 			})
 	})	
 }
@@ -471,7 +472,7 @@ function toggleBookmark(n){
 				title: 'Toggle bookmark (B)'
 			})
 			.click(function(){
-				toggleBookmark(n)
+				toggleBookmark(cur)
 			})
 
 		$('.viewer').trigger('bookmarkAdded', n)
@@ -504,6 +505,146 @@ function prevBookmark(){
 	if(page.length != 0){
 		return setCurrentPage(page)
 	}
+}
+
+
+
+/******************************************************* navigator ***/
+// NOTE: the navigator is not live and will need to get regenerated on
+// 		each magazine edit...
+
+// XXX make this attach to page instead of it's number number...
+function _makeArticleIndicator(i, article, width){
+	var bar = $('.navigator .bar')
+	var article = $(article)
+	var n = getPageNumber(article.children('.cover').first())
+	$('<div/>')
+		.prependTo($('.navigator .bar'))
+		.addClass('article')
+		.css({
+			width: width,
+			left: width*n
+		})
+		.click(function(){
+			setCurrentPage(n)
+		})
+	return article
+}
+
+
+function setupArticleIndicators(W){
+	var articles = $('.magazine .article')
+	// cleanup...
+	clearArticleIndicators()
+	// set article indicator positions...
+	articles.each(function(i, e){
+		return _makeArticleIndicator(i, e, W)
+	})
+}
+
+function clearArticleIndicators(){
+	$('.navigator .bar .article').remove()
+}
+	
+
+function setupNavigator(){
+	var bar = $('.navigator .bar')
+	var elems = $('.navigator .indicator, .navigator .article')
+	var pos = $('.navigator .indicator').fadeIn()
+	var pages = $('.page').length
+	var mag = $('.magazine')
+
+	var W = bar.width()/pages
+
+	setupArticleIndicators(W)
+
+	// set navigator element sizes...
+	elems.css({
+		width: W
+	})
+
+	updateNavigator()
+	
+	// setup event handlers...
+	$('.viewer')
+		.on('pageChanged', function(e, n){updateNavigator(n)})
+		.on('magazineDragging', function(){updateNavigator()})
+}
+
+function clearNavigator(){
+	$('.navigator .indicator').hide()
+	clearBookmarkIndicators()
+	clearArticleIndicators()
+}
+
+
+function updateNavigator(n){
+	var mag = $('.magazine')
+	var page = $('.page')
+	var bar = $('.navigator .bar')
+	var pos = $('.navigator .indicator')
+
+	var pn = page.length
+
+	var bW = bar.width()
+	var mW = mag.width()
+	var PW = page.width()
+	var pW = bar.width()/pn
+
+	if(n == null){
+		// XXX this behaves erratically if the page is zoomed...
+		var res = (-parseFloat(mag.css('left'))/(mW-PW)) * (bW-pW)
+	} else {
+		res = pW*n
+	}
+
+	// normalize the position...
+	res = res > 0 ? res: 0
+	res = res < (bW-pW) ? res: (bW-pW)
+
+	// set indicator position...
+	pos.css({
+		left: res 
+	})
+}
+
+
+function makeBookmarkIndicator(n){
+	if(n == null){
+		n = getPageNumber()
+	} else if(typeof(n) != typeof(1)){
+		n = getPageNumber(n)
+	}
+	var bar = $('.navigator .bar')
+	var pages = $('.page').length
+	var width = bar.width()/pages
+	var res = $('<div/>')
+		.prependTo($('.navigator .bar'))
+		.addClass('bookmark')
+		.css({
+			left: width*n + width*0.75
+		})
+		.attr({
+			page: n
+		})
+		.click(function(){
+			setCurrentPage(n)
+		})
+
+	return res
+}
+
+function clearBookmarkIndicators(){
+	$('.navigator .bar .bookmark').remove()
+}
+function removeBookmarkIndicator(n){
+	$('.navigator .bar .bookmark[page="'+n+'"]').remove()
+}
+
+
+// NOTE: this is 1 based page number, the rest of the system is 0 based.
+function updatePageNumberIndicator(){
+	$('.page-number').text((getPageNumber()+1)+'/'+$('.page').length)
 }
 
 
@@ -661,144 +802,6 @@ function saveState(){
 
 
 
-/******************************************************* navigator ***/
-
-function _makeArticleIndicator(i, article, width){
-	var bar = $('.navigator .bar')
-	var article = $(article)
-	var n = getPageNumber(article.children('.cover').first())
-	$('<div/>')
-		.prependTo($('.navigator .bar'))
-		.addClass('article')
-		.css({
-			width: width,
-			left: width*n
-		})
-		.click(function(){
-			setCurrentPage(n)
-		})
-	return article
-}
-
-
-function setupArticleIndicators(W){
-	var articles = $('.magazine .article')
-	// cleanup...
-	clearArticleIndicators()
-	// set article indicator positions...
-	articles.each(function(i, e){
-		return _makeArticleIndicator(i, e, W)
-	})
-}
-
-function clearArticleIndicators(){
-	$('.navigator .bar .article').remove()
-}
-	
-
-function setupNavigator(){
-	var bar = $('.navigator .bar')
-	var elems = $('.navigator .indicator, .navigator .article')
-	var pos = $('.navigator .indicator').fadeIn()
-	var pages = $('.page').length
-	var mag = $('.magazine')
-
-	var W = bar.width()/pages
-
-	setupArticleIndicators(W)
-
-	// set navigator element sizes...
-	elems.css({
-		width: W
-	})
-
-	updateNavigator()
-	
-	// setup event handlers...
-	$('.viewer')
-		.on('pageChanged', function(e, n){updateNavigator(n)})
-		.on('magazineDragging', function(){updateNavigator()})
-}
-
-function clearNavigator(){
-	$('.navigator .indicator').hide()
-	clearBookmarkIndicators()
-	clearArticleIndicators()
-}
-
-
-function updateNavigator(n){
-	var mag = $('.magazine')
-	var page = $('.page')
-	var bar = $('.navigator .bar')
-	var pos = $('.navigator .indicator')
-
-	var pn = page.length
-
-	var bW = bar.width()
-	var mW = mag.width()
-	var PW = page.width()
-	var pW = bar.width()/pn
-
-	if(n == null){
-		// XXX this behaves erratically if the page is zoomed...
-		var res = (-parseFloat(mag.css('left'))/(mW-PW)) * (bW-pW)
-	} else {
-		res = pW*n
-	}
-
-	// normalize the position...
-	res = res > 0 ? res: 0
-	res = res < (bW-pW) ? res: (bW-pW)
-
-	// set indicator position...
-	pos.css({
-		left: res 
-	})
-}
-
-
-
-function makeBookmarkIndicator(n){
-	if(n == null){
-		n = getPageNumber()
-	} else if(typeof(n) != typeof(1)){
-		n = getPageNumber(n)
-	}
-	var bar = $('.navigator .bar')
-	var pages = $('.page').length
-	var width = bar.width()/pages
-	var res = $('<div/>')
-		.prependTo($('.navigator .bar'))
-		.addClass('bookmark')
-		.css({
-			left: width*n + width*0.75
-		})
-		.attr({
-			page: n
-		})
-		.click(function(){
-			setCurrentPage(n)
-		})
-
-	return res
-}
-
-function clearBookmarkIndicators(){
-	$('.navigator .bar .bookmark').remove()
-}
-function removeBookmarkIndicator(n){
-	$('.navigator .bar .bookmark[page="'+n+'"]').remove()
-}
-
-
-// NOTE: this is 1 based page number, the rest of the system is 0 based.
-function updatePageNumberIndicator(){
-	$('.page-number').text((getPageNumber()+1)+'/'+$('.page').length)
-}
-
-
-
 /********************************************************** editor ***/
 
 // XXX some things get really surprized when this is called, make things 
@@ -813,6 +816,7 @@ function clearMagazine(){
 // 		- magazine
 // 		- cover
 function createMagazine(){
+	// XXX
 }
 
 
@@ -820,6 +824,7 @@ function createMagazine(){
 // 		- article
 // 		- cover
 function createArticle(magazine, title){
+	// XXX
 }
 
 
@@ -827,6 +832,7 @@ function createArticle(magazine, title){
 // 		- page
 // 		- content
 function createPage(article, template){
+	// XXX
 }
 
 
