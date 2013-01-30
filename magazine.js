@@ -35,7 +35,10 @@ var USE_REAL_PAGE_SIZES = false
 // toggles .dragging CSS class on the viewer while dragging is in 
 // progress.
 // NOTE: this is used mostly for styling and drag assisting...
-togglePageDragging = createCSSClassToggler('.viewer', 'dragging')
+var togglePageDragging = createCSSClassToggler('.viewer', 'dragging')
+
+
+var toggleEditorMode = createCSSClassToggler('.viewer', 'editor-mode noSwipe')
 
 
 // this is here only for speed, helps with dragging...
@@ -45,7 +48,7 @@ var _PAGE_VIEW
 // toggle between the two main modes:
 // 	- single page mode (.page-view-mode)
 // 	- thumbnail/ribbon mode
-togglePageView = createCSSClassToggler(
+var togglePageView = createCSSClassToggler(
 	'.viewer', 
 	'page-view-mode',
 	null,

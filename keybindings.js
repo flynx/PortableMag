@@ -3,6 +3,7 @@
 // list of keys to be ignored by handler but still handled by the browser...
 
 var keybindings = {
+	/*
 	// global bindings...
 	'*': {
 		title: 'Global',
@@ -14,14 +15,6 @@ var keybindings = {
 			123,												//	F12
 			8													//	BkSp
 		],
-
-		// togglable modes and options...
-		/*191: {
-			'default':	ImageGrid.showKeyboardBindings,			//	?
-			'ctrl':		ImageGrid.showSetup,					//	ctrl+?
-		},*/
-		13:		function(){togglePageView('on')},				//	Enter
-		27:		function(){togglePageView('off')},				//	Esc
 
 		// ignore the modifiers (shift, alt, ctrl, caps)...
 		16:		function(){},
@@ -48,10 +41,15 @@ var keybindings = {
 			40,													//	Down
 		],
 	},
+	*/
 
+	// ignore all keys here...
+	'.editor-mode': {
+		ignore: '*'
+	},
 
 	// everything except overlays...
-	'.viewer *:not(.overlay-mode *)': {
+	'.viewer:not(.editor-mode)': {
 		title: 'Ribbon and Viewer',
 		doc: '',
 
@@ -82,6 +80,9 @@ var keybindings = {
 		// combined navigation with actions..
 		38: function(){togglePageView()},						//	Up
 		40: function(){togglePageView()},						//	Down
+
+		13:	function(){togglePageView('on')},					//	Enter
+		27:	function(){togglePageView('off')},					//	Esc
 	}
 }
 

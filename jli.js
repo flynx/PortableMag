@@ -249,7 +249,8 @@ var KEYBOARD_HANDLER_PROPAGATE = true
  */
 function makeKeyboardHandler(keybindings, unhandled){
 	if(unhandled == null){
-		unhandled = function(){return false}
+		//unhandled = function(){return false}
+		unhandled = function(){return KEYBOARD_HANDLER_PROPAGATE}
 	}
 	return function(evt){
 		var did_handling = false
@@ -259,7 +260,8 @@ function makeKeyboardHandler(keybindings, unhandled){
 				var bindings = keybindings[mode]
 
 				var key = evt.keyCode
-				if(bindings.ignore != null && bindings.ignore.indexOf(key) != -1){
+				if(bindings.ignore == '*' 
+						|| bindings.ignore != null && bindings.ignore.indexOf(key) != -1){
 					// return true
 					res = res == null ? true : res
 					did_handling = true
