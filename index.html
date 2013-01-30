@@ -10,14 +10,14 @@
 <script src="jquery.js"></script>
 <script src="jquery.touchSwipe.js"></script>
 <script src="jstorage.js"></script>
+<!-- XXX make this optional... -->
 <script src="ckeditor/ckeditor.js"></script>
 
 <script src="jli.js"></script>
 <script src="magazine.js"></script>
 
-<script src="keybindings.js"></script>
-
 <!-- configuration, keep this last... -->
+<script src="keybindings.js"></script>
 <script src="config.js"></script>
 
 <script>
@@ -136,6 +136,8 @@ $(document).ready(function(){
 })
 
 // setup ckeditor events...
+// XXX need to $('[contenteditable]').attr('contenteditable', 'false') on
+//		thumbnail view mode and true on page view mode...
 CKEDITOR.on('instanceCreated', function(evt){
 	var editor = evt.editor
 	editor.on('focus', function(){
@@ -174,7 +176,6 @@ CKEDITOR.on('instanceCreated', function(evt){
 			<div class="button prev-bookmark">
 				<a href="#prevBookmark">
 					<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-					 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
 					 <g>
 					  <title>Previous bookmark (S-Left)</title>
 					  <path transform="rotate(-180 18.9697 20.1122)" id="svg_13" stroke="#ffffff" d="m20.467497,20.112247l-8.773763,-14.254913l5.778195,0l8.773788,14.254913l-8.773788,14.25491l-5.778195,0l8.773763,-14.25491z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
@@ -185,7 +186,6 @@ CKEDITOR.on('instanceCreated', function(evt){
 			<div class="button toggle-bookmark">
 				<a href="#bookmark">
 					<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-					 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
 					 <g>
 					  <title>Toggle bookmark (B)</title>
 					  <rect stroke="#ffffff" id="svg_1" height="28.604868" width="24.052915" y="5.858955" x="8.807377" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
@@ -197,10 +197,22 @@ CKEDITOR.on('instanceCreated', function(evt){
 			<div class="button next-bookmark">
 				<a href="#nextBookmark">
 					<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-					 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
 					 <g>
 					  <title>Next bookmark (S-Right)</title>
 					  <path stroke="#ffffff" id="svg_11" d="m23.175751,20.132858l-8.773797,-14.254913l5.77823,0l8.773788,14.254913l-8.773788,14.254913l-5.77823,0l8.773797,-14.254913z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
+					 </g>
+					</svg>
+				</a>
+			</div>
+			<div class="button info" style="opacity: 0.3">
+				<a href="javascript:alert('not implemented yet...')">
+					<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+					 <g>
+					  <title>Info</title>
+					  <g id="svg_3">
+					   <circle fill="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" cx="20.341617" cy="20.120354" r="14.302816" id="svg_2" stroke="#ffffff"/>
+					   <text fill="#ffffff" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="19.914334" y="23.397665" id="svg_5" font-size="24" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" transform="matrix(1.02694 0 0 1.02694 -0.348556 4.34707)" stroke="#000000">i</text>
+					  </g>
 					 </g>
 					</svg>
 				</a>

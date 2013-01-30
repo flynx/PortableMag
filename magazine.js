@@ -38,6 +38,7 @@ var USE_REAL_PAGE_SIZES = false
 var togglePageDragging = createCSSClassToggler('.viewer', 'dragging')
 
 
+// toggles the editor mode, used for inline magazine editor...
 var toggleEditorMode = createCSSClassToggler('.viewer', 'editor-mode noSwipe')
 
 

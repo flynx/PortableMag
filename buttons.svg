@@ -3,14 +3,21 @@
  <g display="none">
   <title>bookmark</title>
   <rect stroke="#ffffff" id="svg_1" height="28.604868" width="24.052915" y="5.858955" x="8.807377" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
-  <path stroke="#ffffff" id="svg_4" d="m21.762226,3.651895l8.416584,0l0,14.510554l-4.124887,-2.792193l-4.291697,2.792193l0,-14.510554l0,0z" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" fill="#ff0000"/>
+  <path stroke="#ffffff" id="svg_4" d="m21.76223,3.6519l8.41658,0l0,14.510551l-4.124889,-2.792191l-4.291691,2.792191l0,-14.510551l0,0z" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" fill="#ff0000"/>
  </g>
  <g display="none">
   <title>next</title>
-  <path stroke="#ffffff" id="svg_11" d="m23.175751,20.132858l-8.773797,-14.254913l5.77823,0l8.773788,14.254913l-8.773788,14.254913l-5.77823,0l8.773797,-14.254913z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
+  <path stroke="#ffffff" id="svg_11" d="m23.175751,20.13286l-8.773801,-14.25492l5.77823,0l8.77379,14.25492l-8.77379,14.254911l-5.77823,0l8.773801,-14.254911z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
+ </g>
+ <g display="none">
+  <title>prev</title>
+  <path transform="rotate(-180 18.9697 20.1122)" id="svg_13" stroke="#ffffff" d="m20.467501,20.112249l-8.77377,-14.25492l5.778199,0l8.77379,14.25492l-8.77379,14.254911l-5.778199,0l8.77377,-14.254911z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
  </g>
  <g display="inline">
-  <title>prev</title>
-  <path transform="rotate(-180 18.9697 20.1122)" id="svg_13" stroke="#ffffff" d="m20.467497,20.112247l-8.773763,-14.254913l5.778195,0l8.773788,14.254913l-8.773788,14.25491l-5.778195,0l8.773763,-14.25491z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
+  <title>Info</title>
+  <g id="svg_3">
+   <circle fill="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" cx="20.341617" cy="20.120354" r="14.302816" id="svg_2" stroke="#ffffff"/>
+   <text fill="#ffffff" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="19.914334" y="23.397665" id="svg_5" font-size="24" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" transform="matrix(1.02694 0 0 1.02694 -0.348556 4.34707)" stroke="#000000">i</text>
+  </g>
  </g>
 </svg>
