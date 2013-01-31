@@ -834,6 +834,30 @@ function resetStorageState(){
 }
 
 
+// generic state managers...
+function loadState(){
+	var n = loadURLState()
+	var state = loadStorageState() 
+	if(n != null){
+		setCurrentPage(n)
+	} else {
+		setCurrentPage(state.current_page)
+	}
+	loadBookmarks(state.bookmarks)
+}
+function saveState(){
+	saveURLState()
+	saveStorageState()
+}
+
+function resetState(){
+	resetStorageState()
+	loadState()
+}
+
+
+
+/********************************************** JSON serialization ***/
 // JSON format state managers...
 // format:
 // 		{
@@ -848,14 +872,16 @@ function resetStorageState(){
 // 				// root <page>...
 // 				{
 // 					type: 'page' | 'cover',
-// 					classes: [...]
+// 					// classes set on the page element...
+// 					class: [...]
 // 					content: <page-content>
 // 				},
 //
 // 				// article...
 // 				{
 // 					type: 'article',
-// 					classes: [...]
+// 					// classes set on the article element...
+// 					class: [...]
 // 					pages: [
 // 						<page>,
 // 						...
@@ -865,8 +891,10 @@ function resetStorageState(){
 // 			]
 // 		}
 //
-// XXX do we need to store page classes? ...can the user edit them?
-function buildJSONState(export_bookmarks, export_position){
+// NOTE: content classes are stored in the content...
+// NOTE: at this point all page classes will be stored, but .current 
+// 		will be ignored on restore...
+function buildJSON(export_bookmarks, export_position){
 	function _getContent(_, elem){
 		elem = $(elem)
 		if(elem.hasClass('page')){
@@ -894,7 +922,8 @@ function buildJSONState(export_bookmarks, export_position){
 	}
 	return res
 }
-function loadJSONState(data, ignore_chrome){
+
+function loadJSON(data, ignore_chrome){
 	function _build(block, elem){
 		if(elem.type == 'page'){
 			createPage(elem.content)
@@ -929,28 +958,6 @@ function loadJSONState(data, ignore_chrome){
 	if(!ignore_chrome){
 		loadMagazineChrome(data.position, data.bookmarks)
 	}
-}
-
-
-// generic state managers...
-function loadState(){
-	var n = loadURLState()
-	var state = loadStorageState() 
-	if(n != null){
-		setCurrentPage(n)
-	} else {
-		setCurrentPage(state.current_page)
-	}
-	loadBookmarks(state.bookmarks)
-}
-function saveState(){
-	saveURLState()
-	saveStorageState()
-}
-
-function resetState(){
-	resetStorageState()
-	loadState()
 }
 
 
