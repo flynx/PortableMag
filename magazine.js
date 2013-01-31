@@ -1000,15 +1000,16 @@ function createCoverPage(template){
 /************************************************ editor: magazine ***/
 
 
-// XXX setup event handlers...
+// NOTE: we do not need to create any event handlers here specifically 
+// 		as all events are ahndled by the viewer...
 function loadMagazine(mag, position, bookmarks){
 	removeMagazine()
 	mag.appendTo($('.aligner'))
+	// XXX is this the right place for this?
+	setupBookmarkTouchZones()
 	setCurrentPage(position)
 	loadBookmarks(bookmarks != null ? bookmarks : [])
 	setupNavigator()
-	// XXX is this the right place for this?
-	setupBookmarkTouchZones()
 	return mag
 }
 
