@@ -1,23 +1,132 @@
 <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
  <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+
+
  <g display="none">
   <title>bookmark</title>
-  <rect stroke="#ffffff" id="svg_1" height="28.604868" width="24.052915" y="5.858955" x="8.807377" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
-  <path stroke="#ffffff" id="svg_4" d="m21.76223,3.6519l8.41658,0l0,14.510551l-4.124889,-2.792191l-4.291691,2.792191l0,-14.510551l0,0z" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" fill="#ff0000"/>
+  <rect fill="#afafaf" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" x="8.807377" y="5.858955" width="24.052915" height="28.604868" id="svg_1" stroke="#ffffff"/>
+  <path fill="#ff0000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" d="m21.76223,3.6519l8.41658,0l0,14.510551l-4.124889,-2.792191l-4.291691,2.792191l0,-14.510551l0,0z" id="svg_4" stroke="#ffffff"/>
  </g>
+
+
  <g display="none">
   <title>next</title>
-  <path stroke="#ffffff" id="svg_11" d="m23.175751,20.13286l-8.773801,-14.25492l5.77823,0l8.77379,14.25492l-8.77379,14.254911l-5.77823,0l8.773801,-14.254911z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
+  <path fill="#afafaf" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m23.175751,20.13286l-8.773801,-14.25492l5.77823,0l8.77379,14.25492l-8.77379,14.254911l-5.77823,0l8.773801,-14.254911z" id="svg_11" stroke="#ffffff"/>
  </g>
+
+
  <g display="none">
   <title>prev</title>
-  <path transform="rotate(-180 18.9697 20.1122)" id="svg_13" stroke="#ffffff" d="m20.467501,20.112249l-8.77377,-14.25492l5.778199,0l8.77379,14.25492l-8.77379,14.254911l-5.778199,0l8.77377,-14.254911z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
+  <path fill="#afafaf" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m20.467501,20.112249l-8.77377,-14.25492l5.778199,0l8.77379,14.25492l-8.77379,14.254911l-5.778199,0l8.77377,-14.254911z" stroke="#ffffff" id="svg_13" transform="rotate(-180 18.9697 20.1122)"/>
  </g>
- <g display="inline">
+
+
+ <g display="none">
   <title>Info</title>
   <g id="svg_3">
-   <circle fill="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" cx="20.341617" cy="20.120354" r="14.302816" id="svg_2" stroke="#ffffff"/>
-   <text fill="#ffffff" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="19.914334" y="23.397665" id="svg_5" font-size="24" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" transform="matrix(1.02694 0 0 1.02694 -0.348556 4.34707)" stroke="#000000">i</text>
+   <circle stroke="#ffffff" id="svg_2" r="14.302816" cy="20.120354" cx="20.341617" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000"/>
+   <text stroke="#000000" transform="matrix(1.02694 0 0 1.02694 -0.348556 4.34707)" stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="24" id="svg_5" y="23.397665" x="19.914334" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" fill="#ffffff">i</text>
   </g>
  </g>
+
+
+ <g display="none">
+  <title>New Page</title>
+  <g id="svg_24">
+   <g id="svg_16">
+    <g id="svg_9">
+     <circle id="svg_7" r="7.062921" cy="30.383944" cx="28.691122" fill-opacity="0" stroke="#ffffff" fill="#000000"/>
+     <text stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="serif" font-size="18" id="svg_8" y="36.267789" x="28.840151" stroke-width="0" stroke="#000000" fill="#ffffff">+</text>
+    </g>
+    <path id="svg_15" d="m22.85829,34.523949l-13.95871,0.052132l-0.06013,-28.68312l24.05293,0l-0.06015,18.82142" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="null" stroke="#ffffff" fill="none"/>
+   </g>
+   <text stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="12" id="svg_17" y="17.566648" x="15.281621" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffffff">P</text>
+  </g>
+ </g>
+
+
+ <g display="none">
+  <title>Page Right</title>
+  <g id="svg_58">
+   <g id="svg_57">
+    <path id="svg_54" d="m29.57338,34.557121l-20.69354,-0.007992l-0.06013,-28.683129l24.052929,0l-0.000019,20.86593" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="null" stroke="#ffffff" fill="none"/>
+    <path stroke="#ffffff" id="svg_56" fill="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m32.260822,30.336447l-4.331331,-7.037247l2.852551,0l4.331293,7.037247l-4.331293,7.037325l-2.852551,0l4.331331,-7.037325z"/>
+   </g>
+   <text id="svg_55" stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="12" y="17.539691" x="15.261884" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffffff">P</text>
+  </g>
+ </g>
+
+
+ <g display="none">
+  <title>Page Left</title>
+  <g id="svg_68">
+   <g id="svg_67">
+    <g id="svg_66">
+     <path id="svg_61" d="m28.621111,34.492619l-19.731441,0.052151l-0.06013,-28.683099l24.052921,0l-0.000011,17.4384" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="null" stroke="#ffffff" fill="none"/>
+     <path id="svg_65" d="m32.840248,24.30146l0.05212,10.15435l-1.082397,0.060131" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="null" stroke="#ffffff" fill="none"/>
+    </g>
+    <path transform="rotate(180 29.8475 30.3321)" id="svg_62" stroke="#ffffff" fill="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m30.586983,30.3321l-4.331406,-7.037199l2.8526,0l4.331253,7.037199l-4.331253,7.0373l-2.8526,0l4.331406,-7.0373z"/>
+   </g>
+   <text id="svg_63" stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="12" y="17.535359" x="15.271712" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffffff">P</text>
+  </g>
+ </g>
+
+
+ <g display="none">
+  <title>New Article</title>
+  <g id="svg_48">
+   <g id="svg_26">
+    <g id="svg_27">
+     <circle id="svg_28" r="7.062921" cy="30.356987" cx="28.671385" fill-opacity="0" stroke="#ffffff" fill="#000000"/>
+     <text id="svg_29" stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="serif" font-size="18" y="36.240832" x="28.820414" stroke-width="0" stroke="#000000" fill="#ffffff">+</text>
+    </g>
+    <path id="svg_30" d="m22.83856,34.496994l-13.95872,0.052132l-0.06013,-28.683123l24.052917,0l-0.06015,18.821419" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="null" stroke="#ffffff" fill="none"/>
+   </g>
+   <text id="svg_31" stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="12" y="17.539691" x="15.68281" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffffff">A</text>
+  </g>
+ </g>
+
+
+ <g display="none">
+  <title>Article Left</title>
+  <g id="svg_76">
+   <g id="svg_70">
+    <g id="svg_71">
+     <path id="svg_72" d="m28.621141,34.492653l-19.731458,0.052151l-0.060129,-28.683064l24.052911,0l-0.000011,17.438417" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="null" stroke="#ffffff" fill="none"/>
+     <path id="svg_73" d="m32.840252,24.301548l0.05212,10.154297l-1.082371,0.060131" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="null" stroke="#ffffff" fill="none"/>
+    </g>
+    <path id="svg_74" transform="rotate(180 29.8475 30.3322)" stroke="#ffffff" fill="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m30.587011,30.332188l-4.3314,-7.037199l2.852598,0l4.331213,7.037199l-4.331213,7.037247l-2.852598,0l4.3314,-7.037247z"/>
+   </g>
+   <text id="svg_75" stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="12" y="17.535428" x="15.692654" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffffff">A</text>
+  </g>
+ </g>
+
+
+ <g display="none">
+  <title>Article Right</title>
+  <g id="svg_89">
+   <g id="svg_85">
+    <path id="svg_86" d="m29.583231,34.612888l-20.693563,-0.007992l-0.060131,-28.683093l24.052925,0l-0.000019,20.865946" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="null" stroke="#ffffff" fill="none"/>
+    <path id="svg_87" stroke="#ffffff" fill="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m32.27066,30.392271l-4.33132,-7.037251l2.852551,0l4.331224,7.037251l-4.331224,7.037268l-2.852551,0l4.33132,-7.037268z"/>
+   </g>
+   <text id="svg_88" stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="12" y="17.595492" x="15.692638" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffffff">A</text>
+  </g>
+ </g>
+
+
+ <g display="none">
+  <title>New Magazine</title>
+  <g id="svg_47">
+   <g id="svg_33">
+    <g id="svg_34">
+     <circle id="svg_35" r="7.062921" cy="30.356987" cx="28.671385" fill-opacity="0" stroke="#ffffff" fill="#000000"/>
+     <text id="svg_36" stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="serif" font-size="18" y="36.240832" x="28.820414" stroke-width="0" stroke="#000000" fill="#ffffff">+</text>
+    </g>
+    <path id="svg_37" d="m22.8386,34.497002l-13.95876,0.052097l-0.06013,-28.683099l24.052891,0l-0.060101,18.821401" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="null" stroke="#ffffff" fill="none"/>
+   </g>
+   <text id="svg_38" stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="12" y="17.539691" x="15.923339" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffffff">M</text>
+  </g>
+ </g>
+
+
 </svg>
