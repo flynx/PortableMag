@@ -508,11 +508,6 @@ function toggleBookmark(n){
 			.attr({
 				title: 'Toggle bookmark (B)'
 			})
-			.swipe({
-				click: function(){
-					toggleBookmark(cur)
-				}
-			})
 
 		$('.viewer').trigger('bookmarkAdded', n)
 
@@ -1003,6 +998,7 @@ function createCoverPage(template){
 
 
 /************************************************ editor: magazine ***/
+
 
 // XXX setup event handlers...
 function loadMagazine(mag, position, bookmarks){

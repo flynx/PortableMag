@@ -86,18 +86,19 @@ $(document).ready(function(){
 				}
 			},
 
-
 			// XXX for some reason this deos not bubble up the nested elements...
+			// XXX just stopped working....
+			//		...works if we double click but not on a single click...
 			click: function(evt, elem){
 				if($(elem).hasClass('page')){
 					setCurrentPage(elem)
-				} else if($(elem).hasClass('content')){
+				} else if($(elem).parents('.page').length != 0){
 					setCurrentPage($(elem).parents('.page').first())
 				}
 				return true
 			},
 
-			excludedElements: '.noSwipe, a, [contenteditable=true]',
+			excludedElements: $.fn.swipe.defaults.excludedElements + ', [contenteditable=true]',
 			fingers: $.fn.swipe.fingers.ALL
 			//fingers: $.fn.swipe.fingers.THREE
 		})
