@@ -929,10 +929,7 @@ function loadJSONState(data){
 	// remove service classes...
 	// XXX should we do this here, on build or in both places...
 	mag.children('.current.page').removeClass('current')
-	loadMagazine(mag)
-	setupNavigator()
-	loadBookmarks(data.bookmarks)
-	setCurrentPage(data.position)
+	loadMagazine(mag, data.position, data.bookmarks)
 }
 
 
@@ -1002,21 +999,23 @@ function _createCoverPage(template){
 }
 
 
+// XXX setup event handlers...
+function loadMagazine(mag, position, bookmarks){
+	clearMagazine()
+	return mag.appendTo($('.aligner'))
+	setCurrentPage(position)
+	loadBookmarks(bookmarks != null ? bookmarks : [])
+	setupNavigator()
+}
+
 // XXX create magazine...
 // 		- magazine
 // 		- cover
 // 		- article
 // 			- cover
-function loadMagazine(mag){
-	clearMagazine()
-	return mag.appendTo($('.aligner'))
-}
-
 function createMagazine(title, cover, article){
 	clearMagazine()
 	var mag = loadMagazine(_createMagazine(title, cover, article))
-	setCurrentPage()
-	setupNavigator()
 	return mag
 }
 // XXX some things get really surprized when this is called, make things 
