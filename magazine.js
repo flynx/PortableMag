@@ -447,7 +447,6 @@ function prevArticle(){
 /******************************************************* bookmarks ***/
 
 // setup bookmarking active zones in page...
-// XXX make this attach to page instead of it's number number...
 function setupBookmarkTouchZones(){
 	$('.bookmark-toggler').remove()
 	var page = $('.page')
@@ -547,7 +546,9 @@ function prevBookmark(){
 // NOTE: the navigator is not live and will need to get regenerated on
 // 		each magazine edit...
 
-// XXX make this attach to page instead of it's number number...
+// NOTE: article indicators will be regenirated on magazine structure 
+// 		change, so there is no use of linking to actual pages.
+// 		...no need in making this live.
 function makeArticleIndicator(i, article, width){
 	var bar = $('.navigator .bar')
 	var article = $(article)
@@ -612,8 +613,8 @@ function setupNavigator(){
 		.on('magazineDragging', function(){updateNavigator()})
 }
 
+// XXX this needs to unbind events...
 function clearNavigator(){
-	// XXX this needs to unbind events...
 	$('.navigator .indicator').hide()
 	clearBookmarkIndicators()
 	clearArticleIndicators()
@@ -700,7 +701,9 @@ function updatePageNumberIndicator(){
 
 /*********************************************************** state ***/
 
-// XXX make these magazine-specific...
+// XXX make URLs magazine-specific...
+// 		...for extrnal linking we'll need the magazine ID, or make each 
+// 		magazine a seporate path...
 // XXX BUG: if the hash url part coresponds to a real anchor the browser 
 // 		shifts the page, need to disable this...
 // URL state managers...
@@ -1026,7 +1029,6 @@ function loadMagazineData(mag){
 function loadMagazineChrome(position, bookmarks){
 	setupBookmarkTouchZones()
 	setupNavigator()
-	// XXX is this the right place for this?
 	setCurrentPage(position)
 	loadBookmarks(bookmarks != null ? bookmarks : [])
 }
@@ -1041,11 +1043,6 @@ function loadMagazine(mag, position, bookmarks){
 }
 
 
-// XXX create magazine...
-// 		- magazine
-// 		- cover
-// 		- article
-// 			- cover
 function createBaseMagazine(title, cover, article){
 	removeMagazine()
 	var mag = loadMagazine(createMagazine(title, cover, article))
@@ -1056,6 +1053,8 @@ function createBaseMagazine(title, cover, article){
 // XXX some things get really surprized when this is called, make things 
 // 		work with the mag cleared...
 // XXX do we need to clear the event handlers here?
+// 		...this mostly concerns bookmarking and how jQuery handles events 
+// 		on removed elements -- unbind and remove or just forget about it?
 function removeMagazine(){
 	$('.magazine').remove()
 	clearNavigator()
@@ -1065,9 +1064,7 @@ function removeMagazine(){
 
 /************************************************* editor: article ***/
 
-// XXX create article (magazine, title, position)...
-// 		- article
-// 		- cover
+// XXX create article...
 function createArticleBefore(article, title){
 	if(article == null){
 		article = $('.current.page').parents('.article')
@@ -1118,9 +1115,6 @@ function removeArticle(article){
 
 /*************************************************** editor: pages ***/
 
-// XXX create page (article, template, position)...
-// 		- page
-// 		- content
 function createPageIn(article, template){
 	if(article == null){
 		article = $('.current.page').parents('.article')
