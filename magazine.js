@@ -840,14 +840,86 @@ function resetStorageState(){
 
 
 // JSON format state managers...
+// format:
+// 		{
+// 			title: <magazine-title>,
+// 			bookmarks: [
+// 				<page-numer>,
+// 				...
+// 			],
+// 			// this is optional...
+// 			position: <page-number>
+// 			pages: [
+// 				// root <page>...
+// 				{
+// 					type: 'page' | 'cover',
+// 					content: <page-content>
+// 				},
+//
+// 				// article...
+// 				{
+// 					type: 'article',
+// 					pages: [
+// 						<page>,
+// 						...
+// 					]
+// 				]
+// 				...
+// 			]
+// 		}
+//
+// XXX store cover state...
+function buildJSONState(export_bookmarks, export_position){
+	function _getContent(_, elem){
+		elem = $(elem)
+		if(elem.hasClass('page')){
+			return {
+				type: elem.hasClass('cover') ? 'cover' : 'page',
+				content: elem.children('.content')[0].outerHTML
+			}
+		} else if(elem.hasClass('article')){
+			return {
+				type: 'article',
+				pages: elem.children('.page').map(_getContent).toArray()
+			}
+		}
+	}
+	var res = {
+		title: $('.magazine').attr('title'),
+		// this can contain pages or arrays...
+		pages: $('.magazine > .page, .magazine > .article').map(_getContent).toArray(),
+		bookmarks: export_bookmarks ? buildBookmarkList() : [],
+	}
+	if(export_position){
+		res.position = getPageNumber()
+	}
+	return res
+}
 function loadJSONState(data){
-	// XXX
-}
-function buildJSONState(){
-	// XXX
-}
-function dumpJSONState(){
-	// XXX
+	function _build(block, elem){
+		if(elem.type == 'page'){
+			block.append(_createPage(elem.content))
+
+		} else if(elem.type == 'cover'){
+			block.append(_createCoverPage(elem.content))
+
+		} else if(elem.type == 'article') {
+			// buiold an article...
+			var article = _createEmptyArticle()
+				.appendTo(block)
+			// populate article with pages...
+			$(elem.pages).each(function(_, e){
+				_build(article, e)
+			})
+		}
+	}
+	var mag = _createEmptyMagazine(data.title)
+	$(data.pages).each(function(_, e){
+		_build(mag, e)
+	})
+	loadMagazine(mag)
+	loadBookmarks(data.bookmarks)
+	setCurrentPage(data.position)
 }
 
 
@@ -910,7 +982,7 @@ function _createPage(template){
 		.addClass('page')
 		.append($('<div/>')
 				.addClass('content')
-				.text(template))
+				.html(template))
 }
 function _createCoverPage(template){
 	return _createPage(template).addClass('cover')
@@ -922,9 +994,14 @@ function _createCoverPage(template){
 // 		- cover
 // 		- article
 // 			- cover
+function loadMagazine(mag){
+	clearMagazine()
+	return mag.appendTo($('.aligner'))
+}
+
 function createMagazine(title, cover, article){
 	clearMagazine()
-	var mag = _createMagazine(title, cover, article).appendTo($('.aligner'))
+	var mag = loadMagazine(_createMagazine(title, cover, article))
 	setCurrentPage()
 	setupNavigator()
 	return mag
