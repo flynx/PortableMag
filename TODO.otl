@@ -1,4 +1,4 @@
-[_] 30% Priority work
+[_] 28% Priority work
 	[_] 0% TouchSwipe issues...
 		[_] BUG: swipe-back does not cancel a swipe... (TouchSwipe)
 		| ...unless the finger is return to within the threshold of the 
@@ -183,20 +183,20 @@
 			[_] 0% issue download
 				[_] whole edition dowload and update (primary mode)
 				[_] seporate issue download (secondary)
-	[_] 46% stage 4 - editor and templating
-		[_] % template engine
-		[_] 46% edition editor / publisher
+	[_] 33% stage 4 - editor and templating
+		[_] 0% template engine
+		[_] 66% edition editor / publisher
 			[X] create/delete magazine
 			[X] cover
 			[_] 33% article
 				[X] add
 				[_] delete
 				[_] move
-			[_] 0% page
-				[_] add
+			[X] 100% page
+				[X] add
 				| from template
-				[_] delete
-				[_] move
+				[X] delete
+				[X] move
 			[_] 0% fill template field
 				[_] image
 				[_] text

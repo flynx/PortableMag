@@ -179,6 +179,10 @@ body {
 	vertical-align: bottom;
 	top: 50%;
 
+	min-width: 200px;
+	/* can we avoid setting the sizes in so many places? */
+	height: 600px;
+
 	/* this is minus half the page width */
 	/* XXX change to relative units... */
 	margin-left: -400px;
@@ -188,6 +192,10 @@ body {
 	-o-transition: all 0.2s ease;
 	-ms-transition: all 0.2s ease;	
 	transition: all 0.2s ease;
+}
+/* XXX does not appear to work... (likely because :before/:after mess things up) */
+.magazine:empty {
+	background: silver;
 }
 .dragging .magazine {
 	-webkit-transition: none;
@@ -203,7 +211,8 @@ body {
 	display: inline-block;
 	text-align: center;
 
-	top: -50%;
+	/*top: -50%;*/
+	top: -25%;
 
 	height: 300px;
 	width: 600px;
@@ -240,6 +249,10 @@ body {
 	overflow: visible;
 	white-space: nowrap;
 	font-size: 0px;
+	min-width: 200px;
+}
+.article:empty {
+	color: silver;
 }
 
 .article > .cover {
