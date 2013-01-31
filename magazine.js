@@ -894,7 +894,7 @@ function buildJSONState(export_bookmarks, export_position){
 	}
 	return res
 }
-function loadJSONState(data){
+function loadJSONState(data, ignore_chrome){
 	function _build(block, elem){
 		if(elem.type == 'page'){
 			createPage(elem.content)
@@ -924,7 +924,11 @@ function loadJSONState(data){
 	// remove service classes...
 	// XXX should we do this here, on build or in both places...
 	mag.children('.current.page').removeClass('current')
-	loadMagazine(mag, data.position, data.bookmarks)
+	loadMagazineData(mag)
+
+	if(!ignore_chrome){
+		loadMagazineChrome(data.position, data.bookmarks)
+	}
 }
 
 
@@ -983,15 +987,21 @@ function createArticle(template){
 	return createEmptyArticle()
 		.append(createCoverPage(template))
 }
-function createPage(template){
-	return $('<div/>')
+function createPage(data){
+	var page = $('<div/>')
 		.addClass('page')
-		.append($('<div/>')
+
+	var jdata = $(data)
+	if(jdata.hasClass('content')){
+		return page.append(jdata)
+	} else {
+		return page.append($('<div/>')
 				.addClass('content')
-				.html(template))
+				.html(data))
+	}
 }
-function createCoverPage(template){
-	return createPage(template).addClass('cover')
+function createCoverPage(data){
+	return createPage(data).addClass('cover')
 }
 
 
@@ -1000,16 +1010,26 @@ function createCoverPage(template){
 /************************************************ editor: magazine ***/
 
 
+// NOTE: this will just load the data...
+function loadMagazineData(mag){
+	removeMagazine()
+	mag.appendTo($('.aligner'))
+	return mag
+}
+function loadMagazineChrome(position, bookmarks){
+	setupBookmarkTouchZones()
+	setupNavigator()
+	// XXX is this the right place for this?
+	setCurrentPage(position)
+	loadBookmarks(bookmarks != null ? bookmarks : [])
+}
+
+
 // NOTE: we do not need to create any event handlers here specifically 
 // 		as all events are ahndled by the viewer...
 function loadMagazine(mag, position, bookmarks){
-	removeMagazine()
-	mag.appendTo($('.aligner'))
-	// XXX is this the right place for this?
-	setupBookmarkTouchZones()
-	setCurrentPage(position)
-	loadBookmarks(bookmarks != null ? bookmarks : [])
-	setupNavigator()
+	mag = loadMagazineData(mag)
+	loadMagazineChrome(position, bookmarks)
 	return mag
 }
 
