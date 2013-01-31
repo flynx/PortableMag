@@ -853,12 +853,14 @@ function resetStorageState(){
 // 				// root <page>...
 // 				{
 // 					type: 'page' | 'cover',
+// 					classes: [...]
 // 					content: <page-content>
 // 				},
 //
 // 				// article...
 // 				{
 // 					type: 'article',
+// 					classes: [...]
 // 					pages: [
 // 						<page>,
 // 						...
@@ -868,18 +870,20 @@ function resetStorageState(){
 // 			]
 // 		}
 //
-// XXX store cover state...
+// XXX do we need to store page classes? ...can the user edit them?
 function buildJSONState(export_bookmarks, export_position){
 	function _getContent(_, elem){
 		elem = $(elem)
 		if(elem.hasClass('page')){
 			return {
 				type: elem.hasClass('cover') ? 'cover' : 'page',
+				'class': elem.attr('class'),
 				content: elem.children('.content')[0].outerHTML
 			}
 		} else if(elem.hasClass('article')){
 			return {
 				type: 'article',
+				'class': elem.attr('class'),
 				pages: elem.children('.page').map(_getContent).toArray()
 			}
 		}
@@ -898,14 +902,19 @@ function buildJSONState(export_bookmarks, export_position){
 function loadJSONState(data){
 	function _build(block, elem){
 		if(elem.type == 'page'){
-			block.append(_createPage(elem.content))
+			_createPage(elem.content)
+				.addClass(elem['class'])
+				.appendTo(block)
 
 		} else if(elem.type == 'cover'){
-			block.append(_createCoverPage(elem.content))
+			_createCoverPage(elem.content)
+				.addClass(elem['class'])
+				.appendTo(block)
 
 		} else if(elem.type == 'article') {
 			// buiold an article...
 			var article = _createEmptyArticle()
+				.addClass(elem['class'])
 				.appendTo(block)
 			// populate article with pages...
 			$(elem.pages).each(function(_, e){
@@ -917,7 +926,11 @@ function loadJSONState(data){
 	$(data.pages).each(function(_, e){
 		_build(mag, e)
 	})
+	// remove service classes...
+	// XXX should we do this here, on build or in both places...
+	mag.children('.current.page').removeClass('current')
 	loadMagazine(mag)
+	setupNavigator()
 	loadBookmarks(data.bookmarks)
 	setCurrentPage(data.position)
 }
