@@ -876,6 +876,59 @@ function resetState(){
 
 /********************************************************** editor ***/
 
+// basic constructors...
+function _createEmptyMagazine(title){
+	return $('<div/>')
+		.addClass('magazine')
+		.attr({
+			title: title
+		})
+}
+function _createMagazine(title, magazine_cover, article_cover){
+	if(magazine_cover == null){
+		magazine_cover = title
+	}
+	if(article_cover == null){
+		article_cover = 'Article'
+	}
+	return _createEmptyMagazine(title)
+		// a magazine by default has a cover...
+		.append(_createCoverPage(magazine_cover))
+		.append(_createArticle(article_cover))
+}
+// XXX do we need a title here???
+function _createEmptyArticle(){
+	return $('<div/>')
+		.addClass('article')
+}
+function _createArticle(template){
+	return _createEmptyArticle()
+		.append(_createCoverPage(template))
+}
+function _createPage(template){
+	return $('<div/>')
+		.addClass('page')
+		.append($('<div/>')
+				.addClass('content')
+				.text(template))
+}
+function _createCoverPage(template){
+	return _createPage(template).addClass('cover')
+}
+
+
+// XXX create magazine...
+// 		- magazine
+// 		- cover
+// 		- article
+// 			- cover
+function createMagazine(title, cover, article){
+	clearMagazine()
+	var mag = _createMagazine(title, cover, article).appendTo($('.aligner'))
+	setCurrentPage()
+	setupNavigator()
+	return mag
+}
 // XXX some things get really surprized when this is called, make things 
 // 		work with the mag cleared...
 function clearMagazine(){
@@ -884,22 +937,34 @@ function clearMagazine(){
 	clearNavigator()
 }
 
-// XXX create magazine...
-// 		- magazine
-// 		- cover
-function createMagazine(){
-	// XXX
-}
 
 
 // XXX create article (magazine, title, position)...
 // 		- article
 // 		- cover
 function createArticleBefore(article, title){
+	if(article == null){
+		article = $('.current.page').parents('.article')
+	}
 	// XXX
 }
 function createArticleAfter(article, title){
+	if(article == null){
+		article = $('.current.page').parents('.article')
+	}
 	// XXX
+}
+function removeArticle(article){
+	// XXX
+	$('.viewer').trigger('articleRemoved', res)
+}
+function shiftArticleLeft(article){
+	// XXX
+	$('.viewer').trigger('articleMoved', res)
+}
+function shiftArticleRight(article){
+	// XXX
+	$('.viewer').trigger('articleMoved', res)
 }
 
 
@@ -907,8 +972,17 @@ function createArticleAfter(article, title){
 // 		- page
 // 		- content
 function createPageIn(article, template){
-	// XXX
+	if(article == null){
+		article = $('.current.page').parents('.article')
+	}
+	// no article
+	if(article.length == 0){
+		return
+	}
+	var res = _createPage(template).appendTo(article)
 	$('.viewer').trigger('pageCreated', res)
+
+	return res
 }
 // XXX the next two are almost identical...
 // XXX prevent this from working outside of an article....
@@ -917,12 +991,7 @@ function createPageAfter(page, template){
 		page = $('.current.page')
 	}
 
-	var res = $('<div/>')
-		.addClass('page')
-		.append($('<div/>')
-				.addClass('content')
-				.text('Page'))
-		.insertAfter(page)
+	var res = _createPage(template).insertAfter(page)
 
 	$('.viewer').trigger('pageCreated', res)
 
@@ -934,19 +1003,36 @@ function createPageBefore(page, template){
 		page = $('.current.page')
 	}
 
-	var res = $('<div/>')
-		.addClass('page')
-		.append($('<div/>')
-				.addClass('content')
-				.text('Page'))
-		.insertBefore(page)
+	var res = _createPage(template).insertBefore(page)
 
 	$('.viewer').trigger('pageCreated', res)
 
 	return res
 }
+function removePage(page){
+	if(page == null){
+		page = $('.current.page')
+	}
+
+	var cur = getPageNumber()
+	page.remove()
+	setCurrentPage(cur)
+
+	$('.viewer').trigger('pageRemoved', page)
+
+	return page
+}
+
+// XXX should this move to before or after???
+function movePageTo(page, position){
+	// XXX
+	$('.viewer').trigger('pageMoved', page)
+	return page
+}
 // XXX make this push pages between articles...
-function pushPageLeft(page){
+// 		or should it be a seporate method...
+// XXX should this contain a number of steps?
+function shiftPageLeft(page){
 	if(page == null){
 		page = $('.current.page')
 	}
@@ -964,7 +1050,9 @@ function pushPageLeft(page){
 	return page
 }
 // XXX make this push pages between articles...
-function pushPageRight(page){
+// 		or should it be a seporate method...
+// XXX should this contain a number of steps?
+function shiftPageRight(page){
 	if(page == null){
 		page = $('.current.page')
 	}

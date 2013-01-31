@@ -1,11 +1,15 @@
-[_] 34% Priority work
+[_] 30% Priority work
 	[_] 0% TouchSwipe issues...
 		[_] BUG: swipe-back does not cancel a swipe... (TouchSwipe)
 		| ...unless the finger is return to within the threshold of the 
 		| touchdown point.
 		[_] BUG: no drag threshold on excludedElements (TouchSwipe)
 		| stalled...
-	[_] 80% general todo
+	[_] 12% general todo
+		[_] add min-width to magazine and article...
+		[_] add default empty state to viewer, magazine and article...
+		| use it to trigger a "New Magazine", "New Cover"/"New Article" and
+		| "New Cover"/"New Page" actions...
 		[_] add global credits and copyright page...
 		| list and link all the used software and authors...
 		[_] 25% add inline editor...
@@ -29,109 +33,110 @@
 		[_] BUG: href to existing anchors will mess up layout...
 		| need to find out how can we disable anchor links from actually
 		| going to the anchor...
-		[X] do a better structure diagram...
-		[X] BUG: initial load on android does not center on the correct page...
-		| for some odd reason only one of the first and second pages are opened 
-		| correctly, any other page results in showing the second page and any 
-		| click focuses the correct page...
-		|
-		| CAUSE:
-		| the cause for this turned out to be the fact that the page is loaded
-		| allot faster than it is full alligned and rendered on android, so
-		| a fix for this is to set the page some 300ms later...
-		|
-		| XXX find a better solution!
-		[X] make corners clickable for bookmarking...
-		[X] bookmark active zone in upper-right corner of page...
-		[X] SVG icons and logo...
-		[X] add page numbers...
-		[X] 100% bookmarks
-			[X] add next/prev bookmark actions
-			[X] #bookmark anchor
-			[X] bookmark indicators in navigator
-			[X] bookmark indicators in thumbnails
-			[X] bookmark persistence
-			[X] set bookmark from keyboard...
-			[X] set bookmark touch control
-		[X] vanquish opacity effects
-		| they slow everything down considerably!
-		[X] add keyboard navigation...
-		[X] navigator -- indicate position in thumbnail mode...
-		[X] test for stability
-		[X] cleanup code
-		[X] add history #URLs..
-		[X] BUG: something odd going on with window.onResize event...
-		| on android it sometimes fires and sometimes does not -- rotating
-		| the screen does not always scale things correctly...
-		[X] examples for links and anchors...
-		[X] BUG: unstable page fitting.
-		| also broken for portrait layouts...
-		[X] try a slightly different layout...
-		| 
-		| 	+-page--------------+
-		| 	|+-content---+		|
-		| 	||			 |		|
-		| 	||			 |<---->|
-		| 	||			 |		|
-		| 	|+-----------+		|
-		| 	+-------------------+
-		|
-		|
-		|	Thumbnail view
-		|				 +------------+------+
-		|	+------------+\ - - +	   \	  \
-		|	 \			  \\     \		\	   \
-		|	  \			   \\     \		 \	    \
-		|	   \		    \+------------+------+
-		|		+------------+------+
-		|						^
-		|						+--- margin-right: -X
-		|
-		|	Full page view
-		|
-		|	+-screen------------+   +----
-		|	 \	+------------+---\--+\
-		|	--\-+\			  \   \  \\
-		|	   \ \\			   \   \  \\
-		|		+-------------------+  \+----
-		|		   \+------------+------+
-		|		----+
-		|
-		| NOTE: this is not a good idea if not all the pages have the 
-		| 		same BG...
-		|
-		|
-		| Here is another approach:
-		|
-		|	Thumbnail view
-		| 	+-page--------------+
-		| 	|+-content---+		|
-		| 	||			 |		|
-		| 	||			 |		|
-		| 	|+-----------+		|
-		| 	+-------------------+
-		|
-		|	Full page view
-		| 	+-page--------------+
-		| 	|   +-content---+	|
-		| 	|   |			|	|
-		| 	|   |			|	|
-		| 	|   +-----------+	|
-		| 	+-------------------+
-		|
-		|
-		[X] add two finger swipes to navigate between articles...
-		[X] add pinch events...
-		[X] #URL "layers"
-		| navigation to a hidden layer will show the layer, any other 
-		| navigation will hide it...
-		[X] something made phonegap version unhappy...
-		| likely the URL logic...
-		|
-		| try and make it optional...
-		[X] add page urls
-		[X] add state saving to local storage
-		[X] use modes (CSS) for thumbnail/page views...
+		[X] done
+			[X] do a better structure diagram...
+			[X] BUG: initial load on android does not center on the correct page...
+			| for some odd reason only one of the first and second pages are opened 
+			| correctly, any other page results in showing the second page and any 
+			| click focuses the correct page...
+			|
+			| CAUSE:
+			| the cause for this turned out to be the fact that the page is loaded
+			| allot faster than it is full alligned and rendered on android, so
+			| a fix for this is to set the page some 300ms later...
+			|
+			| XXX find a better solution!
+			[X] make corners clickable for bookmarking...
+			[X] bookmark active zone in upper-right corner of page...
+			[X] SVG icons and logo...
+			[X] add page numbers...
+			[X] 100% bookmarks
+				[X] add next/prev bookmark actions
+				[X] #bookmark anchor
+				[X] bookmark indicators in navigator
+				[X] bookmark indicators in thumbnails
+				[X] bookmark persistence
+				[X] set bookmark from keyboard...
+				[X] set bookmark touch control
+			[X] vanquish opacity effects
+			| they slow everything down considerably!
+			[X] add keyboard navigation...
+			[X] navigator -- indicate position in thumbnail mode...
+			[X] test for stability
+			[X] cleanup code
+			[X] add history #URLs..
+			[X] BUG: something odd going on with window.onResize event...
+			| on android it sometimes fires and sometimes does not -- rotating
+			| the screen does not always scale things correctly...
+			[X] examples for links and anchors...
+			[X] BUG: unstable page fitting.
+			| also broken for portrait layouts...
+			[X] try a slightly different layout...
+			| 
+			| 	+-page--------------+
+			| 	|+-content---+		|
+			| 	||			 |		|
+			| 	||			 |<---->|
+			| 	||			 |		|
+			| 	|+-----------+		|
+			| 	+-------------------+
+			|
+			|
+			|	Thumbnail view
+			|				 +------------+------+
+			|	+------------+\ - - +	   \	  \
+			|	 \			  \\     \		\	   \
+			|	  \			   \\     \		 \	    \
+			|	   \		    \+------------+------+
+			|		+------------+------+
+			|						^
+			|						+--- margin-right: -X
+			|
+			|	Full page view
+			|
+			|	+-screen------------+   +----
+			|	 \	+------------+---\--+\
+			|	--\-+\			  \   \  \\
+			|	   \ \\			   \   \  \\
+			|		+-------------------+  \+----
+			|		   \+------------+------+
+			|		----+
+			|
+			| NOTE: this is not a good idea if not all the pages have the 
+			| 		same BG...
+			|
+			|
+			| Here is another approach:
+			|
+			|	Thumbnail view
+			| 	+-page--------------+
+			| 	|+-content---+		|
+			| 	||			 |		|
+			| 	||			 |		|
+			| 	|+-----------+		|
+			| 	+-------------------+
+			|
+			|	Full page view
+			| 	+-page--------------+
+			| 	|   +-content---+	|
+			| 	|   |			|	|
+			| 	|   |			|	|
+			| 	|   +-----------+	|
+			| 	+-------------------+
+			|
+			|
+			[X] add two finger swipes to navigate between articles...
+			[X] add pinch events...
+			[X] #URL "layers"
+			| navigation to a hidden layer will show the layer, any other 
+			| navigation will hide it...
+			[X] something made phonegap version unhappy...
+			| likely the URL logic...
+			|
+			| try and make it optional...
+			[X] add page urls
+			[X] add state saving to local storage
+			[X] use modes (CSS) for thumbnail/page views...
 	[X] 100% stage 1 - basic features
 		[X] global navigation bar
 		[X] real magazine structure
@@ -178,13 +183,13 @@
 			[_] 0% issue download
 				[_] whole edition dowload and update (primary mode)
 				[_] seporate issue download (secondary)
-	[_] 0% stage 4 - advanced features
-		[_] 0% edition editor / publisher
-			[_] create/delete edition
-			[_] cover
-			[_] 0% story
-				[_] add
-				| from template
+	[_] 46% stage 4 - editor and templating
+		[_] % template engine
+		[_] 46% edition editor / publisher
+			[X] create/delete magazine
+			[X] cover
+			[_] 33% article
+				[X] add
 				[_] delete
 				[_] move
 			[_] 0% page

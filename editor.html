@@ -50,6 +50,7 @@ $(document).ready(function(){
 		// editor specific events...
 		.on('pageCreated articleCreated magazineCreated', resetNavigator)
 		.on('pageMoved articleMoved', resetNavigator)
+		.on('pageRemoved articleRemoved', resetNavigator)
 
 		// user interactions...
 		.swipe({
