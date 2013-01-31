@@ -774,17 +774,27 @@ function saveURLState(){
 
 // local storage state managers...
 function loadStorageState(){
-	return {
-		current_page: parseInt($.jStorage.get('current_page', 0)),
-		bookmarks: $.jStorage.get('bookmarks', [])
+	var title = $('.magazine').attr('title')
+	var data = $.jStorage.get(title, {})
+	// set the defaults...
+	if(data.current_page == null){
+		data.current_page = 0
 	}
+	if(data.bookmarks == null){
+		data.bookmarks = []
+	}
+	return data
 }
 function saveStorageState(){
-	$.jStorage.set('current_page', getPageNumber())
-	$.jStorage.set('bookmarks', buildBookmarkList())
+	var title = $('.magazine').attr('title')
+	$.jStorage.set(title, {
+			current_page: getPageNumber(),
+			bookmarks: buildBookmarkList()
+	})
 }
 function resetStorageState(){
-	$.jStorage.flush()
+	var title = $('.magazine').attr('title')
+	$.jStorage.deleteKey(title)
 }
 
 

@@ -10,8 +10,6 @@
 <script src="jquery.js"></script>
 <script src="jquery.touchSwipe.js"></script>
 <script src="jstorage.js"></script>
-<!-- XXX make this optional... -->
-<script src="ckeditor/ckeditor.js"></script>
 
 <script src="jli.js"></script>
 <script src="magazine.js"></script>
@@ -135,22 +133,6 @@ $(document).ready(function(){
 	
 })
 
-// setup ckeditor events...
-// XXX need to $('[contenteditable]').attr('contenteditable', 'false') on
-//		thumbnail view mode and true on page view mode...
-CKEDITOR.on('instanceCreated', function(evt){
-	var editor = evt.editor
-	editor.on('focus', function(){
-		toggleEditorMode('on')
-	})
-	editor.on('blur', function(){
-		toggleEditorMode('off')
-	})
-})
-
-
-
-
 </script>
 </head>
 <body>
@@ -241,7 +223,7 @@ CKEDITOR.on('instanceCreated', function(evt){
 
 <div class="scaler">
 <div class="aligner">
-	<div class="magazine">
+	<div class="magazine" title="PortableMag Demo">
 		<div class="cover page current">
 			<div class="content">
 				<!--h1 style="color:gray;font-size:125px;margin-bottom:-35px; margin-top: 160px">PortableMag</h1>
