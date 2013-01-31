@@ -712,7 +712,24 @@ function updatePageNumberIndicator(){
 
 
 
-/*********************************************************** state ***/
+/*********************************************************** state ****
+*
+*  Local state consists of:
+*  	- current page
+*  	- bookmarks
+* 
+*  Two types of store are used for local state:
+*  	- #URL
+*  		stores current page number
+*  		is used for special URLs like #home, #next, etc.
+*  	- localStorage
+*  		stores current page (overriden by #URL if both are present)
+*  		stores bookmarks
+* 
+*  NOTE: localStorage is magazine specific.
+* 
+*
+**********************************************************************/
 
 // XXX make URLs magazine-specific...
 // 		...for extrnal linking we'll need the magazine ID, or make each 
@@ -878,43 +895,52 @@ function resetState(){
 
 
 
-/********************************************** JSON serialization ***/
-// JSON format state managers...
-// format:
-// 		{
-// 			title: <magazine-title>,
-// 			bookmarks: [
-// 				<page-numer>,
-// 				...
-// 			],
-// 			// this is optional...
-// 			position: <page-number>
-// 			pages: [
-// 				// root <page>...
-// 				{
-// 					type: 'page' | 'cover',
-// 					// classes set on the page element...
-// 					class: [...]
-// 					content: <page-content>
-// 				},
-//
-// 				// article...
-// 				{
-// 					type: 'article',
-// 					// classes set on the article element...
-// 					class: [...]
-// 					pages: [
-// 						<page>,
-// 						...
-// 					]
-// 				]
-// 				...
-// 			]
-// 		}
-//
-// NOTE: content classes are stored in the content...
-// NOTE: at this point all page classes will be stored, but .current 
-// 		will be ignored on restore...
+/********************************************** JSON serialization ****
+* 
+* JSON is used to load/store the magazine data and state.
+*
+* This format may also include local state, like current page number 
+* and bookmarks.
+*
+* Format:
+*  	{
+*  		title: <magazine-title>,
+*  		bookmarks: [
+*  			<page-numer>,
+*  			...
+*  		],
+*  		// this is optional...
+*  		position: <page-number>
+*  		pages: [
+*  			// root <page>...
+*  			{
+*  				type: 'page' | 'cover',
+*  				// classes set on the page element...
+*  				class: [...]
+*  				content: <page-content>
+*  			},
+*
+*  			// article...
+*  			{
+*  				type: 'article',
+*  				// classes set on the article element...
+*  				class: [...]
+*  				pages: [
+*  					<page>,
+*  					...
+*  				]
+*  			},
+*  			...
+*  		]
+*  	}
+* 
+* NOTE: content classes are stored in the content...
+* NOTE: at this point all page classes will be stored, but .current 
+*  		will be ignored on restore...
+*
+*
+**********************************************************************/
+
 function buildJSON(export_bookmarks, export_position){
 	function _getContent(_, elem){
 		elem = $(elem)
@@ -1006,7 +1032,8 @@ function createMagazine(title, magazine_cover, article_cover){
 		.append(createCoverPage(magazine_cover))
 		.append(createArticle(article_cover))
 }
-// XXX do we need a title here???
+
+
 function createEmptyArticle(){
 	return $('<div/>')
 		.addClass('article')
@@ -1015,6 +1042,8 @@ function createArticle(template){
 	return createEmptyArticle()
 		.append(createCoverPage(template))
 }
+
+
 function createPage(data){
 	var page = $('<div/>')
 		.addClass('page')
@@ -1037,13 +1066,13 @@ function createCoverPage(data){
 
 /************************************************ editor: magazine ***/
 
-
-// NOTE: this will just load the data...
+// load the data...
 function loadMagazineData(mag){
 	removeMagazine()
 	mag.appendTo($('.aligner'))
 	return mag
 }
+// load chrome elements like bookmarks and navigator....
 function loadMagazineChrome(position, bookmarks){
 	setupBookmarkTouchZones()
 	setupNavigator()
