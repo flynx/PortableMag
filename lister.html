@@ -42,6 +42,8 @@ $(document).ready(function(){
 			toggleEditorMode('off')
 		})
 
+	$('button').attr('disabled', true)
+
 })
 
 </script>
@@ -51,7 +53,9 @@ $(document).ready(function(){
 <div class="viewer">
 <div class="scaler">
 <div class="aligner">
-	<div class="magazine" title="PortableMag Templates">
+
+	<!-- magazine -->
+	<div class="magazine" title="PortableMag Demo">
 		<div class="cover page current">
 			<div class="content">
 				<!--h1 style="color:gray;font-size:125px;margin-bottom:-35px; margin-top: 160px">PortableMag</h1>
@@ -83,22 +87,448 @@ $(document).ready(function(){
 		<div class="article">
 			<div class="cover page">
 				<div class="content">
-					<h1 name="basics" style="color:gray;font-size:100px;">Templates...</h1>
+					<h1 name="basics" style="color:gray;font-size:100px;">The Basics...</h1>
+					<big>
+						<h2>Main features</h2>
+						<ul>
+							<li>Magazines, Covers, Articles and Pages, fully navigable
+							<li>Three main views: <i style="color:silver">Magazine (under development)</i> Page and Ribbon
+							<li>Fully linkable structure
+							<li>Full intuitive Gesture, Mouse or Keyboard navigation
+							<li>Special #URLs enable full link-based navigation and control
+							<li>Bookmarks and bookmark navigation
+							<li>Intuitive navigator widget
+							<li>Portable to most mobile platforms including: Apple iOS, Android, Windows Phone 7/8, BlackBery, HP webOS and more.
+							<li>Standalone on main desktop operating systems, including Apple MacOS X and Microsoft Windows
+							<li>Based on popular, open and easy to learn and use standards (HTML5 layout, SVG vector graphics)
+							<i style="color: silver">
+							<li>Usable from the web (support for engines other than WebKit not here yet)
+							<li>Integrated Editor (under development)
+							<li>Integrated publishing framework (under development)
+							</i>
+						</ul>
+					</big>
+					<div style="position:absolute; width:100%; bottom:10px; text-align: right;">
+						<a href="#next">get started...</a><br>
+					</div>
 				</div>
 			</div>
 			<div class="page">
 				<div class="content">
-					<h1 contenteditable="true">Two column</h1>
-					<div contenteditable="true" style="float:left; width: 45%; height: 100%; margin: 10px;">
-						Column 1
+					<h1 name="navigation">PortableMag Navigation and Linking</h1>
+					<div style="float:left; width: 40%; height: 100%; margin: 10px;">
+						<h2>Finger controls</h2>
+						<ul>
+							<li> Single finger swipe left/right &ndash; prev/next page.
+							<li> Two finger swipe left/right &ndash; prev/next article.
+							<li> Single finger swipe up/down &ndash; toggle thumbnail view.
+							<li> Pinch in/out &ndash; go in/out of thumbnail view.
+						</ul>
+						<h2>Navigation via #URLs</h2>
+						<h3>The basics</h3>
+						<a href="#1">Page #1</a><br>
+						<a href="#ArticleAnchorExample">Named page</a><br>
+						<p>
+							<s><a href="#page-3-anchor" style="pointer-events:none">Anchor on page #3</a></s><br>
+							<i> currently navigation via existing anchors
+								will break the layout, so use the name attribute
+								on any other tags (see example).
+							</i>
+						</p>
 					</div>
-					<div contenteditable="true" style="float:left; width: 45%; height: 100%; padding: 10px;">
-						Column 2
+
+					<div style="float:left; width: 40%; height: 100%; padding: 10px;">
+						<h3>Special anchors</h3>
+						<p>These show up in the page URL</p>
+						<a href="#home">Magazine cover</a><br>
+						<a href="#end">Last page</a><br>
+						<a href="#thumbnails">Thumbnail view</a><br>
+						<a href="#example-layer">Toggle a hidden layer</a><br>
+						<span name="example-layer" class="hidden">
+							<a href="#hideLayers">Hide all layers</a><br>
+						</span>
+						<a href="#bookmark">Toggle bookmark</a><br>
+
+						<h3>Relative special anchors</h3>
+						<p>These will get replaced by corresponding page numbers in the URL</p>
+						<a href="#next">Next page</a><br>
+						<a href="#prev">Previous page</a><br>
+						<a href="#nextArticle">Next article</a><br>
+						<a href="#prevArticle">Previous article</a><br>
+						<h3>History support</h3>
+						<i>NOTE: this is still a bit flaky...</i><br>
+						<a href="#back">Go back</a><br>
+						<a href="#forward">Go forward</a><br>
+					</div>
+					<div style="position:absolute; width:100%; bottom:10px; text-align: right;">
+						<a href="#config">configuration demo</a> <a href="#next">next page...</a><br>
+					</div>
+
+
+					<div name="example-layer" class="hidden" onclick="window.location='#example-layer'" style="position:absolute; left:450px; top:250px; width: 300px; height:50px; text-align: center; padding: 15px; border: solid gray 5px; background: white; color: gray; cursor: hand; opacity: 0.8">
+						<h3>This is an example layer</h3>
+						<i>click or tap to hide</i>
+					</div>
+				</div>
+			</div>
+
+			<!-- XXX do we need an Article Credits page??? -->
+
+			<div class="page">
+				<div class="content">
+
+					<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+					 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+					 <defs>
+					  <marker refY="50" refX="50" markerHeight="5" markerWidth="5" viewBox="0 0 100 100" orient="auto" markerUnits="strokeWidth" id="se_marker_start_svg_36">
+					   <path stroke-width="10" stroke="#000000" fill="#000000" d="m0,50l100,40l-30,-40l30,-40l-100,40z" id="svg_3"/>
+					  </marker>
+					  <marker refY="50" refX="50" markerHeight="5" markerWidth="5" viewBox="0 0 100 100" orient="auto" markerUnits="strokeWidth" id="se_marker_start_svg_37">
+					   <path stroke-width="10" stroke="#000000" fill="#000000" d="m0,50l100,40l-30,-40l30,-40l-100,40z" id="svg_8"/>
+					  </marker>
+					 </defs>
+					 <title>PortableMag Anatomy</title>
+					 <g>
+					  <title>Layer 1</title>
+					  <text fill="#000000" stroke="#000000" stroke-width="0" x="199" y="56.33334" id="svg_1" font-size="32" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" font-weight="bold">PortableMag Anatomy</text>
+					  <path id="svg_34" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="2" stroke="#000000" fill="none"/>
+					  <g id="svg_30">
+					   <g id="svg_2">
+						<path stroke="#000000" fill="#000000" fill-opacity="0" d="m78.166656,117.166718l675.000092,0l0,123.000031l-675.000092,0" transform="rotate(180 415.667 178.667)" id="svg_12"/>
+						<rect fill="#ffffff" stroke-width="2" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="87" y="132" width="130" height="100" stroke="#000000" id="svg_13"/>
+						<rect stroke="#000000" fill="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" x="223" y="132" width="415.00001" height="100" id="svg_14"/>
+						<text stroke-opacity="0" fill="#000000" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="152" y="187.5" id="svg_24" font-size="14" font-family="Sans-serif" text-anchor="middle" xml:space="preserve">Magazine cover</text>
+						<rect stroke="#000000" id="svg_7" fill="#ffffff" stroke-width="2" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="229.66666" y="138.66667" width="130" height="86"/>
+						<text stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="14" id="svg_4" y="187" x="294.83334" stroke-width="0" stroke="#000000" fill="#000000">Article Cover</text>
+						<rect id="svg_15" stroke="#000000" fill="#e5e5e5" stroke-width="2" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="365.66667" y="138.66668" width="130" height="86"/>
+						<text stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="14" id="svg_5" y="187.00003" x="430.83337" stroke-width="0" stroke="#000000" fill="#000000">Page</text>
+						<rect id="svg_16" stroke="#000000" fill="#e5e5e5" stroke-width="2" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="501.66665" y="138.66666" width="130" height="86"/>
+						<text id="svg_6" stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="14" y="186.66667" x="567.00001" stroke-width="0" stroke="#000000" fill="#000000">Page</text>
+						<path stroke="#000000" id="svg_17" fill="#bfbfbf" d="m646.167236,132.167267l105,0l0,99.000031l-105,0" transform="rotate(180 698.667 181.667)"/>
+						<text stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="14" id="svg_25" y="187.00063" x="709.66669" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#000000">Next Article</text>
+						<text xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="10" id="svg_26" y="113.33334" x="98.66669" stroke-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#000000">Magazine</text>
+						<text xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="9" id="svg_27" y="129.33334" x="236.16669" stroke-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#000000">Article</text>
+					   </g>
+					   <g id="svg_29">
+						<g id="svg_11">
+						 <rect stroke="#000000" fill="#cccccc" stroke-width="2" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="273" y="295" width="322.99999" height="180" id="svg_20"/>
+						 <rect stroke="#000000" fill="#ffffff" stroke-width="2" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="324.5" y="300.38461" width="220" height="169.23077" id="svg_21"/>
+						 <text xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="18" id="svg_10" y="289.33334" x="292.66669" stroke-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#000000">Page</text>
+						 <g id="svg_19">
+						  <text stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="18" id="svg_9" y="381.83334" x="434.16669" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#000000">Page Content</text>
+						  <text xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="14" id="svg_18" y="400.83334" x="433.66669" stroke-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#000000">(safe area)</text>
+						 </g>
+						</g>
+						<g id="svg_28">
+						 <line id="svg_32" y2="275.33334" x2="305.66669" y1="227.33334" x1="362.66669" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#000000" fill="none"/>
+						 <line stroke="#000000" id="svg_33" y2="228.33334" x2="497.66669" y1="289.33334" x1="587.66669" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="none"/>
+						</g>
+						<g id="svg_23">
+						 <text stroke-opacity="0" xml:space="preserve" text-anchor="middle" font-family="Sans-serif" font-size="10" id="svg_22" y="532.33334" x="446.66669" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#000000">This area might get clipped</text>
+						 <path marker-start="url(#se_marker_start_svg_36)" stroke="#000000" id="svg_36" d="m301.666687,464.333344c1,39 84,28 112,55.000031" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="none"/>
+						 <path id="svg_37" marker-start="url(#se_marker_start_svg_37)" stroke="#000000" d="m577.666687,461.666687c1,39 -71,31 -98,56" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="none"/>
+						</g>
+					   </g>
+					  </g>
+					 </g>
+					</svg>
+
+				</div>
+			</div>
+			<div class="page">
+				<div class="content" style="background: black; color: gray; padding-left: 20px; padding-right: 20px;">
+					<h1>The Page <i>content</i> has a fixed size...</h1>
+				</div>
+			</div>
+			<div class="page">
+				<div class="content">
+					<a name="page-3-anchor"></a>
+					<img src="img.jpg" height="100%" align="left" style="margin-right: 15px"/>
+					<h1>Using the content block...</h1>
+					<p>
+					The content block can contain any HTML.
+					</p>
+					<p>
+					The contents will allways fit the screen, the aspect ratio 
+					of the content block is fixed regardless of the viewer.
+					</p>
+					<p>
+					Contents will not get clipped as long as they are within the block.
+					</p>
+					<p>
+					NOTE: by default the overflow is visible (see <a href="#next">next page</a>), so be carefull.
+					</p>
+				</div>
+			</div>
+			<div class="page">
+				<div class="content">
+					<img src="img.jpg" width="200%" style="position: absolute; left: -50%; top: -20%"/>
+					<div style="position:absolute; width:100%; height: 100%; color: white;">
+						<h1>You can still use the full page area...</h1>
+						<p>
+						Though anything outside the content block can and will get clipped,
+						depending on viewer aspect ratio...
+						</p>
+						<p>
+						You can see this by resizing the page in browser or rotating the device.
+						</p>
 					</div>
 				</div>
 			</div>
 		</div>
+		<div class="article">
+			<div class="cover page">
+				<div class="content" name="ArticleAnchorExample">
+					<h1>Page Templates</h1>
+					<a href="#home">home</a><br>
+				</div>
+			</div>
+
+			<div class="page">
+				<div class="content">
+					<h1>Two column</h1>
+					<div style="float:left; width: 45%; height: 100%; margin: 10px;">
+						Column 1
+					</div>
+					<div style="float:left; width: 45%; height: 100%; padding: 10px;">
+						Column 2
+					</div>
+				</div>
+			</div>
+			<div class="page no-resize">
+				<div class="content" style="background:gold">
+					Page
+				</div>
+			</div>
+			<div class="page no-resize">
+				<div class="content" style="background:yellow; width: 600px">
+					Page
+				</div>
+			</div>
+			<div class="page no-resize">
+				<div class="content" style="background:gold; width: 400px">
+					Page
+				</div>
+			</div>
+			<div class="page no-resize">
+				<div class="content" style="background:orange; width: 200px">
+					Page
+				</div>
+			</div>
+		</div>
+		<div class="article">
+			<div class="cover page">
+				<div class="content">
+					<h1>Article Cover</h1>
+					<a href="#home">home</a><br>
+				</div>
+			</div>
+
+			<div class="page">
+				<div class="content">
+					Page
+				</div>
+			</div>
+			<div class="page">
+				<div class="content">
+					Page<br>
+					<a href="#home">home</a><br>
+				</div>
+			</div>
+		</div>
+		<div class="article">
+			<div class="cover page">
+				<div class="content">
+					<h1 name="config">Configuration demo</h1>
+
+					<p>
+					NOTE: this is not an actual configuration page, just a live demo 
+					of some of the available configuration option effects.
+					</p>
+
+					<hr noshade color="silver">
+
+					<style>
+						.settings tr td:first-child {
+							text-align: right;
+							vertical-align: middle;
+							padding-right: 10px;
+						}
+						.settings tr {
+							height: 30px;
+						}
+						.settings button, .settings input {
+							background: white;
+							height: 25px;
+						}
+						.settings input {
+							border: solid silver 1px;
+						}
+						.settings button {
+							border: solid gray 1px;
+							cursor: hand;
+							padding-top: 3px;
+							padding-bottom: 3px;
+							padding-left: 15px;
+							padding-right: 15px;
+						}
+						#RESET {
+							background: red;
+							color: white;
+							font-weight: bold;
+						}
+					</style>
+
+					<table class="settings" width="100%">
+						<tr>
+							<td width="50%">
+								Pages in ribbon: 
+							</td>
+							<td>
+								<input id="PAGES_IN_RIBBON" type="text" size="8" style="text-align:center" disabled>
+								<button onclick="$('#PAGES_IN_RIBBON').attr('value', parseFloat($('#PAGES_IN_RIBBON').attr('value'))+0.5); saveSettings()">+</button>
+								<button onclick="$('#PAGES_IN_RIBBON').attr('value', parseFloat($('#PAGES_IN_RIBBON').attr('value'))-0.5); saveSettings()">-</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Fit page to view: 
+							</td>
+							<td>
+								<button id="FIT_PAGE_TO_VIEW" onclick="toggleSetting(this)"></button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Animate window resize: 
+							</td>
+							<td>
+								<button id="ANIMATE_WINDOW_RESIZE" onclick="toggleSetting(this)"></button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Drag in full page view: 
+							</td>
+							<td>
+								<button id="DRAG_FULL_PAGE" onclick="toggleSetting(this)"></button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Toggle viewer animation (affects transition to and from full page view): 
+							</td>
+							<td>
+								<button id="viewer_transition_state" onclick="toggleViewerAnimation()"></button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Enable different size pages (still flaky): 
+							</td>
+							<td>
+								<button id="USE_REAL_PAGE_SIZES" onclick="toggleSetting(this)"></button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Reset stored data:
+							</td>
+							<td>
+								<button id="RESET" onclick="confirm('You really want to reset?')&&resetState()">Reset</button>
+							</td>
+						</tr>
+					<table/>
+
+					<hr noshade color="silver">
+
+					<table class="settings" width="100%">
+						<tr>
+							<td width="50%">
+								Fingers supported: 
+							</td>
+							<td id="FingersSupported">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Browser info: 
+							</td>
+							<td id="BrowserInfo">
+							</td>
+						</tr>
+					<table/>
+
+
+					<div style="position:absolute; width:100%; bottom:10px; text-align: right;">
+						<a href="#back">go back</a>, or return to <a href="#home">magazine cover...</a><br>
+					</div>
+
+					<script>
+					var toggleViewerAnimation = function(){
+						var toggler = createCSSClassToggler(
+							// XXX this will turn off magazine animations...
+							'.scaler, .page, .magazine',
+							//'.scaler, .page',
+							'unanimated',
+							function(action){
+								$('#viewer_transition_state').text(action == 'on' ? 'off' : 'on')
+							})
+						return function(action){
+							if(action == null || action == '?'){
+								var res = toggler(action)
+							} else {
+								var res = toggler(action == 'on' ? 'off' : 'on')
+							}
+							return res == 'on' ? 'off' : 'on'
+						}
+					}()
+					toggleViewerAnimation('on')
+
+					function saveSettings(){
+						var v = parseFloat($('#PAGES_IN_RIBBON').attr('value'))
+						// ignore bad values...
+						v = v == null ? PAGES_IN_RIBBON : v
+						// can't be less that 1...
+						v = v < 1 ? 1 : v
+						PAGES_IN_RIBBON = v
+						// we need to reset the visible value in case it was wrong...
+						$('#PAGES_IN_RIBBON').attr('value', PAGES_IN_RIBBON)
+
+						FIT_PAGE_TO_VIEW = $('#FIT_PAGE_TO_VIEW').text() == 'true' ? true : false
+						ANIMATE_WINDOW_RESIZE = $('#ANIMATE_WINDOW_RESIZE').text() == 'true' ? true : false
+						DRAG_FULL_PAGE = $('#DRAG_FULL_PAGE').text() == 'true' ? true : false
+						USE_REAL_PAGE_SIZES = $('#USE_REAL_PAGE_SIZES').text() == 'true' ? true : false
+					}
+					function loadSettings(){
+						$('#PAGES_IN_RIBBON').attr('value', PAGES_IN_RIBBON)
+						$('#FIT_PAGE_TO_VIEW').text(FIT_PAGE_TO_VIEW)
+						$('#ANIMATE_WINDOW_RESIZE').text(ANIMATE_WINDOW_RESIZE)
+						$('#DRAG_FULL_PAGE').text(DRAG_FULL_PAGE)
+						$('#USE_REAL_PAGE_SIZES').text(USE_REAL_PAGE_SIZES)
+
+						$('#FingersSupported').text($.fn.swipe.fingers.ALL)
+						var b = $('#BrowserInfo')
+						$.each($.browser, function(i, e){$('<div>'+i+': '+e+'</div>').appendTo(b)})
+					}
+					function toggleSetting(obj){
+						obj = $(obj)
+						obj.text() == 'true' ? obj.text('false') : obj.text('true')
+						saveSettings()
+						updateView()	
+					}
+
+
+					loadSettings()
+
+					</script>
+				</div>
+			</div>
+		</div>
 	</div>
+
+
+
 </div>
 </div>
 </div>
