@@ -79,6 +79,7 @@ function getPageScale(){
 }
 
 
+// NOTE: if page is not given get the current page number...
 function getPageNumber(page){
 	if(page == null){
 		page = $('.current.page')
@@ -100,7 +101,7 @@ function getPageAt(n){
 
 /************************************************** event handlers ***/
 
-// hash url handler...
+// #URL handler...
 // NOTE: most of the handling actually happens in loadURLState...
 function hashChangeHandler(e){
 	e.preventDefault()
@@ -108,7 +109,7 @@ function hashChangeHandler(e){
 	// if we are dealing with history actions the browser will 
 	// do the work for us...
 	if(r == 'back'){
-		// we shift by 2 to combensate for the back/forward URL itself...
+		// we shift by 2 to compensate for the back/forward URL itself...
 		window.history.go(-2)
 	} else if(r == 'forward'){
 		window.history.go(2)
@@ -119,14 +120,7 @@ function hashChangeHandler(e){
 
 
 // window resize event handler...
-// XXX might be good to compensate for document zoom...
 function viewResizeHandler(){
-	/*
-	if(document.width/$(document).width() != 1){
-		// XXX scale the page...
-		console.log('>>> Page Zoom:', document.width/$(document).width())
-	}
-	*/
 	if(ANIMATE_WINDOW_RESIZE){
 		updateView()
 	} else {
@@ -154,18 +148,17 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 			// see if wee need to drag the page and allways drag the ribbon...
 			&& (DRAG_FULL_PAGE || !_PAGE_VIEW)
 			&& (direction=='left' || direction=='right')){
-		// using the "unanimated" trick we will make the drag real-time...
 		if(direction == 'left'){
 			mag.css({left: -cur.position()['left']/scale - distance/scale})
-			//mag.css({left: -n*cur.width()-distance/scale})
 		} else if(direction == 'right') {
 			mag.css({left: -cur.position()['left']/scale + distance/scale})
-			//mag.css({left: -n*cur.width()+distance/scale})
 		}
 
 		$('.viewer').trigger('magazineDragging')
 
 	} else if(phase == 'start'){
+		// NOTE: this is used with the "unanimated" trick, we will make
+		//		dragging real-time...
 		togglePageDragging('on')
 
 	} else if(phase == 'cancel'){
@@ -180,9 +173,10 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 
 		// prev page...
 		if(direction == 'right'){
-			// two+ fingers moves to closest article...
+			// 2 fingers moves to closest article...
 			if(fingers == 2){
 				prevArticle()
+			// 3+ fingers moves to bookmark...
 			} else if(fingers >= 3){
 				prevBookmark()
 			} else {
@@ -190,7 +184,6 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 			}
 		// next page...
 		} else if(direction == 'left'){
-			// two+ fingers moves to closest article...
 			if(fingers == 2){
 				nextArticle()
 			} else if(fingers >= 3){
@@ -283,8 +276,9 @@ function fitNPages(n, fit_to_content){
 	}
 
 	// NOTE: we need to calculate the offset as the actual widths during 
-	// 		the anumation are not correct...
-	// XXX in general this is correct, but still there is some error (rounding?)...
+	// 		the animation are not correct... so just looking at .position()
+	// 		will be counterproductive...
+	// XXX still there is some error (rounding, page zoom?)...
 	if(!USE_REAL_PAGE_SIZES && fit_to_content){
 		var offset = rW * getPageNumber()-1
 	} else {
@@ -297,7 +291,6 @@ function fitNPages(n, fit_to_content){
 		var i = rpages.index(cur) 
 		var offset = rW * i-1
 		// now do the no-resize elements...
-		// XXX this still generates slightly incorrect values...
 		if(USE_REAL_PAGE_SIZES){
 			var nrpages = $('.page.no-resize, .current.page')
 			i = nrpages.index(cur) 
@@ -335,6 +328,8 @@ function fitNPages(n, fit_to_content){
 // NOTE: this now supports negative indexes to count pages from the end...
 function setCurrentPage(n, offset, width){
 	var page = $('.page')
+	// setup n and cur...
+	// no n is given, do the defaultdance
 	if(n == null){
 		var cur = $('.current.page')
 		// no current page...
@@ -355,18 +350,24 @@ function setCurrentPage(n, offset, width){
 			return
 		}
 		n = page.index(cur) 
+
+	// n is a number...
 	} else if(typeof(n) == typeof(1)) {
-		// invalid n...
+		// normalize n...
 		if(n >= page.length){
 			n = page.length-1
 		} else if(-n > page.length){
 			n = 0
 		}
 		var cur = getPageAt(n)
+	
+	// n is an element, likely...
 	} else {
 		var cur = $(n)
 		n = $('.page').index(cur) 
 	}
+
+	// default width...
 	if(width == null){
 		width = cur.width()
 	}
@@ -375,15 +376,20 @@ function setCurrentPage(n, offset, width){
 	cur.addClass('current')
 
 	var mag = $('.magazine')
-	var offset = offset == null ? cur.position()['left']/getPageScale() : offset
-	mag.css({left: -offset})
+	mag.css({
+		// NOTE: this will be wrong during a transition, that's why we 
+		// 		can pass the pre-calculated offset as an argument...
+		left: -(offset == null ? cur.position()['left']/getPageScale() : offset)
+	})
 
 	// center the pages correctly...
+	// NOTE: this is the main reason we need width, and we can get it 
+	// 		pre-calculated because of ongoing transitions make it 
+	// 		pointless to read it...
 	$('.magazine').css({
 		'margin-left': -width/2
 	})
 
-	// trigger the page cange event...
 	$('.viewer').trigger('pageChanged', n)
 	
 	return cur
@@ -391,13 +397,20 @@ function setCurrentPage(n, offset, width){
 
 
 function goToMagazineCover(){
-	setCurrentPage(0)
+	return setCurrentPage(0)
 }
 function goToMagazineEnd(){
-	setCurrentPage($('.page').length-1)
+	return setCurrentPage($('.page').length-1)
 }
 function goToArticleCover(){
-	setCurrentPage($('.current.page').parents('.article').children('.page').first())
+	// try and get the actual first cover...
+	var cover = $('.current.page').parents('.article').children('.cover.page').first()
+	if(cever.length == 0){
+		// no cover, get the first page...
+		return setCurrentPage($('.current.page').parents('.article').children('.page').first())
+	} else {
+		return setCurrentPage(cover)
+	}
 }
 
 
@@ -468,7 +481,7 @@ function setupBookmarkTouchZones(){
 // load bookmarks from list...
 function loadBookmarks(lst){
 	clearBookmarks()
-	// setup set bookmarks...
+	// setup/set bookmarks...
 	$(lst).each(function(i, e){toggleBookmark(e)})
 }
 // build bookmark list...
@@ -704,6 +717,11 @@ function updatePageNumberIndicator(){
 // XXX make URLs magazine-specific...
 // 		...for extrnal linking we'll need the magazine ID, or make each 
 // 		magazine a seporate path...
+// 		the #URL should be of the form:
+// 			#<Name>					- local links
+// 			#<magazine>/<name>		- global urls
+// 		the later can be conviniently searched with: 
+// 			$('[title="<magazine>"] [name="<name>"]')
 // XXX BUG: if the hash url part coresponds to a real anchor the browser 
 // 		shifts the page, need to disable this...
 // URL state managers...
