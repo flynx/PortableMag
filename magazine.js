@@ -902,18 +902,18 @@ function buildJSONState(export_bookmarks, export_position){
 function loadJSONState(data){
 	function _build(block, elem){
 		if(elem.type == 'page'){
-			_createPage(elem.content)
+			createPage(elem.content)
 				.addClass(elem['class'])
 				.appendTo(block)
 
 		} else if(elem.type == 'cover'){
-			_createCoverPage(elem.content)
+			createCoverPage(elem.content)
 				.addClass(elem['class'])
 				.appendTo(block)
 
 		} else if(elem.type == 'article') {
 			// buiold an article...
-			var article = _createEmptyArticle()
+			var article = createEmptyArticle()
 				.addClass(elem['class'])
 				.appendTo(block)
 			// populate article with pages...
@@ -922,7 +922,7 @@ function loadJSONState(data){
 			})
 		}
 	}
-	var mag = _createEmptyMagazine(data.title)
+	var mag = createEmptyMagazine(data.title)
 	$(data.pages).each(function(_, e){
 		_build(mag, e)
 	})
@@ -956,77 +956,90 @@ function resetState(){
 
 
 
-/********************************************************** editor ***/
+/***************************************************** constructor ***/
+// These function will construct detached magazine building blocks...
 
 // basic constructors...
-function _createEmptyMagazine(title){
+function createEmptyMagazine(title){
 	return $('<div/>')
 		.addClass('magazine')
 		.attr({
 			title: title
 		})
 }
-function _createMagazine(title, magazine_cover, article_cover){
+function createMagazine(title, magazine_cover, article_cover){
 	if(magazine_cover == null){
 		magazine_cover = title
 	}
 	if(article_cover == null){
 		article_cover = 'Article'
 	}
-	return _createEmptyMagazine(title)
+	return createEmptyMagazine(title)
 		// a magazine by default has a cover...
-		.append(_createCoverPage(magazine_cover))
-		.append(_createArticle(article_cover))
+		.append(createCoverPage(magazine_cover))
+		.append(createArticle(article_cover))
 }
 // XXX do we need a title here???
-function _createEmptyArticle(){
+function createEmptyArticle(){
 	return $('<div/>')
 		.addClass('article')
 }
-function _createArticle(template){
-	return _createEmptyArticle()
-		.append(_createCoverPage(template))
+function createArticle(template){
+	return createEmptyArticle()
+		.append(createCoverPage(template))
 }
-function _createPage(template){
+function createPage(template){
 	return $('<div/>')
 		.addClass('page')
 		.append($('<div/>')
 				.addClass('content')
 				.html(template))
 }
-function _createCoverPage(template){
-	return _createPage(template).addClass('cover')
+function createCoverPage(template){
+	return createPage(template).addClass('cover')
 }
 
+
+
+
+/************************************************ editor: magazine ***/
 
 // XXX setup event handlers...
 function loadMagazine(mag, position, bookmarks){
-	clearMagazine()
-	return mag.appendTo($('.aligner'))
+	removeMagazine()
+	mag.appendTo($('.aligner'))
 	setCurrentPage(position)
 	loadBookmarks(bookmarks != null ? bookmarks : [])
 	setupNavigator()
+	// XXX is this the right place for this?
+	setupBookmarkTouchZones()
+	return mag
 }
+
 
 // XXX create magazine...
 // 		- magazine
 // 		- cover
 // 		- article
 // 			- cover
-function createMagazine(title, cover, article){
-	clearMagazine()
-	var mag = loadMagazine(_createMagazine(title, cover, article))
+function createBaseMagazine(title, cover, article){
+	removeMagazine()
+	var mag = loadMagazine(createMagazine(title, cover, article))
 	return mag
 }
+
+
 // XXX some things get really surprized when this is called, make things 
 // 		work with the mag cleared...
-function clearMagazine(){
-	// XXX do we remove the whole magazine or only it's contents?
+// XXX do we need to clear the event handlers here?
+function removeMagazine(){
 	$('.magazine').remove()
 	clearNavigator()
 }
 
 
+
+/************************************************* editor: article ***/
 
 // XXX create article (magazine, title, position)...
 // 		- article
@@ -1036,7 +1049,7 @@ function createArticleBefore(article, title){
 		article = $('.current.page').parents('.article')
 	}
 	// XXX fill the data...
-	var res = _createArticle().insertBefore(article)
+	var res = createArticle().insertBefore(article)
 	setCurrentPage()
 	$('.viewer').trigger('articleCreated', res)
 	return res
@@ -1046,20 +1059,13 @@ function createArticleAfter(article, title){
 		article = $('.current.page').parents('.article')
 	}
 	// XXX fill the data...
-	var res = _createArticle().insertAfter(article)
+	var res = createArticle().insertAfter(article)
 	setCurrentPage()
 	$('.viewer').trigger('articleCreated', res)
 	return res
 }
-function removeArticle(article){
-	if(article == null){
-		article = $('.current.page').parents('.article')
-	}
-	article.remove()
-	setCurrentPage()
-	$('.viewer').trigger('articleRemoved', res)
-	return res
-}
+
+
 function shiftArticleLeft(article){
 	// XXX
 	setCurrentPage()
@@ -1074,6 +1080,20 @@ function shiftArticleRight(article){
 }
 
 
+function removeArticle(article){
+	if(article == null){
+		article = $('.current.page').parents('.article')
+	}
+	article.remove()
+	setCurrentPage()
+	$('.viewer').trigger('articleRemoved', res)
+	return res
+}
+
+
+
+/*************************************************** editor: pages ***/
+
 // XXX create page (article, template, position)...
 // 		- page
 // 		- content
@@ -1085,17 +1105,19 @@ function createPageIn(article, template){
 	if(article.length == 0){
 		return
 	}
-	var res = _createPage(template).appendTo(article)
+	var res = createPage(template).appendTo(article)
 	$('.viewer').trigger('pageCreated', res)
 	return res
 }
+
+
 // XXX the next two are almost identical...
 // XXX prevent this from working outside of an article....
 function createPageAfter(page, template){
 	if(page == null){
 		page = $('.current.page')
 	}
-	var res = _createPage(template).insertAfter(page)
+	var res = createPage(template).insertAfter(page)
 	$('.viewer').trigger('pageCreated', res)
 	return res
 }
@@ -1104,21 +1126,11 @@ function createPageBefore(page, template){
 	if(page == null){
 		page = $('.current.page')
 	}
-	var res = _createPage(template).insertBefore(page)
+	var res = createPage(template).insertBefore(page)
 	$('.viewer').trigger('pageCreated', res)
 	return res
 }
-function removePage(page){
-	if(page == null){
-		page = $('.current.page')
-	}
 
-	var cur = getPageNumber()
-	page.remove()
-	setCurrentPage(cur)
-	$('.viewer').trigger('pageRemoved', page)
-	return page
-}
 
 // NOTE: on negative position this will position the element after the 
 // 		target, e.g. position -1 is the last element, etc.
@@ -1147,6 +1159,8 @@ function movePageTo(page, position){
 	$('.viewer').trigger('pageMoved', page)
 	return page
 }
+
+
 function shiftPageLeft(page){
 	if(page == null){
 		page = $('.current.page')
@@ -1159,6 +1173,19 @@ function shiftPageRight(page){
 		page = $('.current.page')
 	}
 	movePageTo(page, getPageNumber(page)+2)
+	return page
+}
+
+
+function removePage(page){
+	if(page == null){
+		page = $('.current.page')
+	}
+
+	var cur = getPageNumber()
+	page.remove()
+	setCurrentPage(cur)
+	$('.viewer').trigger('pageRemoved', page)
 	return page
 }
 
