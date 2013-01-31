@@ -87,8 +87,13 @@ function getPageNumber(page){
 }
 
 
+// NOTE: negative values will yield results from the tail...
 function getPageAt(n){
-	return $($('.page')[n])
+	var page = $('.page')
+	if(n < 0){
+		n = page.length + n
+	}
+	return $(page[n])
 }
 
 
@@ -327,11 +332,36 @@ function fitNPages(n, fit_to_content){
 // 		- page element
 // NOTE: this will fire a 'pageChanged(n)' event on the viewer each time 
 // 		it is called...
+// NOTE: this now supports negative indexes to count pages from the end...
 function setCurrentPage(n, offset, width){
+	var page = $('.page')
 	if(n == null){
 		var cur = $('.current.page')
-		n = $('.page').index(cur) 
+		// no current page...
+		// try to land on the magazine cover...
+		if(cur.length == 0){
+			cur = $('.magazine > .cover')
+		}
+		// try the first cover...
+		if(cur.length == 0){
+			cur = $('.cover.page')
+		}
+		// try first page...
+		if(cur.length == 0){
+			cur = page.first()
+		}
+		// no pages to work with...
+		if(cur.length == 0){
+			return
+		}
+		n = page.index(cur) 
 	} else if(typeof(n) == typeof(1)) {
+		// invalid n...
+		if(n >= page.length){
+			n = page.length-1
+		} else if(-n > page.length){
+			n = 0
+		}
 		var cur = getPageAt(n)
 	} else {
 		var cur = $(n)
@@ -575,6 +605,11 @@ function setupNavigator(){
 	})
 
 	updateNavigator()
+
+	// need to reconstruct indicators...
+	$('.magazine .page .bookmark').each(function(_, e){
+		makeBookmarkIndicator($(e).parents('.page'))
+	})
 	
 	// setup event handlers...
 	$('.viewer')
@@ -583,9 +618,15 @@ function setupNavigator(){
 }
 
 function clearNavigator(){
+	// XXX this needs to unbind events...
 	$('.navigator .indicator').hide()
 	clearBookmarkIndicators()
 	clearArticleIndicators()
+}
+
+function resetNavigator(){
+	clearNavigator()
+	setupNavigator()
 }
 
 
@@ -854,7 +895,10 @@ function createMagazine(){
 // XXX create article (magazine, title, position)...
 // 		- article
 // 		- cover
-function createArticle(magazine, title){
+function createArticleBefore(article, title){
+	// XXX
+}
+function createArticleAfter(article, title){
 	// XXX
 }
 
@@ -862,8 +906,80 @@ function createArticle(magazine, title){
 // XXX create page (article, template, position)...
 // 		- page
 // 		- content
-function createPage(article, template){
+function createPageIn(article, template){
 	// XXX
+	$('.viewer').trigger('pageCreated', res)
+}
+// XXX the next two are almost identical...
+// XXX prevent this from working outside of an article....
+function createPageAfter(page, template){
+	if(page == null){
+		page = $('.current.page')
+	}
+
+	var res = $('<div/>')
+		.addClass('page')
+		.append($('<div/>')
+				.addClass('content')
+				.text('Page'))
+		.insertAfter(page)
+
+	$('.viewer').trigger('pageCreated', res)
+
+	return res
+}
+// XXX prevent this from working outside of an article....
+function createPageBefore(page, template){
+	if(page == null){
+		page = $('.current.page')
+	}
+
+	var res = $('<div/>')
+		.addClass('page')
+		.append($('<div/>')
+				.addClass('content')
+				.text('Page'))
+		.insertBefore(page)
+
+	$('.viewer').trigger('pageCreated', res)
+
+	return res
+}
+// XXX make this push pages between articles...
+function pushPageLeft(page){
+	if(page == null){
+		page = $('.current.page')
+	}
+	var prev = page.prev()
+	if(prev.length == 0){
+		return page
+	}
+	page
+		.detach()
+		.insertBefore(prev)
+	setCurrentPage()
+
+	$('.viewer').trigger('pageMoved', page)
+
+	return page
+}
+// XXX make this push pages between articles...
+function pushPageRight(page){
+	if(page == null){
+		page = $('.current.page')
+	}
+	var next = page.next()
+	if(next.length == 0){
+		return page
+	}
+	page
+		.detach()
+		.insertAfter(next)
+	setCurrentPage()
+
+	$('.viewer').trigger('pageMoved', page)
+
+	return page
 }
 
 

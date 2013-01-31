@@ -47,6 +47,10 @@ $(document).ready(function(){
 		.on('bookmarkAdded', function(_, n){makeBookmarkIndicator(n)})
 		.on('bookmarkRemoved', function(_, n){removeBookmarkIndicator(n)})
 
+		// editor specific events...
+		.on('pageCreated articleCreated magazineCreated', resetNavigator)
+		.on('pageMoved articleMoved', resetNavigator)
+
 		// user interactions...
 		.swipe({
 			swipeStatus: swipeHandler,
@@ -170,7 +174,7 @@ CKEDITOR.on('instanceCreated', function(evt){
 
 	<div class="top-toolbar">
 		<div class="left-set">
-			<div class="button cover title"><a href="#home">PortableMag</a></div>
+			<div class="button cover title"><a href="#home">PortableMag Editor</a></div>
 		</div>
 		<div class="right-set">
 			<div class="button prev-bookmark">
