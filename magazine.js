@@ -1000,6 +1000,8 @@ function writeMetadata(elem, res, metadata){
 	return elem
 }
 
+var JSON_VERSION = 0.1
+
 function buildJSON(export_bookmarks, export_position){
 	function _getContent(_, elem){
 		elem = $(elem)
@@ -1039,6 +1041,8 @@ function buildJSON(export_bookmarks, export_position){
 	var res = readMetadata($('.magazine'))
 	res.pages = $('.magazine > .page, .magazine > .article').map(_getContent).toArray(),
 	res.bookmarks = export_bookmarks ? buildBookmarkList() : []
+
+	res['format-version'] = JSON_VERSION
 
 	if(export_position){
 		res.position = getPageNumber()
@@ -1083,6 +1087,12 @@ function loadJSON(data, ignore_chrome){
 
 		// metadata...
 		writeMetadata(elem, res)
+	}
+
+	// XXX check version...
+	var version = data['json-version']
+	if(version != JSON_VERSION){
+		console.warn('WARNING: JSON Format Version Mismatch.')
 	}
 
 	// create an empty magazine...
