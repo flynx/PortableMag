@@ -911,12 +911,16 @@ function resetState(){
 *  		],
 *  		// this is optional...
 *  		position: <page-number>
+*		// XXX urls are not yet supported...
+*  		url: <URL>,
 *  		pages: [
 *  			// root <page>...
 *  			{
 *  				type: 'page' | 'cover',
 *  				// classes set on the page element...
 *  				class: [...]
+*  				// XXX urls are not yet supported...
+*  				url: <URL>,
 *  				content: <page-content>
 *  			},
 *
@@ -925,6 +929,8 @@ function resetState(){
 *  				type: 'article',
 *  				// classes set on the article element...
 *  				class: [...]
+*  				// XXX urls are not yet supported...
+*  				url: <URL>,
 *  				pages: [
 *  					<page>,
 *  					...
@@ -944,19 +950,41 @@ function resetState(){
 function buildJSON(export_bookmarks, export_position){
 	function _getContent(_, elem){
 		elem = $(elem)
+		// page...
 		if(elem.hasClass('page')){
-			return {
+			var res = {
 				type: elem.hasClass('cover') ? 'cover' : 'page',
 				'class': elem.attr('class'),
 				content: elem.children('.content')[0].outerHTML
 			}
+
+		// article...
 		} else if(elem.hasClass('article')){
-			return {
+			var res = {
 				type: 'article',
 				'class': elem.attr('class'),
 				pages: elem.children('.page').map(_getContent).toArray()
 			}
+
+		// other...
+		} else {
+			var res = {
+				type: 'raw-html',
+				'class': elem.attr('class'),
+				content: elem.html()
+			}
 		}
+		// metadata...
+		if(elem.attr('authors')){
+			// NOTE: this might look odd, but we are using JS .map instead 
+			// 		of the jQuery .map, and they have different signatures...
+			// 		...(index, elem) in jQuery vs. (elem, index) in JS.
+			res.authors = $(elem.attr('authors').split(',')).map(function(e){return e.trim()})
+		}
+		// XXX more metadata...
+		// XXX
+
+		return res
 	}
 	var res = {
 		title: $('.magazine').attr('title'),
@@ -973,25 +1001,35 @@ function buildJSON(export_bookmarks, export_position){
 function loadJSON(data, ignore_chrome){
 	function _build(block, elem){
 		if(elem.type == 'page'){
-			createPage(elem.content)
+			var res = createPage(elem.content)
 				.addClass(elem['class'])
 				.appendTo(block)
 
 		} else if(elem.type == 'cover'){
-			createCoverPage(elem.content)
+			var res = createCoverPage(elem.content)
 				.addClass(elem['class'])
 				.appendTo(block)
 
 		} else if(elem.type == 'article') {
 			// buiold an article...
-			var article = createEmptyArticle()
+			var res = createEmptyArticle()
 				.addClass(elem['class'])
 				.appendTo(block)
 			// populate article with pages...
 			$(elem.pages).each(function(_, e){
-				_build(article, e)
+				_build(res, e)
 			})
+		} else if(elem.type == 'article') {
+			var res = createPage(elem.content)
+				.addClass(elem['class'])
+				.appendTo(block)
 		}
+		// metadata...
+		if(elem.authors){
+			res.attr('authors', elem.authors.join(', '))
+		}
+		// XXX more metadata...
+		// XXX
 	}
 	var mag = createEmptyMagazine(data.title)
 	$(data.pages).each(function(_, e){
