@@ -1,11 +1,18 @@
-[_] 38% Priority work
+[_] 37% Priority work
 	[_] 0% TouchSwipe issues...
 		[_] BUG: swipe-back does not cancel a swipe... (TouchSwipe)
 		| ...unless the finger is return to within the threshold of the 
 		| touchdown point.
 		[_] BUG: no drag threshold on excludedElements (TouchSwipe)
 		| stalled...
-	[_] 74% general todo
+	[_] 68% general todo
+		[_] JSON: store format version in the JSON file...
+		[_] JSON: add page URLs as an alternative to direct content...
+		| use AJAX to get remote pages and their nested content
+		[_] JSON: add metadata section that can be downloaded separately...
+		[_] 0% JSON: add the following fields to metadata section:
+			[_] issue URL
+			[_] authors
 		[_] 57% add the following icons to buttons.svg
 			[X] magazine create
 			[_] magazine remove
