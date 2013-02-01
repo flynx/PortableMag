@@ -5,7 +5,27 @@
 		| touchdown point.
 		[_] BUG: no drag threshold on excludedElements (TouchSwipe)
 		| stalled...
-	[_] 75% general todo
+	[_] 74% general todo
+		[_] 57% add the following icons to buttons.svg
+			[X] magazine create
+			[_] magazine remove
+			[X] article create
+			[_] article remove
+			[X] article shift left
+			[X] article shift right
+			[X] page create
+			[_] page remove
+			[X] page shift left
+			[X] page shift right
+			[_] save
+			[X] bookmark
+			[X] < left
+			[X] > right
+			[_] (<) left
+			[_] (>) right
+			[X] (i) info
+			[_] (+) new
+			[_] (x) remove
 		[_] add global credits and copyright page...
 		| list and link all the used software and authors...
 		[_] add default empty state to viewer, magazine and article...

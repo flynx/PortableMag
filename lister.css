@@ -87,7 +87,21 @@ body {
 	border-left: dashed red 1px;
 }
 
+
+
 /************************************************** general layout ***/
+
+.viewer {
+	position: relative;
+	background: silver;
+
+	padding-top: 50px;
+	padding-bottom: 50px;
+}
+
+.magazine {
+	position: relative;
+}
 
 /* magazine article, this can contain a cover and a number of pages */
 .article {
@@ -122,6 +136,25 @@ body {
 .article > .cover {
 }
 
+
+
+/******************************************************** toolbars ***/
+
+.left-toolbar {
+	position: fixed;
+	top: 30px;
+	left: 30px;
+	width: 40px;
+	height: auto;
+	background: black;
+	color: white;
+
+	padding: 10px;
+
+	z-index: 9999;
+
+	opacity: 0.7;
+}
 
 
 /******************************************************* templates ***/
