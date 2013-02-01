@@ -947,6 +947,59 @@ function resetState(){
 *
 **********************************************************************/
 
+// there are two type of metadata handlers:
+// 	- 'as-is', this is a trivial read and write value
+// 	- explicit reader/writer, this will convert the data from html to JSON
+// 		data and back...
+JSONMetadata = {
+	name: 'as-is',
+	title: 'as-is',
+	authors: {
+		reader: function(data){
+			// NOTE: this might look odd, but we are using JS .map instead 
+			// 		of the jQuery .map, and they have different signatures...
+			// 		...(index, elem) in jQuery vs. (elem, index) in JS.
+			return data.split(',').map(function(e){return e.trim()})
+		},
+		writer: function(data){
+			return data.join(', ')
+		}
+	}
+}
+function readMetadata(elem, res, metadata){
+	if(res == null){
+		res = {}
+	}
+	if(metadata == null){
+		metadata = JSONMetadata
+	}
+	for(var a in metadata){
+		if(elem.attr(a)){
+			if(metadata[a] == 'as-is'){
+				res[a] = elem.attr(a)
+			} else {
+				res[a] = metadata[a].reader(elem.attr(a))
+			}
+		}
+	}
+	return res
+}
+function writeMetadata(elem, res, metadata){
+	if(metadata == null){
+		metadata = JSONMetadata
+	}
+	for(var a in metadata){
+		if(elem[a]){
+			if(metadata[a] == 'as-is'){
+				res.attr(a, elem[a])
+			} else {
+				res.attr(a, metadata[e].writer(elem[a]))
+			}
+		}
+	}
+	return elem
+}
+
 function buildJSON(export_bookmarks, export_position){
 	function _getContent(_, elem){
 		elem = $(elem)
@@ -967,6 +1020,9 @@ function buildJSON(export_bookmarks, export_position){
 			}
 
 		// other...
+		// NOTE: with how the selector that maps this is constructed 
+		// 		we'll never go into here, but for future compatibility
+		// 		and idiot-proofness this code will stay... for now...
 		} else {
 			var res = {
 				type: 'raw-html',
@@ -975,23 +1031,15 @@ function buildJSON(export_bookmarks, export_position){
 			}
 		}
 		// metadata...
-		if(elem.attr('authors')){
-			// NOTE: this might look odd, but we are using JS .map instead 
-			// 		of the jQuery .map, and they have different signatures...
-			// 		...(index, elem) in jQuery vs. (elem, index) in JS.
-			res.authors = $(elem.attr('authors').split(',')).map(function(e){return e.trim()})
-		}
-		// XXX more metadata...
-		// XXX
+		readMetadata(elem, res)
 
 		return res
 	}
-	var res = {
-		title: $('.magazine').attr('title'),
-		// this can contain pages or arrays...
-		pages: $('.magazine > .page, .magazine > .article').map(_getContent).toArray(),
-		bookmarks: export_bookmarks ? buildBookmarkList() : [],
-	}
+	// read the basic metadata set for the magazine...
+	var res = readMetadata($('.magazine'))
+	res.pages = $('.magazine > .page, .magazine > .article').map(_getContent).toArray(),
+	res.bookmarks = export_bookmarks ? buildBookmarkList() : []
+
 	if(export_position){
 		res.position = getPageNumber()
 	}
@@ -1000,16 +1048,20 @@ function buildJSON(export_bookmarks, export_position){
 
 function loadJSON(data, ignore_chrome){
 	function _build(block, elem){
+
+		// page...
 		if(elem.type == 'page'){
 			var res = createPage(elem.content)
 				.addClass(elem['class'])
 				.appendTo(block)
 
+		// cover...
 		} else if(elem.type == 'cover'){
 			var res = createCoverPage(elem.content)
 				.addClass(elem['class'])
 				.appendTo(block)
 
+		// article...
 		} else if(elem.type == 'article') {
 			// buiold an article...
 			var res = createEmptyArticle()
@@ -1019,19 +1071,24 @@ function loadJSON(data, ignore_chrome){
 			$(elem.pages).each(function(_, e){
 				_build(res, e)
 			})
-		} else if(elem.type == 'article') {
+
+		// other...
+		// NOTE: on a wll-formed JSON we'll never go in here, but just 
+		// 		in case...
+		} else if(elem.type == 'raw-html') {
 			var res = createPage(elem.content)
 				.addClass(elem['class'])
 				.appendTo(block)
 		}
+
 		// metadata...
-		if(elem.authors){
-			res.attr('authors', elem.authors.join(', '))
-		}
-		// XXX more metadata...
-		// XXX
+		writeMetadata(elem, res)
 	}
+
+	// create an empty magazine...
 	var mag = createEmptyMagazine(data.title)
+	writeMetadata(mag, data)
+	// build the actual strcture...
 	$(data.pages).each(function(_, e){
 		_build(mag, e)
 	})
@@ -1116,6 +1173,8 @@ function loadMagazineChrome(position, bookmarks){
 	setupNavigator()
 	setCurrentPage(position)
 	loadBookmarks(bookmarks != null ? bookmarks : [])
+	// XXX do we need to cover this with a splash???
+	updateView()
 }
 
 
