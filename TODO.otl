@@ -5,14 +5,16 @@
 		| touchdown point.
 		[_] BUG: no drag threshold on excludedElements (TouchSwipe)
 		| stalled...
-	[_] 68% general todo
+	[_] 69% general todo
 		[_] JSON: store format version in the JSON file...
 		[_] JSON: add page URLs as an alternative to direct content...
 		| use AJAX to get remote pages and their nested content
 		[_] JSON: add metadata section that can be downloaded separately...
-		[_] 0% JSON: add the following fields to metadata section:
+		[_] 75% JSON: add the following fields to metadata section:
 			[_] issue URL
-			[_] authors
+			[X] authors
+			[X] title
+			[X] name
 		[_] 57% add the following icons to buttons.svg
 			[X] magazine create
 			[_] magazine remove
