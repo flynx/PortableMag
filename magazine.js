@@ -400,7 +400,7 @@ function goToMagazineCover(){
 	return setCurrentPage(0)
 }
 function goToMagazineEnd(){
-	return setCurrentPage($('.page').length-1)
+	return setCurrentPage(-1)
 }
 function goToArticleCover(){
 	// try and get the actual first cover...
@@ -897,7 +897,7 @@ function buildJSON(export_bookmarks, export_position){
 	return res
 }
 
-function loadJSON(data, ignore_chrome){
+function loadJSON(data, load_user_data){
 	function _build(block, elem){
 
 		// page...
@@ -955,8 +955,8 @@ function loadJSON(data, ignore_chrome){
 	mag.children('.current.page').removeClass('current')
 	loadMagazineData(mag)
 
-	if(!ignore_chrome){
-		loadMagazineChrome(data.position, data.bookmarks)
+	if(load_user_data){
+		loadMagazineUserData(data.position, data.bookmarks)
 	}
 }
 
@@ -1080,29 +1080,34 @@ function runMagazineTemplates(){
 }
 
 
+
 /******************************************* basic magazine editor ***/
+// NOTE: these are mostly needed for loading magazines...
 
 // load the data...
 function loadMagazineData(mag){
 	removeMagazine()
 	mag.appendTo($('.aligner'))
+	$('.viewer').trigger('magazineDataLoaded')
 	return mag
 }
 
+// NOTE: this needs to be called once per magazine load...
+function loadMagazineChrome(){
+	setupBookmarkTouchZones()
+	runMagazineTemplates()
+	updateView()
+	$('.viewer').trigger('magazineChromeLoaded')
+}
 
 // load chrome elements like bookmarks and navigator....
-function loadMagazineChrome(position, bookmarks){
-	setupBookmarkTouchZones()
-	setupNavigator()
+function loadMagazineUserData(position, bookmarks){
 	if(position){
 		setCurrentPage(position)
 	}
 	if(bookmarks){
 		loadBookmarks(bookmarks != null ? bookmarks : [])
 	}
-	runMagazineTemplates()
-	// XXX do we need to cover this with a splash???
-	updateView()
 }
 
 
@@ -1113,7 +1118,7 @@ function loadMagazineChrome(position, bookmarks){
 // 		on removed elements -- unbind and remove or just forget about it?
 function removeMagazine(){
 	$('.magazine').remove()
-	clearNavigator()
+	$('.viewer').trigger('magazineRemoved')
 }
 
 

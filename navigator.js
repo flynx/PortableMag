@@ -6,6 +6,95 @@
 * TODO make the bar (indicator) clickable -- go to this point.
 *
 **********************************************************************/
+
+function setupNavigator(skip_events){
+	var bar = $('.navigator .bar')
+	var elems = $('.navigator .indicator, .navigator .article')
+	var pos = $('.navigator .indicator').fadeIn()
+	var pages = $('.page').length
+	var mag = $('.magazine')
+
+	var W = bar.width()/pages
+
+	setupArticleIndicators(W)
+
+	// set navigator element sizes...
+	elems.css({
+		width: W
+	})
+
+	updateNavigator()
+
+	// need to reconstruct indicators...
+	$('.magazine .page .bookmark').each(function(_, e){
+		makeBookmarkIndicator($(e).parents('.page'))
+	})
+	
+	// XXX make these run only once...
+	if(!skip_events){
+		// setup event handlers...
+		$('.viewer')
+			// basic functions...
+			.on('pageChanged', function(e, n){updateNavigator(n)})
+			.on('magazineDragging', function(){updateNavigator()})
+			// bookmarks...
+			.on('bookmarksCleared', clearBookmarkIndicators)
+			.on('bookmarkAdded', function(_, n){makeBookmarkIndicator(n)})
+			.on('bookmarkRemoved', function(_, n){removeBookmarkIndicator(n)})
+			// editor specific events...
+			.on('pageCreated articleCreated magazineCreated ' +
+					'pageMoved articleMoved pageRemoved articleRemoved', resetNavigator)
+			// lifecycle events...
+			.on('magazineDataLoaded', resetNavigator)
+			.on('magazineRemoved', clearNavigator)
+	}
+}
+
+// XXX this needs to unbind events...
+function clearNavigator(){
+	$('.navigator .indicator').hide()
+	clearBookmarkIndicators()
+	clearArticleIndicators()
+}
+
+function resetNavigator(){
+	clearNavigator()
+	setupNavigator(skip_events=true)
+}
+
+
+function updateNavigator(n){
+	var mag = $('.magazine')
+	var page = $('.page')
+	var bar = $('.navigator .bar')
+	var pos = $('.navigator .indicator')
+
+	var pn = page.length
+
+	var bW = bar.width()
+	var mW = mag.width()
+	var PW = page.width()
+	var pW = bar.width()/pn
+
+	if(n == null){
+		// XXX this behaves erratically if the page is zoomed...
+		var res = (-parseFloat(mag.css('left'))/(mW-PW)) * (bW-pW)
+	} else {
+		res = pW*n
+	}
+
+	// normalize the position...
+	res = res > 0 ? res: 0
+	res = res < (bW-pW) ? res: (bW-pW)
+
+	// set indicator position...
+	pos.css({
+		left: res 
+	})
+}
+
+
+
 // NOTE: the navigator is not live and will need to get regenerated on
 // 		each magazine edit...
 
@@ -46,91 +135,6 @@ function clearArticleIndicators(){
 	$('.navigator .bar .article').remove()
 }
 	
-
-function setupNavigator(skip_events){
-	var bar = $('.navigator .bar')
-	var elems = $('.navigator .indicator, .navigator .article')
-	var pos = $('.navigator .indicator').fadeIn()
-	var pages = $('.page').length
-	var mag = $('.magazine')
-
-	var W = bar.width()/pages
-
-	setupArticleIndicators(W)
-
-	// set navigator element sizes...
-	elems.css({
-		width: W
-	})
-
-	updateNavigator()
-
-	// need to reconstruct indicators...
-	$('.magazine .page .bookmark').each(function(_, e){
-		makeBookmarkIndicator($(e).parents('.page'))
-	})
-	
-	if(!skip_events){
-		// setup event handlers...
-		$('.viewer')
-			// basic functions...
-			.on('pageChanged', function(e, n){updateNavigator(n)})
-			.on('magazineDragging', function(){updateNavigator()})
-			// bookmarks...
-			.on('bookmarksCleared', clearBookmarkIndicators)
-			.on('bookmarkAdded', function(_, n){makeBookmarkIndicator(n)})
-			.on('bookmarkRemoved', function(_, n){removeBookmarkIndicator(n)})
-			// editor specific events...
-			.on('pageCreated articleCreated magazineCreated', resetNavigator)
-			.on('pageMoved articleMoved', resetNavigator)
-			.on('pageRemoved articleRemoved', resetNavigator)
-	}
-}
-
-// XXX this needs to unbind events...
-function clearNavigator(){
-	$('.navigator .indicator').hide()
-	clearBookmarkIndicators()
-	clearArticleIndicators()
-}
-
-function resetNavigator(){
-	clearNavigator()
-	setupNavigator()
-}
-
-
-function updateNavigator(n){
-	var mag = $('.magazine')
-	var page = $('.page')
-	var bar = $('.navigator .bar')
-	var pos = $('.navigator .indicator')
-
-	var pn = page.length
-
-	var bW = bar.width()
-	var mW = mag.width()
-	var PW = page.width()
-	var pW = bar.width()/pn
-
-	if(n == null){
-		// XXX this behaves erratically if the page is zoomed...
-		var res = (-parseFloat(mag.css('left'))/(mW-PW)) * (bW-pW)
-	} else {
-		res = pW*n
-	}
-
-	// normalize the position...
-	res = res > 0 ? res: 0
-	res = res < (bW-pW) ? res: (bW-pW)
-
-	// set indicator position...
-	pos.css({
-		left: res 
-	})
-}
-
-
 
 /******************************************************* bookmarks ***/
 

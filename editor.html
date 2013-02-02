@@ -45,6 +45,7 @@ $(document).ready(function(){
 		// setup internal events...
 		.on('pageChanged bookmarkAdded bookmarkRemoved bookmarksCleared', saveState)
 		.on('pageChanged', updatePageNumberIndicator)
+		.on('magazineDataLoaded', loadMagazineChrome)
 
 		// templates...
 		.on('pageCreated articleCreated magazineCreated ' +
@@ -118,8 +119,12 @@ $(document).ready(function(){
 
 
 	// load state and setup everything that depends on it...
+	// XXX load the data with loadJSON()
 	loadState()
-	loadMagazineChrome()
+	// need to call this once per whole page load....
+	setupNavigator()
+	// XXX STUB, needed untill we load everything frim JSON...
+	$('.viewer').trigger('magazineDataLoaded')
 
 	// set default view...
 	togglePageView('on')

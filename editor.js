@@ -11,7 +11,7 @@
 // 		as all events are ahndled by the viewer...
 function loadMagazine(mag, position, bookmarks){
 	mag = loadMagazineData(mag)
-	loadMagazineChrome(position, bookmarks)
+	loadMagazineUserData(position, bookmarks)
 	return mag
 }
 
@@ -186,10 +186,6 @@ function removePage(page){
 	$('.viewer').trigger('pageRemoved', page)
 	return page
 }
-
-
-
-
 
 
 
