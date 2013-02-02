@@ -1181,6 +1181,37 @@ var MagazineTemplates = {
 					|| 'PortableMag')
 	},
 
+	// index...
+	'.article-index': function(elem){
+		var list = $('<ul/>')
+		var mag = $('.magazine')
+		// get the articles...
+		$('.magazine .article .cover h1').each(function(i, e){
+			e = $(e)
+			var lnk = $('<a/>')
+							.attr('href', '#' + getPageNumber(e.parents('.page').first()))
+							// XXX is this the right way to go?
+							.text(e.text() || 'No title')
+
+			list.append(
+				$('<li/>')
+					.append(lnk))
+		})
+		var root = $('<ul/>')
+			.append($('<li/>')
+				.append($('<a/>')
+					.attr('href', '#' + getPageNumber($('.magazine > .cover').first()))
+					// XXX is this the right way to go?
+					.text(mag.attr('title') 
+						|| mag.attr('name')
+						|| 'Magazine')))
+		root.append(list)
+		elem
+			.html('')
+			// cover...
+			.append(root)
+	}, 
+
 	// setup page numbers...
 	'.page-number-text': function(elem){
 		elem.each(function(_, e){
