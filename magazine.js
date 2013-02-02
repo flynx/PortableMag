@@ -1192,6 +1192,7 @@ var MagazineTemplates = {
 	},
 
 	// magazine index...
+	// XXX ugly code, revise...
 	'.article-index': function(elem){
 		var list = $('<ul/>')
 		var mag = $('.magazine')
@@ -1225,12 +1226,12 @@ var MagazineTemplates = {
 }
 
 
-// XXX call this on page edits...
 function runMagazineTemplates(){
 	for(var tpl in MagazineTemplates){
 		MagazineTemplates[tpl]($(tpl))
 	}
 }
+
 
 
 /************************************************ editor: magazine ***/
@@ -1265,6 +1266,8 @@ function loadMagazine(mag, position, bookmarks){
 }
 
 
+// NOTE: this will, in addition to the magazine itself, will populate with
+// 		the basic content (cover, article, article cover)
 function createBaseMagazine(title, cover, article){
 	removeMagazine()
 	var mag = loadMagazine(createMagazine(title, cover, article))
@@ -1286,7 +1289,6 @@ function removeMagazine(){
 
 /************************************************* editor: article ***/
 
-// XXX create article...
 function createArticleBefore(article, title){
 	if(article == null){
 		article = $('.current.page').parents('.article')
@@ -1309,14 +1311,32 @@ function createArticleAfter(article, title){
 }
 
 
+// XXX TEST!
 function shiftArticleLeft(article){
-	// XXX
+	var articles = $('.article')
+	var i = articles.index(article)
+	if(i <= 0){
+		return article
+	}
+	var target = $(articles[i-1])
+	article
+		.detach()
+		.insertBefore(target)
 	setCurrentPage()
 	$('.viewer').trigger('articleMoved', res)
 	return res
 }
+// XXX TEST!
 function shiftArticleRight(article){
-	// XXX
+	var articles = $('.article')
+	var i = articles.index(article)
+	if(i >= articles.length){
+		return article
+	}
+	var target = $(articles[i+1])
+	article
+		.detach()
+		.insertAfter(target)
 	setCurrentPage()
 	$('.viewer').trigger('articleMoved', res)
 	return res
