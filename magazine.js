@@ -938,7 +938,7 @@ function loadJSON(data, ignore_chrome){
 
 	// XXX check version...
 	var version = data['format-version']
-	if(version != JSON_VERSION){
+	if(version != JSON_FORMAT_VERSION){
 		// XXX this might be a good spot to add data conversion between
 		// 		versions...
 		console.warn('WARNING: JSON Format Version Mismatch.')
