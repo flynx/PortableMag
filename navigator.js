@@ -2,6 +2,8 @@
 * 
 * Navigator 
 *
+* TODO make indicator dragable
+* TODO make the bar (indicator) clickable -- go to this point.
 *
 **********************************************************************/
 // NOTE: the navigator is not live and will need to get regenerated on
