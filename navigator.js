@@ -45,7 +45,7 @@ function clearArticleIndicators(){
 }
 	
 
-function setupNavigator(){
+function setupNavigator(skip_events){
 	var bar = $('.navigator .bar')
 	var elems = $('.navigator .indicator, .navigator .article')
 	var pos = $('.navigator .indicator').fadeIn()
@@ -68,10 +68,21 @@ function setupNavigator(){
 		makeBookmarkIndicator($(e).parents('.page'))
 	})
 	
-	// setup event handlers...
-	$('.viewer')
-		.on('pageChanged', function(e, n){updateNavigator(n)})
-		.on('magazineDragging', function(){updateNavigator()})
+	if(!skip_events){
+		// setup event handlers...
+		$('.viewer')
+			// basic functions...
+			.on('pageChanged', function(e, n){updateNavigator(n)})
+			.on('magazineDragging', function(){updateNavigator()})
+			// bookmarks...
+			.on('bookmarksCleared', clearBookmarkIndicators)
+			.on('bookmarkAdded', function(_, n){makeBookmarkIndicator(n)})
+			.on('bookmarkRemoved', function(_, n){removeBookmarkIndicator(n)})
+			// editor specific events...
+			.on('pageCreated articleCreated magazineCreated', resetNavigator)
+			.on('pageMoved articleMoved', resetNavigator)
+			.on('pageRemoved articleRemoved', resetNavigator)
+	}
 }
 
 // XXX this needs to unbind events...
@@ -117,6 +128,9 @@ function updateNavigator(n){
 	})
 }
 
+
+
+/******************************************************* bookmarks ***/
 
 function makeBookmarkIndicator(n){
 	if(n == null){

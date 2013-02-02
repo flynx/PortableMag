@@ -42,9 +42,6 @@ $(document).ready(function(){
 		// setup internal events...
 		.on('pageChanged bookmarkAdded bookmarkRemoved bookmarksCleared', saveState)
 		.on('pageChanged', updatePageNumberIndicator)
-		.on('bookmarksCleared', clearBookmarkIndicators)
-		.on('bookmarkAdded', function(_, n){makeBookmarkIndicator(n)})
-		.on('bookmarkRemoved', function(_, n){removeBookmarkIndicator(n)})
 
 		// user interactions...
 		.swipe({

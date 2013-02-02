@@ -43,14 +43,6 @@ $(document).ready(function(){
 		// setup internal events...
 		.on('pageChanged bookmarkAdded bookmarkRemoved bookmarksCleared', saveState)
 		.on('pageChanged', updatePageNumberIndicator)
-		.on('bookmarksCleared', clearBookmarkIndicators)
-		.on('bookmarkAdded', function(_, n){makeBookmarkIndicator(n)})
-		.on('bookmarkRemoved', function(_, n){removeBookmarkIndicator(n)})
-
-		// editor specific events...
-		.on('pageCreated articleCreated magazineCreated', resetNavigator)
-		.on('pageMoved articleMoved', resetNavigator)
-		.on('pageRemoved articleRemoved', resetNavigator)
 
 		// templates...
 		.on('pageCreated articleCreated magazineCreated ' +
