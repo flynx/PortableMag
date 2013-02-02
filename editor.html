@@ -95,10 +95,20 @@ $(document).ready(function(){
 
 			// XXX for some reason this deos not bubble up the nested elements...
 			click: function(evt, elem){
-				if($(elem).hasClass('page')){
+				elem = $(elem)
+				// bubble up to nearest page...
+				if(!elem.hasClass('page') 
+						&& elem.parents('.page').length != 0){
+					elem = elem.parents('.page').first()
+				}
+
+				// click current page to toggle full page view...
+				if(elem.hasClass('current', 'page') 
+						&& togglePageView('?') == 'off'){
+					togglePageView('on')
+				// click any page to set it to current...
+				} else if(elem.hasClass('page')){
 					setCurrentPage(elem)
-				} else if($(elem).parents('.page').length != 0){
-					setCurrentPage($(elem).parents('.page').first())
 				}
 				return true
 			},
