@@ -1172,6 +1172,8 @@ function createCoverPage(data){
 
 /*********************************************** editor: templates ***/
 
+// NOTE: for these to be self-aplicable they must only replace the content
+// 		of the matched elements and not touch the element itself.
 var MagazineTemplates = {
 
 	// setup titles...
@@ -1181,7 +1183,15 @@ var MagazineTemplates = {
 					|| 'PortableMag')
 	},
 
-	// index...
+	// setup page numbers...
+	'.page-number-text': function(elem){
+		elem.each(function(_, e){
+			var e = $(e)
+			e.text(getPageNumber(e.parents('.page')))
+		})
+	},
+
+	// magazine index...
 	'.article-index': function(elem){
 		var list = $('<ul/>')
 		var mag = $('.magazine')
@@ -1207,19 +1217,13 @@ var MagazineTemplates = {
 						|| 'Magazine')))
 		root.append(list)
 		elem
+			// remove the original content...
 			.html('')
 			// cover...
 			.append(root)
-	}, 
-
-	// setup page numbers...
-	'.page-number-text': function(elem){
-		elem.each(function(_, e){
-			var e = $(e)
-			e.text(getPageNumber(e.parents('.page')))
-		})
-	}
+	} 
 }
+
 
 // XXX call this on page edits...
 function runMagazineTemplates(){

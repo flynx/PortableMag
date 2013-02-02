@@ -52,6 +52,10 @@ $(document).ready(function(){
 		.on('pageMoved articleMoved', resetNavigator)
 		.on('pageRemoved articleRemoved', resetNavigator)
 
+		// templates...
+		.on('pageCreated articleCreated magazineCreated ' +
+				'pageMoved pageRemoved articleMoved articleRemoved', runMagazineTemplates)
+
 		// user interactions...
 		.swipe({
 			swipeStatus: swipeHandler,
@@ -167,7 +171,9 @@ $(document).ready(function(){
 
 	<div class="top-toolbar">
 		<div class="left-set">
-			<div class="button cover title"><a href="#home">PortableMag Editor</a></div>
+			<div class="button cover title">
+				<a href="#home"><span class="magazine-title-text">PortableMag</span> <small>(editor)</small></a>
+			</div>
 		</div>
 		<div class="right-set">
 			<div class="button prev-bookmark">
@@ -271,6 +277,12 @@ $(document).ready(function(){
 			<div class="cover page">
 				<div class="content">
 					<h1 name="basics" style="color:gray;font-size:100px;">Templates...</h1>
+
+					Magazine title: <span class="magazine-title-text">[MAGAZINE NAME]</span><br>
+
+					<div class="article-index">[ARTICLE INDEX]</div>
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 			<div class="page">
@@ -282,6 +294,8 @@ $(document).ready(function(){
 					<div contenteditable="true" style="float:left; width: 45%; height: 100%; padding: 10px;">
 						Column 2
 					</div>
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 		</div>
