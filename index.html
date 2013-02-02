@@ -105,9 +105,9 @@ $(document).ready(function(){
 
 
 	// load state and setup everything that depends on it...
+	// XXX load the data with loadJSON()
 	loadState()
-	setupNavigator()
-	setupBookmarkTouchZones()
+	loadMagazineChrome()
 
 	// set default view...
 	togglePageView('on')
@@ -153,7 +153,7 @@ $(document).ready(function(){
 
 	<div class="top-toolbar">
 		<div class="left-set">
-			<div class="button cover title"><a href="#home">PortableMag</a></div>
+			<div class="button cover title"><a href="#home" class="magazine-title-text">Magazine Title</a></div>
 		</div>
 		<div class="right-set">
 			<div class="button prev-bookmark">
@@ -224,7 +224,7 @@ $(document).ready(function(){
 
 <div class="scaler">
 <div class="aligner">
-	<div class="magazine" title="PortableMag Demo">
+	<div class="magazine" title="PortableMag">
 		<div class="cover page current">
 			<div class="content">
 				<!--h1 style="color:gray;font-size:125px;margin-bottom:-35px; margin-top: 160px">PortableMag</h1>
@@ -248,6 +248,8 @@ $(document).ready(function(){
 				 </g>
 				</svg>
 					
+				<!-- if you do not want a page number just do not include it... -->
+				<!--div class="page-number-text">[PAGE NUMBER]</div-->
 			</div>
 		</div>
 
@@ -277,9 +279,11 @@ $(document).ready(function(){
 							</i>
 						</ul>
 					</big>
-					<div style="position:absolute; width:100%; bottom:10px; text-align: right;">
+					<div style="position:absolute; bottom:10px; right:30px">
 						<a href="#next">get started...</a><br>
 					</div>
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 			<div class="page">
@@ -329,7 +333,7 @@ $(document).ready(function(){
 						<a href="#back">Go back</a><br>
 						<a href="#forward">Go forward</a><br>
 					</div>
-					<div style="position:absolute; width:100%; bottom:10px; text-align: right;">
+					<div style="position:absolute; right: 30px; bottom:10px;">
 						<a href="#config">configuration demo</a> <a href="#next">next page...</a><br>
 					</div>
 
@@ -338,6 +342,8 @@ $(document).ready(function(){
 						<h3>This is an example layer</h3>
 						<i>click or tap to hide</i>
 					</div>
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 
@@ -402,11 +408,15 @@ $(document).ready(function(){
 					 </g>
 					</svg>
 
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 			<div class="page">
 				<div class="content" style="background: black; color: gray; padding-left: 20px; padding-right: 20px;">
 					<h1>The Page <i>content</i> has a fixed size...</h1>
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 			<div class="page">
@@ -427,6 +437,8 @@ $(document).ready(function(){
 					<p>
 					NOTE: by default the overflow is visible (see <a href="#next">next page</a>), so be carefull.
 					</p>
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 			<div class="page">
@@ -442,6 +454,8 @@ $(document).ready(function(){
 						You can see this by resizing the page in browser or rotating the device.
 						</p>
 					</div>
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 		</div>
@@ -450,6 +464,8 @@ $(document).ready(function(){
 				<div class="content" name="ArticleAnchorExample">
 					<h1>Page Templates</h1>
 					<a href="#home">home</a><br>
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 
@@ -462,26 +478,36 @@ $(document).ready(function(){
 					<div style="float:left; width: 45%; height: 100%; padding: 10px;">
 						Column 2
 					</div>
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 			<div class="page no-resize">
 				<div class="content" style="background:gold">
 					Page
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 			<div class="page no-resize">
 				<div class="content" style="background:yellow; width: 600px">
 					Page
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 			<div class="page no-resize">
 				<div class="content" style="background:gold; width: 400px">
 					Page
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 			<div class="page no-resize">
 				<div class="content" style="background:orange; width: 200px">
 					Page
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 		</div>
@@ -490,18 +516,24 @@ $(document).ready(function(){
 				<div class="content">
 					<h1>Article Cover</h1>
 					<a href="#home">home</a><br>
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 
 			<div class="page">
 				<div class="content">
 					Page
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 			<div class="page">
 				<div class="content">
 					Page<br>
 					<a href="#home">home</a><br>
+
+					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 		</div>

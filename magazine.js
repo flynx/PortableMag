@@ -947,6 +947,9 @@ function resetState(){
 *
 **********************************************************************/
 
+var JSON_FORMAT_VERSION = 0.1
+
+
 // there are two type of metadata handlers:
 // 	- 'as-is', this is a trivial read and write value
 // 	- explicit reader/writer, this will convert the data from html to JSON
@@ -1000,8 +1003,6 @@ function writeMetadata(elem, res, metadata){
 	return elem
 }
 
-var JSON_VERSION = 0.1
-
 function buildJSON(export_bookmarks, export_position){
 	function _getContent(_, elem){
 		elem = $(elem)
@@ -1042,7 +1043,7 @@ function buildJSON(export_bookmarks, export_position){
 	res.pages = $('.magazine > .page, .magazine > .article').map(_getContent).toArray(),
 	res.bookmarks = export_bookmarks ? buildBookmarkList() : []
 
-	res['format-version'] = JSON_VERSION
+	res['format-version'] = JSON_FORMAT_VERSION
 
 	if(export_position){
 		res.position = getPageNumber()
@@ -1090,7 +1091,7 @@ function loadJSON(data, ignore_chrome){
 	}
 
 	// XXX check version...
-	var version = data['json-version']
+	var version = data['format-version']
 	if(version != JSON_VERSION){
 		console.warn('WARNING: JSON Format Version Mismatch.')
 	}
@@ -1169,6 +1170,34 @@ function createCoverPage(data){
 
 
 
+/*********************************************** editor: templates ***/
+
+var MagazineTemplates = {
+
+	// setup titles...
+	'.magazine-title-text': function(elem){
+		elem.text($('.magazine').attr('title') 
+					|| $('.magazine').attr('name') 
+					|| 'PortableMag')
+	},
+
+	// setup page numbers...
+	'.page-number-text': function(elem){
+		elem.each(function(_, e){
+			var e = $(e)
+			e.text(getPageNumber(e.parents('.page')))
+		})
+	}
+}
+
+// XXX call this on page edits...
+function runMagazineTemplates(){
+	for(var tpl in MagazineTemplates){
+		MagazineTemplates[tpl]($(tpl))
+	}
+}
+
+
 /************************************************ editor: magazine ***/
 
 // load the data...
@@ -1181,12 +1210,16 @@ function loadMagazineData(mag){
 function loadMagazineChrome(position, bookmarks){
 	setupBookmarkTouchZones()
 	setupNavigator()
-	setCurrentPage(position)
-	loadBookmarks(bookmarks != null ? bookmarks : [])
+	if(position){
+		setCurrentPage(position)
+	}
+	if(bookmarks){
+		loadBookmarks(bookmarks != null ? bookmarks : [])
+	}
+	runMagazineTemplates()
 	// XXX do we need to cover this with a splash???
 	updateView()
 }
-
 
 // NOTE: we do not need to create any event handlers here specifically 
 // 		as all events are ahndled by the viewer...
