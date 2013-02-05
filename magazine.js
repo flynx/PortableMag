@@ -38,7 +38,7 @@ var UPDATE_HASH_URL_POSITION = false
 // of weather UPDATE_HASH_URL_POSITION state.
 // NOTE: UPDATE_HASH_URL_POSITION implicitly enables full browser history
 // 		based navigation.
-// NOTE: this can slow down navigation...
+// NOTE: this, if enabled, can slow down navigation...
 // NOTE: partial history navigation over links will still work.
 var FULL_HISTORY_ENABLED = false
 
@@ -723,6 +723,12 @@ function saveURLState(){
 	} else if(FULL_HISTORY_ENABLED){
 		// XXX add option to disable history altogether...
 		window.history.pushState(null, null, '#' + n)
+	} else {
+		// clear the url if it does not match the current page...
+		// XXX should this be here?
+		if(n != parseInt(anchor)){
+			window.location.hash = ''
+		}
 	}
 	return n
 }
