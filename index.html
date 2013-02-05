@@ -24,6 +24,7 @@ XXX scrollTo is a cool and a powerfull tool but it needs a sustantial code reorg
 <!--script src="editor.js"></script-->
 
 <!-- configuration, keep this last... -->
+<script src="platform.js"></script>
 <script src="keybindings.js"></script>
 <script src="config.js"></script>
 
@@ -703,6 +704,13 @@ $(document).ready(function(){
 							<td id="BrowserInfo">
 							</td>
 						</tr>
+						<tr>
+							<td>
+								User Agent: 
+							</td>
+							<td id="UserAgent">
+							</td>
+						</tr>
 					<table/>
 
 
@@ -760,6 +768,7 @@ $(document).ready(function(){
 						$('#FingersSupported').text($.fn.swipe.fingers.ALL)
 						var b = $('#BrowserInfo')
 						$.each($.browser, function(i, e){$('<div>'+i+': '+e+'</div>').appendTo(b)})
+						$('#UserAgent').text(navigator.userAgent)
 					}
 					function toggleSetting(obj){
 						obj = $(obj)
