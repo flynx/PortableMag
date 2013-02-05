@@ -30,8 +30,17 @@ var USE_REAL_PAGE_SIZES = false
 
 // if true this will make each page flip update the hash url...
 // if false, only direct linking will update the url.
-// XXX this if false, will break the layer hide/show toggle...
-var UPDATE_HASH_URL_POSITION = true
+// NOTE: this can slow down navigation...
+// XXX BUG this if false, will break the layer hide/show toggle...
+var UPDATE_HASH_URL_POSITION = false
+
+// if true this will enable history for local page navigation regardless
+// of weather UPDATE_HASH_URL_POSITION state.
+// NOTE: UPDATE_HASH_URL_POSITION implicitly enables full browser history
+// 		based navigation.
+// NOTE: this can slow down navigation...
+// NOTE: partial history navigation over links will still work.
+var FULL_HISTORY_ENABLED = false
 
 
 
@@ -680,6 +689,12 @@ function loadURLState(){
 				.addClass('hidden')
 				.removeClass('shown')
 		}
+		if(!UPDATE_HASH_URL_POSITION){
+			// push current position...
+			// NOTE: this will enable partial history navigation, but only 
+			// on actions envolving actual links...
+			window.history.pushState(null, null, '#' + getPageNumber())
+		}
 		return n
 	}
 }
@@ -705,6 +720,9 @@ function saveURLState(){
 	}
 	if(UPDATE_HASH_URL_POSITION){
 		window.location.hash = n
+	} else if(FULL_HISTORY_ENABLED){
+		// XXX add option to disable history altogether...
+		window.history.pushState(null, null, '#' + n)
 	}
 	return n
 }

@@ -670,6 +670,14 @@ $(document).ready(function(){
 						</tr>
 						<tr>
 							<td>
+								Full navigation gistory: 
+							</td>
+							<td>
+								<button id="FULL_HISTORY_ENABLED" onclick="toggleSetting(this)"></button>
+							</td>
+						</tr>
+						<tr>
+							<td>
 								Reset stored data:
 							</td>
 							<td>
@@ -738,6 +746,7 @@ $(document).ready(function(){
 						DRAG_FULL_PAGE = $('#DRAG_FULL_PAGE').text() == 'true' ? true : false
 						USE_REAL_PAGE_SIZES = $('#USE_REAL_PAGE_SIZES').text() == 'true' ? true : false
 						UPDATE_HASH_URL_POSITION = $('#UPDATE_HASH_URL_POSITION').text() == 'true' ? true : false
+						FULL_HISTORY_ENABLED = $('#FULL_HISTORY_ENABLED').text() == 'true' ? true : false
 					}
 					function loadSettings(){
 						$('#PAGES_IN_RIBBON').attr('value', PAGES_IN_RIBBON)
@@ -746,6 +755,7 @@ $(document).ready(function(){
 						$('#DRAG_FULL_PAGE').text(DRAG_FULL_PAGE)
 						$('#USE_REAL_PAGE_SIZES').text(USE_REAL_PAGE_SIZES)
 						$('#UPDATE_HASH_URL_POSITION').text(UPDATE_HASH_URL_POSITION)
+						$('#FULL_HISTORY_ENABLED').text(FULL_HISTORY_ENABLED)
 
 						$('#FingersSupported').text($.fn.swipe.fingers.ALL)
 						var b = $('#BrowserInfo')
