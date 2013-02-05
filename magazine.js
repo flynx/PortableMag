@@ -718,14 +718,17 @@ function saveURLState(){
 			return anchor
 		}
 	}
+
+	// set the #URL to current mapge number...
 	if(UPDATE_HASH_URL_POSITION){
 		window.location.hash = n
+
+	// push history state...
 	} else if(FULL_HISTORY_ENABLED){
-		// XXX add option to disable history altogether...
 		window.history.pushState(null, null, '#' + n)
+
+	// clear the url if it does not match the current page...
 	} else {
-		// clear the url if it does not match the current page...
-		// XXX should this be here?
 		if(n != parseInt(anchor)){
 			window.location.hash = ''
 		}
@@ -736,7 +739,8 @@ function saveURLState(){
 
 // local storage state managers...
 function loadStorageState(){
-	var title = $('.magazine').attr('title')
+	var title = ($('.magazine').attr('title') 
+					|| $('.magazine').attr('name'))
 	var data = $.jStorage.get(title, {})
 	// set the defaults...
 	if(data.current_page == null){
@@ -748,14 +752,16 @@ function loadStorageState(){
 	return data
 }
 function saveStorageState(){
-	var title = $('.magazine').attr('title')
+	var title = ($('.magazine').attr('title') 
+					|| $('.magazine').attr('name'))
 	$.jStorage.set(title, {
 			current_page: getPageNumber(),
 			bookmarks: buildBookmarkList()
 	})
 }
 function resetStorageState(){
-	var title = $('.magazine').attr('title')
+	var title = ($('.magazine').attr('title')
+					|| $('.magazine').attr('name'))
 	$.jStorage.deleteKey(title)
 }
 
