@@ -28,6 +28,11 @@ var DRAG_FULL_PAGE = true
 //var USE_REAL_PAGE_SIZES = true
 var USE_REAL_PAGE_SIZES = false
 
+// if true this will make each page flip update the hash url...
+// if false, only direct linking will update the url.
+// XXX this if false, will break the layer hide/show toggle...
+var UPDATE_HASH_URL_POSITION = true
+
 
 
 /*********************************************************** modes ***/
@@ -584,6 +589,14 @@ function prevBookmark(){
 // 			$('[title="<magazine>"] [name="<name>"]')
 // XXX BUG: if the hash url part coresponds to a real anchor the browser 
 // 		shifts the page, need to disable this...
+var RELATIVE_URLS = [
+	'back', 'forward',
+	'next', 'prev',
+	'nextArticle', 'prevArticle',
+	'nextBookmark', 'prevBookmark',
+	'bookmark',
+	'hideLayers'
+]
 // URL state managers...
 function loadURLState(){
 	if(window.location.hash == ''){
@@ -593,9 +606,15 @@ function loadURLState(){
 	var n = parseInt(anchor)
 	if(typeof(n) == typeof(1) && n >= 0){
 		return n
+	}
+
+	// for relative #URLs remove them from hash...
+	if(RELATIVE_URLS.indexOf(anchor) >= 0 && !UPDATE_HASH_URL_POSITION){
+		window.location.hash = ''
+	}
 
 	// XXX add real external aliases...
-	} else if(anchor == 'thumbnails') {
+	if(anchor == 'thumbnails') {
 		togglePageView('off')
 		return getPageNumber()
 
@@ -684,7 +703,9 @@ function saveURLState(){
 			return anchor
 		}
 	}
-	window.location.hash = n
+	if(UPDATE_HASH_URL_POSITION){
+		window.location.hash = n
+	}
 	return n
 }
 

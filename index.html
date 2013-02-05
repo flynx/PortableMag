@@ -7,11 +7,18 @@
 <link rel="stylesheet" href="magazine.css">
 <link rel="stylesheet" href="magazine-custom.css">
 
-<script src="jquery.js"></script>
-<script src="jquery.touchSwipe.js"></script>
-<script src="jstorage.js"></script>
+<script src="ext-lib/jquery.js"></script>
+<script src="ext-lib/jquery.touchSwipe.js"></script>
+<script src="ext-lib/jstorage.js"></script>
+<!-- EXPERIMENTAL -->
+<!-- 
+XXX scrollTo is a cool and a powerfull tool but it needs a sustantial code reorganization 
+	this might be a good idea/exersize sometime in the future...
+-->
+<!--script src="ext-lib/jquery.scrollto.js"></script-->
 
-<script src="jli.js"></script>
+<script src="lib/jli.js"></script>
+
 <script src="magazine.js"></script>
 <script src="navigator.js"></script>
 <!--script src="editor.js"></script-->
@@ -655,6 +662,14 @@ $(document).ready(function(){
 						</tr>
 						<tr>
 							<td>
+								Enable #URL updating on page flip: 
+							</td>
+							<td>
+								<button id="UPDATE_HASH_URL_POSITION" onclick="toggleSetting(this)"></button>
+							</td>
+						</tr>
+						<tr>
+							<td>
 								Reset stored data:
 							</td>
 							<td>
@@ -722,6 +737,7 @@ $(document).ready(function(){
 						ANIMATE_WINDOW_RESIZE = $('#ANIMATE_WINDOW_RESIZE').text() == 'true' ? true : false
 						DRAG_FULL_PAGE = $('#DRAG_FULL_PAGE').text() == 'true' ? true : false
 						USE_REAL_PAGE_SIZES = $('#USE_REAL_PAGE_SIZES').text() == 'true' ? true : false
+						UPDATE_HASH_URL_POSITION = $('#UPDATE_HASH_URL_POSITION').text() == 'true' ? true : false
 					}
 					function loadSettings(){
 						$('#PAGES_IN_RIBBON').attr('value', PAGES_IN_RIBBON)
@@ -729,6 +745,7 @@ $(document).ready(function(){
 						$('#ANIMATE_WINDOW_RESIZE').text(ANIMATE_WINDOW_RESIZE)
 						$('#DRAG_FULL_PAGE').text(DRAG_FULL_PAGE)
 						$('#USE_REAL_PAGE_SIZES').text(USE_REAL_PAGE_SIZES)
+						$('#UPDATE_HASH_URL_POSITION').text(UPDATE_HASH_URL_POSITION)
 
 						$('#FingersSupported').text($.fn.swipe.fingers.ALL)
 						var b = $('#BrowserInfo')
