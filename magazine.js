@@ -692,7 +692,7 @@ function loadURLState(){
 		if(!UPDATE_HASH_URL_POSITION){
 			// push current position...
 			// NOTE: this will enable partial history navigation, but only 
-			// on actions envolving actual links...
+			// 		on actions envolving actual links...
 			window.history.pushState(null, null, '#' + getPageNumber())
 		}
 		return n
@@ -729,7 +729,11 @@ function saveURLState(){
 
 	// clear the url if it does not match the current page...
 	} else {
-		if(n != parseInt(anchor)){
+		if(n != parseInt(anchor) 
+				// do not remove linked pages...
+				// XXX this does not work when navigating from a different page...
+				|| (elem.hasClass('page') && n != getPageNumber(elem))
+				|| n != getPageNumber(elem).parents('.page')){
 			window.location.hash = ''
 		}
 	}
