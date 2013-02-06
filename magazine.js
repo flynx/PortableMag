@@ -415,6 +415,7 @@ function fitNPages(n, fit_to_content){
 	if(!USE_REAL_PAGE_SIZES && fit_to_content){
 		var offset = rW * getPageNumber()-1
 	} else {
+		console.log('slow...')
 		// calculate the target offset...
 		if(USE_REAL_PAGE_SIZES){
 			var rpages = $('.page:not(.no-resize), .current.page')
