@@ -104,7 +104,7 @@ function updateNavigator(n){
 function makeArticleIndicator(i, article, width){
 	var bar = $('.navigator .bar')
 	var article = $(article)
-	var n = getPageNumber(article.children('.cover').first())
+	var n = getPageNumber(article.find('.cover').first())
 	$('<div/>')
 		.prependTo($('.navigator .bar'))
 		.addClass('article')
