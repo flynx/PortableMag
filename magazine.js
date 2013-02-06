@@ -14,6 +14,16 @@ var PAGES_IN_RIBBON = 4.0
 // if true, expand a page to fit the whole view in single page mode...
 var FIT_PAGE_TO_VIEW = true
 
+// default page alignment in full view...
+// supported values:
+// 	- 'center'
+// 	- 'left'
+// 	- 'right'
+// NOTE: page local align values take priority over this.
+// NOTE: this has no effect on thumbnail view.
+// NOTE: this has no effect if FIT_PAGE_TO_VIEW is true.
+var FULL_PAGE_ALIGN = 'center'
+
 // if true will make page resizes after window resize animated...
 var ANIMATE_WINDOW_RESIZE = true
 
@@ -86,6 +96,17 @@ function updateView(){
 
 
 /********************************************************* helpers ***/
+
+function getPageAlign(page){
+	if(page == null){
+		page = $('.current.page')
+	}
+	return (page.hasClass('page-align-center') ? 'center' 
+					: page.hasClass('page-align-left') ? 'left' 
+					: page.hasClass('page-align-right') ? 'right' 
+					: FULL_PAGE_ALIGN)
+}
+
 
 function getPageScale(){
 	return getElementScale($('.scaler'))
@@ -326,6 +347,7 @@ function fitNPages(n, fit_to_content){
 	// 		the animation are not correct... so just looking at .position()
 	// 		will be counterproductive...
 	// XXX still there is some error (rounding, page zoom?)...
+	// calculate offset...
 	if(!USE_REAL_PAGE_SIZES && fit_to_content){
 		var offset = rW * getPageNumber()-1
 	} else {
@@ -350,7 +372,21 @@ function fitNPages(n, fit_to_content){
 
 	if(USE_REAL_PAGE_SIZES){
 		if(cur.hasClass('no-resize')){
-			rW = cur.children('.content').width()
+			var align = getPageAlign(cur)
+
+			// center align if explicitly required or if we are in a ribbon...
+			if(n > 1 || align == 'center'){
+				rW = cur.children('.content').width()
+
+			// align left...
+			} else if(align == 'left'){
+				rW = $('.viewer').width()/scale
+
+			// align right...
+			} else if(align == 'right'){
+				var v = $('.viewer')
+				rW = (v.width()/scale/2 - (v.width()/scale-cur.width()))*2 
+			}
 		}
 	}
 
@@ -412,11 +448,26 @@ function setCurrentPage(n, offset, width){
 	} else {
 		var cur = $(n)
 		n = $('.page').index(cur) 
+		//n = page.index(cur) 
 	}
 
 	// default width...
 	if(width == null){
 		width = cur.width()
+		if(USE_REAL_PAGE_SIZES && togglePageView('?') == 'on'){
+			var align = getPageAlign(cur)
+			var scale = getPageScale()
+			if(align == 'center'){
+				width = cur.width()
+
+			} else if(align == 'left'){
+				width = $('.viewer').width()/scale
+
+			} else if(align == 'right'){
+				var v = $('.viewer')
+				width = (v.width()/scale/2 - (v.width()/scale-cur.width()))*2 
+			}
+		}
 	}
 
 	$('.current.page').removeClass('current')
@@ -634,6 +685,7 @@ function prevBookmark(){
 // URL state managers...
 // NOTE: loadURLState will have no side-effects on the URL, it will just 
 // 		get the state from the URL and return it.
+// NOTE: this will also do the apropriate action depending on #URL...
 function loadURLState(){
 	if(window.location.hash == ''){
 		return null

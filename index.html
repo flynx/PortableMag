@@ -512,28 +512,28 @@ $(document).ready(function(){
 					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
-			<div class="page no-resize">
+			<div class="page no-resize page-align-left">
 				<div class="content" style="background:gold">
 					Page
 
 					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
-			<div class="page no-resize">
+			<div class="page no-resize page-align-center">
 				<div class="content" style="background:yellow; width: 600px">
 					Page
 
 					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
-			<div class="page no-resize">
+			<div class="page no-resize page-align-right">
 				<div class="content" style="background:gold; width: 400px">
 					Page
 
 					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
-			<div class="page no-resize">
+			<div class="page no-resize page-align-right">
 				<div class="content" style="background:orange; width: 200px">
 					Page
 
@@ -631,6 +631,14 @@ $(document).ready(function(){
 						</tr>
 						<tr>
 							<td>
+								Enable different size pages (still flaky): 
+							</td>
+							<td>
+								<button id="USE_REAL_PAGE_SIZES" onclick="toggleSetting(this)"></button>
+							</td>
+						</tr>
+						<tr>
+							<td>
 								Animate window resize: 
 							</td>
 							<td>
@@ -651,14 +659,6 @@ $(document).ready(function(){
 							</td>
 							<td>
 								<button id="viewer_transition_state" onclick="toggleViewerAnimation()"></button>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Enable different size pages (still flaky): 
-							</td>
-							<td>
-								<button id="USE_REAL_PAGE_SIZES" onclick="toggleSetting(this)"></button>
 							</td>
 						</tr>
 						<tr>
