@@ -31,7 +31,6 @@ var USE_REAL_PAGE_SIZES = false
 // if true this will make each page flip update the hash url...
 // if false, only direct linking will update the url.
 // NOTE: this can slow down navigation...
-// XXX BUG this if false, will break the layer hide/show toggle...
 var UPDATE_HASH_URL_POSITION = false
 
 // if true this will enable history for local page navigation regardless
@@ -116,10 +115,33 @@ function getPageAt(n){
 /************************************************** event handlers ***/
 
 // #URL handler...
+var RELATIVE_URLS = [
+	'back', 'forward',
+	'next', 'prev',
+	'nextArticle', 'prevArticle',
+	'nextBookmark', 'prevBookmark',
+	'bookmark',
+	'hideLayers'
+]
 // NOTE: most of the handling actually happens in loadURLState...
 function hashChangeHandler(e){
 	e.preventDefault()
+
+	var anchor = window.location.hash.split('#')[1]
+
+	// skip empty #URL...
+	if(anchor == ''){
+		return false
+	}
+
 	var r = loadURLState()
+	var n = getPageNumber()
+
+	// for relative #URLs remove them from hash...
+	if(RELATIVE_URLS.indexOf(anchor) >= 0 && !UPDATE_HASH_URL_POSITION){
+		window.location.hash = ''
+	}
+
 	// if we are dealing with history actions the browser will 
 	// do the work for us...
 	if(r == 'back'){
@@ -127,7 +149,18 @@ function hashChangeHandler(e){
 		window.history.go(-2)
 	} else if(r == 'forward'){
 		window.history.go(2)
-	} else {
+	} else if(r != n){
+
+		/* XXX this will put this into an endless loop...
+		 * 		...mainly because it changes the #URL from within the handler
+		if(!UPDATE_HASH_URL_POSITION){
+			// push current position...
+			// NOTE: this will enable partial history navigation, but only 
+			// 		on actions envolving actual links...
+			window.history.pushState(null, null, '#' + getPageNumber())
+		}
+		*/
+
 		setCurrentPage(r)
 	}
 }
@@ -598,15 +631,9 @@ function prevBookmark(){
 // 			$('[title="<magazine>"] [name="<name>"]')
 // XXX BUG: if the hash url part coresponds to a real anchor the browser 
 // 		shifts the page, need to disable this...
-var RELATIVE_URLS = [
-	'back', 'forward',
-	'next', 'prev',
-	'nextArticle', 'prevArticle',
-	'nextBookmark', 'prevBookmark',
-	'bookmark',
-	'hideLayers'
-]
 // URL state managers...
+// NOTE: loadURLState will have no side-effects on the URL, it will just 
+// 		get the state from the URL and return it.
 function loadURLState(){
 	if(window.location.hash == ''){
 		return null
@@ -615,11 +642,6 @@ function loadURLState(){
 	var n = parseInt(anchor)
 	if(typeof(n) == typeof(1) && n >= 0){
 		return n
-	}
-
-	// for relative #URLs remove them from hash...
-	if(RELATIVE_URLS.indexOf(anchor) >= 0 && !UPDATE_HASH_URL_POSITION){
-		window.location.hash = ''
 	}
 
 	// XXX add real external aliases...
@@ -689,15 +711,10 @@ function loadURLState(){
 				.addClass('hidden')
 				.removeClass('shown')
 		}
-		if(!UPDATE_HASH_URL_POSITION){
-			// push current position...
-			// NOTE: this will enable partial history navigation, but only 
-			// 		on actions envolving actual links...
-			window.history.pushState(null, null, '#' + getPageNumber())
-		}
 		return n
 	}
 }
+// save current state to URL...
 function saveURLState(){
 	var anchor = window.location.hash.split('#')[1]
 	var elem = $('[name='+anchor+']')
