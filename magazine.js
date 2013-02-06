@@ -733,7 +733,7 @@ function saveURLState(){
 		if(n != parseInt(anchor) 
 				// do not remove linked pages...
 				|| (elem.hasClass('page') && n != getPageNumber(elem))
-				|| n != getPageNumber(elem).parents('.page')){
+				|| n != getPageNumber($(elem).parents('.page'))){
 			window.location.hash = ''
 		}
 	}
