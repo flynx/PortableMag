@@ -1212,8 +1212,7 @@ var MagazineTemplates = {
 
 	// setup titles...
 	'.magazine-title-text': function(elem){
-		elem.text($('.magazine').attr('title') 
-					|| $('.magazine').attr('name') 
+		elem.text(getMagazineTitle()
 					|| 'PortableMag')
 	},
 
@@ -1247,8 +1246,7 @@ var MagazineTemplates = {
 				.append($('<a/>')
 					.attr('href', '#' + getPageNumber($('.magazine > .cover').first()))
 					// XXX is this the right way to go?
-					.text(mag.attr('title') 
-						|| mag.attr('name')
+					.text(getMagazineTitle()
 						|| 'Magazine')))
 		root.append(list)
 		elem
