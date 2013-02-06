@@ -114,10 +114,13 @@ function isPageResizable(page){
 	}
 
 	var mag = $('.magazine')
+	var set = page.parents('.page-set').first()
 	var article = page.parents('.article').first()
 
 	// first check the page...
 	return (page.hasClass('no-resize') ? false 
+			// then the page-set...
+			: set.hasClass('no-resize') ? false
 			// then the article...
 			: article.hasClass('no-resize') ? false
 			// then the magazine...
@@ -140,12 +143,17 @@ function getPageAlign(page){
 	}
 
 	var mag = $('.magazine')
+	var set = page.parents('.page-set').first()
 	var article = page.parents('.article').first()
 
 	// first check the page...
 	return (page.hasClass('page-align-center') ? 'center' 
 			: page.hasClass('page-align-left') ? 'left' 
 			: page.hasClass('page-align-right') ? 'right' 
+			// then the page-set...
+			: set.hasClass('page-align-center') ? 'center' 
+			: set.hasClass('page-align-left') ? 'left' 
+			: set.hasClass('page-align-right') ? 'right' 
 			// then the article...
 			: article.hasClass('page-align-center') ? 'center' 
 			: article.hasClass('page-align-left') ? 'left' 
