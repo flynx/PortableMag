@@ -97,14 +97,35 @@ function updateView(){
 
 /********************************************************* helpers ***/
 
+// this will get the current active alignment...
+// NOTE: align can be set for:
+// 		- page
+// 		- article
+// 		- magazine
+// 		- app (via. FULL_PAGE_ALIGN)
+// NOTE: the more local setting takes priority over the more general.
 function getPageAlign(page){
 	if(page == null){
 		page = $('.current.page')
 	}
+
+	var mag = $('.magazine')
+	var article = page.parents('.article').first()
+
+	// first check the page...
 	return (page.hasClass('page-align-center') ? 'center' 
-					: page.hasClass('page-align-left') ? 'left' 
-					: page.hasClass('page-align-right') ? 'right' 
-					: FULL_PAGE_ALIGN)
+			: page.hasClass('page-align-left') ? 'left' 
+			: page.hasClass('page-align-right') ? 'right' 
+			// then the article...
+			: article.hasClass('page-align-center') ? 'center' 
+			: article.hasClass('page-align-left') ? 'left' 
+			: article.hasClass('page-align-right') ? 'right' 
+			// then the magazine...
+			: mag.hasClass('page-align-center') ? 'center' 
+			: mag.hasClass('page-align-left') ? 'left' 
+			: mag.hasClass('page-align-right') ? 'right' 
+			// now for the app default...
+			: FULL_PAGE_ALIGN)
 }
 
 
