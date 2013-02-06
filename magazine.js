@@ -1138,6 +1138,7 @@ function buildJSON(export_bookmarks, export_position){
 	return res
 }
 
+// XXX this does not load page attrs correctly...
 function loadJSON(data, load_user_data){
 	function _build(block, elem){
 
@@ -1185,6 +1186,8 @@ function loadJSON(data, load_user_data){
 		}
 
 		// metadata...
+		// XXX still might be a bit buggy -- might not be loading some 
+		// 		data correctly...
 		writeMetadata(elem, res)
 	}
 
