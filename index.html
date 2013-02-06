@@ -649,6 +649,16 @@ $(document).ready(function(){
 						</tr>
 						<tr>
 							<td>
+								Transition duration: 
+							</td>
+							<td>
+								<input id="transition_duration" type="text" size="8" style="text-align:center" disabled>
+								<button onclick="$('#transition_duration').attr('value', parseInt($('#transition_duration').attr('value'))*2); saveSettings()">+</button>
+								<button onclick="$('#transition_duration').attr('value', parseInt($('#transition_duration').attr('value'))/2); saveSettings()">-</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
 								Fit page to view: 
 							</td>
 							<td>
@@ -715,7 +725,7 @@ $(document).ready(function(){
 
 					<hr noshade color="silver">
 
-					<table class="settings" width="100%">
+					<table class="settings" width="100%" style="font-size:small">
 						<tr>
 							<td width="50%">
 								Fingers supported: 
@@ -745,6 +755,9 @@ $(document).ready(function(){
 					</div>
 
 					<script>
+
+					var TRANSITION_DURATION = 100
+
 					var toggleViewerAnimation = function(){
 						var toggler = createCSSClassToggler(
 							// XXX this will turn off magazine animations...
@@ -775,6 +788,16 @@ $(document).ready(function(){
 						// we need to reset the visible value in case it was wrong...
 						$('#PAGES_IN_RIBBON').attr('value', PAGES_IN_RIBBON)
 
+						// transition duration...
+						var t = parseInt($('#transition_duration').attr('value'))
+						t = t == null ? TRANSITION_DURATION : t
+						t = t < 25 ? 25 : t
+						console.log(t)
+						TRANSITION_DURATION = t
+						setTransitionDuration($('.scaler'), t)
+						setTransitionDuration($('.magazine'), t)
+
+
 						FIT_PAGE_TO_VIEW = $('#FIT_PAGE_TO_VIEW').text() == 'true' ? true : false
 						ANIMATE_WINDOW_RESIZE = $('#ANIMATE_WINDOW_RESIZE').text() == 'true' ? true : false
 						DRAG_FULL_PAGE = $('#DRAG_FULL_PAGE').text() == 'true' ? true : false
@@ -783,6 +806,7 @@ $(document).ready(function(){
 						FULL_HISTORY_ENABLED = $('#FULL_HISTORY_ENABLED').text() == 'true' ? true : false
 					}
 					function loadSettings(){
+						$('#transition_duration').attr('value', TRANSITION_DURATION)
 						$('#PAGES_IN_RIBBON').attr('value', PAGES_IN_RIBBON)
 						$('#FIT_PAGE_TO_VIEW').text(FIT_PAGE_TO_VIEW)
 						$('#ANIMATE_WINDOW_RESIZE').text(ANIMATE_WINDOW_RESIZE)
