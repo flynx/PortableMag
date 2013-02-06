@@ -1,11 +1,16 @@
-[_] 37% Priority work
+[_] 36% Priority work
 	[_] 0% TouchSwipe issues...
 		[_] BUG: swipe-back does not cancel a swipe... (TouchSwipe)
 		| ...unless the finger is return to within the threshold of the 
 		| touchdown point.
 		[_] BUG: no drag threshold on excludedElements (TouchSwipe)
 		| stalled...
-	[_] 67% general todo
+	[_] 62% general todo
+		[X] 100% add page sets..
+			[X] general page navigation
+			[X] serialization
+			[X] PROBLEM: cover is not found within the page-set
+			[X] PROBLEM: next/prev article navigation is broken
 		[_] move some of the current configuration options to the magazine...
 		| same idea as .no-resize class...
 		[_] add transition-duration editors to config page (a-la PAGES_IN_RIBBON)...

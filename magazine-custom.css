@@ -8,11 +8,11 @@
 	background: gray;
 }
 
-.magazine > .cover {
+.magazine .cover {
 	background: white;
 }
 
-.article > .cover {
+.article .cover {
 	background: white;
 }
 

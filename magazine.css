@@ -32,8 +32,6 @@ body {
 
 	width: auto;
 	height: auto;
-	/* XXX change to relative units... */
-	margin-top: -300px;
 
 	/* XXX change to relative units... */
 	font-size: 12px;
@@ -182,6 +180,7 @@ body {
 	min-width: 200px;
 	/* can we avoid setting the sizes in so many places? */
 	height: 600px;
+	margin-top: -300px;
 
 	/* this is minus half the page width */
 	/* XXX change to relative units... */
@@ -211,8 +210,7 @@ body {
 	display: inline-block;
 	text-align: center;
 
-	/*top: -50%;*/
-	top: -25%;
+	top: 25%;
 
 	height: 300px;
 	width: 600px;
@@ -243,6 +241,7 @@ body {
 
 
 /* magazine article, this can contain a cover and a number of pages */
+.page-set,
 .article {
 	display: inline-block;
 	width: auto;
@@ -255,7 +254,7 @@ body {
 	color: silver;
 }
 
-.article > .cover {
+.article .cover {
 }
 
 

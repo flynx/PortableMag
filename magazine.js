@@ -12,7 +12,20 @@
 var PAGES_IN_RIBBON = 4.0
 
 // if true, expand a page to fit the whole view in single page mode...
+// NOTE: if .no-resize is set on a page then this will not have effect
+// 		on the that page...
 var FIT_PAGE_TO_VIEW = true
+
+// if false, this will force all pages to be fit to screen size in full 
+// page view...
+// XXX make this default and remove the option...
+// XXX will produce a bad transition on togglePageView to TN and back 
+// 		after no-resize sized pages...
+// 		...the most probable reason is that we waste too much time between 
+// 		setting different values to elements...
+// 		need to keep wrights as tight as possible...
+var USE_REAL_PAGE_SIZES = true
+//var USE_REAL_PAGE_SIZES = false
 
 // default page alignment in full view...
 // supported values:
@@ -21,7 +34,10 @@ var FIT_PAGE_TO_VIEW = true
 // 	- 'right'
 // NOTE: page local align values take priority over this.
 // NOTE: this has no effect on thumbnail view.
-// NOTE: this has no effect if FIT_PAGE_TO_VIEW is true.
+// NOTE: this has no effect if FIT_PAGE_TO_VIEW is true and a page has 
+// 		no-resize class set.
+// 		also, USE_REAL_PAGE_SIZES if set to false will make this have 
+// 		no effect.
 var FULL_PAGE_ALIGN = 'center'
 
 // if true will make page resizes after window resize animated...
@@ -29,14 +45,6 @@ var ANIMATE_WINDOW_RESIZE = true
 
 // if false will disable page dragging in single page mode...
 var DRAG_FULL_PAGE = true
-
-// XXX make this default and remove the option...
-// XXX will produce a bad transition on togglePageView to TN and back after no-resize sized pages...
-// 		...the most probable reason is that we waste too much time between 
-// 		setting different values to elements...
-// 		need to keep wrights as tight as possible...
-var USE_REAL_PAGE_SIZES = true
-//var USE_REAL_PAGE_SIZES = false
 
 // if true this will make each page flip update the hash url...
 // if false, only direct linking will update the url.
@@ -96,6 +104,28 @@ function updateView(){
 
 
 /********************************************************* helpers ***/
+
+function isPageResizable(page){
+	if(page == null){
+		page = $('.current.page')
+	}
+	if(!USE_REAL_PAGE_SIZES){
+		return false
+	}
+
+	var mag = $('.magazine')
+	var article = page.parents('.article').first()
+
+	// first check the page...
+	return (page.hasClass('no-resize') ? false 
+			// then the article...
+			: article.hasClass('no-resize') ? false
+			// then the magazine...
+			: mag.hasClass('no-resize') ? false 
+			// now for default...
+			: true)
+}
+
 
 // this will get the current active alignment...
 // NOTE: align can be set for:
@@ -241,6 +271,7 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 	var mag = $('.magazine')
 	var pos = $('.navigator .bar .indicator')
 
+	// XXX make this drag pages that are larger than view before dragging outside...
 	if(phase=='move' 
 			// see if wee need to drag the page and allways drag the ribbon...
 			&& (DRAG_FULL_PAGE || !_PAGE_VIEW)
@@ -527,10 +558,10 @@ function goToMagazineEnd(){
 }
 function goToArticleCover(){
 	// try and get the actual first cover...
-	var cover = $('.current.page').parents('.article').children('.cover.page').first()
-	if(cever.length == 0){
+	var cover = $('.current.page').parents('.article').find('.cover.page').first()
+	if(cover.length == 0){
 		// no cover, get the first page...
-		return setCurrentPage($('.current.page').parents('.article').children('.page').first())
+		return setCurrentPage($('.current.page').parents('.article').find('.page').first())
 	} else {
 		return setCurrentPage(cover)
 	}
@@ -560,7 +591,7 @@ function nextArticle(){
 	var articles = $('.magazine .article')
 	return setCurrentPage(
 		$(articles[Math.min(articles.index(cur)+1, articles.length-1)])
-			.children('.page')
+			.find('.page')
 			.first())
 }
 function prevArticle(){
@@ -574,7 +605,7 @@ function prevArticle(){
 	var articles = $('.magazine .article')
 	return setCurrentPage(
 		$(articles[Math.max(articles.index(cur)-1, 0)])
-			.children('.page')
+			.find('.page')
 			.first())
 }
 
@@ -998,8 +1029,10 @@ var JSON_FORMAT_VERSION = 0.1
 // 	- explicit reader/writer, this will convert the data from html to JSON
 // 		data and back...
 JSONMetadata = {
+	id: 'as-is',
 	name: 'as-is',
 	title: 'as-is',
+	style: 'as-is',
 	authors: {
 		reader: function(data){
 			// NOTE: this might look odd, but we are using JS .map instead 
@@ -1060,12 +1093,20 @@ function buildJSON(export_bookmarks, export_position){
 				content: elem.children('.content')[0].outerHTML
 			}
 
+		// page-set...
+		} else if(elem.hasClass('page-set')){
+			var res = {
+				type: 'page-set',
+				'class': elem.attr('class'),
+				pages: elem.children('.page').map(_getContent).toArray()
+			}
+
 		// article...
 		} else if(elem.hasClass('article')){
 			var res = {
 				type: 'article',
 				'class': elem.attr('class'),
-				pages: elem.children('.page').map(_getContent).toArray()
+				pages: elem.children('.page, .page-set').map(_getContent).toArray()
 			}
 
 		// other...
@@ -1111,6 +1152,17 @@ function loadJSON(data, load_user_data){
 			var res = createCoverPage(elem.content)
 				.addClass(elem['class'])
 				.appendTo(block)
+
+		// page-set...
+		} else if(elem.type == 'page-set') {
+			// buiold an article...
+			var res = createEmptyPageSet()
+				.addClass(elem['class'])
+				.appendTo(block)
+			// populate article with pages...
+			$(elem.pages).each(function(_, e){
+				_build(res, e)
+			})
 
 		// article...
 		} else if(elem.type == 'article') {
@@ -1186,6 +1238,12 @@ function createMagazine(title, magazine_cover, article_cover){
 		.append(createArticle(article_cover))
 }
 
+
+// XXX do we need other page-set functions???
+function createEmptyPageSet(){
+	return $('<div/>')
+		.addClass('page-set')
+}
 
 function createEmptyArticle(){
 	return $('<div/>')
