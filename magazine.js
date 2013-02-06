@@ -1032,6 +1032,8 @@ JSONMetadata = {
 	id: 'as-is',
 	name: 'as-is',
 	title: 'as-is',
+	// NOTE: do not use background:none as jQuery refuses to set it on 
+	// 		detached elements.
 	style: 'as-is',
 	authors: {
 		reader: function(data){
@@ -1140,55 +1142,56 @@ function buildJSON(export_bookmarks, export_position){
 
 // XXX this does not load page attrs correctly...
 function loadJSON(data, load_user_data){
-	function _build(block, elem){
+	function _build(parent, data){
 
 		// page...
-		if(elem.type == 'page'){
-			var res = createPage(elem.content)
-				.addClass(elem['class'])
-				.appendTo(block)
+		if(data.type == 'page'){
+			var res = createPage(data.content)
+				.addClass(data['class'])
+				.appendTo(parent)
 
 		// cover...
-		} else if(elem.type == 'cover'){
-			var res = createCoverPage(elem.content)
-				.addClass(elem['class'])
-				.appendTo(block)
+		} else if(data.type == 'cover'){
+			var res = createCoverPage(data.content)
+				.addClass(data['class'])
+				.appendTo(parent)
 
 		// page-set...
-		} else if(elem.type == 'page-set') {
+		} else if(data.type == 'page-set') {
 			// buiold an article...
 			var res = createEmptyPageSet()
-				.addClass(elem['class'])
-				.appendTo(block)
+				.addClass(data['class'])
+				.appendTo(parent)
 			// populate article with pages...
-			$(elem.pages).each(function(_, e){
+			$(data.pages).each(function(_, e){
 				_build(res, e)
 			})
 
 		// article...
-		} else if(elem.type == 'article') {
+		} else if(data.type == 'article') {
 			// buiold an article...
 			var res = createEmptyArticle()
-				.addClass(elem['class'])
-				.appendTo(block)
+				.addClass(data['class'])
+				.appendTo(parent)
 			// populate article with pages...
-			$(elem.pages).each(function(_, e){
+			$(data.pages).each(function(_, e){
 				_build(res, e)
 			})
 
 		// other...
 		// NOTE: on a wll-formed JSON we'll never go in here, but just 
 		// 		in case...
-		} else if(elem.type == 'raw-html') {
-			var res = createPage(elem.content)
-				.addClass(elem['class'])
-				.appendTo(block)
+		} else if(data.type == 'raw-html') {
+			var res = createPage(data.content)
+				.addClass(data['class'])
+				.appendTo(parent)
 		}
 
 		// metadata...
-		// XXX still might be a bit buggy -- might not be loading some 
-		// 		data correctly...
-		writeMetadata(elem, res)
+		// XXX for some reason this does not set the style attr on pages in page-set...
+		writeMetadata(res, data)
+
+		return res
 	}
 
 	// check version...
