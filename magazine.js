@@ -35,6 +35,9 @@ var DRAG_FULL_PAGE = true
 // 		we get to the right from the no-resize element...
 // 		...think the reason is .no-resize page centering...
 // XXX still buggy on togglePageView to TN after funny sized pages...
+// 		...the most probable reason is that we waste too much time between 
+// 		setting different values to elements...
+// 		need to keep wrights as tight as possible...
 //var USE_REAL_PAGE_SIZES = true
 var USE_REAL_PAGE_SIZES = false
 
@@ -105,6 +108,13 @@ function getPageAlign(page){
 					: page.hasClass('page-align-left') ? 'left' 
 					: page.hasClass('page-align-right') ? 'right' 
 					: FULL_PAGE_ALIGN)
+}
+
+// XXX need a way to get the title without a magazine loaded...
+// 		...something like a current magazine option...
+function getMagazineTitle(){
+	return ($('.magazine').attr('title') 
+				|| $('.magazine').attr('name'))
 }
 
 
@@ -811,9 +821,10 @@ function saveURLState(){
 
 
 // local storage state managers...
-function loadStorageState(){
-	var title = ($('.magazine').attr('title') 
-					|| $('.magazine').attr('name'))
+function loadStorageState(title){
+	if(title == null){
+		title = getMagazineTitle()
+	}
 	var data = $.jStorage.get(title, {})
 	// set the defaults...
 	if(data.current_page == null){
@@ -824,31 +835,82 @@ function loadStorageState(){
 	}
 	return data
 }
-function saveStorageState(){
-	var title = ($('.magazine').attr('title') 
-					|| $('.magazine').attr('name'))
-	$.jStorage.set(title, {
+function saveStorageState(title){
+	if(title == null){
+		title = getMagazineTitle()
+	}
+	var data = $.jStorage.get(title, {})
+	$.extend(data, {
 			current_page: getPageNumber(),
 			bookmarks: buildBookmarkList()
 	})
+	$.jStorage.set(title, data)
+	return data
 }
-function resetStorageState(){
-	var title = ($('.magazine').attr('title')
-					|| $('.magazine').attr('name'))
+function resetStorageState(title){
+	if(title == null){
+		title = getMagazineTitle()
+	}
 	$.jStorage.deleteKey(title)
 }
+
+
+// JSON state on local storage...
+// NOTE: these will only load the data, bookmarks and position are 
+// 		ignored...
+function saveJSONStorage(title){
+	if(title == null){
+		title = getMagazineTitle()
+	}
+	var data = $.jStorage.get(title, {})
+	$.extend(data, {
+		// XXX do we need to stringify this??
+		'magazine-data': buildJSON()
+	})
+	$.jStorage.set(title, data)
+	return data
+}
+// load JSON magazine data from storage...
+// XXX we're losing the bookmarks at some point...
+function loadJSONStorage(title){
+	if(title == null){
+		title = getMagazineTitle()
+	}
+	var data = $.jStorage.get(title, {})
+	// NOTE: we are caching the data here because the actual structure 
+	// 		is persistent and may get overwritten by loadJSON(...)
+	var bookmarks = data.bookmarks
+	var current_page = data.current_page
+	var json = data['magazine-data']
+	if(json != null){
+		loadJSON(json)
+		loadMagazineUserData(current_page, bookmarks)
+	}
+}
+// remove JSON magazine data from storage...
+// NOTE: this will resave curent values but will remove the JSON data...
+function clearJSONStorage(title){
+	if(title == null){
+		title = getMagazineTitle()
+	}
+	var data = $.jStorage.get(title, {})
+	var json = data['magazine-data']
+	if(json != null){
+		delete data['magazine-data']
+		$.jStorage.set(title, data)
+	}
+}
+
 
 
 // generic state managers...
 function loadState(){
 	var n = loadURLState()
 	var state = loadStorageState() 
-	if(n != null){
-		setCurrentPage(n)
-	} else {
-		setCurrentPage(state.current_page)
+	if(n == null){
+		n = state.current_page
 	}
-	loadBookmarks(state.bookmarks)
+	loadMagazineUserData(n, state.bookmarks)	
 }
 function saveState(){
 	saveURLState()
@@ -961,11 +1023,11 @@ function writeMetadata(elem, res, metadata){
 		metadata = JSONMetadata
 	}
 	for(var a in metadata){
-		if(elem[a]){
+		if(res[a] != null){
 			if(metadata[a] == 'as-is'){
-				res.attr(a, elem[a])
+				elem.attr(a, res[a])
 			} else {
-				res.attr(a, metadata[e].writer(elem[a]))
+				elem.attr(a, metadata[e].writer(res[a]))
 			}
 		}
 	}
@@ -1070,6 +1132,7 @@ function loadJSON(data, load_user_data){
 
 	// create an empty magazine...
 	var mag = createEmptyMagazine(data.title)
+	// XXX for some reason this does not restore name/title...
 	writeMetadata(mag, data)
 	// build the actual strcture...
 	$(data.pages).each(function(_, e){
