@@ -434,6 +434,7 @@ function fitNPages(n, fit_to_content){
 		}
 	}
 
+	// align the magazine...
 	if(USE_REAL_PAGE_SIZES){
 		if(cur.hasClass('no-resize')){
 			var align = getPageAlign(cur)
@@ -663,7 +664,7 @@ function clearBookmarks(){
 }
 
 
-// NOTE: this will trigger events on the viewer:
+// NOTE: this will trigger the folowing events on the viewer:
 // 		- bookmarkAdded(n)
 // 		- bookmarkRemoved(n)
 function toggleBookmark(n){
@@ -746,6 +747,7 @@ function prevBookmark(){
 // 			$('[title="<magazine>"] [name="<name>"]')
 // XXX BUG: if the hash url part coresponds to a real anchor the browser 
 // 		shifts the page, need to disable this...
+//
 // URL state managers...
 // NOTE: loadURLState will have no side-effects on the URL, it will just 
 // 		get the state from the URL and return it.
@@ -1015,6 +1017,22 @@ function resetState(){
 *  				url: <URL>,
 *  				pages: [
 *  					<page>,
+*
+*  					// page-set...
+*					// NOTE: this is just like and article but can be 
+*					//		nested within and article.
+*					// NOTE: only one level of nexting is supported/testd.
+*  					{
+*  						type: 'page-set',
+*  						// classes set on the article element...
+*  						class: [...]
+*  						// XXX urls are not yet supported...
+*  						url: <URL>,
+*  						pages: [
+*  							<page>,
+*  							...
+*  						]
+*  					},
 *  					...
 *  				]
 *  			},
@@ -1022,6 +1040,11 @@ function resetState(){
 *  		]
 *  	}
 * 
+* NOTE: essentially we have nodes of the folowing type:
+* 		- magazine (root)
+* 		- article
+* 		- page-set
+* 		- page
 * NOTE: content classes are stored in the content...
 * NOTE: at this point all page classes will be stored, but .current 
 *  		will be ignored on restore...
@@ -1029,7 +1052,7 @@ function resetState(){
 *
 **********************************************************************/
 
-var JSON_FORMAT_VERSION = 0.1
+var JSON_FORMAT_VERSION = 0.2
 
 
 // there are two type of metadata handlers:
@@ -1148,7 +1171,10 @@ function buildJSON(export_bookmarks, export_position){
 	return res
 }
 
-// XXX this does not load page attrs correctly...
+// NOTE: if jQuery get's fussy about some CSS value, the style value 
+// 		will not get loaded correctly.
+// 		one example is "background: none", use "background: transparent"
+// 		instead.
 function loadJSON(data, load_user_data){
 	function _build(parent, data){
 
