@@ -69,8 +69,11 @@ var FULL_HISTORY_ENABLED = false
 var togglePageDragging = createCSSClassToggler('.viewer', 'dragging')
 
 
+// toggle global editor mode...
+var toggleEditorMode = createCSSClassToggler('.viewer', 'editor-mode')
+
 // toggles the editor mode, used for inline magazine editor...
-var toggleEditorMode = createCSSClassToggler('.viewer', 'editor-mode noSwipe')
+var toggleInlineEditorMode = createCSSClassToggler('.viewer', 'inline-editor-mode noSwipe')
 
 
 // this is here only for speed, helps with dragging...
@@ -114,13 +117,13 @@ function isPageResizable(page){
 	}
 
 	var mag = $('.magazine')
-	var set = page.parents('.page-set').first()
+	var group = page.parents('.group').first()
 	var article = page.parents('.article').first()
 
 	// first check the page...
 	return (page.hasClass('no-resize') ? false 
-			// then the page-set...
-			: set.hasClass('no-resize') ? false
+			// then the group...
+			: group.hasClass('no-resize') ? false
 			// then the article...
 			: article.hasClass('no-resize') ? false
 			// then the magazine...
@@ -143,17 +146,17 @@ function getPageAlign(page){
 	}
 
 	var mag = $('.magazine')
-	var set = page.parents('.page-set').first()
+	var group = page.parents('.group').first()
 	var article = page.parents('.article').first()
 
 	// first check the page...
 	return (page.hasClass('page-align-center') ? 'center' 
 			: page.hasClass('page-align-left') ? 'left' 
 			: page.hasClass('page-align-right') ? 'right' 
-			// then the page-set...
-			: set.hasClass('page-align-center') ? 'center' 
-			: set.hasClass('page-align-left') ? 'left' 
-			: set.hasClass('page-align-right') ? 'right' 
+			// then the group...
+			: group.hasClass('page-align-center') ? 'center' 
+			: group.hasClass('page-align-left') ? 'left' 
+			: group.hasClass('page-align-right') ? 'right' 
 			// then the article...
 			: article.hasClass('page-align-center') ? 'center' 
 			: article.hasClass('page-align-left') ? 'left' 
@@ -1018,12 +1021,12 @@ function resetState(){
 *  				pages: [
 *  					<page>,
 *
-*  					// page-set...
+*  					// group...
 *					// NOTE: this is just like and article but can be 
 *					//		nested within and article.
 *					// NOTE: only one level of nexting is supported/testd.
 *  					{
-*  						type: 'page-set',
+*  						type: 'group',
 *  						// classes set on the article element...
 *  						class: [...]
 *  						// XXX urls are not yet supported...
@@ -1043,7 +1046,7 @@ function resetState(){
 * NOTE: essentially we have nodes of the folowing type:
 * 		- magazine (root)
 * 		- article
-* 		- page-set
+* 		- group
 * 		- page
 * NOTE: content classes are stored in the content...
 * NOTE: at this point all page classes will be stored, but .current 
@@ -1052,7 +1055,7 @@ function resetState(){
 *
 **********************************************************************/
 
-var JSON_FORMAT_VERSION = 0.2
+var JSON_FORMAT_VERSION = 0.3
 
 
 // there are two type of metadata handlers:
@@ -1126,10 +1129,10 @@ function buildJSON(export_bookmarks, export_position){
 				content: elem.children('.content')[0].outerHTML
 			}
 
-		// page-set...
-		} else if(elem.hasClass('page-set')){
+		// group...
+		} else if(elem.hasClass('group')){
 			var res = {
-				type: 'page-set',
+				type: 'group',
 				'class': elem.attr('class'),
 				pages: elem.children('.page').map(_getContent).toArray()
 			}
@@ -1139,7 +1142,7 @@ function buildJSON(export_bookmarks, export_position){
 			var res = {
 				type: 'article',
 				'class': elem.attr('class'),
-				pages: elem.children('.page, .page-set').map(_getContent).toArray()
+				pages: elem.children('.page, .group').map(_getContent).toArray()
 			}
 
 		// other...
@@ -1190,8 +1193,8 @@ function loadJSON(data, load_user_data){
 				.addClass(data['class'])
 				.appendTo(parent)
 
-		// page-set...
-		} else if(data.type == 'page-set') {
+		// group...
+		} else if(data.type == 'group') {
 			// buiold an article...
 			var res = createEmptyPageSet()
 				.addClass(data['class'])
@@ -1222,7 +1225,7 @@ function loadJSON(data, load_user_data){
 		}
 
 		// metadata...
-		// XXX for some reason this does not set the style attr on pages in page-set...
+		// XXX for some reason this does not set the style attr on pages in group...
 		writeMetadata(res, data)
 
 		return res
@@ -1279,10 +1282,10 @@ function createMagazine(title, magazine_cover, article_cover){
 }
 
 
-// XXX do we need other page-set functions???
+// XXX do we need other group functions???
 function createEmptyPageSet(){
 	return $('<div/>')
-		.addClass('page-set')
+		.addClass('group')
 }
 
 function createEmptyArticle(){

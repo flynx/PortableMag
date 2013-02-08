@@ -6,6 +6,10 @@
 		[_] BUG: no drag threshold on excludedElements (TouchSwipe)
 		| stalled...
 	[_] 63% general todo
+		[_] editor mode service page
+		| a virtual page at the end of the magazine with magazine-specific
+		| settings.
+		| similar to the current configuration demo page.
 		[_] 0% add two main page themes (global/local applicable):
 			[_] light
 			[_] dark

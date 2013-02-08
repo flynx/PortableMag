@@ -2,8 +2,27 @@
 *
 * Magazine editor actions
 *
+* XXX do a generic shift left/right add/remove set of function and build
+* 		selectors around them...
 *
 **********************************************************************/
+
+/********************************************************* generic ***/
+
+// move element to target and atach it at position 
+// position can be 'before', 'after' (default), 'prepend' or 'append'
+function moveElementTo(elem, target, position){
+	position = position != null ? position : 'after'
+	elem
+		.detach()
+		[position == 'after'? 'insertAfter'
+		: position == 'before'? 'insertBefore'
+		: position == 'append'? 'appendTo'
+		: position == 'prepend'? 'prependTo'](target)
+	return elem
+}
+
+
 
 /************************************************ editor: magazine ***/
 
@@ -186,6 +205,9 @@ function removePage(page){
 	$('.viewer').trigger('pageRemoved', page)
 	return page
 }
+
+/******************************************************* page sets ***/
+function 
 
 
 

@@ -241,7 +241,7 @@ body {
 
 
 /* magazine article, this can contain a cover and a number of pages */
-.page-set,
+.group,
 .article {
 	display: inline-block;
 	width: auto;
@@ -339,6 +339,46 @@ body {
 	right: 10px;
 	top: 10px;
 	color: gray;
+}
+
+
+.inline-editor-mode .left-toolbar,
+.left-toolbar {
+	display: none;
+}
+.settings.page {
+	display: none;
+}
+.editor-mode .settings.page {
+	display: inline-block;
+}
+
+.editor-mode .left-toolbar {
+	position: absolute;
+	display: block;
+	top: 30px;
+	left: 30px;
+	width: 40px;
+	height: auto;
+	background: black;
+	color: white;
+
+	padding: 10px;
+
+	z-index: 9999;
+
+	opacity: 0.7;
+
+	-webkit-transition: all 0.1s ease;
+	-moz-transition: all 0.1s ease;
+	-o-transition: all 0.1s ease;
+	-ms-transition: all 0.1s ease;	
+	transition: all 0.1s ease;
+}
+
+.editor-mode .left-toolbar svg {
+	display: block;
+	cursor: hand;
 }
 
 

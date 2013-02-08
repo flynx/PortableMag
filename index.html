@@ -21,7 +21,7 @@ XXX scrollTo is a cool and a powerfull tool but it needs a sustantial code reorg
 
 <script src="magazine.js"></script>
 <script src="navigator.js"></script>
-<!--script src="editor.js"></script-->
+<script src="editor.js"></script>
 
 <!-- configuration, keep this last... -->
 <script src="platform.js"></script>
@@ -150,6 +150,9 @@ $(document).ready(function(){
 				$('.splash').fadeOut()
 			}, 350)
 		})
+
+	// setup the editor buttons...
+	// XXX
 	
 
 	
@@ -170,7 +173,130 @@ $(document).ready(function(){
 	</div>
 
 
-	<!-- XXX Magazine title... -->
+	<!-- Toolbars -->
+
+	<div class="left-toolbar">
+
+		<svg id="new-magazine" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+		 <g>
+		  <title>New Magazine</title>
+		  <g id="svg_47">
+		   <g id="svg_33">
+			<g id="svg_34">
+			 <circle fill="#000000" stroke="#ffffff" fill-opacity="0" cx="28.671385" cy="30.356987" r="7.062921" id="svg_35"/>
+			 <text fill="#ffffff" stroke="#000000" stroke-width="0" x="28.820414" y="36.240832" font-size="18" font-family="serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_36">+</text>
+			</g>
+			<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m22.8386,34.497002l-13.95876,0.052097l-0.06013,-28.683099l24.052891,0l-0.060101,18.821401" id="svg_37"/>
+		   </g>
+		   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.923339" y="17.539691" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_38">M</text>
+		  </g>
+		 </g>
+		</svg>
+
+		<hr>
+
+		<div>
+			<svg id="new-article" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+			 <g>
+			  <title>New Article</title>
+			  <g id="svg_48">
+			   <g id="svg_26">
+				<g id="svg_27">
+				 <circle fill="#000000" stroke="#ffffff" fill-opacity="0" cx="28.671385" cy="30.356987" r="7.062921" id="svg_28"/>
+				 <text fill="#ffffff" stroke="#000000" stroke-width="0" x="28.820414" y="36.240832" font-size="18" font-family="serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_29">+</text>
+				</g>
+				<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m22.83856,34.49699l-13.95872,0.052139l-0.06013,-28.683129l24.052921,0l-0.06015,18.82142" id="svg_30"/>
+			   </g>
+			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.68281" y="17.539691" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_31">A</text>
+			  </g>
+			 </g>
+			</svg>
+
+
+			<svg id="shift-article-left" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+			 <g>
+			  <title>Shift Article Left</title>
+			  <g id="svg_76">
+			   <g id="svg_70">
+				<g id="svg_71">
+				 <path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m28.62114,34.492649l-19.73146,0.052151l-0.06013,-28.68306l24.052919,0l-0.000019,17.438419" id="svg_72"/>
+				 <path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m32.840248,24.30155l0.05212,10.154291l-1.082369,0.060139" id="svg_73"/>
+				</g>
+				<path d="m30.587009,30.33219l-4.3314,-7.037199l2.8526,0l4.331209,7.037199l-4.331209,7.037241l-2.8526,0l4.3314,-7.037241z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000" stroke="#ffffff" transform="rotate(180 29.8475 30.3322)" id="svg_74"/>
+			   </g>
+			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.692654" y="17.535428" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_75">A</text>
+			  </g>
+			 </g>
+			</svg>
+
+
+			<svg id="shift-article-right" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+			 <g>
+			  <title>Shift Article Right</title>
+			  <g id="svg_89">
+			   <g id="svg_85">
+				<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m29.583229,34.612888l-20.693559,-0.007988l-0.06013,-28.6831l24.052921,0l-0.000023,20.86595" id="svg_86"/>
+				<path d="m32.27066,30.392269l-4.33132,-7.037249l2.852549,0l4.33123,7.037249l-4.33123,7.03727l-2.852549,0l4.33132,-7.03727z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000" stroke="#ffffff" id="svg_87"/>
+			   </g>
+			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.692638" y="17.595492" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_88">A</text>
+			  </g>
+			 </g>
+			</svg>
+		</div>
+
+		<hr>
+
+		<div>
+			<svg id="new-page" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+			 <g>
+			  <title>New Page</title>
+			  <g id="svg_24">
+			   <g id="svg_16">
+				<g id="svg_9">
+				 <circle fill="#000000" stroke="#ffffff" fill-opacity="0" cx="28.691122" cy="30.383944" r="7.062921" id="svg_7"/>
+				 <text fill="#ffffff" stroke="#000000" stroke-width="0" x="28.840151" y="36.267789" id="svg_8" font-size="18" font-family="serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0">+</text>
+				</g>
+				<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m22.85829,34.523949l-13.95871,0.052132l-0.06013,-28.68312l24.05293,0l-0.06015,18.82142" id="svg_15"/>
+			   </g>
+			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.281621" y="17.566648" id="svg_17" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0">P</text>
+			  </g>
+			 </g>
+			</svg>
+
+
+			<svg id="shift-page-left" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+			 <g>
+			  <title>Shift Page Left</title>
+			  <g id="svg_68">
+			   <g id="svg_67">
+				<g id="svg_66">
+				 <path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m28.621111,34.492619l-19.731441,0.052151l-0.06013,-28.683099l24.052921,0l-0.000011,17.4384" id="svg_61"/>
+				 <path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m32.840248,24.30146l0.05212,10.15435l-1.082397,0.060131" id="svg_65"/>
+				</g>
+				<path d="m30.586981,30.3321l-4.3314,-7.037199l2.852598,0l4.331251,7.037199l-4.331251,7.0373l-2.852598,0l4.3314,-7.0373z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000" stroke="#ffffff" id="svg_62" transform="rotate(180 29.8475 30.3321)"/>
+			   </g>
+			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.271712" y="17.535359" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_63">P</text>
+			  </g>
+			 </g>
+			</svg>
+
+
+			<svg id="shift-page-right" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+			 <g>
+			  <title>Shift Page Right</title>
+			  <g id="svg_58">
+			   <g id="svg_57">
+				<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m29.57338,34.557121l-20.69354,-0.007992l-0.06013,-28.683129l24.052929,0l-0.000019,20.86593" id="svg_54"/>
+				<path d="m32.260818,30.336451l-4.331329,-7.037251l2.852551,0l4.331299,7.037251l-4.331299,7.037321l-2.852551,0l4.331329,-7.037321z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000" id="svg_56" stroke="#ffffff"/>
+			   </g>
+			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.261884" y="17.539691" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_55">P</text>
+			  </g>
+			 </g>
+			</svg>
+		</div>
+
+	</div>
+
 
 	<div class="top-toolbar">
 		<div class="left-set">
@@ -569,7 +695,7 @@ $(document).ready(function(){
 		</div>
 		<div class="article">
 			<!-- page set -->
-			<div class="page-set" style="background: url(img.jpg) no-repeat right top; background-size: 100% auto; color: white;">
+			<div class="group" style="background: url(img.jpg) no-repeat right top; background-size: 100% auto; color: white;">
 				<div class="page cover no-resize page-align-left" style="background:transparent">
 					<div class="content">
 						<h1>Page Set Example</h1>

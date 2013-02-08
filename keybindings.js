@@ -49,7 +49,7 @@ var keybindings = {
 	},
 
 	// everything except overlays...
-	'.viewer:not(.editor-mode)': {
+	'.viewer:not(.inline-editor-mode)': {
 		title: 'Ribbon and Viewer',
 		doc: '',
 
