@@ -1,0 +1,264 @@
+/**********************************************************************
+* magazine customization 
+*
+**********************************************************************/
+
+/*************************************** main structural elements ****/
+
+.viewer {
+	background: gray;
+}
+
+.magazine {
+	background: transparent;
+	box-shadow: 10px 10px 50px 10px #555;
+}
+
+.magazine:before,
+.magazine:after {
+	color: #888;
+}
+
+.button svg * {
+	stroke: silver;
+}
+.button.info svg * {
+	stroke: gray;
+	fill: gray;
+}
+
+.magazine .cover {
+}
+
+.article {
+	background: transparent;
+}
+
+.article .cover {
+}
+
+.page {
+	background: silver;
+
+	font-family: Arial;
+}
+
+.cover {
+	background: white;
+}
+
+
+.top-toolbar, .bottom-toolbar {
+	font-size: 14px;
+	color: silver;
+	box-shadow: 5px 5px 50px 5px #444 inset;
+}
+
+.top-toolbar .title,
+.bottom-toolbar .title {
+	font-size: 40px;
+}
+
+/* toolbar links */
+.top-toolbar a, .bottom-toolbar a {
+	color: silver;
+	text-decoration: none;
+}
+
+.button {
+	font-size: 25px;
+	font-weight: bold;
+	cursor: hand;
+}
+
+.bottom-toolbar .page-number {
+	color: gray;
+}
+
+.navigator {
+}
+
+.navigator .bar {
+	background: silver;
+}
+
+.navigator .bar .indicator {
+	background: yellow;
+}
+
+.navigator .bar .article {
+	background: white;
+}
+
+.navigator .bar .bookmark {
+	background: red;
+}
+
+.page-number-text {
+	color: gray;
+}
+
+
+
+
+/**************************************************** light theme ****/
+
+.light {
+}
+
+.light.viewer {
+	background: white;
+}
+
+.light.viewer .magazine:before,
+.light.viewer .magazine:after {
+	color: #eee;
+}
+.light.viewer .magazine {
+	box-shadow: 10px 10px 50px 10px #ddd;
+}
+
+.light.viewer .top-toolbar,
+.light.viewer .bottom-toolbar {
+	font-size: 14px;
+	color: silver;
+	background: white;
+	box-shadow: 5px 5px 50px 20px #eee;
+}
+.light.viewer .top-toolbar a,
+.light.viewer .bottom-toolbar a {
+	color: silver;
+	text-decoration: none;
+}
+
+.light.viewer .bottom-toolbar .page-number {
+	color: silver;
+}
+
+.light.viewer .button svg * {
+	stroke: silver;
+}
+.light.viewer .button.info svg * {
+	fill: silver;
+}
+
+.light.viewer .navigator {
+	opacity: 0.9;
+}
+
+.light.viewer .navigator .bar {
+	background: silver;
+}
+
+.light.viewer .navigator .bar .indicator {
+	background: orange;
+}
+
+.light.viewer .navigator .bar .article {
+	background: silver;
+}
+
+.light.viewer .navigator .bar .bookmark {
+	background: red;
+}
+
+
+/**************************************************** dark theme ****/
+
+.dark {
+}
+
+.dark.viewer {
+	background: #444;
+}
+
+.dark.viewer .magazine {
+	box-shadow: 10px 10px 50px 10px #333;
+}
+
+.dark.viewer .magazine:before,
+.dark.viewer .magazine:after {
+	color: #555;
+}
+
+.dark.viewer .top-toolbar,
+.dark.viewer .bottom-toolbar {
+	font-size: 14px;
+	color: gray;
+	background: #333;
+	box-shadow: none;
+}
+
+.dark.viewer .top-toolbar a,
+.dark.viewer .bottom-toolbar a {
+	color: gray;
+	text-decoration: none;
+}
+
+.dark.viewer .bottom-toolbar .page-number {
+	color: #555;
+}
+
+.dark.viewer .button svg * {
+	stroke: gray;
+}
+.dark.viewer .button.info svg * {
+	fill: gray;
+}
+
+.dark.viewer .navigator {
+}
+
+.dark.viewer .navigator .bar {
+	background: silver;
+}
+
+.dark.viewer .navigator .bar .indicator {
+	background: yellow;
+}
+
+.dark.viewer .navigator .bar .article {
+	background: white;
+}
+
+.dark.viewer .navigator .bar .bookmark {
+	background: red;
+}
+
+
+
+
+/*********************************************************************/
+
+.magazine {
+	background: transparent;
+}
+
+.magazine .cover {
+}
+
+.article {
+	background: transparent;
+}
+
+.article .cover {
+}
+
+.page {
+	background: silver;
+
+	font-family: Arial;
+}
+
+.cover {
+	background: white;
+}
+
+
+.page-number-text {
+	color: gray;
+}
+
+
+
+/*********************************************************************/
