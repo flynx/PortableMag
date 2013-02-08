@@ -169,24 +169,24 @@
 }
 
 .dark.viewer {
-	background: #444;
+	background: #222;
 }
 
 .dark.viewer .magazine {
-	box-shadow: 10px 10px 50px 10px #333;
+	box-shadow: 10px 10px 50px 10px #111;
 }
 
 .dark.viewer .magazine:before,
 .dark.viewer .magazine:after {
-	color: #555;
+	color: #333;
 }
 
 .dark.viewer .top-toolbar,
 .dark.viewer .bottom-toolbar {
 	font-size: 14px;
 	color: gray;
-	background: #333;
-	box-shadow: none;
+	background: black;
+	box-shadow: none; 
 }
 
 .dark.viewer .top-toolbar a,
