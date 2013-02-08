@@ -262,3 +262,13 @@
 
 
 /*********************************************************************/
+
+.shadowless.viewer .magazine,
+.shadowless.viewer .top-toolbar,
+.shadowless.viewer .bottom-toolbar {
+	box-shadow: none;
+}
+
+
+
+/*********************************************************************/

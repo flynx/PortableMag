@@ -81,6 +81,8 @@ toggleThemes = createCSSClassToggler('.viewer', [
 	'dark'
 ])
 
+toggleShadows = createCSSClassToggler('.viewer', 'shadowless')
+
 
 
 // this is here only for speed, helps with dragging...
