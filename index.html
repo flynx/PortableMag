@@ -834,6 +834,14 @@ $(document).ready(function(){
 						</tr>
 						<tr>
 							<td>
+								Toggele viewer themes: 
+							</td>
+							<td>
+								<button id="theme_toggler" onclick="toggleThemes(); $(this).text(toggleThemes('?'))"></button>
+							</td>
+						</tr>
+						<tr>
+							<td>
 								Full navigation gistory: 
 							</td>
 							<td>
@@ -945,6 +953,7 @@ $(document).ready(function(){
 						var b = $('#BrowserInfo')
 						$.each($.browser, function(i, e){$('<div>'+i+': '+e+'</div>').appendTo(b)})
 						$('#UserAgent').text(navigator.userAgent)
+						$('#theme_toggler').text(toggleThemes('?'))
 					}
 					function toggleSetting(obj){
 						obj = $(obj)
