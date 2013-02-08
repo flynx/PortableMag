@@ -265,7 +265,6 @@ body {
 .top-toolbar, .bottom-toolbar {
 	display: block;
 	position: absolute;
-	z-index: 1000;
 	text-align: center;
 	overflow: hidden;
 
@@ -287,6 +286,11 @@ body {
 	bottom: 0px;
 	width: 100%;
 }
+.page-view-mode .top-toolbar,
+.page-view-mode .bottom-toolbar {
+	display: none;
+}
+
 /* title */
 .top-toolbar .title,
 .bottom-toolbar .title {
@@ -304,12 +308,14 @@ body {
 	text-align: right;
 }
 /* toolbar links */
-.top-toolbar a, .bottom-toolbar a {
+.top-toolbar a,
+.bottom-toolbar a {
 	color: silver;
 	text-decoration: none;
 }
 /* toolbar controls */
-.top-toolbar .controls, .bottom-toolbar .controls {
+.top-toolbar .controls,
+.bottom-toolbar .controls {
 	margin-top: 10px;
 }
 /* toolbar buttons */
@@ -326,11 +332,6 @@ body {
 
 	margin-left: 20px;
 	margin-right: 20px;
-}
-/* page view mode */
-.page-view-mode .top-toolbar,
-.page-view-mode .bottom-toolbar {
-	height: 0px;
 }
 
 /* page indicator */
@@ -524,6 +525,23 @@ body {
 }
 .caption.shown {
 	opacity: 0.8;
+}
+
+
+
+/*********************************************************************/
+
+body {
+	font-family: arial;
+}
+
+.page a, 
+.page a:visited, 
+.page a:active {
+	color: blue;
+}
+.page a:hover {
+	color: red;
 }
 
 

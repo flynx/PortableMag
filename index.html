@@ -5,7 +5,8 @@
 <title>PortableMag</title>
 
 <link rel="stylesheet" href="magazine.css">
-<link rel="stylesheet" href="magazine-custom.css">
+<link rel="stylesheet" href="magazine-themes.css">
+<!--link rel="stylesheet" href="magazine-custom.css"-->
 
 <script src="ext-lib/jquery.js"></script>
 <script src="ext-lib/jquery.touchSwipe.js"></script>
@@ -162,7 +163,7 @@ $(document).ready(function(){
 </head>
 <body>
 
-<div class="viewer">
+<div class="viewer dark">
 
 	<!-- Splash screen -->
 	<div class="splash noSwipe">
@@ -300,7 +301,7 @@ $(document).ready(function(){
 
 	<div class="top-toolbar">
 		<div class="left-set">
-			<div class="button cover title"><a href="#home" class="magazine-title-text">Magazine Title</a></div>
+			<div class="button title"><a href="#home" class="magazine-title-text">Magazine Title</a></div>
 		</div>
 		<div class="right-set">
 			<div class="button prev-bookmark">
@@ -334,7 +335,7 @@ $(document).ready(function(){
 					</svg>
 				</a>
 			</div>
-			<div class="button info" style="opacity: 0.3">
+			<div class="button info">
 				<a href="javascript:alert('not implemented yet...')">
 					<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
 					 <g>
@@ -918,7 +919,6 @@ $(document).ready(function(){
 						var t = parseInt($('#transition_duration').attr('value'))
 						t = t == null ? TRANSITION_DURATION : t
 						t = t < 25 ? 25 : t
-						console.log(t)
 						TRANSITION_DURATION = t
 						setTransitionDuration($('.scaler'), t)
 						setTransitionDuration($('.magazine'), t)

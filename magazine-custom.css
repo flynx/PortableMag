@@ -4,16 +4,23 @@
 **********************************************************************/
 
 /*************************************** main structural elements ****/
+
 .viewer {
 	background: gray;
 }
 
+.magazine {
+	background: transparent;
+}
+
 .magazine .cover {
-	background: white;
+}
+
+.article {
+	background: transparent;
 }
 
 .article .cover {
-	background: white;
 }
 
 .page {
@@ -22,8 +29,109 @@
 	font-family: Arial;
 }
 
+.cover {
+	background: white;
+}
+
+
+.top-toolbar, .bottom-toolbar {
+	font-size: 14px;
+	color: silver;
+}
+
+.top-toolbar .title,
+.bottom-toolbar .title {
+	font-size: 40px;
+}
+
+/* toolbar links */
+.top-toolbar a, .bottom-toolbar a {
+	color: silver;
+	text-decoration: none;
+}
+
+.button {
+	font-size: 25px;
+	font-weight: bold;
+	cursor: hand;
+}
+
+.bottom-toolbar .page-number {
+	color: gray;
+}
+
+.navigator {
+}
+
+.navigator .bar {
+	background: silver;
+}
+
+.navigator .bar .indicator {
+	background: yellow;
+}
+
+.navigator .bar .article {
+	background: white;
+}
+
+.navigator .bar .bookmark {
+	background: red;
+}
+
+.page-number-text {
+	color: gray;
+}
+
+
+
+
+/**************************************************** light theme ****/
+
+.light {
+	color: gray;
+	background: white;
+}
+
+.light.viewer {
+}
+
+.magazine {
+}
+
+.light .magazine .cover {
+}
+
+.light .article .cover {
+}
+
+.light .page {
+}
+
+
+
+/**************************************************** dark theme ****/
+
+.dark {
+	color: white;
+	background: black;
+}
+
+.dark.viewer {
+}
+
+.dark .magazine .cover {
+}
+
+.dark .article .cover {
+}
+
+.dark .page {
+}
+
 
 /*********************************************************************/
+
 body {
 	font-family: arial;
 }
