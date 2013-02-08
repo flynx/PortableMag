@@ -263,12 +263,19 @@
 
 /*********************************************************************/
 
+.shadowless.light.viewer {
+	background: #f0f0f0;
+}
+.shadowless.light.viewer .magazine:before,
+.shadowless.light.viewer .magazine:after {
+	color: #e8e8e8;
+}
+
 .shadowless.viewer .magazine,
 .shadowless.viewer .top-toolbar,
 .shadowless.viewer .bottom-toolbar {
 	box-shadow: none;
 }
-
 
 
 /*********************************************************************/
