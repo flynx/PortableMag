@@ -39,7 +39,7 @@ function loadMagazine(mag, position, bookmarks){
 // 		the basic content (cover, article, article cover)
 function createBaseMagazine(title, cover, article){
 	removeMagazine()
-	var mag = loadMagazine(createMagazine(title, cover, article))
+	var mag = loadMagazine(createMagazine(title, cover, article), 0, [])
 	return mag
 }
 

@@ -6,13 +6,11 @@
 		[_] BUG: no drag threshold on excludedElements (TouchSwipe)
 		| stalled...
 	[_] 64% general todo
+		[_] BUG: loading a magazine with position set to 0 will align it incorrectly.
 		[_] editor mode service page
 		| a virtual page at the end of the magazine with magazine-specific
 		| settings.
 		| similar to the current configuration demo page.
-		[X] 100% add two main page themes (global/local applicable):
-			[X] light
-			[X] dark
 		[_] 20% move some of the current configuration options to the magazine...
 			[X] page align
 			| global, magazine, article, page-set, page
@@ -94,6 +92,9 @@
 		[_] BUG: href to existing anchors will mess up layout...
 		| need to find out how can we disable anchor links from actually
 		| going to the anchor...
+		[X] 100% add two main page themes (global/local applicable):
+			[X] light
+			[X] dark
 		[X] add transition-duration editors to config page (a-la PAGES_IN_RIBBON)...
 		| will help tuning the system,,,
 		[X] BUG: jquery does not set background to none on detached elements...
