@@ -68,12 +68,19 @@ var FULL_HISTORY_ENABLED = false
 // NOTE: this is used mostly for styling and drag assisting...
 var togglePageDragging = createCSSClassToggler('.viewer', 'dragging')
 
-
 // toggle global editor mode...
 var toggleEditorMode = createCSSClassToggler('.viewer', 'editor-mode')
 
 // toggles the editor mode, used for inline magazine editor...
 var toggleInlineEditorMode = createCSSClassToggler('.viewer', 'inline-editor-mode noSwipe')
+
+// toggle between viewer themes...
+toggleThemes = createCSSClassToggler('.viewer', [
+	'light',
+	'none',
+	'dark'
+])
+
 
 
 // this is here only for speed, helps with dragging...
