@@ -12,13 +12,13 @@
 // move element to target and atach it at position 
 // position can be 'before', 'after' (default), 'prepend' or 'append'
 function moveElementTo(elem, target, position){
-	position = position != null ? position : 'after'
 	elem
 		.detach()
-		[position == 'after'? 'insertAfter'
-		: position == 'before'? 'insertBefore'
+		[position == 'before'? 'insertBefore'
 		: position == 'append'? 'appendTo'
-		: position == 'prepend'? 'prependTo'](target)
+		: position == 'prepend'? 'prependTo'
+		// the default...
+		: 'insertAfter'](target)
 	return elem
 }
 
@@ -205,9 +205,6 @@ function removePage(page){
 	$('.viewer').trigger('pageRemoved', page)
 	return page
 }
-
-/******************************************************* page sets ***/
-function 
 
 
 
