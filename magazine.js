@@ -115,6 +115,8 @@ function updateView(){
 function isPageResizable(page){
 	if(page == null){
 		page = $('.current.page')
+	} else {
+		page = $(page)
 	}
 	if(!USE_REAL_PAGE_SIZES){
 		return false
@@ -147,6 +149,8 @@ function isPageResizable(page){
 function getPageAlign(page){
 	if(page == null){
 		page = $('.current.page')
+	} else {
+		page = $(page)
 	}
 
 	var mag = $('.magazine')
@@ -191,6 +195,8 @@ function getPageScale(){
 function getPageNumber(page){
 	if(page == null){
 		page = $('.current.page')
+	} else {
+		page = $(page)
 	}
 	return $('.page').index(page) 
 }
@@ -1126,6 +1132,7 @@ JSONMetadata = {
 
 
 function readMetadata(elem, res, metadata){
+	elem = $(elem)
 	if(res == null){
 		res = {}
 	}
@@ -1144,6 +1151,7 @@ function readMetadata(elem, res, metadata){
 	return res
 }
 function writeMetadata(elem, res, metadata){
+	elem = $(elem)
 	if(metadata == null){
 		metadata = JSONMetadata
 	}
