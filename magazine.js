@@ -75,13 +75,15 @@ var toggleEditorMode = createCSSClassToggler('.viewer', 'editor-mode')
 var toggleInlineEditorMode = createCSSClassToggler('.viewer', 'inline-editor-mode noSwipe')
 
 // toggle between viewer themes...
-toggleThemes = createCSSClassToggler('.viewer', [
+var toggleThemes = createCSSClassToggler('.viewer', [
 	'light',
+	// this is the default...
 	'none',
 	'dark'
 ])
 
-toggleShadows = createCSSClassToggler('.viewer', 'shadowless')
+// toggle box-shadows, this is here mostly for performance reasons...
+var toggleShadows = createCSSClassToggler('.viewer', 'shadowless')
 
 
 
@@ -352,6 +354,7 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 // NOTE: if n is 1 then fit_to_content bool argument controls wether:
 // 			- the page will be stretched to viewer (false)
 // 			- or to content (true)
+// XXX this produces odd animations in some cases...
 function fitNPages(n, fit_to_content){
 	if(n == null){
 		n = 1
@@ -376,16 +379,21 @@ function fitNPages(n, fit_to_content){
 	var rW = cW
 	var scale = getPageScale()
 
+	var target_width
+	var target_height
+
+
 	// to compensate for transitions, no data sampling should be beyound
 	// this point, as we will start changing things next...
 
 	if(fit_to_content){
 		if(USE_REAL_PAGE_SIZES){
-			page.width('auto')
-			page.height('auto')
+			// XXX
+			target_width = 'auto'
+			target_height = 'auto'
 		} else {
-			page.width(cW)
-			page.height(cH)
+			target_width = cW
+			target_height = cH
 		}
 		if(W/H > (cW*n)/cH){
 			scale = H/cH
@@ -399,26 +407,23 @@ function fitNPages(n, fit_to_content){
 		// need to calc width only...
 		if(W/H > (cW*n)/cH){
 			scale = H/cH
-			page.width(W/scale)
-			page.height(cH)
+			target_width = W/scale
+			target_height = cH
 
 		// need to calc height only...
 		} else if(W/H > (cW*n)/cH){
 			scale = W/(cW*n)
-			page.height(H/scale)
-			page.width(cW)
+			target_height = H/scale
+			target_width = cW
 
 		// set both width and height to defaults (content and page ratios match)...
 		} else {
 			scale = W/(cW*n)
-			page.height(cH)
-			page.width(cW)
+			target_height = cH
+			target_width = cW
 		}
 		// resulting page width...
 		var rW = W/scale
-	}
-	if(USE_REAL_PAGE_SIZES){
-		$('.page.no-resize').width('auto')
 	}
 
 	// NOTE: we need to calculate the offset as the actual widths during 
@@ -467,10 +472,47 @@ function fitNPages(n, fit_to_content){
 		}
 	}
 
+	// now do the actual modification...
+
 	// do the scaling... 
 	setElementScale($('.scaler'), scale)
-	// fix position...
-	setCurrentPage(null, offset, rW)
+
+	// XXX for some reason setting size "auto" will first shrink the whole 
+	// 		page to 0 and then instantly set it to the correct size...
+	//page
+	//	.width(target_width)
+	//	.height(target_height)
+	//if(USE_REAL_PAGE_SIZES){
+	//	$('.page.no-resize').width('auto')
+	//}
+
+	// NOTE: we only need the .scaler animated, the rest just plays havoc with
+	// 		the transition...
+	// XXX this still jumps to offset on left/right aligned pages but 1) on 
+	// 		fast transitions it is not noticable and 2) it is way better than
+	// 		the effect that was before...
+	unanimated($('.page, .content, .magazine'), function(){
+		// NOTE: this is not done directly as to avoid artifacts asociated with
+		// 		setting 'auto' to all the elements, which makes them first slowly
+		// 		shrink down to 0 and then appear correctly sized in an instant.
+		page.each(function(_, e){
+			if(target_width == 'auto'){
+				e.style.width = $(e).find('.content').width()
+				e.style.height = $(e).find('.content').height()
+			} else {
+				e.style.width = target_width
+				e.style.height = target_height
+			}
+		})
+		if(USE_REAL_PAGE_SIZES){
+			//$('.page.no-resize').width('auto')
+			$('.page.no-resize').each(function(_, e){
+				e.style.width = 'auto'
+			})
+		}
+		// fix position...
+		setCurrentPage(null, offset, rW)
+	}, 200)()
 }
 
 
