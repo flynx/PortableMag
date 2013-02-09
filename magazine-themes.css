@@ -136,9 +136,10 @@
 }
 
 .light.viewer .button svg * {
-	stroke: silver;
+	stroke: gray;
 }
 .light.viewer .button.info svg * {
+	stroke: silver;
 	fill: silver;
 }
 
@@ -169,16 +170,16 @@
 }
 
 .dark.viewer {
-	background: #222;
+	background: #111;
 }
 
 .dark.viewer .magazine {
-	box-shadow: 10px 10px 50px 10px #111;
+	box-shadow: 10px 10px 50px 10px #000;
 }
 
 .dark.viewer .magazine:before,
 .dark.viewer .magazine:after {
-	color: #333;
+	color: #222;
 }
 
 .dark.viewer .top-toolbar,
