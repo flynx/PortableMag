@@ -18,14 +18,7 @@ var FIT_PAGE_TO_VIEW = true
 
 // if false, this will force all pages to be fit to screen size in full 
 // page view...
-// XXX make this default and remove the option...
-// XXX will produce a bad transition on togglePageView to TN and back 
-// 		after no-resize sized pages...
-// 		...the most probable reason is that we waste too much time between 
-// 		setting different values to elements...
-// 		need to keep wrights as tight as possible...
 var USE_REAL_PAGE_SIZES = true
-//var USE_REAL_PAGE_SIZES = false
 
 // default page alignment in full view...
 // supported values:
@@ -354,7 +347,6 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 // NOTE: if n is 1 then fit_to_content bool argument controls wether:
 // 			- the page will be stretched to viewer (false)
 // 			- or to content (true)
-// XXX this produces odd animations in some cases...
 function fitNPages(n, fit_to_content){
 	if(n == null){
 		n = 1
@@ -388,7 +380,6 @@ function fitNPages(n, fit_to_content){
 
 	if(fit_to_content){
 		if(USE_REAL_PAGE_SIZES){
-			// XXX
 			target_width = 'auto'
 			target_height = 'auto'
 		} else {
@@ -1276,7 +1267,6 @@ function loadJSON(data, load_user_data){
 		}
 
 		// metadata...
-		// XXX for some reason this does not set the style attr on pages in group...
 		writeMetadata(res, data)
 
 		return res
