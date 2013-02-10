@@ -75,7 +75,10 @@ var keybindings = {
 		},
 		190:	39,												//	>
 
-		66:		toggleBookmark,									//	B
+		66: {
+			'default': toggleBookmark,							//	B
+			'ctrl': function(){toggleThemes()},					//	ctrl-B
+		},
 
 		// combined navigation with actions..
 		38: function(){togglePageView()},						//	Up
