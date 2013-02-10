@@ -3,6 +3,7 @@
 <html>
 <head>
 <title>PortableMag</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 <link rel="stylesheet" href="magazine.css">
 <link rel="stylesheet" href="magazine-themes.css">
@@ -758,6 +759,9 @@ $(document).ready(function(){
 					NOTE: this is not an actual configuration page, just a live demo 
 					of some of the available configuration option effects.
 					</p>
+					<p>
+						<a id="downloader" download="magazine.json">download magazine...</a>
+					</p>
 
 					<hr noshade color="silver">
 
@@ -907,13 +911,6 @@ $(document).ready(function(){
 						</tr>
 						<tr>
 							<td>
-								Browser info: 
-							</td>
-							<td id="BrowserInfo">
-							</td>
-						</tr>
-						<tr>
-							<td>
 								User Agent: 
 							</td>
 							<td id="UserAgent">
@@ -975,6 +972,7 @@ $(document).ready(function(){
 						USE_REAL_PAGE_SIZES = $('#USE_REAL_PAGE_SIZES').text() == 'true' ? true : false
 						UPDATE_HASH_URL_POSITION = $('#UPDATE_HASH_URL_POSITION').text() == 'true' ? true : false
 						FULL_HISTORY_ENABLED = $('#FULL_HISTORY_ENABLED').text() == 'true' ? true : false
+
 					}
 					function loadSettings(){
 						$('#transition_duration').attr('value', TRANSITION_DURATION)
@@ -992,6 +990,7 @@ $(document).ready(function(){
 						var b = $('#BrowserInfo')
 						$.each($.browser, function(i, e){$('<div>'+i+': '+e+'</div>').appendTo(b)})
 						$('#UserAgent').text(navigator.userAgent)
+
 					}
 					function toggleSetting(obj){
 						obj = $(obj)
@@ -1002,6 +1001,14 @@ $(document).ready(function(){
 
 
 					loadSettings()
+
+					// setup the link...
+					$('#downloader')
+					.attr('href','data:text/octet-stream;base64,'+btoa(
+							JSON.stringify(buildJSON(true, true))
+								// this is a really odd one, Chrome seems to replace some 
+								// entities with actual chars...
+								.replace(/–/g, '&ndash;')))
 
 					</script>
 				</div>
