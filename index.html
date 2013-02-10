@@ -12,6 +12,7 @@
 <script src="ext-lib/jquery.touchSwipe.js"></script>
 <script src="ext-lib/jstorage.js"></script>
 <script src="ext-lib/spin.js"></script>
+<script src="ext-lib/jquery.spin.js"></script>
 <!-- EXPERIMENTAL -->
 <!-- 
 XXX scrollTo is a cool and a powerfull tool but it needs a sustantial code reorganization 
@@ -151,8 +152,9 @@ $(document).ready(function(){
 			setTimeout(function(){
 				$('.splash').fadeOut()
 			}, 350)
+			// remove the spinner...
 			setTimeout(function(){
-				spinner.stop()
+				$('#spinner').spin(false)
 			}, 500)
 		})
 
@@ -195,7 +197,7 @@ $(document).ready(function(){
 				top: 'auto', // Top position relative to parent in px
 				left: 'auto' // Left position relative to parent in px
 			}
-			var spinner = new Spinner(opts).spin($('#spinner')[0])
+			$('#spinner').spin(opts)
 			</script>
 		</td></tr></table>
 	</div>
