@@ -44,7 +44,7 @@ var keybindings = {
 	*/
 
 	// ignore all keys here...
-	'.editor-mode': {
+	'.inline-editor-mode': {
 		ignore: '*'
 	},
 

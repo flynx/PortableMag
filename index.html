@@ -11,6 +11,7 @@
 <script src="ext-lib/jquery.js"></script>
 <script src="ext-lib/jquery.touchSwipe.js"></script>
 <script src="ext-lib/jstorage.js"></script>
+<script src="ext-lib/spin.js"></script>
 <!-- EXPERIMENTAL -->
 <!-- 
 XXX scrollTo is a cool and a powerfull tool but it needs a sustantial code reorganization 
@@ -150,7 +151,11 @@ $(document).ready(function(){
 			setTimeout(function(){
 				$('.splash').fadeOut()
 			}, 350)
+			setTimeout(function(){
+				spinner.stop()
+			}, 500)
 		})
+
 
 	// setup the editor buttons...
 	// XXX
@@ -169,7 +174,28 @@ $(document).ready(function(){
 	<div class="splash noSwipe">
 		<!-- XXX replace this with a background-image logo... -->
 		<table width="100%" height="100%"><tr><td align="center" valign="middle">
-			<h2><i>loading...</i></h2>
+			<h2><div id="spinner" style="position:relative; display:inline-block; width:50px; height:50px; vertical-align:middle;"></div><i>loading...</i></h2>
+			<script>
+			// add a spinner to the splash...
+			var opts = {
+				lines: 11, // The number of lines to draw
+				length: 6, // The length of each line
+				width: 4, // The line thickness
+				radius: 8, // The radius of the inner circle
+				corners: 1, // Corner roundness (0..1)
+				rotate: 0, // The rotation offset
+				color: $('.splash #spinner').css('color'), // #rgb or #rrggbb
+				speed: 1, // Rounds per second
+				trail: 64, // Afterglow percentage
+				shadow: false, // Whether to render a shadow
+				hwaccel: true, // Whether to use hardware acceleration
+				className: 'spinner', // The CSS class to assign to the spinner
+				zIndex: 2e9, // The z-index (defaults to 2000000000)
+				top: 'auto', // Top position relative to parent in px
+				left: 'auto' // Left position relative to parent in px
+			}
+			var spinner = new Spinner(opts).spin($('#spinner')[0])
+			</script>
 		</td></tr></table>
 	</div>
 

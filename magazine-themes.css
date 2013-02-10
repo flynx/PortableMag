@@ -5,6 +5,17 @@
 
 /*************************************** main structural elements ****/
 
+.splash {
+	background: gray;
+}
+.splash * {
+	color: white;
+}
+.splash #spinner {
+	color: white;
+}
+
+
 .viewer {
 	background: gray;
 }
@@ -106,6 +117,17 @@
 .light {
 }
 
+.light .splash {
+	background: white;
+}
+.light .splash * {
+	color: gray;
+}
+.light .splash #spinner {
+	color: gray;
+}
+
+
 .light.viewer {
 	background: white;
 }
@@ -168,6 +190,17 @@
 
 .dark {
 }
+
+.dark .splash {
+	background: black;
+}
+.dark .splash * {
+	color: silver;
+}
+.dark .splash #spinner {
+	color: white;
+}
+
 
 .dark.viewer {
 	background: #111;
