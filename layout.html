@@ -74,6 +74,10 @@ $(document).ready(function(){
 		}, 
 		function(k){console.log(k)}))
 
+	if(!NAVIGATE_RELATIVE_TO_VISIBLE){
+		$('.viewer').css({overflow: 'hidden'})
+	}
+
 	// expand the templates...
 	runMagazineTemplates()
 

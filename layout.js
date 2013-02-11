@@ -19,7 +19,7 @@ var togglePageFitMode = createCSSClassToggler(
 		if(action == 'on'){
 			console.log('fitting pages to view...')
 			var n = getPageNumber()
-			var scale = getElementScale($('.magazine'))
+			var scale = getMagazineScale()
 			$('.page:not(.no-resize)').width($('.viewer').width()/scale)
 			setCurrentPage(n)
 		} else {
@@ -43,7 +43,7 @@ function getPageNumber(page){
 	} else {
 		var s = $('.viewer').scrollLeft()
 		var W = $('.viewer').width()
-		var scale = getElementScale($('.magazine'))
+		var scale = getMagazineScale()
 		var cur = -1
 		var res = $('.page').map(function(i, e){
 			e = $(e)
@@ -56,6 +56,24 @@ function getPageNumber(page){
 	}
 }
 
+function getMagazineScale(){
+	return getElementScale($('.magazine'))
+}
+function setMagazineScale(scale){
+	var mag = $('.magazine')
+	// NOTE: we are updating margins to make the scroll area adapt to new scale...
+	var w = mag.width()
+	var m = -(w - (w*scale))/2 + $('.viewer').width()/2
+	mag.css({
+		'margin-left': m,
+		'margin-right': m
+	})
+	setElementScale(mag, scale)
+	setCurrentPage()
+}
+
+
+
 
 
 /********************************************************* actions ***/
@@ -64,7 +82,7 @@ function setCurrentPage(n){
 	if(n == null){
 		n = getPageNumber()
 	}
-	var scale = getElementScale($('.magazine'))
+	var scale = getMagazineScale()
 	var l = $('.page').length
 	n = n < 0 ? l - n : n
 	n = n < -l ? 0 : n
@@ -72,7 +90,8 @@ function setCurrentPage(n){
 	$('.current.page').removeClass('current')
 	$($('.page')[n]).addClass('current')
 	var cur = $('.current.page')
-	if(USE_PAGE_ALIGN){
+	if(USE_PAGE_ALIGN
+			&& $('.page').width()*2*scale > $('.viewer').width()){
 		var align = getPageAlign()
 	} else {
 		var align = 'center'
