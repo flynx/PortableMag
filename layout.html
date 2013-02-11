@@ -34,6 +34,8 @@
 
 <script src="lib/jli.js"></script>
 
+<script src="magazine.js"></script>
+
 <script>
 
 function getPageNumber(){
@@ -82,6 +84,7 @@ function lastPage(){
 }
 
 $(document).ready(function(){
+	// keyboard...
 	$(document)
 		.keydown(makeKeyboardHandler({
 			'*': {
@@ -95,6 +98,10 @@ $(document).ready(function(){
 			}
 		}))
 
+	// expand the templates...
+	runMagazineTemplates()
+
+	setCurrentPage(0)
 })
 
 </script>
@@ -105,7 +112,7 @@ $(document).ready(function(){
 <div class="viewer">
 
 	<div class="magazine" name="PortableMag">
-		<div class="cover page current">
+		<div class="cover page">
 			<div class="content">
 				<!--h1 style="color:gray;font-size:125px;margin-bottom:-35px; margin-top: 160px">PortableMag</h1>
 				<h1 style="color:silver; font-size: 20px; margin-left:10px">A suit for publishing portable periodic magazines on mobile platforms.</h1-->
