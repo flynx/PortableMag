@@ -21,10 +21,9 @@
 	z-index: 9000;
 	box-shadow: 10px 10px 150px -50px black;
 }
-
 .page:hover {
 	z-index: 9000;
-	box-shadow: 10px 10px 150px 10px black;
+	box-shadow: 10px 10px 150px 0px black;
 }
 
 </style>
@@ -83,6 +82,30 @@ function lastPage(){
 	setCurrentPage(-1)
 }
 
+var togglePageFitMode = createCSSClassToggler(
+	'.viewer', 
+	'.page-fit-to-viewer', 
+	function(action){
+		if(action == 'on'){
+			console.log('fitting pages to view...')
+			fitPagesToView()
+		} else {
+			console.log('restoring page sizes...')
+			restorePageSizes()
+		}
+	})
+
+function fitPagesToView(){
+	var n = getPageNumber()
+	$('.page:not(.no-resize)').width($('.viewer').width())
+	setCurrentPage(n)
+}
+function restorePageSizes(){
+	var n = getPageNumber()
+	$('.page:not(.no-resize)').width('')
+	setCurrentPage(n)
+}
+
 $(document).ready(function(){
 	// keyboard...
 	$(document)
@@ -95,8 +118,13 @@ $(document).ready(function(){
 				35: lastPage, 											//	End
 				37: prevPage,											//	Left
 				39: nextPage,											//	Right
+
+				70: function(){											//	F
+					togglePageFitMode()
+				}
+
 			}
-		}))
+		}, function(k){console.log(k)}))
 
 	// expand the templates...
 	runMagazineTemplates()
