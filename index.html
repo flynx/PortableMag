@@ -1004,12 +1004,14 @@ $(document).ready(function(){
 					loadSettings()
 
 					// setup download link...
+					/*
 					$('#downloader')
 					.attr('href','data:text/octet-stream;base64,'+btoa(
 							JSON.stringify(buildJSON(true, true))
 								// this is a really odd one, Chrome seems to replace some 
 								// entities with actual chars...
 								.replace(/–/g, '&ndash;')))
+					*/
 
 					// upload...
 					function handleFileSelect(evt) {
@@ -1024,7 +1026,7 @@ $(document).ready(function(){
 							reader.onload = (function(theFile) {
 								return function(e) {
 										console.log('loading...')
-										console.log($.parseJSON(e.target.result))
+										window.JSON_DATA = e.target.result
 										loadJSON($.parseJSON(e.target.result), true)
 										console.log('done.')
 									};
