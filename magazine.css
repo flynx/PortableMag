@@ -179,8 +179,9 @@ body {
 	top: 50%;
 
 	min-width: 200px;
-	/* can we avoid setting the sizes in so many places? */
+	/* XXX has to be the same as default page height */
 	height: 600px;
+	/* XXX has to pe half of page height */
 	margin-top: -300px;
 
 	/* this is minus half the page width */
