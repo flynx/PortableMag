@@ -4,6 +4,12 @@
 *
 **********************************************************************/
 
+var NAVIGATE_RELATIVE_TO_VISIBLE = false
+
+var USE_PAGE_ALIGN = true
+
+
+
 /********************************************************** layout ***/
 
 var togglePageFitMode = createCSSClassToggler(
@@ -13,7 +19,8 @@ var togglePageFitMode = createCSSClassToggler(
 		if(action == 'on'){
 			console.log('fitting pages to view...')
 			var n = getPageNumber()
-			$('.page:not(.no-resize)').width($('.viewer').width())
+			var scale = getElementScale($('.magazine'))
+			$('.page:not(.no-resize)').width($('.viewer').width()/scale)
 			setCurrentPage(n)
 		} else {
 			console.log('restoring page sizes...')
@@ -31,18 +38,22 @@ function getPageNumber(page){
 	if(page != null){
 		return $('.page').index($(page))
 	}
-
-	var s = $('.viewer').scrollLeft()
-	var W = $('.viewer').width()
-	var cur = -1
-	var res = $('.page').map(function(i, e){
-		e = $(e)
-		var l = e.position().left
-		var w = e.width()
-		return Math.abs((l+(w/2)) - (s+(W/2)))
-	})
-	cur = res.index(Math.min.apply(Math, res))
-	return cur
+	if(!NAVIGATE_RELATIVE_TO_VISIBLE){
+		return $('.page').index($('.current.page'))
+	} else {
+		var s = $('.viewer').scrollLeft()
+		var W = $('.viewer').width()
+		var scale = getElementScale($('.magazine'))
+		var cur = -1
+		var res = $('.page').map(function(i, e){
+			e = $(e)
+			var l = e.position().left
+			var w = e.width()*scale
+			return Math.abs((l+(w/2)) - (s+(W/2)))
+		})
+		cur = res.index(Math.min.apply(Math, res))
+		return cur
+	}
 }
 
 
@@ -53,6 +64,7 @@ function setCurrentPage(n){
 	if(n == null){
 		n = getPageNumber()
 	}
+	var scale = getElementScale($('.magazine'))
 	var l = $('.page').length
 	n = n < 0 ? l - n : n
 	n = n < -l ? 0 : n
@@ -60,7 +72,18 @@ function setCurrentPage(n){
 	$('.current.page').removeClass('current')
 	$($('.page')[n]).addClass('current')
 	var cur = $('.current.page')
-	var offset = $('.viewer').width()/2 - cur.width()/2
+	if(USE_PAGE_ALIGN){
+		var align = getPageAlign()
+	} else {
+		var align = 'center'
+	}
+	if(align == 'left'){
+		var offset = 0
+	} else if(align == 'right'){
+		var offset = $('.viewer').width() - cur.width()*scale
+	} else {
+		var offset = $('.viewer').width()/2 - (cur.width()/2)*scale
+	}
 	cur.ScrollTo({
 		offsetLeft: offset
 	})
