@@ -40,15 +40,13 @@ function getPageNumber(){
 	var s = $('.viewer').scrollLeft()
 	var W = $('.viewer').width()
 	var cur = -1
-	$('.page').each(function(i, e){
+	var res = $('.page').map(function(i, e){
 		e = $(e)
 		var l = e.position().left
 		var w = e.width()
-		if(l+(w/2) >= s){
-			cur = i
-			return false
-		}
+		return Math.abs((l+(w/2)) - (s+(W/2)))
 	})
+	cur = res.index(Math.min.apply(Math, res))
 	return cur
 }
 function setCurrentPage(n){
@@ -61,7 +59,11 @@ function setCurrentPage(n){
 	n = n >= l ? l - 1 : n
 	$('.current.page').removeClass('current')
 	$($('.page')[n]).addClass('current')
-	$('.current.page').ScrollTo({'offset': 20})
+	var cur = $('.current.page')
+	var offset = $('.viewer').width()/2 - cur.width()/2
+	cur.ScrollTo({
+		offsetLeft: offset
+	})
 }
 
 function nextPage(){
