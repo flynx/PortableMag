@@ -26,6 +26,14 @@
 	box-shadow: 10px 10px 150px 0px black;
 }
 
+.page {
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: all 0 ease;
+	-ms-transition: none;	
+	transition: none;
+}
+
 </style>
 
 <script src="ext-lib/jquery.js"></script>
@@ -118,6 +126,10 @@ $(document).ready(function(){
 				35: lastPage, 											//	End
 				37: prevPage,											//	Left
 				39: nextPage,											//	Right
+				32:	{
+					'default': nextPage,								//	Space
+					'shift': prevPage									//	shift-Space
+				},
 
 				70: function(){											//	F
 					togglePageFitMode()
