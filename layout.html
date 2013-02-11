@@ -45,18 +45,22 @@
 
 <script>
 
-function getPageNumber(){
-	var s = $('.viewer').scrollLeft()
-	var W = $('.viewer').width()
-	var cur = -1
-	var res = $('.page').map(function(i, e){
-		e = $(e)
-		var l = e.position().left
-		var w = e.width()
-		return Math.abs((l+(w/2)) - (s+(W/2)))
-	})
-	cur = res.index(Math.min.apply(Math, res))
-	return cur
+function getPageNumber(page){
+	if(page != null){
+		return $('.page').index($(page))
+	} else {
+		var s = $('.viewer').scrollLeft()
+		var W = $('.viewer').width()
+		var cur = -1
+		var res = $('.page').map(function(i, e){
+			e = $(e)
+			var l = e.position().left
+			var w = e.width()
+			return Math.abs((l+(w/2)) - (s+(W/2)))
+		})
+		cur = res.index(Math.min.apply(Math, res))
+		return cur
+	}
 }
 function setCurrentPage(n){
 	if(n == null){
