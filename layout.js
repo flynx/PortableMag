@@ -41,6 +41,7 @@ function getPageNumber(page){
 	if(!NAVIGATE_RELATIVE_TO_VISIBLE){
 		return $('.page').index($('.current.page'))
 	} else {
+		// XXX this gets crazy when magazine is scaled...
 		var s = $('.viewer').scrollLeft()
 		var W = $('.viewer').width()
 		var scale = getMagazineScale()
@@ -56,6 +57,7 @@ function getPageNumber(page){
 	}
 }
 
+
 function getMagazineScale(){
 	return getElementScale($('.magazine'))
 }
@@ -67,12 +69,11 @@ function setMagazineScale(scale){
 	mag.css({
 		'margin-left': m,
 		'margin-right': m
+		// XXX also add margins at top and bottom for vertical elements...
 	})
 	setElementScale(mag, scale)
 	setCurrentPage()
 }
-
-
 
 
 
@@ -104,6 +105,7 @@ function setCurrentPage(n){
 		var offset = $('.viewer').width()/2 - (cur.width()/2)*scale
 	}
 	cur.ScrollTo({
+		offsetTop: $('.viewer').height()/2 - (cur.height()/2)*scale,
 		offsetLeft: offset
 	})
 }

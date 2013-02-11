@@ -37,6 +37,18 @@
 	transition: none;
 }
 
+/* vertical */
+.vertical.magazine,
+.vertical.article,
+.vertical.group {
+	vertical-align: top;
+}
+.vertical .article,
+.vertical .group,
+.vertical .page {
+	display: block;
+}
+
 </style>
 
 <script src="ext-lib/jquery.js"></script>
@@ -389,7 +401,7 @@ $(document).ready(function(){
 				</div>
 			</div>
 		</div>
-		<div class="article">
+		<div class="article vertical">
 			<div class="cover page">
 				<div class="content">
 					<h1>Article Cover</h1>
@@ -399,21 +411,31 @@ $(document).ready(function(){
 				</div>
 			</div>
 
-			<div class="page">
-				<div class="content">
-					Page
+			<div class="group">
+				<div class="page">
+					<div class="content">
+						Page
 
-					<div class="page-number-text">[PAGE NUMBER]</div>
+						<div class="page-number-text">[PAGE NUMBER]</div>
+					</div>
+				</div>
+				<div class="page">
+					<div class="content">
+						Page
+
+						<div class="page-number-text">[PAGE NUMBER]</div>
+					</div>
+				</div>
+				<div class="page">
+					<div class="content">
+						Page<br>
+						<a href="#home">home</a><br>
+
+						<div class="page-number-text">[PAGE NUMBER]</div>
+					</div>
 				</div>
 			</div>
-			<div class="page">
-				<div class="content">
-					Page<br>
-					<a href="#home">home</a><br>
 
-					<div class="page-number-text">[PAGE NUMBER]</div>
-				</div>
-			</div>
 		</div>
 		<div class="article">
 			<!-- page set -->

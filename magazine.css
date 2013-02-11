@@ -24,7 +24,7 @@ body {
 	/* XXX make this browser-sized... */
 	position: relative;
 	display: inline-block;
-	vertical-align: bottom;
+	vertical-align: middle;
 	text-align: left;
 	overflow: hidden;
 
@@ -175,7 +175,7 @@ body {
 .magazine {
 	position: relative;
 	display: inline-block;
-	vertical-align: bottom;
+	vertical-align: middle;
 	top: 50%;
 
 	min-width: 200px;
