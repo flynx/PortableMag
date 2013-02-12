@@ -86,14 +86,26 @@ $(document).ready(function(){
 		}, 
 		function(k){console.log(k)}))
 
+	var t = null
+	var scrolling = false
 	$('.viewer')
+		.on('scroll', function(evt){
+			scrolling = true
+			clearTimeout(t)
+			t = setTimeout(function(){
+				//setCurrentPage()
+			}, 200)
+		})
 		.on('mouseup touchend', function(evt){
-			setCurrentPage()
+			//setCurrentPage()
+			scrolling = false
 		})
 
+	/*
 	if(!NAVIGATE_RELATIVE_TO_VISIBLE){
 		$('.viewer').css({overflow: 'hidden'})
 	}
+	*/
 
 	// expand the templates...
 	runMagazineTemplates()
