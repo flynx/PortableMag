@@ -114,24 +114,22 @@ $(document).ready(function(){
 	window.touching = false
 	window.t = 0
 
-	function monitor_scroll(){
-		clearTimeout(window.t)
-		window.t = setTimeout(function(){
-				//if(!window.touching){
-				v.trigger('scrollend')
-				//}
-			}, TIMEOUT)
-	}
+	setInterval(function(){
+		if(!touching && scrolling){
+			v.trigger('scrollend')
+		}
+		scrolling = false
+	}, TIMEOUT)
 
 	$('.viewer')
 		.on('scroll', function(evt){
-			monitor_scroll()
+			scrolling = true
 		})
 		.on('touchstart mousedown', function(evt){
-			window.touching = true
+			touching = true
 		})
 		.on('touchend mouseup', function(evt){
-			window.touching = false
+			touching = false
 		})
 
 		.on('scrollend', function(){
