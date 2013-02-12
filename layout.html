@@ -114,17 +114,13 @@ $(document).ready(function(){
 	var TIMEOUT = 100
 	var t = 0
 
-	function _monitor(){
-		if(!touching){
-			v.trigger('scrollend')
-			clearTimeout(t)
-		} else {
-			log('timed out...')
-		}
-	}
 	function monitor_scroll(){
 		clearTimeout(t)
-		t = setTimeout(_monitor, TIMEOUT)
+		t = setTimeout(function(){
+				if(!touching){
+					v.trigger('scrollend')
+				}
+			}, TIMEOUT)
 	}
 
 	$('.viewer')
@@ -139,7 +135,6 @@ $(document).ready(function(){
 		.on('touchend mouseup', function(evt){
 			//log('touchend...')
 			touching = false
-			monitor_scroll()
 		})
 
 		.on('scrollend', function(){
