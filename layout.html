@@ -107,15 +107,40 @@ $(document).ready(function(){
 		_log.scrollTop(_log.prop('scrollHeight'))
 	}
 
+	var CHECK_INTERVAL = 200
+	var touching = false
+	var t
+
+	function wait_for_scroll_end(){
+		if(!touching){
+			// XXX need to avoid this being called more than once...
+			$('.viewer').trigger('scrollend')
+			t = null
+		} else {
+			t = setTimeout(wait_for_scroll_end, CHECK_INTERVAL)
+		}
+	}
+
 	$('.viewer')
 		.on('scroll', function(evt){
 			log('scroll...')
+
+			if(t == null){
+				t = setTimeout(wait_for_scroll_end, CHECK_INTERVAL)	
+			}
 		})
-		.on('touchend', function(evt){
+		.on('touchstart mousedown', function(evt){
+			log('touchstart...')
+
+			touching = true
+		})
+		.on('touchend mouseup', function(evt){
 			log('touchend...')
+
+			touching = false
 		})
-		.on('mouseup', function(evt){
-			log('mouseup...')
+		.on('scrollend', function(evt){
+			log('!!! scrollend...')
 		})
 
 	/*
