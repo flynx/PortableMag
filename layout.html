@@ -105,6 +105,9 @@ $(document).ready(function(){
 		_log.html(_log.html() + '<br>' + text + '')
 		_log.scrollTop(_log.prop('scrollHeight'))
 	}
+	function clear_log(){
+		_log.html('')
+	}
 
 
 
@@ -112,20 +115,22 @@ $(document).ready(function(){
 	var v = $('.viewer')
 	var TIMEOUT = 200
 	window.touching = false
-	window.t = 0
+	window.scrolling = false
+	window.t = null
 
-	function monitor_scroll(){
-		clearTimeout(t)
-		t = setTimeout(function(){
-				//if(!window.touching){
-				v.trigger('scrollend')
-				//}
-			}, TIMEOUT)
-	}
+	setInterval(function(){log('---')}, 1000)
+	setInterval(function(){clear_log()}, 100000)
 
 	$('.viewer')
 		.on('scroll', function(evt){
-			//monitor_scroll()
+			if(t != null){
+				clearTimeout(t)
+			}
+			t = setTimeout(function(){
+					//if(!touching){
+					v.trigger('scrollend')
+					//}
+				}, TIMEOUT)
 		})
 		.on('touchstart mousedown', function(evt){
 			//touching = true
@@ -134,17 +139,13 @@ $(document).ready(function(){
 			//touching = false
 			//setCurrentPage()
 		})
-		.on('webkitTransitionEnd oTransitionEnd msTransitionEnd transitionend', function(){
-			log('transition ended...')
-			//v.trigger('scrollend')
-			setCurrentPage()
-		})
 
 		.on('scrollend', function(){
 			log('scrolling done...')
 			// XXX for some reason, on android, this sets the page but 
-			//		does not actually scroll to it...
-			log('>>>' + setCurrentPage())
+			//		does not actually scroll to it -- no animation and/or
+			//		.ScrollTo does notwork...
+			setCurrentPage()
 		})
 
 
