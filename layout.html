@@ -117,6 +117,7 @@ $(document).ready(function(){
 	function _monitor(){
 		if(!touching){
 			v.trigger('scrollend')
+			clearTimeout(t)
 		} else {
 			log('timed out...')
 		}
