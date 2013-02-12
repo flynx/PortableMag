@@ -132,6 +132,11 @@ $(document).ready(function(){
 		})
 		.on('touchend mouseup', function(evt){
 			//touching = false
+			//setCurrentPage()
+		})
+		.on('webkitTransitionEnd oTransitionEnd msTransitionEnd transitionend', function(){
+			log('transition ended...')
+			//v.trigger('scrollend')
 			setCurrentPage()
 		})
 
