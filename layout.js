@@ -4,8 +4,8 @@
 *
 **********************************************************************/
 
-//var NAVIGATE_RELATIVE_TO_VISIBLE = false
-var NAVIGATE_RELATIVE_TO_VISIBLE = true
+var NAVIGATE_RELATIVE_TO_VISIBLE = false
+//var NAVIGATE_RELATIVE_TO_VISIBLE = true
 
 var USE_PAGE_ALIGN = true
 

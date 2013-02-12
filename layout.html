@@ -60,9 +60,37 @@
 <script src="magazine.js"></script>
 <script src="layout.js"></script>
 
+<script src="platform.js"></script>
+
 <script>
 
 $(document).ready(function(){
+	// log...
+	/*
+	var _log = $('<div id="log"></div>')
+		.css({
+			position: 'fixed',
+			background: 'silver',
+			opacity: 0.5,
+			width: 200,
+			height: '80%',
+			top: 10,
+			left: 10,
+			'z-index': 90000,
+			overflow: 'hidden',
+			padding: 10,
+		})
+		.text('log')
+		.appendTo($('body'))
+	function log(text){
+		_log.html(_log.html() + '<br>' + text + '')
+		_log.scrollTop(_log.prop('scrollHeight'))
+	}
+	function clear_log(){
+		_log.html('')
+	}
+	*/
+
 	// keyboard...
 	$(document)
 		.keydown(makeKeyboardHandler({
@@ -87,80 +115,21 @@ $(document).ready(function(){
 		}, 
 		function(k){console.log(k)}))
 
-	var _log = $('<div id="log"></div>')
-		.css({
-			position: 'fixed',
-			background: 'silver',
-			opacity: 0.5,
-			width: 200,
-			height: '80%',
-			top: 10,
-			left: 10,
-			'z-index': 90000,
-			overflow: 'hidden',
-			padding: 10,
-		})
-		.text('log')
-		.appendTo($('body'))
-	function log(text){
-		_log.html(_log.html() + '<br>' + text + '')
-		_log.scrollTop(_log.prop('scrollHeight'))
-	}
-	function clear_log(){
-		_log.html('')
+
+	if(NAVIGATE_RELATIVE_TO_VISIBLE){
+		$('.viewer')
+			.on('scrollstop', function(evt){
+				log('scrollstop...')
+				// XXX for some reason, on android, this sets the page but 
+				//		does not actually scroll to it -- no animation and/or
+				//		.ScrollTo does notwork...
+				setCurrentPage()
+			})
 	}
 
-
-
-
-	var v = $('.viewer')
-	var TIMEOUT = 200
-	window.touching = false
-	window.t = null
-
-
-	$('.viewer')
-		.on('scrollstop', function(evt){
-			log('scrollstop...')
-			setCurrentPage()
-		})
-
-		/*
-		.on('scroll', function(evt){
-			if(t != null){
-				clearTimeout(t)
-			}
-			t = setTimeout(function(){
-					//if(!touching){
-					v.trigger('scrollend')
-					//}
-				}, TIMEOUT)
-		})
-		.on('touchstart mousedown', function(evt){
-			//touching = true
-		})
-		.on('touchend mouseup', function(evt){
-			//touching = false
-			//setCurrentPage()
-		})
-
-		.on('scrollend', function(){
-			log('scrolling done...')
-			// XXX for some reason, on android, this sets the page but 
-			//		does not actually scroll to it -- no animation and/or
-			//		.ScrollTo does notwork...
-			setCurrentPage()
-		})
-		*/
-
-
-
-
-	/*
 	if(!NAVIGATE_RELATIVE_TO_VISIBLE){
 		$('.viewer').css({overflow: 'hidden'})
 	}
-	*/
 
 	// expand the templates...
 	runMagazineTemplates()
@@ -473,7 +442,7 @@ $(document).ready(function(){
 				</div>
 			</div>
 		</div>
-		<div class="article vertical">
+		<!--div class="article vertical">
 			<div class="cover page">
 				<div class="content">
 					<h1>Article Cover</h1>
@@ -508,7 +477,7 @@ $(document).ready(function(){
 				</div>
 			</div>
 
-		</div>
+		</div-->
 		<div class="article">
 			<!-- page set -->
 			<div class="group" style="background: url(img.jpg) no-repeat right top; background-size: 100% auto; color: white;">
