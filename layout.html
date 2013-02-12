@@ -86,30 +86,36 @@ $(document).ready(function(){
 		}, 
 		function(k){console.log(k)}))
 
-	var t = null
-	var _offset_delta = [0, 0]
-	var scrolling = false
-	var v = $('.viewer')
-	var SCROLL_TIMEOUT = 200
-	function scroll_trail_handler(){
-		_offset_delta = [
-			v.scrollTop() - _offset_delta[0],
-			v.scrollLeft() - _offset_delta[1]
-		]
-		if(!scrolling && _offset_delta[0] == 0 && _offset_delta[1] == 0){
-			setCurrentPage()
-		} else {
-			t = setTimeout(scroll_trail_handler, SCROLL_TIMEOUT)
-		}
+	var _log = $('<div id="log"></div>')
+		.css({
+			position: 'fixed',
+			background: 'silver',
+			opacity: 0.5,
+			width: 150,
+			height: '80%',
+			top: 10,
+			left: 10,
+			'z-index': 90000,
+			overflow: 'hidden',
+			padding: 10,
+		})
+		.text('log')
+		.appendTo($('body'))
+
+	function log(text){
+		_log.html(_log.html() + '<br>' + text)
+		_log.scrollTop(_log.prop('scrollHeight'))
 	}
 
 	$('.viewer')
 		.on('scroll', function(evt){
-			scrolling = true
+			log('scroll...')
 		})
-		.on('mouseup touchend', function(evt){
-			scrolling = false
-			t = setTimeout(scroll_trail_handler, SCROLL_TIMEOUT)
+		.on('touchend', function(evt){
+			log('touchend...')
+		})
+		.on('mouseup', function(evt){
+			log('mouseup...')
 		})
 
 	/*
