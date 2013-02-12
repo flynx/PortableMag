@@ -157,6 +157,7 @@ function setCurrentPage(n){
 		offsetTop: $('.viewer').height()/2 - (cur.height()/2)*scale,
 		offsetLeft: offset
 	})
+	return cur
 }
 
 
