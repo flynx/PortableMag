@@ -139,7 +139,9 @@ $(document).ready(function(){
 
 		.on('scrollend', function(){
 			log('scrolling done...')
-			setCurrentPage()
+			// XXX for some reason, on android, this sets the page but 
+			//		does not actually scroll to it...
+			log('>>>' + setCurrentPage())
 		})
 
 
