@@ -87,18 +87,29 @@ $(document).ready(function(){
 		function(k){console.log(k)}))
 
 	var t = null
+	var _offset_delta = [0, 0]
 	var scrolling = false
+	var v = $('.viewer')
+	var SCROLL_TIMEOUT = 200
+	function scroll_trail_handler(){
+		_offset_delta = [
+			v.scrollTop() - _offset_delta[0],
+			v.scrollLeft() - _offset_delta[1]
+		]
+		if(!scrolling && _offset_delta[0] == 0 && _offset_delta[1] == 0){
+			setCurrentPage()
+		} else {
+			t = setTimeout(scroll_trail_handler, SCROLL_TIMEOUT)
+		}
+	}
+
 	$('.viewer')
 		.on('scroll', function(evt){
 			scrolling = true
-			clearTimeout(t)
-			t = setTimeout(function(){
-				//setCurrentPage()
-			}, 200)
 		})
 		.on('mouseup touchend', function(evt){
-			//setCurrentPage()
 			scrolling = false
+			t = setTimeout(scroll_trail_handler, SCROLL_TIMEOUT)
 		})
 
 	/*
