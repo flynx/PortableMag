@@ -126,6 +126,7 @@ $(document).ready(function(){
 	$('.viewer')
 		.on('scroll', function(evt){
 			log('scroll...')
+			scroll_monitor()
 		})
 		.on('touchstart mousedown', function(evt){
 			log('touchstart...')
