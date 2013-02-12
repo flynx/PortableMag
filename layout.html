@@ -114,22 +114,25 @@ $(document).ready(function(){
 	window.touching = false
 	window.t = 0
 
-	setInterval(function(){
-		if(!touching && scrolling){
-			v.trigger('scrollend')
-		}
-		scrolling = false
-	}, TIMEOUT)
+	function monitor_scroll(){
+		clearTimeout(t)
+		t = setTimeout(function(){
+				//if(!window.touching){
+				v.trigger('scrollend')
+				//}
+			}, TIMEOUT)
+	}
 
 	$('.viewer')
 		.on('scroll', function(evt){
-			scrolling = true
+			//monitor_scroll()
 		})
 		.on('touchstart mousedown', function(evt){
-			touching = true
+			//touching = true
 		})
 		.on('touchend mouseup', function(evt){
-			touching = false
+			//touching = false
+			setCurrentPage()
 		})
 
 		.on('scrollend', function(){
