@@ -53,6 +53,7 @@
 
 <script src="ext-lib/jquery.js"></script>
 <script src="ext-lib/jquery.scrollto.js"></script>
+<script src="ext-lib/jquery.scrollstop.js"></script>
 
 <script src="lib/jli.js"></script>
 
@@ -115,13 +116,16 @@ $(document).ready(function(){
 	var v = $('.viewer')
 	var TIMEOUT = 200
 	window.touching = false
-	window.scrolling = false
 	window.t = null
 
-	setInterval(function(){log('---')}, 1000)
-	setInterval(function(){clear_log()}, 100000)
 
 	$('.viewer')
+		.on('scrollstop', function(evt){
+			log('scrollstop...')
+			setCurrentPage()
+		})
+
+		/*
 		.on('scroll', function(evt){
 			if(t != null){
 				clearTimeout(t)
@@ -147,6 +151,7 @@ $(document).ready(function(){
 			//		.ScrollTo does notwork...
 			setCurrentPage()
 		})
+		*/
 
 
 
