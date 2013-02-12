@@ -91,7 +91,7 @@ $(document).ready(function(){
 			position: 'fixed',
 			background: 'silver',
 			opacity: 0.5,
-			width: 150,
+			width: 200,
 			height: '80%',
 			top: 10,
 			left: 10,
@@ -101,54 +101,43 @@ $(document).ready(function(){
 		})
 		.text('log')
 		.appendTo($('body'))
-
 	function log(text){
-		_log.html(_log.html() + '<br>' + text)
+		_log.html(_log.html() + '<br>' + text + '')
 		_log.scrollTop(_log.prop('scrollHeight'))
 	}
 
-	var CHECK_INTERVAL = 200
-	var touching = false
-	var t
-	var v = $('.viewer')
-	var _scroll_delta = [0, 0]
-	var sd = 0
 
-	function wait_for_scroll_end(){
-		if(!touching && _scroll_delta[0] <= sd && _scroll_delta[1] <= sd){
-			// XXX need to avoid this being called more than once...
-			$('.viewer').trigger('scrollend')
-			t = null
+
+
+	var v = $('.viewer')
+	var touching = false
+	var TIMEOUT = 200
+	var t = 0
+
+	function scroll_monitor(){
+		clearTimeout(t)
+		if(touching){
+			t = setTimeout(scroll_monitor, TIMEOUT)
 		} else {
-			t = setTimeout(wait_for_scroll_end, CHECK_INTERVAL)
+			log('scrolling done...')
 		}
 	}
 
 	$('.viewer')
 		.on('scroll', function(evt){
 			log('scroll...')
-			_scroll_delta = [
-				_scroll_delta[0] - v.scrollLeft(),
-				_scroll_delta[1] - v.scrollTop()
-			]
-
-			if(t == null){
-				t = setTimeout(wait_for_scroll_end, CHECK_INTERVAL)	
-			}
 		})
 		.on('touchstart mousedown', function(evt){
 			log('touchstart...')
-
 			touching = true
 		})
 		.on('touchend mouseup', function(evt){
 			log('touchend...')
-
 			touching = false
 		})
-		.on('scrollend', function(evt){
-			log('!!! scrollend...')
-		})
+
+
+
 
 	/*
 	if(!NAVIGATE_RELATIVE_TO_VISIBLE){
