@@ -111,15 +111,15 @@ $(document).ready(function(){
 
 	var v = $('.viewer')
 	var TIMEOUT = 100
-	var window.touching = false
-	var window.t = 0
+	window.touching = false
+	window.t = 0
 
 	function monitor_scroll(){
 		clearTimeout(window.t)
 		window.t = setTimeout(function(){
-				if(!window.touching){
+				//if(!window.touching){
 					v.trigger('scrollend')
-				}
+				//}
 			}, TIMEOUT)
 	}
 
