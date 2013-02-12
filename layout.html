@@ -110,14 +110,14 @@ $(document).ready(function(){
 
 
 	var v = $('.viewer')
-	var touching = false
 	var TIMEOUT = 100
-	var t = 0
+	var window.touching = false
+	var window.t = 0
 
 	function monitor_scroll(){
-		clearTimeout(t)
-		t = setTimeout(function(){
-				if(!touching){
+		clearTimeout(window.t)
+		window.t = setTimeout(function(){
+				if(!window.touching){
 					v.trigger('scrollend')
 				}
 			}, TIMEOUT)
@@ -130,11 +130,11 @@ $(document).ready(function(){
 		})
 		.on('touchstart mousedown', function(evt){
 			//log('touchstart...')
-			touching = true
+			window.touching = true
 		})
 		.on('touchend mouseup', function(evt){
 			//log('touchend...')
-			touching = false
+			window.touching = false
 		})
 
 		.on('scrollend', function(){
