@@ -116,10 +116,10 @@ $(document).ready(function(){
 
 	function scroll_monitor(){
 		clearTimeout(t)
-		if(touching){
-			t = setTimeout(scroll_monitor, TIMEOUT)
-		} else {
-			log('scrolling done...')
+		if(!touching){
+			t = setTimeout(function(){
+				log('scrolling done...')
+			}, TIMEOUT)
 		}
 	}
 
