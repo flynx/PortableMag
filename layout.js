@@ -4,7 +4,8 @@
 *
 **********************************************************************/
 
-var NAVIGATE_RELATIVE_TO_VISIBLE = false
+//var NAVIGATE_RELATIVE_TO_VISIBLE = false
+var NAVIGATE_RELATIVE_TO_VISIBLE = true
 
 var USE_PAGE_ALIGN = true
 
@@ -78,11 +79,16 @@ var togglePageView = createCSSClassToggler(
 /********************************************************* helpers ***/
 
 function getPageNumber(page){
+	// a page is given...
 	if(page != null){
 		return $('.page').index($(page))
 	}
+
+	// get the next page... 
 	if(!NAVIGATE_RELATIVE_TO_VISIBLE){
 		return $('.page').index($('.current.page'))
+
+	// get the closest page to view... 
 	} else {
 		// XXX this gets crazy when magazine is scaled...
 		var s = $('.viewer').scrollLeft()

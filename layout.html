@@ -86,11 +86,14 @@ $(document).ready(function(){
 		}, 
 		function(k){console.log(k)}))
 
-	/*
+	$('.viewer')
+		.on('mouseup touchend', function(evt){
+			setCurrentPage()
+		})
+
 	if(!NAVIGATE_RELATIVE_TO_VISIBLE){
 		$('.viewer').css({overflow: 'hidden'})
 	}
-	*/
 
 	// expand the templates...
 	runMagazineTemplates()
