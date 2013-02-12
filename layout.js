@@ -8,27 +8,70 @@ var NAVIGATE_RELATIVE_TO_VISIBLE = false
 
 var USE_PAGE_ALIGN = true
 
+var PAGES_IN_RIBBON = 4
+
 
 
 /********************************************************** layout ***/
 
 var togglePageFitMode = createCSSClassToggler(
-	'.viewer', 
-	'.page-fit-to-viewer', 
-	function(action){
-		if(action == 'on'){
-			console.log('fitting pages to view...')
-			var n = getPageNumber()
-			var scale = getMagazineScale()
-			$('.page:not(.no-resize)').width($('.viewer').width()/scale)
+		'.viewer', 
+		'.page-fit-to-viewer', 
+		function(action){
+			if(action == 'on'){
+				console.log('fitting pages to view...')
+				var n = getPageNumber()
+				var scale = getMagazineScale()
+				$('.page:not(.no-resize)').width($('.viewer').width()/scale)
+			} else {
+				console.log('restoring page sizes...')
+				var n = getPageNumber()
+				$('.page:not(.no-resize)').width('')
+			}
 			setCurrentPage(n)
-		} else {
-			console.log('restoring page sizes...')
-			var n = getPageNumber()
-			$('.page:not(.no-resize)').width('')
-			setCurrentPage(n)
-		}
-	})
+		})
+
+
+var togglePageView = createCSSClassToggler(
+		'.viewer',
+		'.full-page-view-mode',
+		// XXX make this support transitions...
+		function(action){
+			var view = $('.viewer')
+			var page = $('.page')
+
+			if(action == 'on'){
+				var W = view.width()
+				var H = view.height()
+				var w = page.width()
+				var h = page.height()
+
+				// XXX this is not correct...
+				// 		...need to fit one rectangel (page) into another (viewer)
+				if(W >= H){
+					// fit to width...
+					var scale = W/w
+				} else {
+					// fit to height...
+					var scale = H/h
+				}
+				setMagazineScale(scale)
+				unanimated($('.magazine, .viewer'), togglePageFitMode)('on')
+			} else {
+				unanimated($('.magazine, .viewer'), togglePageFitMode)('off')
+
+				var W = view.width()
+				var H = view.height()
+				var w = page.width()
+				var h = page.height()
+
+				scale = W/(w*PAGES_IN_RIBBON)
+				setMagazineScale(scale)
+			}
+			// NOTE: can't disable transitions on this one because ScrollTo
+			// 		uses jQuery animation...
+			setCurrentPage()
+		})
 
 
 
