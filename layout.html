@@ -144,7 +144,14 @@ $(document).ready(function(){
 			//		.ScrollTo does notwork...
 			//limit_scroll()
 			if(!touching){
-				t = setTimeout(setCurrentPage, 100)
+				t = setTimeout(function(){
+					var n = getPageNumber()
+					var page = $($('.page')[n])
+					$('.current.page').removeClass('current')
+					page.addClass('current')
+					// attempt to make it without using .ScrollTo(...)
+					$('.viewer').scrollLeft(page.position().left)
+				}, 100)
 			}
 		})
 
