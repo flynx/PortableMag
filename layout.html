@@ -127,17 +127,26 @@ $(document).ready(function(){
 		function(k){console.log(k)}))
 
 
-	//if(NAVIGATE_RELATIVE_TO_VISIBLE){
-		$('.viewer')
-			.on('scrollstop', function(evt){
-				//log('scrollstop...')
-				// XXX for some reason, on android, this sets the page but 
-				//		does not actually scroll to it -- no animation and/or
-				//		.ScrollTo does notwork...
-				//setCurrentPage()
-				//limit_scroll()
-			})
-	//}
+	var touching = false
+	var t = null
+	$('.viewer')
+		.on('mousedown touchstart', function(){
+			touching = true
+			clearTimeout(t)
+		})
+		.on('mouseup touchend', function(){
+			touching = false
+		})
+		.on('scrollstop', function(evt){
+			//log('scrollstop...')
+			// XXX for some reason, on android, this sets the page but 
+			//		does not actually scroll to it -- no animation and/or
+			//		.ScrollTo does notwork...
+			//limit_scroll()
+			if(!touching){
+				t = setTimeout(setCurrentPage, 100)
+			}
+		})
 
 	if(!NAVIGATE_RELATIVE_TO_VISIBLE){
 		$('.viewer').css({overflow: 'hidden'})
