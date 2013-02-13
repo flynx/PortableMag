@@ -53,7 +53,7 @@
 
 <script src="ext-lib/jquery.js"></script>
 <script src="ext-lib/jquery.scrollto.js"></script>
-<script src="ext-lib/jquery.scrollstop.js"></script>
+<!--script src="ext-lib/jquery.scrollstop.js"></script-->
 
 <script src="lib/jli.js"></script>
 
@@ -66,7 +66,6 @@
 
 $(document).ready(function(){
 	// log...
-	/*
 	var _log = $('<div id="log"></div>')
 		.css({
 			position: 'fixed',
@@ -89,7 +88,6 @@ $(document).ready(function(){
 	function clear_log(){
 		_log.html('')
 	}
-	*/
 
 	// keyboard...
 	$(document)
@@ -116,7 +114,46 @@ $(document).ready(function(){
 		function(k){console.log(k)}))
 
 
-	if(NAVIGATE_RELATIVE_TO_VISIBLE){
+	window.scroll_state = 'none'
+	window.SCROLL_STOP_THRESHOLD = 0
+	window.SCROLL_CHECK_INTERVAL = 50
+
+	window._scroll_offset = null
+	var v = $('.viewer')
+
+	setInterval(function(){
+		var c = v.scrollLeft()
+		if(scroll_state == 'kinetic'
+				&& (_scroll_offset - c) < SCROLL_STOP_THRESHOLD){
+			scroll_state = 'none'
+			v.trigger('scrollstop')
+		}
+	}, SCROLL_CHECK_INTERVAL)
+
+	window._cur_page = 0
+
+	$('.viewer')
+		.on('scroll', function(){
+			var c = getPageNumber()
+			if(_cur_page != c && scroll_state == 'touching'){
+				log('page: '+c)
+				//setCurrentPage(c)
+				$('.current.page').removeClass('current')
+				$($('.page')[c]).addClass('current')
+				_cur_page = c
+			}
+		})
+		.on('mousedown touchstart', function(){
+			log('touching...')
+			scroll_state = 'touching'
+		})
+		.on('mouseup touchend', function(){
+			log('kinetic...')
+			scroll_state = 'kinetic'
+		})
+
+
+	//if(NAVIGATE_RELATIVE_TO_VISIBLE){
 		$('.viewer')
 			.on('scrollstop', function(evt){
 				log('scrollstop...')
@@ -125,7 +162,7 @@ $(document).ready(function(){
 				//		.ScrollTo does notwork...
 				setCurrentPage()
 			})
-	}
+	//}
 
 	if(!NAVIGATE_RELATIVE_TO_VISIBLE){
 		$('.viewer').css({overflow: 'hidden'})
