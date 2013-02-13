@@ -66,6 +66,7 @@
 
 $(document).ready(function(){
 	// log...
+	/*
 	var _log = $('<div id="log"></div>')
 		.css({
 			position: 'fixed',
@@ -88,6 +89,7 @@ $(document).ready(function(){
 	function clear_log(){
 		_log.html('')
 	}
+	*/
 
 	// keyboard...
 	$(document)
@@ -114,7 +116,15 @@ $(document).ready(function(){
 		function(k){console.log(k)}))
 
 
-	/*
+	// XXX delta-based scrollstop does not work good on android
+	//		both the interval and scroll event versions failed...
+	// XXX timeout-based scrollstop des not work correctly...
+	//		...for some reason the timeout function gets called like 
+	//		it's an interval...
+	// XXX try margin-based scrolling
+	//		in full page view set the margin so as to only allow 
+	//		scrolling the next and previous pages (in setCurrentPage)...
+	/* 
 	window.scroll_state = 'none'
 	window.SCROLL_STOP_THRESHOLD = 3
 	window.SCROLL_CHECK_INTERVAL = 50
@@ -136,8 +146,8 @@ $(document).ready(function(){
 	window._cur_page = 0
 	*/
 
+	/*
 	$('.viewer')
-		/*
 		.on('mousedown touchstart', function(){
 			log('touching...')
 			scroll_state = 'touching'
@@ -146,7 +156,7 @@ $(document).ready(function(){
 			log('kinetic...')
 			scroll_state = 'kinetic'
 		})
-		*/
+	*/
 
 
 	//if(NAVIGATE_RELATIVE_TO_VISIBLE){
@@ -169,6 +179,15 @@ $(document).ready(function(){
 
 	setCurrentPage(0)
 })
+
+// XXX does not seem to work...
+function setCurrentMargins(){
+	var n = getPageNumber()
+	$('.magazine').css({
+		'margin-left': -$($('.page')[n-1]).position().left,
+		'margin-right': -($('.magazine').width() - $($('.page')[n+2]).position().left),
+	})
+}
 
 </script>
 
