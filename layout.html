@@ -114,6 +114,7 @@ $(document).ready(function(){
 		function(k){console.log(k)}))
 
 
+	/*
 	window.scroll_state = 'none'
 	window.SCROLL_STOP_THRESHOLD = 3
 	window.SCROLL_CHECK_INTERVAL = 50
@@ -133,21 +134,10 @@ $(document).ready(function(){
 	}, SCROLL_CHECK_INTERVAL)
 
 	window._cur_page = 0
+	*/
 
 	$('.viewer')
 		/*
-		.on('scroll', function(){
-			log('scroll...')
-			var c = v.scrollLeft()
-			if(scroll_state == 'kinetic'
-					&& ((_scroll_offset - c) <= SCROLL_STOP_THRESHOLD 
-					|| _scroll_offset - c >= -SCROLL_STOP_THRESHOLD)){
-				scroll_state = 'none'
-				log('none...')
-				v.trigger('scrollstop')
-			}
-		})
-		*/
 		.on('mousedown touchstart', function(){
 			log('touching...')
 			scroll_state = 'touching'
@@ -156,6 +146,7 @@ $(document).ready(function(){
 			log('kinetic...')
 			scroll_state = 'kinetic'
 		})
+		*/
 
 
 	//if(NAVIGATE_RELATIVE_TO_VISIBLE){
