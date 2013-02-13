@@ -124,8 +124,10 @@ $(document).ready(function(){
 	setInterval(function(){
 		var c = v.scrollLeft()
 		if(scroll_state == 'kinetic'
-				&& (_scroll_offset - c) < SCROLL_STOP_THRESHOLD){
+				&& ((_scroll_offset - c) <= SCROLL_STOP_THRESHOLD 
+				|| _scroll_offset - c >= -SCROLL_STOP_THRESHOLD)){
 			scroll_state = 'none'
+			log('none...')
 			v.trigger('scrollstop')
 		}
 	}, SCROLL_CHECK_INTERVAL)
