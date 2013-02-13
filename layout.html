@@ -157,6 +157,26 @@ $(document).ready(function(){
 			scroll_state = 'kinetic'
 		})
 	*/
+	window._scroll_limit = [0, 0]
+
+	$('.viewer')
+		.on('scroll', function(){
+			if(_scroll_limit[0] == 0 && _scroll_limit[1] == 0){
+				return true
+			}
+			var sl = $('.viewer').scrollLeft()
+			if(sl <= _scroll_limit[0]){
+				$('.viewer').scrollLeft(_scroll_limit[0])
+				setCurrentPage()
+				setScrollLimit()
+				return false
+			} else if(sl >= _scroll_limit[1]){
+				$('.viewer').scrollLeft(_scroll_limit[1])
+				setCurrentPage()
+				setScrollLimit()
+				return false
+			}
+		})
 
 
 	//if(NAVIGATE_RELATIVE_TO_VISIBLE){
@@ -181,12 +201,13 @@ $(document).ready(function(){
 })
 
 // XXX does not seem to work...
-function setCurrentMargins(){
+function setScrollLimit(){
 	var n = getPageNumber()
-	$('.magazine').css({
-		'margin-left': -$($('.page')[n-1]).position().left,
-		'margin-right': -($('.magazine').width() - $($('.page')[n+2]).position().left),
-	})
+	var l = n == 0 ? 0 : n-1 
+	// XXX this is still a bit wrong...
+	var r = n == $('.page').length-1 ? n : n+1
+	_scroll_limit[0] = $($('.page')[l]).position().left
+	_scroll_limit[1] = $($('.page')[r]).position().left
 }
 
 </script>
