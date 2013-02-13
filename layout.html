@@ -147,10 +147,15 @@ $(document).ready(function(){
 	runMagazineTemplates()
 
 	//setCurrentPage(0)
-	limit_scroll()
+	//limit_scroll()
 })
 
 var SCROLL_LIMIT = 800 * 1.5
+
+function setup_scroll_limiter(){
+	$('.magazine').wrapAll($('<div class="scroller">'))
+	limit_scroll()
+}
 
 // XXX set the limit to next/prev page alignment...
 function limit_scroll(){
@@ -180,8 +185,6 @@ function clear_limits(){
 <body>
 
 <div class="viewer">
-
-<div class='scroller'>
 
 	<div class="magazine" name="PortableMag">
 		<div class="cover page">
@@ -542,8 +545,6 @@ function clear_limits(){
 			</div>
 		</div>
 	</div>
-
-</div>
 
 </div>
 
