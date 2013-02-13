@@ -37,6 +37,17 @@
 	transition: none;
 }
 
+.scroller {
+	position: relative;
+	display: inline-block;
+	text-align: center;
+	width: auto;
+	height: 100%;
+
+	overflow: hidden;
+}
+
+
 /* vertical */
 .vertical.magazine,
 .vertical.article,
@@ -53,7 +64,7 @@
 
 <script src="ext-lib/jquery.js"></script>
 <script src="ext-lib/jquery.scrollto.js"></script>
-<!--script src="ext-lib/jquery.scrollstop.js"></script-->
+<script src="ext-lib/jquery.scrollstop.js"></script>
 
 <script src="lib/jli.js"></script>
 
@@ -116,57 +127,15 @@ $(document).ready(function(){
 		function(k){console.log(k)}))
 
 
-	// XXX delta-based scrollstop does not work good on android
-	//		both the interval and scroll event versions failed...
-	// XXX timeout-based scrollstop des not work correctly...
-	//		...for some reason the timeout function gets called like 
-	//		it's an interval...
-	// XXX scroll limiting did not work -- problems with page refresh...
-	// XXX try margin-based scrolling
-	//		in full page view set the margin so as to only allow 
-	//		scrolling the next and previous pages (in setCurrentPage)...
-	/* 
-	window.scroll_state = 'none'
-	window.SCROLL_STOP_THRESHOLD = 3
-	window.SCROLL_CHECK_INTERVAL = 50
-
-	window._scroll_offset = null
-	var v = $('.viewer')
-
-	setInterval(function(){
-		var c = v.scrollLeft()
-		if(scroll_state == 'kinetic'
-				&& ((_scroll_offset - c) <= SCROLL_STOP_THRESHOLD 
-				|| _scroll_offset - c >= -SCROLL_STOP_THRESHOLD)){
-			scroll_state = 'none'
-			log('none...')
-			v.trigger('scrollstop')
-		}
-	}, SCROLL_CHECK_INTERVAL)
-
-	window._cur_page = 0
-	*/
-
-	/*
-	$('.viewer')
-		.on('mousedown touchstart', function(){
-			log('touching...')
-			scroll_state = 'touching'
-		})
-		.on('mouseup touchend', function(){
-			log('kinetic...')
-			scroll_state = 'kinetic'
-		})
-	*/
-
 	//if(NAVIGATE_RELATIVE_TO_VISIBLE){
 		$('.viewer')
 			.on('scrollstop', function(evt){
-				log('scrollstop...')
+				//log('scrollstop...')
 				// XXX for some reason, on android, this sets the page but 
 				//		does not actually scroll to it -- no animation and/or
 				//		.ScrollTo does notwork...
-				setCurrentPage()
+				//setCurrentPage()
+				limit_scroll()
 			})
 	//}
 
@@ -178,11 +147,31 @@ $(document).ready(function(){
 	runMagazineTemplates()
 
 	setCurrentPage(0)
-	setScrollLimit()
+	limit_scroll()
 })
 
-// XXX do a margin-based version...
-function setScrollLimit(){
+var SCROLL_LIMIT = 800 * 1.5
+
+// XXX set the limit to next/prev page alignment...
+function limit_scroll(){
+	var W = $('.viewer').width()
+	var ml = parseFloat($('.scroller').css('margin-left')) || 0
+	var pos = $('.viewer').scrollLeft()
+	var c = -ml + pos + W/2
+	$('.scroller').css({
+		'margin-left': -(c-SCROLL_LIMIT),
+		'width': c+SCROLL_LIMIT
+	})
+	$('.viewer').scrollLeft(pos-ml-(c-SCROLL_LIMIT))
+}
+function clear_limits(){
+	var pos = $('.viewer').scrollLeft()
+	var l = parseFloat($('.scroller').css('margin-left'))
+	$('.scroller').css({
+		'margin-left': '',
+		'width': ''
+	})
+	$('.viewer').scrollLeft(pos - l)
 }
 
 </script>
@@ -191,8 +180,8 @@ function setScrollLimit(){
 <body>
 
 <div class="viewer">
-<!--div class="_scaler">
-<div class="_aligner"-->
+
+<div class='scroller'>
 
 	<div class="magazine" name="PortableMag">
 		<div class="cover page">
@@ -554,9 +543,8 @@ function setScrollLimit(){
 		</div>
 	</div>
 
+</div>
 
-<!--/div>
-</div-->
 </div>
 
 </body>
