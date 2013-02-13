@@ -133,16 +133,6 @@ $(document).ready(function(){
 	window._cur_page = 0
 
 	$('.viewer')
-		.on('scroll', function(){
-			var c = getPageNumber()
-			if(_cur_page != c && scroll_state == 'touching'){
-				log('page: '+c)
-				//setCurrentPage(c)
-				$('.current.page').removeClass('current')
-				$($('.page')[c]).addClass('current')
-				_cur_page = c
-			}
-		})
 		.on('mousedown touchstart', function(){
 			log('touching...')
 			scroll_state = 'touching'
