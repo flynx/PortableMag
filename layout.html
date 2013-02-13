@@ -115,12 +115,13 @@ $(document).ready(function(){
 
 
 	window.scroll_state = 'none'
-	window.SCROLL_STOP_THRESHOLD = 0
+	window.SCROLL_STOP_THRESHOLD = 3
 	window.SCROLL_CHECK_INTERVAL = 50
 
 	window._scroll_offset = null
 	var v = $('.viewer')
 
+	/*
 	setInterval(function(){
 		var c = v.scrollLeft()
 		if(scroll_state == 'kinetic'
@@ -131,10 +132,22 @@ $(document).ready(function(){
 			v.trigger('scrollstop')
 		}
 	}, SCROLL_CHECK_INTERVAL)
+	*/
 
 	window._cur_page = 0
 
 	$('.viewer')
+		.on('scroll', function(){
+			log('scroll...')
+			var c = v.scrollLeft()
+			if(scroll_state == 'kinetic'
+					&& ((_scroll_offset - c) <= SCROLL_STOP_THRESHOLD 
+					|| _scroll_offset - c >= -SCROLL_STOP_THRESHOLD)){
+				scroll_state = 'none'
+				log('none...')
+				v.trigger('scrollstop')
+			}
+		})
 		.on('mousedown touchstart', function(){
 			log('touching...')
 			scroll_state = 'touching'
@@ -152,7 +165,7 @@ $(document).ready(function(){
 				// XXX for some reason, on android, this sets the page but 
 				//		does not actually scroll to it -- no animation and/or
 				//		.ScrollTo does notwork...
-				setCurrentPage()
+				//setCurrentPage()
 			})
 	//}
 
