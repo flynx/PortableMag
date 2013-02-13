@@ -121,6 +121,7 @@ $(document).ready(function(){
 	// XXX timeout-based scrollstop des not work correctly...
 	//		...for some reason the timeout function gets called like 
 	//		it's an interval...
+	// XXX scroll limiting did not work -- problems with page refresh...
 	// XXX try margin-based scrolling
 	//		in full page view set the margin so as to only allow 
 	//		scrolling the next and previous pages (in setCurrentPage)...
@@ -157,27 +158,6 @@ $(document).ready(function(){
 			scroll_state = 'kinetic'
 		})
 	*/
-	window._scroll_limit = [0, 0]
-
-	$('.viewer')
-		.on('scroll', function(){
-			if(_scroll_limit[0] == 0 && _scroll_limit[1] == 0){
-				return true
-			}
-			var sl = $('.viewer').scrollLeft()
-			if(sl <= _scroll_limit[0]){
-				$('.viewer').scrollLeft(_scroll_limit[0])
-				setCurrentPage()
-				setScrollLimit()
-				return false
-			} else if(sl >= _scroll_limit[1]){
-				$('.viewer').scrollLeft(_scroll_limit[1])
-				setCurrentPage()
-				setScrollLimit()
-				return false
-			}
-		})
-
 
 	//if(NAVIGATE_RELATIVE_TO_VISIBLE){
 		$('.viewer')
@@ -186,7 +166,7 @@ $(document).ready(function(){
 				// XXX for some reason, on android, this sets the page but 
 				//		does not actually scroll to it -- no animation and/or
 				//		.ScrollTo does notwork...
-				setTimeout(function(){setCurrentPage()}, 50)
+				setCurrentPage()
 			})
 	//}
 
@@ -201,14 +181,8 @@ $(document).ready(function(){
 	setScrollLimit()
 })
 
-// XXX does not seem to work...
+// XXX do a margin-based version...
 function setScrollLimit(){
-	var n = getPageNumber()
-	var l = n == 0 ? 0 : n-1 
-	// XXX this is still a bit wrong...
-	var r = n == $('.page').length-1 ? n : n+1
-	_scroll_limit[0] = $($('.page')[l]).position().left
-	_scroll_limit[1] = $($('.page')[r]).position().left
 }
 
 </script>
