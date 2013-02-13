@@ -121,7 +121,6 @@ $(document).ready(function(){
 	window._scroll_offset = null
 	var v = $('.viewer')
 
-	/*
 	setInterval(function(){
 		var c = v.scrollLeft()
 		if(scroll_state == 'kinetic'
@@ -132,11 +131,11 @@ $(document).ready(function(){
 			v.trigger('scrollstop')
 		}
 	}, SCROLL_CHECK_INTERVAL)
-	*/
 
 	window._cur_page = 0
 
 	$('.viewer')
+		/*
 		.on('scroll', function(){
 			log('scroll...')
 			var c = v.scrollLeft()
@@ -148,6 +147,7 @@ $(document).ready(function(){
 				v.trigger('scrollstop')
 			}
 		})
+		*/
 		.on('mousedown touchstart', function(){
 			log('touching...')
 			scroll_state = 'touching'
