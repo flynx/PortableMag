@@ -248,6 +248,36 @@ function shiftMagazineTo(offset){
 		})
 	}
 }
+// XXX this is almost the same as getElementScale...
+function getElementShift(elem){
+	elem = $(elem)
+	var vendors = ['o', 'moz', 'ms', 'webkit']
+	var transform = elem.css('transform')
+	var res
+
+	// go through vendor prefixes... (hate this!)
+	if(!transform || transform == 'none'){
+		for(var i in vendors){
+			transform = elem.css('-' + vendors[i] + '-transform')
+			if(transform && transform != 'none'){
+				break
+			}
+		}
+	}
+	// no transform is set...
+	if(!transform || transform == 'none'){
+		return {left: 0, top: 0}
+	}
+	//return parseFloat(/translate\(([-.0-9]*),/.exec(transform)[1])
+	return {
+		left: parseFloat(/(translate\(|matrix\([^,]*,[^,]*,[^,]*,[^,]*,)([^,]*),/.exec(transform)[2]),
+		top: null
+	}
+}
+
+function getMagazineShift(){
+	return getElementShift($('.magazine')).left
+}
 
 
 

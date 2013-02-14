@@ -205,6 +205,14 @@ body {
 	-ms-transition: none;	
 	transition: none;
 }
+.dragging * {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
 /* user hints, visible when user draggs past the cover or the last page
  * of the mag... */
 .magazine:before, .magazine:after {
