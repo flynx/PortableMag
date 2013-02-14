@@ -4,6 +4,7 @@
 <head>
 <title>PortableMag</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 
 <link rel="stylesheet" href="magazine.css">
 <link rel="stylesheet" href="magazine-themes.css">
@@ -133,10 +134,14 @@ $(document).ready(function(){
 		snap: '.page',
 		momentum: false,
 		hScrollbar: false,
-		/*onScrollEnd: function () {
-			document.querySelector('#indicator > li.active').className = '';
-			document.querySelector('#indicator > li:nth-child(' + (this.currPageX+1) + ')').className = 'active';
-		}*/
+		onScrollEnd: function () {
+			var n = getPageNumber()
+			var page = $($('.page')[n])
+			$('.current.page').removeClass('current')
+			page.addClass('current')
+			// XXX need to calc the propper offset...
+			myScroll.scrollToElement(page.offset(), 40)
+		}
 	})
 	
 

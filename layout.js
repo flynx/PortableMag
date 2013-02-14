@@ -91,15 +91,18 @@ function getPageNumber(page){
 	// get the closest page to view... 
 	} else {
 		// XXX this gets crazy when magazine is scaled...
-		var s = $('.viewer').scrollLeft()
+		//var s = $('.viewer').scrollLeft()
+		var o = -$($('.magazine')[0]).offset().left - $('.viewer').offset().left
 		var W = $('.viewer').width()
 		var scale = getMagazineScale()
 		var cur = -1
 		var res = $('.page').map(function(i, e){
 			e = $(e)
 			var l = e.position().left
+			//var l = e.offset().left
 			var w = e.width()*scale
-			return Math.abs((l+(w/2)) - (s+(W/2)))
+			//return Math.abs((l+(w/2)) - (s+(W/2)))
+			return Math.abs((l+(w/2)) - (o+(W/2)))
 		})
 		cur = res.index(Math.min.apply(Math, res))
 		return cur
