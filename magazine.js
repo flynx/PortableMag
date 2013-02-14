@@ -52,6 +52,8 @@ var UPDATE_HASH_URL_POSITION = false
 // NOTE: partial history navigation over links will still work.
 var FULL_HISTORY_ENABLED = false
 
+var USE_TRANSFORM = true
+
 
 
 /*********************************************************** modes ***/
@@ -590,11 +592,24 @@ function setCurrentPage(n, offset, width){
 	cur.addClass('current')
 
 	var mag = $('.magazine')
-	mag.css({
-		// NOTE: this will be wrong during a transition, that's why we 
-		// 		can pass the pre-calculated offset as an argument...
-		left: -(offset == null ? cur.position()['left']/getPageScale() : offset)
-	})
+	if(USE_TRANSFORM){
+		var transform = 'translate('+ 
+				-(offset == null ? cur.position()['left']/getPageScale() : offset) +
+				'px, 0px) translateZ(0px)'
+		mag.css({
+			'-ms-transform' : transform, 
+			'-webkit-transform' : transform, 
+			'-moz-transform' : transform, 
+			'-o-transform' : transform, 
+			'transform' : transform, 
+		})
+	} else {
+		mag.css({
+			// NOTE: this will be wrong during a transition, that's why we 
+			// 		can pass the pre-calculated offset as an argument...
+			left: -(offset == null ? cur.position()['left']/getPageScale() : offset)
+		})
+	}
 
 	// center the pages correctly...
 	// NOTE: this is the main reason we need width, and we can get it 
