@@ -150,7 +150,11 @@ $(document).ready(function(){
 					$('.current.page').removeClass('current')
 					page.addClass('current')
 					// attempt to make it without using .ScrollTo(...)
-					$('.viewer').scrollLeft(page.position().left)
+					// XXX the problem appears to be in the .scrollLeft(...)
+					//		that does not work on some webkit browser versions
+					//		namely on android it's "odd" to say the least...
+					//$('.viewer').scrollLeft(page.position().left)
+					$('.viewer')[0].scrollLeft = page.position().left
 				}, 100)
 			}
 		})
