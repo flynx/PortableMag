@@ -213,6 +213,26 @@ function getPageAt(n){
 	return $(page[n])
 }
 
+function shiftMagazineTo(offset){
+	var mag = $('.magazine')
+	if(USE_TRANSFORM){
+		var transform = 'translate('+ offset +'px, 0px) translateZ(0px)'
+		mag.css({
+			'-ms-transform' : transform, 
+			'-webkit-transform' : transform, 
+			'-moz-transform' : transform, 
+			'-o-transform' : transform, 
+			'transform' : transform, 
+		})
+	} else {
+		mag.css({
+			// NOTE: this will be wrong during a transition, that's why we 
+			// 		can pass the pre-calculated offset as an argument...
+			left: offset
+		})
+	}
+}
+
 
 
 /************************************************** event handlers ***/
@@ -300,9 +320,9 @@ function swipeHandler(evt, phase, direction, distance, duration, fingers){
 			&& (DRAG_FULL_PAGE || !_PAGE_VIEW)
 			&& (direction=='left' || direction=='right')){
 		if(direction == 'left'){
-			mag.css({left: -cur.position()['left']/scale - distance/scale})
+			shiftMagazineTo(-cur.position()['left']/scale - distance/scale)
 		} else if(direction == 'right') {
-			mag.css({left: -cur.position()['left']/scale + distance/scale})
+			shiftMagazineTo(-cur.position()['left']/scale + distance/scale)
 		}
 
 		$('.viewer').trigger('magazineDragging')
@@ -591,25 +611,9 @@ function setCurrentPage(n, offset, width){
 	$('.current.page').removeClass('current')
 	cur.addClass('current')
 
-	var mag = $('.magazine')
-	if(USE_TRANSFORM){
-		var transform = 'translate('+ 
-				-(offset == null ? cur.position()['left']/getPageScale() : offset) +
-				'px, 0px) translateZ(0px)'
-		mag.css({
-			'-ms-transform' : transform, 
-			'-webkit-transform' : transform, 
-			'-moz-transform' : transform, 
-			'-o-transform' : transform, 
-			'transform' : transform, 
-		})
-	} else {
-		mag.css({
-			// NOTE: this will be wrong during a transition, that's why we 
-			// 		can pass the pre-calculated offset as an argument...
-			left: -(offset == null ? cur.position()['left']/getPageScale() : offset)
-		})
-	}
+	// NOTE: this will be wrong during a transition, that's why we 
+	// 		can pass the pre-calculated offset as an argument...
+	shiftMagazineTo(-(offset == null ? cur.position()['left']/getPageScale() : offset))
 
 	// center the pages correctly...
 	// NOTE: this is the main reason we need width, and we can get it 
