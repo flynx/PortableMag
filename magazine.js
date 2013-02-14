@@ -218,7 +218,7 @@ function getPageAt(n){
 
 function shiftMagazineTo(offset){
 	var mag = $('.magazine')
-	var scale = getMagazineScale()
+	var scale = getPageScale()
 	if(USE_TRANSFORM){
 		var transform = 'translate('+ offset +'px, 0px) scale('+ scale +') translateZ(0px)'
 		mag.css({
