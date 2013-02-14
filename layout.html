@@ -66,6 +66,8 @@
 <script src="ext-lib/jquery.scrollto.js"></script>
 <script src="ext-lib/jquery.scrollstop.js"></script>
 
+<script src="ext-lib/iscroll.js"></script>
+
 <script src="lib/jli.js"></script>
 
 <script src="magazine.js"></script>
@@ -126,7 +128,19 @@ $(document).ready(function(){
 		}, 
 		function(k){console.log(k)}))
 
+	window.myScroll = new iScroll('viewer', {
+		snap: true,
+		momentum: false,
+		hScrollbar: false,
+		/*onScrollEnd: function () {
+			document.querySelector('#indicator > li.active').className = '';
+			document.querySelector('#indicator > li:nth-child(' + (this.currPageX+1) + ')').className = 'active';
+		}*/
+	})
+	
 
+
+	/*
 	var touching = false
 	var t = null
 	$('.viewer')
@@ -158,6 +172,7 @@ $(document).ready(function(){
 				}, 100)
 			}
 		})
+	*/
 
 	if(!NAVIGATE_RELATIVE_TO_VISIBLE){
 		$('.viewer').css({overflow: 'hidden'})
@@ -204,7 +219,7 @@ function clear_limits(){
 </head>
 <body>
 
-<div class="viewer">
+<div id="viewer" class="viewer">
 
 	<div class="magazine" name="PortableMag">
 		<div class="cover page">
