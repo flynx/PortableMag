@@ -130,18 +130,25 @@ $(document).ready(function(){
 		function(k){console.log(k)}))
 
 	window.myScroll = new iScroll('viewer', {
-		//snap: true,
+		vScroll: false,
+		// XXX we do not actually need this, just a couple fixed zoom levels...
+		zoom: true,
+		zoomMin: 0.1,
 		snap: '.page',
 		momentum: false,
 		hScrollbar: false,
+		chechDOMChanges: true,
+		/*
 		onScrollEnd: function () {
 			var n = getPageNumber()
 			var page = $($('.page')[n])
 			$('.current.page').removeClass('current')
 			page.addClass('current')
 			// XXX need to calc the propper offset...
-			myScroll.scrollToElement(page.offset(), 40)
+			//myScroll.scrollToElement(page[0], 40)
+			//myScroll.scrollToElement(page[0], 40)
 		}
+		*/
 	})
 	
 
