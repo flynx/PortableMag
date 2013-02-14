@@ -131,13 +131,10 @@ $(document).ready(function(){
 
 	window.myScroll = new iScroll('viewer', {
 		vScroll: false,
-		// XXX we do not actually need this, just a couple fixed zoom levels...
-		zoom: true,
-		zoomMin: 0.1,
 		snap: '.page',
 		momentum: false,
 		hScrollbar: false,
-		chechDOMChanges: true,
+		//chechDOMChanges: true,
 		/*
 		onScrollEnd: function () {
 			var n = getPageNumber()
