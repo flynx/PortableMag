@@ -223,12 +223,23 @@ function shiftMagazineTo(offset){
 			'-moz-transform' : transform, 
 			'-o-transform' : transform, 
 			'transform' : transform, 
+
+			// XXX can we avoid this here?? 
+			left: 0,
 		})
 	} else {
+		var transform = 'translate(0px, 0px) translateZ(0px)'
 		mag.css({
 			// NOTE: this will be wrong during a transition, that's why we 
 			// 		can pass the pre-calculated offset as an argument...
-			left: offset
+			left: offset,
+
+			// XXX can we avoid this here?? 
+			'-ms-transform' : transform, 
+			'-webkit-transform' : transform, 
+			'-moz-transform' : transform, 
+			'-o-transform' : transform, 
+			'transform' : transform, 
 		})
 	}
 }

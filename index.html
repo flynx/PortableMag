@@ -852,12 +852,20 @@ $(document).ready(function(){
 								<button id="DRAG_FULL_PAGE" onclick="toggleSetting(this)"></button>
 							</td>
 						</tr>
-						<tr>
+						<!--tr>
 							<td>
 								Toggle viewer animation (affects transition to and from full page view): 
 							</td>
 							<td>
 								<button id="viewer_transition_state" onclick="toggleViewerAnimation()"></button>
+							</td>
+						</tr-->
+						<tr>
+							<td>
+								Use transform to drag: 
+							</td>
+							<td>
+								<button id="USE_TRANSFORM" onclick="toggleSetting(this); setCurrentPage()"></button>
 							</td>
 						</tr>
 						<tr>
@@ -975,6 +983,7 @@ $(document).ready(function(){
 						USE_REAL_PAGE_SIZES = $('#USE_REAL_PAGE_SIZES').text() == 'true' ? true : false
 						UPDATE_HASH_URL_POSITION = $('#UPDATE_HASH_URL_POSITION').text() == 'true' ? true : false
 						FULL_HISTORY_ENABLED = $('#FULL_HISTORY_ENABLED').text() == 'true' ? true : false
+						USE_TRANSFORM = $('#USE_TRANSFORM').text() == 'true' ? true : false
 
 					}
 					function loadSettings(){
@@ -986,6 +995,7 @@ $(document).ready(function(){
 						$('#USE_REAL_PAGE_SIZES').text(USE_REAL_PAGE_SIZES)
 						$('#UPDATE_HASH_URL_POSITION').text(UPDATE_HASH_URL_POSITION)
 						$('#FULL_HISTORY_ENABLED').text(FULL_HISTORY_ENABLED)
+						$('#USE_TRANSFORM').text(USE_TRANSFORM)
 						$('#theme_toggler').text(toggleThemes('?'))
 						$('#theme_shadow_toggler').text(toggleShadows('?'))
 
