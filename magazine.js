@@ -191,6 +191,9 @@ function getMagazineTitle(){
 function getPageScale(){
 	return getElementScale($('.scaler'))
 }
+function setPageScale(scale){
+	return setElementScale($('.scaler'), scale)
+}
 
 
 // NOTE: if page is not given get the current page number...
@@ -215,8 +218,9 @@ function getPageAt(n){
 
 function shiftMagazineTo(offset){
 	var mag = $('.magazine')
+	var scale = getMagazineScale()
 	if(USE_TRANSFORM){
-		var transform = 'translate('+ offset +'px, 0px) translateZ(0px)'
+		var transform = 'translate('+ offset +'px, 0px) scale('+ scale +') translateZ(0px)'
 		mag.css({
 			'-ms-transform' : transform, 
 			'-webkit-transform' : transform, 
@@ -228,7 +232,7 @@ function shiftMagazineTo(offset){
 			left: 0,
 		})
 	} else {
-		var transform = 'translate(0px, 0px) translateZ(0px)'
+		var transform = 'translate(0px, 0px) scale('+ scale +') translateZ(0px)'
 		mag.css({
 			// NOTE: this will be wrong during a transition, that's why we 
 			// 		can pass the pre-calculated offset as an argument...
