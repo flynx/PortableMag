@@ -67,7 +67,7 @@
 <script src="ext-lib/jquery.scrollto.js"></script>
 <script src="ext-lib/jquery.scrollstop.js"></script>
 
-<script src="ext-lib/iscroll.js"></script>
+<script src="ext-lib/iscroll-custom.js"></script>
 
 <script src="lib/jli.js"></script>
 
@@ -79,32 +79,6 @@
 <script>
 
 $(document).ready(function(){
-	// log...
-	/*
-	var _log = $('<div id="log"></div>')
-		.css({
-			position: 'fixed',
-			background: 'silver',
-			opacity: 0.5,
-			width: 200,
-			height: '80%',
-			top: 10,
-			left: 10,
-			'z-index': 90000,
-			overflow: 'hidden',
-			padding: 10,
-		})
-		.text('log')
-		.appendTo($('body'))
-	function log(text){
-		_log.html(_log.html() + '<br>' + text + '')
-		_log.scrollTop(_log.prop('scrollHeight'))
-	}
-	function clear_log(){
-		_log.html('')
-	}
-	*/
-
 	// keyboard...
 	$(document)
 		.keydown(makeKeyboardHandler({
