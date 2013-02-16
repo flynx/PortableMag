@@ -160,8 +160,10 @@ var m = Math,
 		that.scroller.style[transformOrigin] = '0 0';
 		if (that.options.useTransition) that.scroller.style[transitionTimingFunction] = 'cubic-bezier(0.33,0.66,0.66,1)';
 		
-		if (that.options.useTransform) that.scroller.style[transform] = 'translate(' + that.x + 'px,' + that.y + 'px)' + translateZ;
-		else that.scroller.style.cssText += ';position:absolute;top:' + that.y + 'px;left:' + that.x + 'px';
+		if (that.options.useTransform) 
+			that.scroller.style[transform] = 'translate(' + that.x + 'px,' + that.y + 'px)' + translateZ;
+		else 
+			that.scroller.style.cssText += ';position:absolute;top:' + that.y + 'px;left:' + that.x + 'px';
 
 		that.refresh();
 
@@ -402,8 +404,8 @@ iScroll.prototype = {
 
 		if (that.zoomed) {
 			scale = that.scale * that.lastScale;
-			scale = Math.max(that.options.zoomMin, scale);
-			scale = Math.min(that.options.zoomMax, scale);
+			//scale = Math.max(that.options.zoomMin, scale);
+			//scale = Math.min(that.options.zoomMax, scale);
 			that.lastScale = scale / that.scale;
 			that.scale = scale;
 
@@ -426,13 +428,16 @@ iScroll.prototype = {
 					// Double tapped
 					clearTimeout(that.doubleTapTimer);
 					that.doubleTapTimer = null;
-					if (that.options.onZoomStart) that.options.onZoomStart.call(that, e);
+					// XXX change this to a double tap event...
+					//if (that.options.onZoomStart) that.options.onZoomStart.call(that, e);
+					/* XXX Zoom...
 					that.zoom(that.pointX, that.pointY, that.scale == 1 ? that.options.doubleTapZoom : 1);
 					if (that.options.onZoomEnd) {
 						setTimeout(function() {
 							that.options.onZoomEnd.call(that, e);
 						}, 200); // 200 is default zoom duration
 					}
+					*/
 				} else if (this.options.handleClick) {
 					that.doubleTapTimer = setTimeout(function () {
 						that.doubleTapTimer = null;
@@ -511,6 +516,7 @@ iScroll.prototype = {
 		if (that.options.onTouchEnd) that.options.onTouchEnd.call(that, e);
 	},
 	
+	// XXX
 	_resetPos: function (time) {
 		var that = this,
 			resetX = that.x >= 0 ? 0 : that.x < that.maxScrollX ? that.maxScrollX : that.x,
