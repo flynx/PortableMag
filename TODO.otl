@@ -5,8 +5,81 @@
 		| touchdown point.
 		[_] BUG: no drag threshold on excludedElements (TouchSwipe)
 		| stalled...
-	[_] 65% general todo
-		[_] % EXPERIMENT: Try using scroll instead of left of .magazine....
+	[_] 64% general todo
+		[_] 0% STUB: build a UI around current iscroll to allow time for internal scroll devel
+			[_] resize pages to screen on load
+			[_] scale .content ot fit in page
+			| this will temporarily disable these features:
+				groups (depends on style)
+				page background images
+			[_] disable snapping in ribbon mode
+		[_] 0% build a custom scroll lib...
+			[_] 0% features:
+				[_] drag/scroll
+				[_] inertial
+				[_] snap
+				| if enabled, on release, detect nearest snap-point and scroll to it.
+			[_] 0% tragets
+				[_] smooth scroll on devices (iscroll)
+				| adaptive transitions, etc.
+				[_] snap scroll to markers (a-la iscroll)
+					[_] snap align
+						[_] left (iscroll)
+						[_] center
+						[_] right
+				[_] flexible event system
+					[_] pre/post events
+					[_] ability to modify action data before it runs
+					[_] ability to cancel current action
+					| like stop scrolling at a given point.
+					[_] ability to take over and do something manually
+				[_] all actions callable
+				[_] both x and y axis support (x is a priority)
+			[_] scroll phases
+				[_] user scroll phase
+				| from mousedown/touchstart and to mouseup/touchend
+				[_] auto scroll phase
+				| from mouseup/touchend and untill scrollend
+				|
+				| must account for speed...
+					[_] momentum
+					[_] snap
+			[_] 0% actions
+				[_] 0% .scrollTo(target)
+				| must accept:
+					[_] element
+					[_] px
+					[_] name
+			[_] 0% events
+				basic anatomy
+				|
+				| 	user scroll				+-------------------+
+				| +-------------------------+		auto scroll
+				|
+				| touchstart				touchend
+				| |							|
+				| scrollstart				userscrollend		scrollend
+				| userscrollstart			|					|
+				| |							|					|
+				| v							v					v
+				| o----+--+-+-+--+-+---+-+--o----+--+-+-+---+---+
+				|	   ^  ^ ^ ^	 ^ ^   ^ ^		 ^	^ ^ ^	^
+				| 	   +-----------------+		 +----------+
+				| 	   scroll					 scroll
+				|
+				[_] 0% scroll
+					[_] scrollstart / userscrollstart
+					| on mousedown/touchstart
+					[_] scroll
+					| mousemove/touchmove
+					|
+					| also triggered by lib on auto-scroll...
+					[_] userscrollend
+					| on mouseup/touchend
+					[_] scrollend
+				[_] 0% snap
+					[_] snapped
+		[_] 0% EXPERIMENT: Try using scroll instead of left of .magazine....
 			[_] try and get rid of .scroller
 			[_] try using the scroll event to see of we reached the limit...
 			| and move the limit accordingly
