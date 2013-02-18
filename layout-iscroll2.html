@@ -121,6 +121,7 @@ $(document).ready(function(){
 		.on('mousemove touchmove', function(evt){
 			//var t = evt.timeStamp || Date.now();
 			evt.preventDefault()
+			console.log(evt.touches)
 			if(evt.touches != null && evt.touches.length > 0){
 				console.log('touching!!!')
 				var pos_x = evt.touches[0].pointX
