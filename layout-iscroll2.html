@@ -109,52 +109,68 @@ $(document).ready(function(){
 	var _x = null
 	var _t = null
 	USE_TRANSFORM = true
-	$('.viewer')
 
-		.on('mousedown touchstart', function(){
-			logger.log('[touchstart]')
-			//_t = evt.timeStamp || Date.now();
-			scrolling = true
-			togglePageDragging('on')
-		})
+	// XXX this is a stub, but need to keep the two types of events 
+	//		seporated as mouse events sometimes interfere with touch events...
+	if('touchmove' in window){
+		$('.viewer')
+			.on('touchstart', function(){
+				logger.log('[touchstart]')
+				//_t = evt.timeStamp || Date.now();
+				scrolling = true
+				togglePageDragging('on')
+			})
+			.on('touchmove', function(evt){
+				evt.preventDefault()
+				var pos_x = event.touches[0].pageX
 
-		.on('touchmove', function(evt){
-			evt.preventDefault()
-			var pos_x = event.touches[0].pageX
+				if(_x == null){
+					_x = pos_x
+				}
+				var x = pos_x
+				if(scrolling){
+					var s = getMagazineShift()
+					//logger.log('>>>' + s)
+					shiftMagazineTo(s + (x - _x))
+				}
+				_x = x
+			})
+			.on('touchend', function(){
+				logger.log('[touchend]')
+				scrolling = false
+				togglePageDragging('off')
+			})
 
-			if(_x == null){
-				_x = pos_x
-			}
-			var x = pos_x
-			if(scrolling){
-				var s = getMagazineShift()
-				//logger.log('>>>' + s)
-				shiftMagazineTo(s + (x - _x))
-			}
-			_x = x
-		})
-		.on('mousemove', function(evt){
-			//var t = evt.timeStamp || Date.now();
-			evt.preventDefault()
-			var pos_x = evt.clientX
+	} else {
+		$('.viewer')
+			.on('mousedown', function(){
+				logger.log('[touchstart]')
+				//_t = evt.timeStamp || Date.now();
+				scrolling = true
+				togglePageDragging('on')
+			})
+			.on('mousemove', function(evt){
+				//var t = evt.timeStamp || Date.now();
+				evt.preventDefault()
+				var pos_x = evt.clientX
 
-			if(_x == null){
-				_x = pos_x
-			}
-			var x = pos_x
-			if(scrolling){
-				var s = getMagazineShift()
-				logger.log('>>>' + s)
-				shiftMagazineTo(s + (x - _x))
-			}
-			_x = x
-		})
+				if(_x == null){
+					_x = pos_x
+				}
+				var x = pos_x
+				if(scrolling){
+					var s = getMagazineShift()
+					shiftMagazineTo(s + (x - _x))
+				}
+				_x = x
+			})
+			.on('mouseup', function(){
+				logger.log('[touchend]')
+				scrolling = false
+				togglePageDragging('off')
+			})
+		}
 
-		.on('mouseup touchend', function(){
-			logger.log('[touchend]')
-			scrolling = false
-			togglePageDragging('off')
-		})
 
 	// XXX need to setup style for android to work...
 	$('.viewer').css({overflow: 'hidden'})
