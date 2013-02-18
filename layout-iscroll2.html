@@ -108,7 +108,7 @@ $(document).ready(function(){
 	var scrolling = false
 	var _x = null
 	var _t = null
-	USE_TRANSFORM = false
+	USE_TRANSFORM = true
 	$('.viewer')
 
 		.on('mousedown touchstart', function(){
@@ -121,9 +121,6 @@ $(document).ready(function(){
 		.on('touchmove', function(evt){
 			evt.preventDefault()
 			var pos_x = event.touches[0].pageX
-
-			console.log(event.touches[0].pageX)
-
 
 			if(_x == null){
 				_x = pos_x
