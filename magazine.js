@@ -361,61 +361,73 @@ function viewResizeHandler(){
 // 		each call while dragging...
 // XXX for some reason with finger count of 3 and greater, touchSwipe
 // 		dies on	android...
-function swipeHandler(evt, phase, direction, distance, duration, fingers){
-	var pages = $('.page')
-	var cur = $('.current.page')
-	var n = pages.index(cur)
-	var scale = getPageScale()
-	var mag = $('.magazine')
-	var pos = $('.navigator .bar .indicator')
+function makeSwipeHandler(){
+	var pages
+	var cur
+	var n
+	var scale
+	var mag
+	var pos
+	var viewer
 
-	// XXX make this drag pages that are larger than view before dragging outside...
-	if(phase=='move' 
-			// see if wee need to drag the page and allways drag the ribbon...
-			&& (DRAG_FULL_PAGE || !_PAGE_VIEW)
-			&& (direction=='left' || direction=='right')){
-		if(direction == 'left'){
-			shiftMagazineTo(-cur.position()['left']/scale - distance/scale)
-		} else if(direction == 'right') {
-			shiftMagazineTo(-cur.position()['left']/scale + distance/scale)
-		}
+	return function(evt, phase, direction, distance, duration, fingers){
 
-		$('.viewer').trigger('magazineDragging')
+		if(phase == 'start'){
+			// NOTE: this is used with the "unanimated" trick, we will make
+			//		dragging real-time...
+			togglePageDragging('on')
 
-	} else if(phase == 'start'){
-		// NOTE: this is used with the "unanimated" trick, we will make
-		//		dragging real-time...
-		togglePageDragging('on')
+			// setup the data for the drag...
+			pages = $('.page')
+			cur = $('.current.page')
+			n = pages.index(cur)
+			scale = getPageScale()
+			mag = $('.magazine')
+			pos = $('.navigator .bar .indicator')
+			viewer = $('.viewer')
 
-	} else if(phase == 'cancel'){
-		togglePageDragging('off')
-		setCurrentPage()
-
-	} else if(phase =='end' ){
-		togglePageDragging('off')
-		// see which page is closer to the middle of the screen and set it...
-		// do this based on how much we dragged...
-		var p = Math.ceil((distance/scale)/cur.width())
-
-		// prev page...
-		if(direction == 'right'){
-			// 2 fingers moves to closest article...
-			if(fingers == 2){
-				prevArticle()
-			// 3+ fingers moves to bookmark...
-			} else if(fingers >= 3){
-				prevBookmark()
-			} else {
-				setCurrentPage(Math.max(n-p, 0))
+		// XXX make this drag pages that are larger than view before dragging outside...
+		} else if(phase=='move' 
+				// see if wee need to drag the page and allways drag the ribbon...
+				&& (DRAG_FULL_PAGE || !_PAGE_VIEW)
+				&& (direction=='left' || direction=='right')){
+			if(direction == 'left'){
+				shiftMagazineTo(-cur.position().left/scale - distance/scale)
+			} else if(direction == 'right') {
+				shiftMagazineTo(-cur.position().left/scale + distance/scale)
 			}
-		// next page...
-		} else if(direction == 'left'){
-			if(fingers == 2){
-				nextArticle()
-			} else if(fingers >= 3){
-				nextBookmark()
-			} else {
-				setCurrentPage(Math.min(n+p, pages.length-1))
+			viewer.trigger('magazineDragging')
+
+		} else if(phase == 'cancel'){
+			togglePageDragging('off')
+			setCurrentPage()
+
+		} else if(phase =='end' ){
+			togglePageDragging('off')
+			// see which page is closer to the middle of the screen and set it...
+			// do this based on how much we dragged...
+			var p = Math.ceil((distance/scale)/cur.width())
+
+			// prev page...
+			if(direction == 'right'){
+				// 2 fingers moves to closest article...
+				if(fingers == 2){
+					prevArticle()
+				// 3+ fingers moves to bookmark...
+				} else if(fingers >= 3){
+					prevBookmark()
+				} else {
+					setCurrentPage(Math.max(n-p, 0))
+				}
+			// next page...
+			} else if(direction == 'left'){
+				if(fingers == 2){
+					nextArticle()
+				} else if(fingers >= 3){
+					nextBookmark()
+				} else {
+					setCurrentPage(Math.min(n+p, pages.length-1))
+				}
 			}
 		}
 	}
