@@ -104,7 +104,7 @@ $(document).ready(function(){
 		function(k){console.log(k)}))
 
 
-	logger = Logger()
+	//logger = Logger()
 	var scrolling = false
 	var _x = null
 	var _t = null
@@ -112,10 +112,10 @@ $(document).ready(function(){
 
 	// XXX this is a stub, but need to keep the two types of events 
 	//		seporated as mouse events sometimes interfere with touch events...
-	if('touchmove' in window){
+	if('ontouchmove' in window){
 		$('.viewer')
 			.on('touchstart', function(){
-				logger.log('[touchstart]')
+				//logger.log('[touchstart]')
 				//_t = evt.timeStamp || Date.now();
 				scrolling = true
 				togglePageDragging('on')
@@ -136,7 +136,7 @@ $(document).ready(function(){
 				_x = x
 			})
 			.on('touchend', function(){
-				logger.log('[touchend]')
+				//logger.log('[touchend]')
 				scrolling = false
 				togglePageDragging('off')
 			})
@@ -144,7 +144,7 @@ $(document).ready(function(){
 	} else {
 		$('.viewer')
 			.on('mousedown', function(){
-				logger.log('[touchstart]')
+				//logger.log('[touchstart]')
 				//_t = evt.timeStamp || Date.now();
 				scrolling = true
 				togglePageDragging('on')
@@ -165,7 +165,7 @@ $(document).ready(function(){
 				_x = x
 			})
 			.on('mouseup', function(){
-				logger.log('[touchend]')
+				//logger.log('[touchend]')
 				scrolling = false
 				togglePageDragging('off')
 			})
