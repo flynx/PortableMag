@@ -126,8 +126,8 @@ $(document).ready(function(){
 			}
 			var x = evt.clientX
 			if(scrolling && Math.abs(x-_x) > 6){
+				console.log('drag...')
 				var s = getMagazineShift()
-				console.log('>>> '+s+'')
 				shiftMagazineTo(s + (x - _x))
 			}
 			_x = x
