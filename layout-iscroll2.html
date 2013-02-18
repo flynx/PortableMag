@@ -120,10 +120,8 @@ $(document).ready(function(){
 
 		.on('touchmove', function(evt){
 			evt.preventDefault()
-			//var pos_x = event.touches[0].pointX
-			var pos_x = event.pageX
+			var pos_x = event.touches[0].pointX
 
-			console.log(event.pageX + ' ' + event.clientX +' '+ event.touches)
 
 			if(_x == null){
 				_x = pos_x
