@@ -7,7 +7,7 @@
 		| stalled...
 	[_] 64% general todo
 		[_] 0% STUB: build a UI around current iscroll to allow time for internal scroll devel
-			[_] resize pages to screen on load
+			[_] manually resize pages to screen on load
 			[_] scale .content ot fit in page
 			| this will temporarily disable these features:
 				groups (depends on style)

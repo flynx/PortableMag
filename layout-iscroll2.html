@@ -107,24 +107,30 @@ $(document).ready(function(){
 	logger = Logger()
 	var scrolling = false
 	var _x = null
+	var _t = null
 	$('.viewer')
+
 		.on('mousedown touchstart', function(){
 			logger.log('[touchstart]')
+			//_t = evt.timeStamp || Date.now();
 			scrolling = true
 			togglePageDragging('on')
 		})
+
 		.on('mousemove touchmove', function(evt){
+			//var t = evt.timeStamp || Date.now();
 			evt.preventDefault()
 			if(_x == null){
 				_x = evt.clientX
 			}
 			var x = evt.clientX
-			if(scrolling){
-				logger.log('[drag]')
+			if(scrolling && Math.abs(x-_x) > 6){
+				//logger.log('[drag]')
 				shiftMagazineTo(getMagazineShift() + (x - _x))
 			}
 			_x = x
 		})
+
 		.on('mouseup touchend', function(){
 			logger.log('[touchend]')
 			scrolling = false

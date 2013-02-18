@@ -147,12 +147,14 @@ var m = Math,
 		that.options.zoom = that.options.useTransform && that.options.zoom;
 		that.options.useTransition = hasTransitionEnd && that.options.useTransition;
 
+		/* XXX removed for now...
 		// Helpers FIX ANDROID BUG!
 		// translate3d and scale doesn't work together!
 		// Ignoring 3d ONLY WHEN YOU SET that.options.zoom
 		if ( that.options.zoom && isAndroid ){
 			translateZ = '';
 		}
+		*/
 		
 		// Set some default styles
 		that.scroller.style[transitionProperty] = that.options.useTransform ? cssVendor + 'transform' : 'top left';
@@ -349,7 +351,7 @@ iScroll.prototype = {
 		that.absDistX = m.abs(that.distX);
 		that.absDistY = m.abs(that.distY);
 
-		// XXX why is this here??
+		// XXX this appears to be a move threshold...
 		if (that.absDistX < 6 && that.absDistY < 6) {
 			return;
 		}
@@ -402,6 +404,7 @@ iScroll.prototype = {
 
 		if (that.options.onBeforeScrollEnd) that.options.onBeforeScrollEnd.call(that, e);
 
+		// XXX do we need this?
 		if (that.zoomed) {
 			scale = that.scale * that.lastScale;
 			//scale = Math.max(that.options.zoomMin, scale);
@@ -787,7 +790,7 @@ iScroll.prototype = {
 			pos = 0,
 			page = 0;
 
-		if (that.scale < that.options.zoomMin) that.scale = that.options.zoomMin;
+		//if (that.scale < that.options.zoomMin) that.scale = that.options.zoomMin;
 		that.wrapperW = that.wrapper.clientWidth || 1;
 		that.wrapperH = that.wrapper.clientHeight || 1;
 
