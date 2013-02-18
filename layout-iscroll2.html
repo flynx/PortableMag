@@ -118,16 +118,9 @@ $(document).ready(function(){
 			togglePageDragging('on')
 		})
 
-		.on('mousemove touchmove', function(evt){
-			//var t = evt.timeStamp || Date.now();
+		.on('touchmove', function(evt){
 			evt.preventDefault()
-			console.log(evt.touches)
-			if(evt.touches != null && evt.touches.length > 0){
-				console.log('touching!!!')
-				var pos_x = evt.touches[0].pointX
-			} else {
-				var pos_x = evt.clientX
-			}
+			var pos_x = evt.touches[0].pointX
 
 			if(_x == null){
 				_x = pos_x
@@ -140,6 +133,24 @@ $(document).ready(function(){
 			}
 			_x = x
 		})
+		/*
+		.on('mousemove', function(evt){
+			//var t = evt.timeStamp || Date.now();
+			evt.preventDefault()
+			var pos_x = evt.clientX
+
+			if(_x == null){
+				_x = pos_x
+			}
+			var x = pos_x
+			//console.log(pos_x)
+			if(scrolling){
+				var s = getMagazineShift()
+				shiftMagazineTo(s + (x - _x))
+			}
+			_x = x
+		})
+		*/
 
 		.on('mouseup touchend', function(){
 			logger.log('[touchend]')
