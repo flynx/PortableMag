@@ -251,6 +251,7 @@ function shiftMagazineTo(offset){
 // XXX this is almost the same as getElementScale...
 function getElementShift(elem){
 	elem = $(elem)
+	// using transform...
 	if(USE_TRANSFORM){
 		var vendors = ['o', 'moz', 'ms', 'webkit']
 		var transform = elem.css('transform')
@@ -269,11 +270,11 @@ function getElementShift(elem){
 		if(!transform || transform == 'none'){
 			return {left: 0, top: 0}
 		}
-		//return parseFloat(/translate\(([-.0-9]*),/.exec(transform)[1])
 		return {
 			left: parseFloat(/(translate\(|matrix\([^,]*,[^,]*,[^,]*,[^,]*,)([^,]*),/.exec(transform)[2]),
 			top: null
 		}
+	// using left...
 	} else {
 		return {
 			left: elem.position().left,
