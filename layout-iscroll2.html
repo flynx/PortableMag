@@ -109,6 +109,7 @@ $(document).ready(function(){
 	var _x = null
 	var _t = null
 	var _s = null
+	var _scale = null
 
 	// XXX this is a stub, but need to keep the two types of events 
 	//		seporated as mouse events sometimes interfere with touch events...
@@ -122,6 +123,7 @@ $(document).ready(function(){
 				scrolling = true
 				//togglePageDragging('on')
 				_s = getMagazineShift()
+				_scale = getMagazineScale()
 			})
 			.on('touchmove', function(evt){
 				evt.preventDefault()
@@ -134,7 +136,7 @@ $(document).ready(function(){
 				if(scrolling){
 					//logger.log('>>>' + s)
 					_s += x - _x
-					shiftMagazineTo(_s)
+					shiftMagazineTo(_s, _scale)
 				}
 				_x = x
 			})
@@ -144,6 +146,7 @@ $(document).ready(function(){
 				//togglePageDragging('off')
 				_x = null
 				_s = null
+				_scale = null
 			})
 
 	} else {
@@ -156,6 +159,7 @@ $(document).ready(function(){
 				scrolling = true
 				//togglePageDragging('on')
 				_s = getMagazineShift()
+				_scale = getMagazineScale()
 			})
 			.on('mousemove', function(evt){
 				//var t = evt.timeStamp || Date.now();
@@ -168,7 +172,7 @@ $(document).ready(function(){
 				var x = pos_x
 				if(scrolling){
 					_s += x - _x
-					shiftMagazineTo(_s)
+					shiftMagazineTo(_s, _scale)
 				}
 				_x = x
 			})
@@ -178,8 +182,11 @@ $(document).ready(function(){
 				//togglePageDragging('off')
 				_x = null
 				_s = null
+				_scale = null
 			})
-		}
+	}
+
+	setMagazineScale(0.5)
 
 
 	// XXX need to setup style for android to work...
