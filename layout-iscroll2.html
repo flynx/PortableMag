@@ -108,7 +108,7 @@ $(document).ready(function(){
 	var scrolling = false
 	var _x = null
 	var _t = null
-	USE_TRANSFORM = true
+	var _s = null
 
 	// XXX this is a stub, but need to keep the two types of events 
 	//		seporated as mouse events sometimes interfere with touch events...
@@ -119,6 +119,7 @@ $(document).ready(function(){
 				//_t = evt.timeStamp || Date.now();
 				scrolling = true
 				togglePageDragging('on')
+				_s = getMagazineShift()
 			})
 			.on('touchmove', function(evt){
 				evt.preventDefault()
@@ -129,9 +130,9 @@ $(document).ready(function(){
 				}
 				var x = pos_x
 				if(scrolling){
-					var s = getMagazineShift()
 					//logger.log('>>>' + s)
-					shiftMagazineTo(s + (x - _x))
+					_s += x - _x
+					shiftMagazineTo(_s)
 				}
 				_x = x
 			})
@@ -140,6 +141,7 @@ $(document).ready(function(){
 				scrolling = false
 				togglePageDragging('off')
 				_x = null
+				_s = null
 			})
 
 	} else {
@@ -149,6 +151,7 @@ $(document).ready(function(){
 				//_t = evt.timeStamp || Date.now();
 				scrolling = true
 				togglePageDragging('on')
+				_s = getMagazineShift()
 			})
 			.on('mousemove', function(evt){
 				//var t = evt.timeStamp || Date.now();
@@ -160,8 +163,8 @@ $(document).ready(function(){
 				}
 				var x = pos_x
 				if(scrolling){
-					var s = getMagazineShift()
-					shiftMagazineTo(s + (x - _x))
+					_s += x - _x
+					shiftMagazineTo(_s)
 				}
 				_x = x
 			})
@@ -170,6 +173,7 @@ $(document).ready(function(){
 				scrolling = false
 				togglePageDragging('off')
 				_x = null
+				_s = null
 			})
 		}
 
