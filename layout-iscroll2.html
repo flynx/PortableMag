@@ -121,15 +121,13 @@ $(document).ready(function(){
 		.on('mousemove touchmove', function(evt){
 			//var t = evt.timeStamp || Date.now();
 			//evt.preventDefault()
-			console.log('move...')
 			if(_x == null){
 				_x = evt.clientX
 			}
 			var x = evt.clientX
 			if(scrolling && Math.abs(x-_x) > 6){
-				logger.log('[drag]')
 				var s = getMagazineShift()
-				logger.log('>>> '+s+'')
+				console.log('>>> '+s+'')
 				shiftMagazineTo(s + (x - _x))
 			}
 			_x = x
