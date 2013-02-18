@@ -113,12 +113,14 @@ $(document).ready(function(){
 	// XXX this is a stub, but need to keep the two types of events 
 	//		seporated as mouse events sometimes interfere with touch events...
 	if('ontouchmove' in window){
+		// XXX STUB...
+		togglePageDragging('on')
 		$('.viewer')
 			.on('touchstart', function(){
 				//logger.log('[touchstart]')
 				//_t = evt.timeStamp || Date.now();
 				scrolling = true
-				togglePageDragging('on')
+				//togglePageDragging('on')
 				_s = getMagazineShift()
 			})
 			.on('touchmove', function(evt){
@@ -139,18 +141,20 @@ $(document).ready(function(){
 			.on('touchend', function(){
 				//logger.log('[touchend]')
 				scrolling = false
-				togglePageDragging('off')
+				//togglePageDragging('off')
 				_x = null
 				_s = null
 			})
 
 	} else {
+		// XXX stub...
+		togglePageDragging('on')
 		$('.viewer')
 			.on('mousedown', function(){
 				//logger.log('[touchstart]')
 				//_t = evt.timeStamp || Date.now();
 				scrolling = true
-				togglePageDragging('on')
+				//togglePageDragging('on')
 				_s = getMagazineShift()
 			})
 			.on('mousemove', function(evt){
@@ -171,7 +175,7 @@ $(document).ready(function(){
 			.on('mouseup', function(){
 				//logger.log('[touchend]')
 				scrolling = false
-				togglePageDragging('off')
+				//togglePageDragging('off')
 				_x = null
 				_s = null
 			})
