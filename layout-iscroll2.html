@@ -120,9 +120,9 @@ $(document).ready(function(){
 
 		.on('mousemove touchmove', function(evt){
 			//var t = evt.timeStamp || Date.now();
-			console.log('moving...')
 			evt.preventDefault()
-			if(evt.touches && evt.touches.length > 0){
+			if(evt.touches != null && evt.touches.length > 0){
+				console.log('touching!!!')
 				var pos_x = evt.touches[0].pointX
 			} else {
 				var pos_x = evt.clientX
@@ -132,7 +132,7 @@ $(document).ready(function(){
 				_x = pos_x
 			}
 			var x = pos_x
-			console.log(pos_x)
+			//console.log(pos_x)
 			if(scrolling){
 				var s = getMagazineShift()
 				shiftMagazineTo(s + (x - _x))
