@@ -120,14 +120,15 @@ $(document).ready(function(){
 
 		.on('touchmove', function(evt){
 			evt.preventDefault()
-			//var pos_x = evt.touches[0].pointX
-			var pos_x = evt.pageX
+			//var pos_x = event.touches[0].pointX
+			var pos_x = event.pageX
+
+			console.log(event, event.pageX, event.clientX, event.touches)
 
 			if(_x == null){
 				_x = pos_x
 			}
 			var x = pos_x
-			console.log(pos_x)
 			if(scrolling){
 				var s = getMagazineShift()
 				shiftMagazineTo(s + (x - _x))
