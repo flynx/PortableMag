@@ -242,8 +242,9 @@ function makeScrollHandler(root, callback){
 
 // XXX make this more acurate...
 // 		...should check mode or if we are in a ribbon...
+var NAVIGATION_MODE_THRESHOLD = 0.7
 function isNavigationViewRelative(){
-	return getMagazineScale() < 1
+	return getMagazineScale() <= NAVIGATION_MODE_THRESHOLD
 }
 
 
@@ -321,7 +322,6 @@ function setMagazineScale(scale){
 
 	// center-align ribbon view pages...
 	var align = isNavigationViewRelative() ? 'center' : null
-
 	var left = getMagazineOffset(cur, scale, align)
 
 	setElementTransform(mag, left, scale)
