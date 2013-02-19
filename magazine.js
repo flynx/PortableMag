@@ -216,6 +216,7 @@ function getPageAt(n){
 	return $(page[n])
 }
 
+// NOTE: at this point this works only on the X axis...
 function shiftMagazineTo(offset, scale){
 	var mag = $('.magazine')
 	if(scale == null){
@@ -368,7 +369,7 @@ function makeSwipeHandler(){
 	var scale
 	var mag
 	var pos
-	var viewer
+	var viewer = $('.viewer')
 
 	return function(evt, phase, direction, distance, duration, fingers){
 
@@ -384,7 +385,6 @@ function makeSwipeHandler(){
 			scale = getPageScale()
 			mag = $('.magazine')
 			pos = $('.navigator .bar .indicator')
-			viewer = $('.viewer')
 
 		// XXX make this drag pages that are larger than view before dragging outside...
 		} else if(phase=='move' 

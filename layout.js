@@ -78,6 +78,7 @@ var togglePageView = createCSSClassToggler(
 
 /********************************************************* helpers ***/
 
+// XXX make this work for narrow and left/right alligned pages...
 function getPageNumber(page){
 	// a page is given...
 	if(page != null){
@@ -124,7 +125,7 @@ function setMagazineScale(scale){
 		// XXX also add margins at top and bottom for vertical elements...
 	})
 	setElementScale(mag, scale)
-	setCurrentPage()
+	//setCurrentPage()
 }
 
 
@@ -164,11 +165,11 @@ function setCurrentPage(n){
 }
 
 
-function nextPage(){
-	setCurrentPage(getPageNumber()+1)
+function nextPage(page){
+	setCurrentPage(getPageNumber(page)+1)
 }
-function prevPage(){
-	var n = getPageNumber()-1
+function prevPage(page){
+	var n = getPageNumber(page)-1
 	n = n < 0 ? 0 : n
 	setCurrentPage(n)
 }

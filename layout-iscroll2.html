@@ -20,8 +20,11 @@
 }
 
 .current.page {
+	/*
 	z-index: 9000;
 	box-shadow: 10px 10px 150px -50px black;
+	border-bottom: solid yellow 10px;
+	*/
 }
 /*
 .page:hover {
@@ -31,6 +34,9 @@
 */
 
 .page {
+
+	vertical-align:top;
+
 	-webkit-transition: none;
 	-moz-transition: none;
 	-o-transition: all 0 ease;
@@ -104,101 +110,137 @@ $(document).ready(function(){
 		function(k){console.log(k)}))
 
 
-	//logger = Logger()
-	var scrolling = false
-	var _x = null
-	var _t = null
-	var _s = null
-	var _scale = null
+	window.THRESHOLD = 10
+	var scroller = makeScrollHandler($('.viewer'), function(speed, distance){
+		// XXX this is not too correct...
+		//		...make this mode specific...
+		if(getMagazineScale() >= 1){
+			var cur = $('.current.page')
+			if(distance > THRESHOLD){
+				return nextPage(cur)
+			} else if(distance < -THRESHOLD){
+				return prevPage(cur)
+			}
+		}
+		setCurrentPage()
+	}).start()
 
-	// XXX this is a stub, but need to keep the two types of events 
-	//		seporated as mouse events sometimes interfere with touch events...
-	if('ontouchmove' in window){
-		// XXX STUB...
-		togglePageDragging('on')
-		$('.viewer')
-			.on('touchstart', function(){
-				//logger.log('[touchstart]')
-				//_t = evt.timeStamp || Date.now();
-				scrolling = true
-				//togglePageDragging('on')
-				_s = getMagazineShift()
-				_scale = getMagazineScale()
-			})
-			.on('touchmove', function(evt){
-				evt.preventDefault()
-				var pos_x = event.touches[0].pageX
-
-				if(_x == null){
-					_x = pos_x
-				}
-				var x = pos_x
-				if(scrolling){
-					//logger.log('>>>' + s)
-					_s += x - _x
-					shiftMagazineTo(_s, _scale)
-				}
-				_x = x
-			})
-			.on('touchend', function(){
-				//logger.log('[touchend]')
-				scrolling = false
-				//togglePageDragging('off')
-				_x = null
-				_s = null
-				_scale = null
-			})
-
-	} else {
-		// XXX stub...
-		togglePageDragging('on')
-		$('.viewer')
-			.on('mousedown', function(){
-				//logger.log('[touchstart]')
-				//_t = evt.timeStamp || Date.now();
-				scrolling = true
-				//togglePageDragging('on')
-				_s = getMagazineShift()
-				_scale = getMagazineScale()
-			})
-			.on('mousemove', function(evt){
-				//var t = evt.timeStamp || Date.now();
-				evt.preventDefault()
-				var pos_x = evt.clientX
-
-				if(_x == null){
-					_x = pos_x
-				}
-				var x = pos_x
-				if(scrolling){
-					_s += x - _x
-					shiftMagazineTo(_s, _scale)
-				}
-				_x = x
-			})
-			.on('mouseup', function(){
-				//logger.log('[touchend]')
-				scrolling = false
-				//togglePageDragging('off')
-				_x = null
-				_s = null
-				_scale = null
-			})
-	}
-
-	setMagazineScale(0.5)
-
+	//setMagazineScale(0.5)
 
 	// XXX need to setup style for android to work...
 	$('.viewer').css({overflow: 'hidden'})
 
-
 	// expand the templates...
 	runMagazineTemplates()
 
-	//setCurrentPage(0)
+	setCurrentPage(0)
 	//limit_scroll()
 })
+
+function makeScrollHandler(root, callback){
+
+	// local data...
+	var scrolling = false
+	var touch = false
+	var touches = 0
+	var start
+	var prev_x
+	var prev_t
+	var shift
+	var scale
+	var x
+	var t
+	var dx
+	var dt
+
+	function startMoveHandler(evt, callback){
+		prev_t = event.timeStamp || Date.now();
+		if(event.touches != null){
+			touch = true
+		}
+		scrolling = true
+		scroller.state = 'scrolling'
+		//root.trigger('userScrollStart')
+		//togglePageDragging('on')
+		shift = getMagazineShift()
+		scale = getMagazineScale()
+		// get the user coords...
+		prev_x = touch ? event.touches[0].pageX : evt.clientX
+		start = prev_x
+	}
+	// XXX add limits to this...
+	// XXX try and make this adaptive to stay ahead of the lags...
+	function moveHandler(evt){
+		evt.preventDefault()
+		t = event.timeStamp || Date.now();
+		// get the user coords...
+		x = touch ? event.touches[0].pageX : evt.clientX
+		touches = touch ? event.touches.length : 0
+		if(scrolling){
+			shift += x - prev_x
+			shiftMagazineTo(shift, scale)
+		}
+		dx = x - prev_x
+		dt = t - prev_t
+		prev_t = t
+		prev_x = x
+		//root.trigger('userScroll')
+	}
+	function endMoveHandler(evt){
+		x = touch ? event.touches[0].pageX : evt.clientX
+		touch = false
+		scrolling = false
+		scroller.state = 'waiting'
+		touches = 0
+		//togglePageDragging('off')
+		// XXX add speed to this...
+		//root.trigger('userScrollEnd')
+		callback && callback(dx/dt, start - x)
+	}
+
+	var scroller = {
+		start: function(){
+			this.state = 'waiting'
+			// XXX STUB: this makes starting the scroll a bit sluggish, 
+			//		find a faster way...
+			togglePageDragging('on')
+
+			// NOTE: if we bind both touch and mouse events, on touch devices they 
+			//		might start interfering with each other...
+			if('ontouchmove' in window){
+				root
+					.on('touchstart', startMoveHandler)
+					.on('touchmove', moveHandler) 
+					.on('touchend', endMoveHandler)
+			} else {
+				root
+					.on('mousedown', startMoveHandler) 
+					.on('mousemove', moveHandler) 
+					.on('mouseup', endMoveHandler) 
+			}
+			return this
+		},
+		stop: function(){
+			this.state = 'stopped'
+			if('ontouchmove' in window){
+				root
+					.off('touchstart', startMoveHandler)
+					.off('touchmove', moveHandler) 
+					.off('touchend', endMoveHandler)
+			} else {
+				root
+					.off('mousedown', startMoveHandler) 
+					.off('mousemove', moveHandler) 
+					.off('mouseup', endMoveHandler) 
+			}
+			return this
+		},
+		// NOTE: this is updated live but not used by the system in any way...
+		state: 'stopped'
+	}
+	return scroller
+}
+
 
 var SCROLL_LIMIT = 800 * 1.5
 
