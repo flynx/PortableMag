@@ -167,6 +167,8 @@ function makeScrollHandler(root, callback){
 		// get the user coords...
 		prev_x = touch ? event.touches[0].pageX : evt.clientX
 		start = prev_x
+
+		return false
 	}
 	// XXX add limits to this...
 	// XXX try and make this adaptive to stay ahead of the lags...
@@ -187,7 +189,7 @@ function makeScrollHandler(root, callback){
 		//root.trigger('userScroll')
 	}
 	function endMoveHandler(evt){
-		x = touch ? event.touches[0].pageX : evt.clientX
+		x = touch ? event.changedTouches[0].pageX : evt.clientX
 		touch = false
 		scrolling = false
 		scroller.state = 'waiting'
