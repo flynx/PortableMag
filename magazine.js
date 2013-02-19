@@ -192,7 +192,7 @@ function getPageScale(){
 	return getElementScale($('.scaler'))
 }
 function setPageScale(scale){
-	return setElementScale($('.scaler'), scale)
+	return setElementTransform($('.scaler'), null, scale)
 }
 
 
@@ -216,75 +216,11 @@ function getPageAt(n){
 	return $(page[n])
 }
 
-// NOTE: at this point this works only on the X axis...
-function shiftMagazineTo(offset, scale){
-	var mag = $('.magazine')
-	if(scale == null){
-		var scale = getElementScale(mag)
-	}
-	if(USE_TRANSFORM){
-		var transform = 'translate('+ offset +'px, 0px) scale('+ scale +') translateZ(0px)'
-		mag.css({
-			'-ms-transform' : transform, 
-			'-webkit-transform' : transform, 
-			'-moz-transform' : transform, 
-			'-o-transform' : transform, 
-			'transform' : transform, 
-
-			// XXX can we avoid this here?? 
-			left: 0,
-		})
-	} else {
-		var transform = 'translate(0px, 0px) scale('+ scale +') translateZ(0px)'
-		mag.css({
-			// NOTE: this will be wrong during a transition, that's why we 
-			// 		can pass the pre-calculated offset as an argument...
-			left: offset,
-
-			// XXX can we avoid this here?? 
-			'-ms-transform' : transform, 
-			'-webkit-transform' : transform, 
-			'-moz-transform' : transform, 
-			'-o-transform' : transform, 
-			'transform' : transform, 
-		})
-	}
+function shiftMagazineTo(offset){
+	setElementTransform($('.magazine'), offset)
 }
+
 // XXX this is almost the same as getElementScale...
-function getElementShift(elem){
-	elem = $(elem)
-	// using transform...
-	if(USE_TRANSFORM){
-		var vendors = ['o', 'moz', 'ms', 'webkit']
-		var transform = elem.css('transform')
-		var res
-
-		// go through vendor prefixes... (hate this!)
-		if(!transform || transform == 'none'){
-			for(var i in vendors){
-				transform = elem.css('-' + vendors[i] + '-transform')
-				if(transform && transform != 'none'){
-					break
-				}
-			}
-		}
-		// no transform is set...
-		if(!transform || transform == 'none'){
-			return {left: 0, top: 0}
-		}
-		return {
-			left: parseFloat(/(translate\(|matrix\([^,]*,[^,]*,[^,]*,[^,]*,)([^,]*),/.exec(transform)[2]),
-			top: null
-		}
-	// using left...
-	} else {
-		return {
-			left: elem.position().left,
-			top: null
-		}
-	}
-}
-
 function getMagazineShift(){
 	return getElementShift($('.magazine')).left
 }

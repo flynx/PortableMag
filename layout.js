@@ -76,7 +76,158 @@ var togglePageView = createCSSClassToggler(
 
 
 
+/************************************************** event handlers ***/
+
+function makeScrollHandler(root, callback){
+
+	// local data...
+	var scrolling = false
+	var touch = false
+	var touches = 0
+	var start
+	var prev_x
+	var prev_t
+	var shift
+	var scale
+	var x
+	var t
+	var dx
+	var dt
+
+	function startMoveHandler(evt, callback){
+		prev_t = event.timeStamp || Date.now();
+		setTransitionDuration($('.magazine'), 0)
+		if(event.touches != null){
+			touch = true
+		}
+		scrolling = true
+		scroller.state = 'scrolling'
+		//root.trigger('userScrollStart')
+		//togglePageDragging('on')
+		shift = getMagazineShift()
+		scale = getMagazineScale()
+		// get the user coords...
+		prev_x = touch ? event.touches[0].pageX : evt.clientX
+		start = prev_x
+
+		return false
+	}
+	// XXX add limits to this...
+	// XXX try and make this adaptive to stay ahead of the lags...
+	function moveHandler(evt){
+		evt.preventDefault()
+		t = event.timeStamp || Date.now();
+		// get the user coords...
+		x = touch ? event.touches[0].pageX : evt.clientX
+		touches = touch ? event.touches.length : 0
+		if(scrolling){
+			shift += x - prev_x
+			setElementTransform($('.magazine'), shift, scale)
+		}
+		dx = x - prev_x
+		dt = t - prev_t
+		prev_t = t
+		prev_x = x
+		//root.trigger('userScroll')
+
+		return false
+	}
+	function endMoveHandler(evt){
+		// XXX get real transition duration...
+		setTransitionDuration($('.magazine'), 200)
+		x = touch ? event.changedTouches[0].pageX : evt.clientX
+		touch = false
+		scrolling = false
+		scroller.state = 'waiting'
+		touches = 0
+		//togglePageDragging('off')
+		// XXX add speed to this...
+		//root.trigger('userScrollEnd')
+		callback && callback(dx/dt, start - x)
+
+		return false
+	}
+
+	var scroller = {
+		start: function(){
+			this.state = 'waiting'
+			// XXX STUB: this makes starting the scroll a bit sluggish, 
+			//		find a faster way...
+			//togglePageDragging('on')
+
+			// NOTE: if we bind both touch and mouse events, on touch devices they 
+			//		might start interfering with each other...
+			if('ontouchmove' in window){
+				root
+					.on('touchstart', startMoveHandler)
+					.on('touchmove', moveHandler) 
+					.on('touchend', endMoveHandler)
+			} else {
+				root
+					.on('mousedown', startMoveHandler) 
+					.on('mousemove', moveHandler) 
+					.on('mouseup', endMoveHandler) 
+			}
+			return this
+		},
+		stop: function(){
+			this.state = 'stopped'
+			if('ontouchmove' in window){
+				root
+					.off('touchstart', startMoveHandler)
+					.off('touchmove', moveHandler) 
+					.off('touchend', endMoveHandler)
+			} else {
+				root
+					.off('mousedown', startMoveHandler) 
+					.off('mousemove', moveHandler) 
+					.off('mouseup', endMoveHandler) 
+			}
+			return this
+		},
+		// NOTE: this is updated live but not used by the system in any way...
+		state: 'stopped'
+	}
+	return scroller
+}
+
+
+
 /********************************************************* helpers ***/
+
+// XXX there is something here that depends on scale that is either not 
+// 		compensated, or is over compensated...
+function getMagazineOffset(page, scale, align){
+	if(page == null){
+		page = $('.current.page')
+	}
+	if(scale == null){
+		scale = getMagazineScale()
+	}
+	if(align == null){
+		align = getPageAlign(page)
+	}
+	var mag = $('.magazine')
+
+	// calculate the align offset...
+	if(align == 'left'){
+		var offset = 0
+
+	} else if(align == 'right'){
+		var offset = $('.viewer').width() - page.width()*scale
+
+	// center (default)
+	} else {
+		var offset = $('.viewer').width()/2 - (page.width()/2)*scale
+	}
+
+	var w = mag.outerWidth(true)
+	// XXX this depends on scale...
+	var pos = page.position().left//*scale
+
+	return -((w - w*scale)/2 + pos) + offset
+}
+
 
 // XXX make this work for narrow and left/right alligned pages...
 function getPageNumber(page){
@@ -100,12 +251,10 @@ function getPageNumber(page){
 		var res = $('.page').map(function(i, e){
 			e = $(e)
 			var l = e.position().left
-			//var l = e.offset().left
 			var w = e.width()*scale
-			//return Math.abs((l+(w/2)) - (s+(W/2)))
 			return Math.abs((l+(w/2)) - (o+(W/2)))
-		})
-		cur = res.index(Math.min.apply(Math, res))
+		}).toArray()
+		cur = res.indexOf(Math.min.apply(Math, res))
 		return cur
 	}
 }
@@ -116,16 +265,11 @@ function getMagazineScale(){
 }
 function setMagazineScale(scale){
 	var mag = $('.magazine')
-	// NOTE: we are updating margins to make the scroll area adapt to new scale...
-	var w = mag.width()
-	var m = -(w - (w*scale))/2 + $('.viewer').width()/2
-	mag.css({
-		'margin-left': m,
-		'margin-right': m
-		// XXX also add margins at top and bottom for vertical elements...
-	})
-	setElementScale(mag, scale)
-	//setCurrentPage()
+	var cur = $('.current.page')
+
+	var left = getMagazineOffset(cur, scale, 'center')
+
+	setElementTransform(mag, left, scale)
 }
 
 
@@ -141,26 +285,16 @@ function setCurrentPage(n){
 	n = n < 0 ? l - n : n
 	n = n < -l ? 0 : n
 	n = n >= l ? l - 1 : n
+
 	$('.current.page').removeClass('current')
 	$($('.page')[n]).addClass('current')
+
 	var cur = $('.current.page')
-	if(USE_PAGE_ALIGN
-			&& $('.page').width()*2*scale > $('.viewer').width()){
-		var align = getPageAlign()
-	} else {
-		var align = 'center'
-	}
-	if(align == 'left'){
-		var offset = 0
-	} else if(align == 'right'){
-		var offset = $('.viewer').width() - cur.width()*scale
-	} else {
-		var offset = $('.viewer').width()/2 - (cur.width()/2)*scale
-	}
-	cur.ScrollTo({
-		offsetTop: $('.viewer').height()/2 - (cur.height()/2)*scale,
-		offsetLeft: offset
-	})
+
+	var left = getMagazineOffset(cur)
+
+	setElementTransform($('.magazine'), left, scale)
+
 	return cur
 }
 
