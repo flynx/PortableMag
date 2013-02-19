@@ -4,11 +4,6 @@
 *
 **********************************************************************/
 
-//var NAVIGATE_RELATIVE_TO_VISIBLE = false
-//var NAVIGATE_RELATIVE_TO_VISIBLE = true
-
-var USE_PAGE_ALIGN = true
-
 var PAGES_IN_RIBBON = 4
 
 
@@ -83,6 +78,8 @@ var togglePageView = createCSSClassToggler(
 // 		- general configuration
 // 		- optional events...
 // XXX should we use a callback or an event???
+// XXX make this get the scrolled item automatically...
+// 		...now $('.magazine') is hardcoded...
 function makeScrollHandler(root, callback){
 
 	// local data...
@@ -149,7 +146,8 @@ function makeScrollHandler(root, callback){
 		touches = touch ? event.touches.length : 0
 
 		// XXX needs testing...
-		if(config.autoCancelEvents){
+		// check scroll bounds...
+		if(bounds != null){
 			if(config.hScroll && (x <= bounds.left || x >= bounds.right)
 				|| config.vScroll && (y <= bounds.top || y >= bounds.bottom)){
 				// XXX cancel the touch event and trigger the end handler...
@@ -161,15 +159,16 @@ function makeScrollHandler(root, callback){
 		if(scrolling){
 			shift += x - prev_x
 			setElementTransform($('.magazine'), shift, scale)
-		}
-		// XXX these should be done every time the event is caught or 
-		// 		just while scrolling?
-		dx = x - prev_x
-		dt = t - prev_t
-		prev_t = t
-		prev_x = x
-		//root.trigger('userScroll')
 
+			// XXX these should be done every time the event is caught or 
+			// 		just while scrolling?
+			dx = x - prev_x
+			dt = t - prev_t
+			prev_t = t
+			prev_x = x
+
+			//root.trigger('userScroll')
+		}
 		return false
 	}
 	function endMoveHandler(evt){
@@ -180,6 +179,7 @@ function makeScrollHandler(root, callback){
 		scrolling = false
 		scroller.state = 'waiting'
 		touches = 0
+		bounds = null
 		//togglePageDragging('off')
 		// XXX add speed to this...
 		//root.trigger('userScrollEnd')
@@ -226,6 +226,7 @@ function makeScrollHandler(root, callback){
 			}
 			return this
 		},
+		// XXX check...
 		setCallback: function(func){
 			this.callback = func
 		},
@@ -288,7 +289,6 @@ function getPageNumber(page){
 	}
 
 	// get the next page relative to the current... 
-	//if(!NAVIGATE_RELATIVE_TO_VISIBLE){
 	if(!isNavigationViewRelative()){
 		return $('.page').index($('.current.page'))
 
@@ -339,6 +339,7 @@ function setCurrentPage(n){
 	}
 	var scale = getMagazineScale()
 	var l = $('.page').length
+	// normalize the number...
 	n = n < 0 ? l - n : n
 	n = n < -l ? 0 : n
 	n = n >= l ? l - 1 : n
@@ -350,7 +351,6 @@ function setCurrentPage(n){
 
 	// center-align pages in ribbon view...
 	var align = isNavigationViewRelative() ? 'center' : null
-
 	var left = getMagazineOffset(cur, null, align)
 
 	setElementTransform($('.magazine'), left, scale)
