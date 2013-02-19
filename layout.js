@@ -5,7 +5,7 @@
 **********************************************************************/
 
 //var NAVIGATE_RELATIVE_TO_VISIBLE = false
-var NAVIGATE_RELATIVE_TO_VISIBLE = true
+//var NAVIGATE_RELATIVE_TO_VISIBLE = true
 
 var USE_PAGE_ALIGN = true
 
@@ -78,6 +78,8 @@ var togglePageView = createCSSClassToggler(
 
 /************************************************** event handlers ***/
 
+// XXX make this more universal...
+// XXX should we use a callback or an event???
 function makeScrollHandler(root, callback){
 
 	// local data...
@@ -113,6 +115,7 @@ function makeScrollHandler(root, callback){
 		return false
 	}
 	// XXX add limits to this...
+	// XXX slow down drag when at limit...
 	// XXX try and make this adaptive to stay ahead of the lags...
 	function moveHandler(evt){
 		evt.preventDefault()
@@ -185,6 +188,9 @@ function makeScrollHandler(root, callback){
 			}
 			return this
 		},
+		setCallback: function(func){
+			this.callback = func
+		},
 		// NOTE: this is updated live but not used by the system in any way...
 		state: 'stopped'
 	}
@@ -194,6 +200,13 @@ function makeScrollHandler(root, callback){
 
 
 /********************************************************* helpers ***/
+
+// XXX make this more acurate...
+// 		...should check mode or if we are in a ribbon...
+function isNavigationViewRelative(){
+	return getMagazineScale() < 1
+}
+
 
 // XXX there is something here that depends on scale that is either not 
 // 		compensated, or is over compensated...
@@ -231,22 +244,23 @@ function getMagazineOffset(page, scale, align){
 
 // XXX make this work for narrow and left/right alligned pages...
 function getPageNumber(page){
-	// a page is given...
+	// a page is given explicitly, get the next one...
 	if(page != null){
 		return $('.page').index($(page))
 	}
 
-	// get the next page... 
-	if(!NAVIGATE_RELATIVE_TO_VISIBLE){
+	// get the next page relative to the current... 
+	//if(!NAVIGATE_RELATIVE_TO_VISIBLE){
+	if(!isNavigationViewRelative()){
 		return $('.page').index($('.current.page'))
 
-	// get the closest page to view... 
+	// get the closest page to view center... 
+	// NOTE: this ignores page aligns and only gets the page who's center 
+	// 		is closer to view's center
 	} else {
-		// XXX this gets crazy when magazine is scaled...
-		//var s = $('.viewer').scrollLeft()
+		var scale = getMagazineScale()
 		var o = -$($('.magazine')[0]).offset().left - $('.viewer').offset().left
 		var W = $('.viewer').width()
-		var scale = getMagazineScale()
 		var cur = -1
 		var res = $('.page').map(function(i, e){
 			e = $(e)
@@ -267,9 +281,15 @@ function setMagazineScale(scale){
 	var mag = $('.magazine')
 	var cur = $('.current.page')
 
-	var left = getMagazineOffset(cur, scale, 'center')
+	// XXX make this check more unversal...
+	// center-align ribbon view pages...
+	var align = scale < 1 ? 'center' : null
+
+	var left = getMagazineOffset(cur, scale, align)
 
 	setElementTransform(mag, left, scale)
+
+	return mag
 }
 
 
@@ -291,7 +311,11 @@ function setCurrentPage(n){
 
 	var cur = $('.current.page')
 
-	var left = getMagazineOffset(cur)
+	// XXX make this check more unversal...
+	// center-align pages in ribbon view...
+	var align = scale < 1 ? 'center' : null
+
+	var left = getMagazineOffset(cur, null, align)
 
 	setElementTransform($('.magazine'), left, scale)
 
