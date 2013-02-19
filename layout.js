@@ -79,6 +79,9 @@ var togglePageView = createCSSClassToggler(
 /************************************************** event handlers ***/
 
 // XXX make this more universal...
+// 		- h/v scroll
+// 		- general configuration
+// 		- optional events...
 // XXX should we use a callback or an event???
 function makeScrollHandler(root, callback){
 
@@ -88,16 +91,37 @@ function makeScrollHandler(root, callback){
 	var touches = 0
 	var start
 	var prev_x
+	var prev_y
 	var prev_t
+	var bounds
 	var shift
 	var scale
 	var x
+	var y
 	var t
 	var dx
 	var dt
 
+	// XXX at this point this is not used...
+	var config = {
+		hScroll: true,
+		vScroll: false,
+
+		enableEvents: false,
+		autoCancelEvents: false,
+		eventBounds: 5,
+	}
+
 	function startMoveHandler(evt, callback){
 		prev_t = event.timeStamp || Date.now();
+		if(config.autoCancelEvents){
+			bounds = {
+				left: config.eventBounds,
+				right: root.width() - config.eventBounds,
+				top: config.eventBounds,
+				bottom: root.height() - config.eventBounds 
+			}
+		}
 		setTransitionDuration($('.magazine'), 0)
 		if(event.touches != null){
 			touch = true
@@ -123,10 +147,23 @@ function makeScrollHandler(root, callback){
 		// get the user coords...
 		x = touch ? event.touches[0].pageX : evt.clientX
 		touches = touch ? event.touches.length : 0
+
+		// XXX needs testing...
+		if(config.autoCancelEvents){
+			if(config.hScroll && (x <= bounds.left || x >= bounds.right)
+				|| config.vScroll && (y <= bounds.top || y >= bounds.bottom)){
+				// XXX cancel the touch event and trigger the end handler...
+				return endMoveHandler(evt)
+			}
+		}
+
+		// do the actual scroll...
 		if(scrolling){
 			shift += x - prev_x
 			setElementTransform($('.magazine'), shift, scale)
 		}
+		// XXX these should be done every time the event is caught or 
+		// 		just while scrolling?
 		dx = x - prev_x
 		dt = t - prev_t
 		prev_t = t
@@ -165,6 +202,7 @@ function makeScrollHandler(root, callback){
 					.on('touchstart', startMoveHandler)
 					.on('touchmove', moveHandler) 
 					.on('touchend', endMoveHandler)
+					.on('touchcancel', endMoveHandler)
 			} else {
 				root
 					.on('mousedown', startMoveHandler) 
@@ -281,9 +319,8 @@ function setMagazineScale(scale){
 	var mag = $('.magazine')
 	var cur = $('.current.page')
 
-	// XXX make this check more unversal...
 	// center-align ribbon view pages...
-	var align = scale < 1 ? 'center' : null
+	var align = isNavigationViewRelative() ? 'center' : null
 
 	var left = getMagazineOffset(cur, scale, align)
 
@@ -311,9 +348,8 @@ function setCurrentPage(n){
 
 	var cur = $('.current.page')
 
-	// XXX make this check more unversal...
 	// center-align pages in ribbon view...
-	var align = scale < 1 ? 'center' : null
+	var align = isNavigationViewRelative() ? 'center' : null
 
 	var left = getMagazineOffset(cur, null, align)
 
