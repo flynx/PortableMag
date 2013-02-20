@@ -114,18 +114,22 @@ $(document).ready(function(){
 
 
 	window.THRESHOLD = 10
-	var scroller = makeScrollHandler($('.viewer'), function(speed, distance){
-		// XXX this is not too correct...
-		//		...make this mode specific...
-		if(getMagazineScale() >= 1){
-			var cur = $('.current.page')
-			if(distance > THRESHOLD){
-				return nextPage(cur)
-			} else if(distance < -THRESHOLD){
-				return prevPage(cur)
+	window.MagazineScroller = makeScrollHandler($('.viewer'), {
+		hScroll: true,
+		vScroll: false,
+		callback: function(speed, distance){
+			// XXX this is not too correct...
+			//		...make this mode specific...
+			if(getMagazineScale() >= 1){
+				var cur = $('.current.page')
+				if(distance > THRESHOLD){
+					return nextPage(cur)
+				} else if(distance < -THRESHOLD){
+					return prevPage(cur)
+				}
 			}
-		}
-		setCurrentPage()
+			setCurrentPage()
+		},
 	}).start()
 
 	//setMagazineScale(0.5)

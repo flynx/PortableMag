@@ -44,6 +44,7 @@ var togglePageView = createCSSClassToggler(
 
 				// XXX this is not correct...
 				// 		...need to fit one rectangel (page) into another (viewer)
+				// 		...use the implementation in magazine.js
 				if(W >= H){
 					// fit to width...
 					var scale = W/w
@@ -80,13 +81,16 @@ var togglePageView = createCSSClassToggler(
 // XXX should we use a callback or an event???
 // XXX make this get the scrolled item automatically...
 // 		...now $('.magazine') is hardcoded...
-function makeScrollHandler(root, callback){
+function makeScrollHandler(root, config){
+	root = $(root)
 
 	// local data...
+	var scrolled
 	var scrolling = false
 	var touch = false
 	var touches = 0
-	var start
+	var start_x
+	var start_y
 	var prev_x
 	var prev_y
 	var prev_t
@@ -97,41 +101,35 @@ function makeScrollHandler(root, callback){
 	var y
 	var t
 	var dx
+	var dy
 	var dt
-
-	// XXX at this point this is not used...
-	var config = {
-		hScroll: true,
-		vScroll: false,
-
-		enableEvents: false,
-		autoCancelEvents: false,
-		eventBounds: 5,
-	}
 
 	function startMoveHandler(evt, callback){
 		prev_t = event.timeStamp || Date.now();
-		if(config.autoCancelEvents){
+		if(scroller.options.autoCancelEvents){
 			bounds = {
-				left: config.eventBounds,
-				right: root.width() - config.eventBounds,
-				top: config.eventBounds,
-				bottom: root.height() - config.eventBounds 
+				left: scroller.options.eventBounds,
+				right: root.width() - scroller.options.eventBounds,
+				top: scroller.options.eventBounds,
+				bottom: root.height() - scroller.options.eventBounds 
 			}
 		}
-		setTransitionDuration($('.magazine'), 0)
+		scrolled = $(root.children()[0])
+		setTransitionDuration(scrolled, 0)
 		if(event.touches != null){
 			touch = true
 		}
 		scrolling = true
 		scroller.state = 'scrolling'
-		//root.trigger('userScrollStart')
+		scroller.options.enabelStartEvent && root.trigger('userScrollStart')
 		//togglePageDragging('on')
-		shift = getMagazineShift()
-		scale = getMagazineScale()
+		shift = getElementShift(scrolled)
+		scale = getElementScale(scrolled)
 		// get the user coords...
 		prev_x = touch ? event.touches[0].pageX : evt.clientX
-		start = prev_x
+		start_x = prev_x
+		prev_y = touch ? event.touches[0].pageY : evt.clientY
+		start_y = prev_y
 
 		return false
 	}
@@ -143,13 +141,14 @@ function makeScrollHandler(root, callback){
 		t = event.timeStamp || Date.now();
 		// get the user coords...
 		x = touch ? event.touches[0].pageX : evt.clientX
+		y = touch ? event.touches[0].pageY : evt.clientY
 		touches = touch ? event.touches.length : 0
 
 		// XXX needs testing...
 		// check scroll bounds...
 		if(bounds != null){
-			if(config.hScroll && (x <= bounds.left || x >= bounds.right)
-				|| config.vScroll && (y <= bounds.top || y >= bounds.bottom)){
+			if(scroller.options.hScroll && (x <= bounds.left || x >= bounds.right)
+				|| scroller.options.vScroll && (y <= bounds.top || y >= bounds.bottom)){
 				// XXX cancel the touch event and trigger the end handler...
 				return endMoveHandler(evt)
 			}
@@ -157,17 +156,24 @@ function makeScrollHandler(root, callback){
 
 		// do the actual scroll...
 		if(scrolling){
-			shift += x - prev_x
-			setElementTransform($('.magazine'), shift, scale)
+			if(scroller.options.hScroll){
+				shift.left += x - prev_x
+			}
+			if(scroller.options.vScroll){
+				shift.top += y - prev_y
+			}
+			setElementTransform(scrolled, shift, scale)
 
 			// XXX these should be done every time the event is caught or 
 			// 		just while scrolling?
 			dx = x - prev_x
+			dy = y - prev_y
 			dt = t - prev_t
-			prev_t = t
 			prev_x = x
+			prev_y = y
+			prev_t = t
 
-			//root.trigger('userScroll')
+			scroller.options.enableUserScrollEvent && root.trigger('userScroll')
 		}
 		return false
 	}
@@ -175,20 +181,34 @@ function makeScrollHandler(root, callback){
 		// XXX get real transition duration...
 		setTransitionDuration($('.magazine'), 200)
 		x = touch ? event.changedTouches[0].pageX : evt.clientX
+		y = touch ? event.changedTouches[0].pageY : evt.clientY
 		touch = false
 		scrolling = false
 		scroller.state = 'waiting'
 		touches = 0
 		bounds = null
 		//togglePageDragging('off')
-		// XXX add speed to this...
-		//root.trigger('userScrollEnd')
-		callback && callback(dx/dt, start - x)
+		scroller.options.enableEndEvent && root.trigger('userScrollEnd', dx, dy, dt, start_x, start_y)
+		scroller.options.callback && scroller.options.callback(dx/dt, start_x-x)
 
 		return false
 	}
 
 	var scroller = {
+		options: {
+			hScroll: true,
+			vScroll: true,
+
+			enabelStartEvent: false,
+			enableUserScrollEvent: false,
+			enableEndEvent: false,
+
+			autoCancelEvents: false,
+			eventBounds: 5,
+
+			callback: null
+		},
+
 		start: function(){
 			this.state = 'waiting'
 			// XXX STUB: this makes starting the scroll a bit sluggish, 
@@ -233,6 +253,12 @@ function makeScrollHandler(root, callback){
 		// NOTE: this is updated live but not used by the system in any way...
 		state: 'stopped'
 	}
+
+	// merge the config with the defaults...
+	if(config != null){
+		$.extend(scroller.options, config)
+	}
+
 	return scroller
 }
 
@@ -274,15 +300,18 @@ function getMagazineOffset(page, scale, align){
 		var offset = $('.viewer').width()/2 - (page.width()/2)*scale
 	}
 
+	// NOTE: this without scaling also represents the inner width of 
+	// 		the viewer...
 	var w = mag.outerWidth(true)
 	// XXX this depends on scale...
 	var pos = page.position().left//*scale
+
+	var l = 0
 
 	return -((w - w*scale)/2 + pos) + offset
 }
 
 
-// XXX make this work for narrow and left/right alligned pages...
 function getPageNumber(page){
 	// a page is given explicitly, get the next one...
 	if(page != null){
