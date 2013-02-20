@@ -12,7 +12,7 @@
 <style>
 
 .viewer {
-	overflow: auto;
+	overflow: hidden;
 }
 .magazine {
 	left: 150px;
@@ -113,69 +113,54 @@ $(document).ready(function(){
 		function(k){console.log(k)}))
 
 
-	window.THRESHOLD = 10
+	window.CLICK_THRESHOLD = 10
+	window.SNAP_TO_PAGES_IN_RIBBON = false
+
+	// XXX make this a default setup in the lib...
 	window.MagazineScroller = makeScrollHandler($('.viewer'), {
 		hScroll: true,
 		vScroll: false,
-		callback: function(speed, distance, touches){
+		callback: function(evt, speed, distance, touches){
+			// ignore situations when the user is still touching...
 			if(touches > 0){
-				return true
+				return
 			}
-			// XXX this is not too correct...
-			//		...make this mode specific...
-			if(getMagazineScale() >= 1){
+
+			// click/tap...
+			if(Math.abs(distance) < CLICK_THRESHOLD){
+				// click...
+				var target = $(evt.target)
+				target = getPageNumber(target.hasClass('page') ? target 
+										: target.parents('.page'))
+				if(target != -1){
+					togglePageView()
+					setCurrentPage(target)
+				}
+				return
+			}
+
+			// swipe left/right...
+			// XXX add swipe up/down...
+			if(!isNavigationViewRelative()){
 				var cur = $('.current.page')
-				if(distance > THRESHOLD){
+				if(distance >= CLICK_THRESHOLD){
 					return nextPage(cur)
-				} else if(distance < -THRESHOLD){
+				} else if(distance <= -CLICK_THRESHOLD){
 					return prevPage(cur)
 				}
 			}
-			setCurrentPage()
+
+			// this makes things snap...
+			SNAP_TO_PAGES_IN_RIBBON && setCurrentPage()
 		},
 	}).start()
-
-	//setMagazineScale(0.5)
-
-	// XXX need to setup style for android to work...
-	$('.viewer').css({overflow: 'hidden'})
 
 	// expand the templates...
 	runMagazineTemplates()
 
 	setCurrentPage(0)
-	//limit_scroll()
 })
 
-
-var SCROLL_LIMIT = 800 * 1.5
-
-function setup_scroll_limiter(){
-	$('.magazine').wrapAll($('<div class="scroller">'))
-	limit_scroll()
-}
-
-// XXX set the limit to next/prev page alignment...
-function limit_scroll(){
-	var W = $('.viewer').width()
-	var ml = parseFloat($('.scroller').css('margin-left')) || 0
-	var pos = $('.viewer').scrollLeft()
-	var c = -ml + pos + W/2
-	$('.scroller').css({
-		'margin-left': -(c-SCROLL_LIMIT),
-		'width': c+SCROLL_LIMIT
-	})
-	$('.viewer').scrollLeft(pos-ml-(c-SCROLL_LIMIT))
-}
-function clear_limits(){
-	var pos = $('.viewer').scrollLeft()
-	var l = parseFloat($('.scroller').css('margin-left'))
-	$('.scroller').css({
-		'margin-left': '',
-		'width': ''
-	})
-	$('.viewer').scrollLeft(pos - l)
-}
 
 </script>
 

@@ -13,37 +13,37 @@
 				groups (depends on style)
 				page background images
 			[_] disable snapping in ribbon mode
-		[_] 0% build a custom scroll lib...
-			[_] 0% features:
-				[_] drag/scroll
+		[_] 36% build a custom scroll lib...
+			[_] 66% features:
+				[X] drag/scroll
 				[_] inertial
-				[_] snap
+				[X] snap
 				| if enabled, on release, detect nearest snap-point and scroll to it.
-			[_] 0% tragets
-				[_] smooth scroll on devices (iscroll)
+			[_] 65% tragets
+				[X] smooth scroll on devices (iscroll)
 				| adaptive transitions, etc.
-				[_] snap scroll to markers (a-la iscroll)
-					[_] snap align
-						[_] left (iscroll)
-						[_] center
-						[_] right
+				[X] snap scroll to markers (a-la iscroll)
+					[X] snap align
+						[X] left (iscroll)
+						[X] center
+						[X] right
 				[_] flexible event system
-					[_] pre/post events
+					[X] pre/post events
 					[_] ability to modify action data before it runs
 					[_] ability to cancel current action
 					| like stop scrolling at a given point.
 					[_] ability to take over and do something manually
 				[_] all actions callable
-				[_] both x and y axis support (x is a priority)
+				[X] both x and y axis support (x is a priority)
 			[_] scroll phases
-				[_] user scroll phase
+				[X] user scroll phase
 				| from mousedown/touchstart and to mouseup/touchend
 				[_] auto scroll phase
 				| from mouseup/touchend and untill scrollend
 				|
 				| must account for speed...
 					[_] momentum
-					[_] snap
+					[X] snap
 			[_] 0% actions
 				[_] 0% .scrollTo(target)
 				| must accept:
