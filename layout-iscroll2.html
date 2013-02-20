@@ -113,22 +113,31 @@ $(document).ready(function(){
 		function(k){console.log(k)}))
 
 
-	window.CLICK_THRESHOLD = 10
 	window.SNAP_TO_PAGES_IN_RIBBON = false
 	window.INITIAL_TIME = 200
-	window.LONG_CLICK_THRESHOLD = 400
+	window.INNERTIA_SCALE = 1
 
 	// XXX make this a default setup in the lib...
 	window.MagazineScroller = makeScrollHandler($('.viewer'), {
 		hScroll: true,
 		vScroll: false,
 
+		/*
 		// XXX the callback signature is a tad messy, revise...
 		// XXX need ability to dampen innertia, add some kind of resistance...
-		callback: function(evt, speed, distance, duration, touches, state){
-			console.log(duration)
+		callback: function(data){
+			var evt = data.orig_event
+			var scroller = data.scroller
+			var root = scroller.root
+			var speed = data.speed
+			var distance = data.distance
+			var duration = data.duration
+			var touches = data.touches
+			var state = data.state
+
 			// canceling a scroll...
 			if(state == 'canceling' && togglePageView('?') == 'on'){
+				//root.trigger('userScrollCancelled')
 				setCurrentPage()
 				return
 			}
@@ -142,9 +151,12 @@ $(document).ready(function(){
 			// click/tap...
 			if(Math.abs(distance) < CLICK_THRESHOLD){
 				if(duration > LONG_CLICK_THRESHOLD){
-					return alert('long click...')
+					//root.trigger('userLongClick')
 				}
 				// click...
+				//root.trigger('userClick')
+
+				// get page target and select it if it's within a page...
 				var target = $(evt.target)
 				target = getPageNumber(
 							target.hasClass('page') ? target 
@@ -164,9 +176,13 @@ $(document).ready(function(){
 			if(!isNavigationViewRelative()){
 				var cur = $('.current.page')
 				if(distance >= CLICK_THRESHOLD){
+					//root.trigger('userSwipeRight')
+
 					setTransitionDuration(mag, INITIAL_TIME)
 					return nextPage(cur)
 				} else if(distance <= -CLICK_THRESHOLD){
+					//root.trigger('userSwipeLeft')
+
 					setTransitionDuration(mag, INITIAL_TIME)
 					return prevPage(cur)
 				}
@@ -178,6 +194,7 @@ $(document).ready(function(){
 			}
 
 			// innertial scroll...
+			// XXX make this generic...
 			var t = INITIAL_TIME * (1+Math.abs(speed))
 			// XXX this is only horisontal at this point...
 			var at = getElementShift(mag).left
@@ -188,18 +205,18 @@ $(document).ready(function(){
 			// filter out really small speeds...
 			if(Math.abs(speed) > 0.5){
 				// check bounds...
+				// NOTE: need to cut the distance and time if we are going the 
+				//		hit the bounds...
 				if(to > first){
 					// trim the time proportionally...
 					var _t = t
 					t = Math.abs(t * ((at-first)/(at-to)))
-					console.log(_t, t)
 					to = first
 					setTransitionEasing(mag, 'linear')
 				} else if(to < last){
 					// trim the time proportionally...
 					var _t = t
 					t = Math.abs(t * ((at-last)/(at-to)))
-					console.log(_t, t)
 					to = last
 					setTransitionEasing(mag, 'linear')
 
@@ -218,6 +235,7 @@ $(document).ready(function(){
 					setTransitionDuration(mag, INITIAL_TIME)
 				}, t+10)
 
+			// check scroll bounds...
 			// do not let the user scroll out of view...
 			} else {
 				if(at > first){
@@ -234,7 +252,126 @@ $(document).ready(function(){
 				}
 			}
 		},
+		*/
 	}).start()
+
+	$('.viewer')
+		.on('scrollCancelled', function(){
+			setCurrentPage()
+		})
+		.on('shortClick', function(evt, data){
+			// get page target and select it if it's within a page...
+			var target = $(data.orig_event.target)
+			target = getPageNumber(
+						target.hasClass('page') ? target 
+							: target.parents('.page'))
+			if(target != -1){
+				togglePageView()
+				setCurrentPage(target)
+			}
+		})
+		.on('longClick', function(evt, data){
+		})
+		.on('swipeLeft', function(evt, data){
+			// ribbon mode...
+			if(isNavigationViewRelative()){
+				setTimeout(function(){
+					data.scroller.root.trigger('screenReleased', data)}, 2)
+				return
+			}
+			// full page view...
+			var cur = $('.current.page')
+			var mag = $('.magazine')
+			setTransitionDuration(mag, INITIAL_TIME)
+
+			prevPage(cur)
+		})
+		.on('swipeRight', function(evt, data){
+			// ribbon mode...
+			if(isNavigationViewRelative()){
+				setTimeout(function(){
+					data.scroller.root.trigger('screenReleased', data)}, 2)
+				return
+			}
+			// full page view...
+			var cur = $('.current.page')
+			var mag = $('.magazine')
+			setTransitionDuration(mag, INITIAL_TIME)
+
+			nextPage(cur)
+		})
+
+		// do snap and innertia...
+		.on('screenReleased', function(evt, data){
+			// this makes things snap...
+			if(SNAP_TO_PAGES_IN_RIBBON){
+				setCurrentPage()
+				return
+			}
+
+			var speed = data.speed
+			var pages = $('.page')
+			var mag = $('.magazine')
+			// innertial scroll...
+			// XXX make this generic...
+			var t = INITIAL_TIME * (1+Math.abs(speed))
+			// XXX this is only horisontal at this point...
+			var at = getElementShift(mag).left
+			var to = (at + (t*speed*INNERTIA_SCALE))
+			var first = getMagazineOffset(pages.first(), null, 'center')
+			var last = getMagazineOffset(pages.last(), null, 'center')
+
+			// filter out really small speeds...
+			if(Math.abs(speed) > 0.5){
+				// check bounds...
+				// NOTE: need to cut the distance and time if we are going the 
+				//		hit the bounds...
+				if(to > first){
+					// trim the time proportionally...
+					var _t = t
+					t = Math.abs(t * ((at-first)/(at-to)))
+					to = first
+					setTransitionEasing(mag, 'linear')
+				} else if(to < last){
+					// trim the time proportionally...
+					var _t = t
+					t = Math.abs(t * ((at-last)/(at-to)))
+					to = last
+					setTransitionEasing(mag, 'linear')
+
+				} else {
+					setTransitionEasing(mag, 'ease-out')
+				}
+
+				setTransitionDuration(mag, t)
+				setElementTransform(mag, to)
+
+				// restore defaults...
+				// XXX this is a bit dumb at this point...
+				// XXX run this as a transition end handler...
+				setTimeout(function(){
+					setTransitionEasing(mag, 'ease-out')
+					setTransitionDuration(mag, INITIAL_TIME)
+				}, t+10)
+
+			// check scroll bounds...
+			// do not let the user scroll out of view...
+			} else {
+				if(at > first){
+					setTransitionEasing(mag, 'ease-in')
+					setTransitionDuration(mag, INITIAL_TIME)
+					//setCurrentPage(0)
+					setElementTransform(mag, first)
+
+				} else if(at < last){
+					setTransitionEasing(mag, 'ease-in')
+					setTransitionDuration(mag, INITIAL_TIME)
+					//setCurrentPage(-1)
+					setElementTransform(mag, last)
+				}
+			}
+		})
+
 
 	// XXX stub...
 	setTransitionEasing($('.magazine'), 'ease-out')
