@@ -116,6 +116,7 @@ $(document).ready(function(){
 	window.CLICK_THRESHOLD = 10
 	window.SNAP_TO_PAGES_IN_RIBBON = false
 	window.INITIAL_TIME = 200
+	window.LONG_CLICK_THRESHOLD = 400
 
 	// XXX make this a default setup in the lib...
 	window.MagazineScroller = makeScrollHandler($('.viewer'), {
@@ -123,7 +124,9 @@ $(document).ready(function(){
 		vScroll: false,
 
 		// XXX the callback signature is a tad messy, revise...
-		callback: function(evt, speed, distance, touches, state){
+		// XXX need ability to dampen innertia, add some kind of resistance...
+		callback: function(evt, speed, distance, duration, touches, state){
+			console.log(duration)
 			// canceling a scroll...
 			if(state == 'canceling' && togglePageView('?') == 'on'){
 				setCurrentPage()
@@ -138,6 +141,9 @@ $(document).ready(function(){
 
 			// click/tap...
 			if(Math.abs(distance) < CLICK_THRESHOLD){
+				if(duration > LONG_CLICK_THRESHOLD){
+					return alert('long click...')
+				}
 				// click...
 				var target = $(evt.target)
 				target = getPageNumber(

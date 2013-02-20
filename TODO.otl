@@ -1,11 +1,30 @@
-[_] 37% Priority work
-	[_] 0% TouchSwipe issues...
-		[_] BUG: swipe-back does not cancel a swipe... (TouchSwipe)
-		| ...unless the finger is return to within the threshold of the 
-		| touchdown point.
-		[_] BUG: no drag threshold on excludedElements (TouchSwipe)
-		| stalled...
-	[_] 65% general todo
+[_] 36% Priority work
+	[_] 63% general todo
+		[_] JSON load/save
+		[_] 0% Version 1.0 checklist (migration to layout.html)
+			[_] page scaling for full page view
+			[_] top/bottom toolbars
+			[_] splash screen w. logo
+			[_] 0% bells 'n' whistles
+				[_] navigator
+				[_] bookmarks
+				[_] article navigation
+			[_] URL navigation
+			[_] layers (URL-activated)
+			[_] 0% overlay pages
+				[_] credits & copyright
+				[_] basic user config
+				[_] help and instructions
+			[_] issue selection & related navigation
+			| essentially a special magazine that will load other magazines 
+			| instead of going into a full page view...
+		[_] 0% Editor version 1.0 checklist
+			[_] editor toolbar
+			| this can take two forms:
+			| 	- global
+			| 	- relative to page
+			| 	- mixed (preferred)
+			[_] save/load JSON
 		[_] 60% build a custom scroll lib...
 			[X] 100% features:
 				[X] drag/scroll
@@ -69,11 +88,6 @@
 					[_] scrollend
 				[_] 0% snap
 					[_] snapped
-		[_] 0% EXPERIMENT: Try using scroll instead of left of .magazine....
-			[_] try and get rid of .scroller
-			[_] try using the scroll event to see of we reached the limit...
-			| and move the limit accordingly
-			[_] BUG: scrool seems to do odd things on refresh...
 		[_] BUG: loading a magazine with position set to 0 will align it incorrectly.
 		| needs testing with the rewritten fitNPages()...
 		[_] Editor: might be a good idea to prevent deleting the last page...
@@ -86,14 +100,14 @@
 		| a virtual page at the end of the magazine with magazine-specific
 		| settings.
 		| similar to the current configuration demo page.
-		[_] 20% move some of the current configuration options to the magazine...
+		[_] 60% move some of the current configuration options to the magazine...
 			[X] page align
 			| global, magazine, article, page-set, page
-			[_] resize settings (.no-resize class)
+			[X] resize settings (.no-resize class)
 			| global, magazine, article, page-set, page
 			[_] default page/content size
 			| global, magazine, article
-			[_] fit page to view
+			[X] fit page to view
 			| global, magazine, article
 			[_] drag full page
 			| global, magazine
@@ -155,6 +169,11 @@
 		[_] BUG: href to existing anchors will mess up layout...
 		| need to find out how can we disable anchor links from actually
 		| going to the anchor...
+		[_] 0% EXPERIMENT: Try using scroll instead of left of .magazine....
+			[_] try and get rid of .scroller
+			[_] try using the scroll event to see of we reached the limit...
+			| and move the limit accordingly
+			[_] BUG: scrool seems to do odd things on refresh...
 		[X] check if scrollTo knows about element scaling...
 		| if not update the code....
 		[X] Editor: make the editor switchable...
@@ -368,6 +387,12 @@
 			[_] 0% issue download
 				[_] whole edition dowload and update (primary mode)
 				[_] seporate issue download (secondary)
+	[_] 0% TouchSwipe issues...
+		[_] BUG: swipe-back does not cancel a swipe... (TouchSwipe)
+		| ...unless the finger is return to within the threshold of the 
+		| touchdown point.
+		[_] BUG: no drag threshold on excludedElements (TouchSwipe)
+		| stalled...
 	
 [_] 0% Low priority todo
 	[_] look into HPub ebook spec...
