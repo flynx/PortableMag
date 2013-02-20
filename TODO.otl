@@ -5,21 +5,14 @@
 		| touchdown point.
 		[_] BUG: no drag threshold on excludedElements (TouchSwipe)
 		| stalled...
-	[_] 64% general todo
-		[_] 0% STUB: build a UI around current iscroll to allow time for internal scroll devel
-			[_] manually resize pages to screen on load
-			[_] scale .content ot fit in page
-			| this will temporarily disable these features:
-				groups (depends on style)
-				page background images
-			[_] disable snapping in ribbon mode
-		[_] 36% build a custom scroll lib...
-			[_] 66% features:
+	[_] 65% general todo
+		[_] 60% build a custom scroll lib...
+			[X] 100% features:
 				[X] drag/scroll
-				[_] inertial
+				[X] inertial
 				[X] snap
 				| if enabled, on release, detect nearest snap-point and scroll to it.
-			[_] 65% tragets
+			[X] 100% tragets
 				[X] smooth scroll on devices (iscroll)
 				| adaptive transitions, etc.
 				[X] snap scroll to markers (a-la iscroll)
@@ -27,22 +20,19 @@
 						[X] left (iscroll)
 						[X] center
 						[X] right
-				[_] flexible event system
+				[X] flexible event system
 					[X] pre/post events
-					[_] ability to modify action data before it runs
-					[_] ability to cancel current action
+					[X] ability to cancel current action
 					| like stop scrolling at a given point.
-					[_] ability to take over and do something manually
-				[_] all actions callable
 				[X] both x and y axis support (x is a priority)
-			[_] scroll phases
+			[X] scroll phases
 				[X] user scroll phase
 				| from mousedown/touchstart and to mouseup/touchend
-				[_] auto scroll phase
+				[X] auto scroll phase
 				| from mouseup/touchend and untill scrollend
 				|
 				| must account for speed...
-					[_] momentum
+					[X] momentum
 					[X] snap
 			[_] 0% actions
 				[_] 0% .scrollTo(target)

@@ -115,6 +115,7 @@ $(document).ready(function(){
 
 	window.CLICK_THRESHOLD = 10
 	window.SNAP_TO_PAGES_IN_RIBBON = false
+	window.INITIAL_TIME = 200
 
 	// XXX make this a default setup in the lib...
 	window.MagazineScroller = makeScrollHandler($('.viewer'), {
@@ -149,22 +150,88 @@ $(document).ready(function(){
 				return
 			}
 
+			var pages = $('.page')
+			var mag = $('.magazine')
+
 			// swipe left/right...
 			// XXX add swipe up/down...
 			if(!isNavigationViewRelative()){
 				var cur = $('.current.page')
 				if(distance >= CLICK_THRESHOLD){
+					setTransitionDuration(mag, INITIAL_TIME)
 					return nextPage(cur)
 				} else if(distance <= -CLICK_THRESHOLD){
+					setTransitionDuration(mag, INITIAL_TIME)
 					return prevPage(cur)
 				}
 			}
 
 			// this makes things snap...
-			// XXX add innertia if we are not snapping...
-			SNAP_TO_PAGES_IN_RIBBON && setCurrentPage()
+			if(SNAP_TO_PAGES_IN_RIBBON){
+				return setCurrentPage()
+			}
+
+			// innertial scroll...
+			var t = INITIAL_TIME * (1+Math.abs(speed))
+			// XXX this is only horisontal at this point...
+			var at = getElementShift(mag).left
+			var to = at + (t*speed)
+			var first = getMagazineOffset(pages.first(), null, 'center')
+			var last = getMagazineOffset(pages.last(), null, 'center')
+
+			// filter out really small speeds...
+			if(Math.abs(speed) > 0.5){
+				// check bounds...
+				if(to > first){
+					// trim the time proportionally...
+					var _t = t
+					t = Math.abs(t * ((at-first)/(at-to)))
+					console.log(_t, t)
+					to = first
+					setTransitionEasing(mag, 'linear')
+				} else if(to < last){
+					// trim the time proportionally...
+					var _t = t
+					t = Math.abs(t * ((at-last)/(at-to)))
+					console.log(_t, t)
+					to = last
+					setTransitionEasing(mag, 'linear')
+
+				} else {
+					setTransitionEasing(mag, 'ease-out')
+				}
+
+				setTransitionDuration(mag, t)
+				setElementTransform(mag, to)
+
+				// restore defaults...
+				// XXX this is a bit dumb at this point...
+				// XXX run this as a transition end handler...
+				setTimeout(function(){
+					setTransitionEasing(mag, 'ease-out')
+					setTransitionDuration(mag, INITIAL_TIME)
+				}, t+10)
+
+			// do not let the user scroll out of view...
+			} else {
+				if(at > first){
+					setTransitionEasing(mag, 'ease-in')
+					setTransitionDuration(mag, INITIAL_TIME)
+					//setCurrentPage(0)
+					setElementTransform(mag, first)
+
+				} else if(at < last){
+					setTransitionEasing(mag, 'ease-in')
+					setTransitionDuration(mag, INITIAL_TIME)
+					//setCurrentPage(-1)
+					setElementTransform(mag, last)
+				}
+			}
 		},
 	}).start()
+
+	// XXX stub...
+	setTransitionEasing($('.magazine'), 'ease-out')
 
 	// expand the templates...
 	runMagazineTemplates()
