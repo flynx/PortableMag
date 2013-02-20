@@ -117,7 +117,10 @@ $(document).ready(function(){
 	window.MagazineScroller = makeScrollHandler($('.viewer'), {
 		hScroll: true,
 		vScroll: false,
-		callback: function(speed, distance){
+		callback: function(speed, distance, touches){
+			if(touches > 0){
+				return true
+			}
 			// XXX this is not too correct...
 			//		...make this mode specific...
 			if(getMagazineScale() >= 1){
