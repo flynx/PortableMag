@@ -15,12 +15,10 @@ var togglePageFitMode = createCSSClassToggler(
 		'.page-fit-to-viewer', 
 		function(action){
 			if(action == 'on'){
-				console.log('fitting pages to view...')
 				var n = getPageNumber()
 				var scale = getMagazineScale()
 				$('.page:not(.no-resize)').width($('.viewer').width()/scale)
 			} else {
-				console.log('restoring page sizes...')
 				var n = getPageNumber()
 				$('.page:not(.no-resize)').width('')
 			}

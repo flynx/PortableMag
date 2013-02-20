@@ -130,8 +130,9 @@ $(document).ready(function(){
 			if(Math.abs(distance) < CLICK_THRESHOLD){
 				// click...
 				var target = $(evt.target)
-				target = getPageNumber(target.hasClass('page') ? target 
-										: target.parents('.page'))
+				target = getPageNumber(
+							target.hasClass('page') ? target 
+								: target.parents('.page'))
 				if(target != -1){
 					togglePageView()
 					setCurrentPage(target)
@@ -151,6 +152,7 @@ $(document).ready(function(){
 			}
 
 			// this makes things snap...
+			// XXX add innertia if we are not snapping...
 			SNAP_TO_PAGES_IN_RIBBON && setCurrentPage()
 		},
 	}).start()
@@ -159,6 +161,7 @@ $(document).ready(function(){
 	runMagazineTemplates()
 
 	setCurrentPage(0)
+	togglePageView('on')
 })
 
 
