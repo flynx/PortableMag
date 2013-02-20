@@ -120,8 +120,17 @@ $(document).ready(function(){
 	window.MagazineScroller = makeScrollHandler($('.viewer'), {
 		hScroll: true,
 		vScroll: false,
-		callback: function(evt, speed, distance, touches){
+
+		// XXX the callback signature is a tad messy, revise...
+		callback: function(evt, speed, distance, touches, state){
+			// canceling a scroll...
+			if(state == 'canceling' && togglePageView('?') == 'on'){
+				setCurrentPage()
+				return
+			}
+
 			// ignore situations when the user is still touching...
+			// ...like when he/she lifted one finger of several...
 			if(touches > 0){
 				return
 			}
