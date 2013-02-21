@@ -14,6 +14,11 @@
 <script src="ext-lib/jstorage.js"></script>
 <script src="ext-lib/spin.js"></script>
 <script src="ext-lib/jquery.spin.js"></script>
+<!-- zip functionality -->
+<script src="ext-lib/jszip.js"></script>
+<script src="ext-lib/jszip-load.js"></script>
+<script src="ext-lib\jszip-inflate.js"></script>
+<!--script src="ext-lib\jszip-deflate.js"></script-->
 <!-- EXPERIMENTAL -->
 <!-- 
 XXX scrollTo is a cool and a powerfull tool but it needs a sustantial code reorganization 
@@ -754,8 +759,9 @@ $(document).ready(function(){
 					of some of the available configuration option effects.
 					</p>
 					<p>
-						<a id="downloader" download="magazine.json">download magazine...</a>
-						<input type="file" id="upload" name="files[]"/>
+						<button id="downloader">build the magazine...</button>
+						<a id="data_download" style="display:none">download...</a>
+						<input type="file" id="upload" name="file" multiple/>
 						Alternative layout: <a href="./layout.html">native scroll</a>, 
 						<a href="./index2.html">hand-written drag</a>
 					</p>
@@ -1012,12 +1018,61 @@ $(document).ready(function(){
 					// setup download link...
 					/*
 					$('#downloader')
-					.attr('href','data:text/octet-stream;base64,'+btoa(
+						.attr('href','data:text/octet-stream;base64,'+btoa(
 							JSON.stringify(buildJSON(true, true))
 								// this is a really odd one, Chrome seems to replace some 
 								// entities with actual chars...
 								.replace(/–/g, '&ndash;')))
 					*/
+					var USE_ZIP = true
+					var USE_DATA_URL = true
+					function generateMagazineZip(){
+						var zip = new JSZip()
+						var json = JSON.stringify(buildJSON(true, true))
+										// this is a really odd one, Chrome seems to replace some 
+										// entities with actual chars...
+										// what is even more odd, this then confuses some unicode
+										// readers/wwriters...
+										.replace(/–/g, '&ndash;')
+						if(USE_ZIP){
+							zip.file('magazine.json', json)
+							var content = zip.generate()
+						} else {
+							var content = btoa(json)
+						}
+						if(USE_DATA_URL){
+							$('#data_download')
+								.attr('href','data:text/octet-stream;base64,'+content)
+								.css('display', 'inline')
+							if(USE_ZIP){
+								$('#data_download')
+									.attr('download','magazine.zip')
+							} else {
+								$('#data_download')
+									.attr('download','magazine.json')
+							}
+						} else {
+							location.href="data:application/zip;base64,"+content
+						}
+					}
+					$('#downloader')
+						.click(generateMagazineZip)
+
+					// util...
+					// from: http://stackoverflow.com/a/11058858
+					function ab2str(buf) {
+					  return String.fromCharCode.apply(null, new Uint16Array(buf));
+					}
+
+					function str2ab(str) {
+					  var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+					  var bufView = new Uint16Array(buf);
+					  for (var i=0, strLen=str.length; i<strLen; i++) {
+						bufView[i] = str.charCodeAt(i);
+					  }
+					  return buf;
+					}
+					
 
 					// upload...
 					function handleFileSelect(evt) {
@@ -1032,14 +1087,30 @@ $(document).ready(function(){
 							reader.onload = (function(theFile) {
 								return function(e) {
 										console.log('loading...')
-										window.JSON_DATA = e.target.result
-										loadJSON($.parseJSON(e.target.result), true)
+										var raw_data = e.target.result
+										window.JSON_DATA = raw_data
+
+										if(USE_ZIP){
+											var zip = new JSZip(raw_data)
+											console.log('zip loaded...')
+											var json = zip.file('magazine.json').data
+										} else {
+											var json = raw_data
+										}
+
+
+										loadJSON($.parseJSON(json), true)
 										console.log('done.')
 									};
 							})(f);
 
 							// Read in the image file as a data URL.
-							reader.readAsText(f);
+							if(USE_ZIP){
+								reader.readAsArrayBuffer(f)
+							} else {
+								reader.readAsBinaryString(f)
+							}
+							//reader.readAsText(f)
 						}
 					}
 

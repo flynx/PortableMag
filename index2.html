@@ -135,6 +135,9 @@ $(document).ready(function(){
 						target.hasClass('page') ? target 
 							: target.parents('.page'))
 			if(target != -1){
+				setTransitionDuration(mag, INITIAL_TIME)
+				setTransitionEasing(mag, 'ease')
+
 				togglePageView()
 				setCurrentPage(target)
 			}
