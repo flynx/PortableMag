@@ -120,7 +120,9 @@ $(document).ready(function(){
 	// XXX make this a default setup in the lib...
 	window.MagazineScroller = makeScrollHandler($('.viewer'), {
 		hScroll: true,
-		vScroll: false
+		vScroll: false,
+
+		//enableMultiClicks: true,
 	}).start()
 
 
@@ -135,6 +137,7 @@ $(document).ready(function(){
 						target.hasClass('page') ? target 
 							: target.parents('.page'))
 			if(target != -1){
+				var mag = $('.magazine')
 				setTransitionDuration(mag, INITIAL_TIME)
 				setTransitionEasing(mag, 'ease')
 
@@ -142,8 +145,17 @@ $(document).ready(function(){
 				setCurrentPage(target)
 			}
 		})
-		.on('longClick', function(evt, data){
+		/* XXX to use these set the enableMultiClicks to true in makeScrollHandler
+		.on('multiClick', function(evt, data){
+			alert('multiple clicks... ('+data.clicks+')')
 		})
+		.on('doubleClick', function(evt, data){
+			alert('double click...')
+		})
+		.on('longClick', function(evt, data){
+			alert('long click...')
+		})
+		*/
 		.on('swipeLeft', function(evt, data){
 			// ribbon mode...
 			if(isNavigationViewRelative()){

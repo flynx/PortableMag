@@ -759,9 +759,9 @@ $(document).ready(function(){
 					of some of the available configuration option effects.
 					</p>
 					<p>
-						<button id="downloader">build the magazine...</button>
+						<button onclick="generateMagazineDownload()">build the magazine...</button>
 						<a id="data_download" style="display:none">download...</a>
-						<input type="file" id="upload" name="file" multiple/>
+						<input type="file" id="upload" name="file" multiple onchange="handleFileSelect(event)"/>
 						Alternative layout: <a href="./layout.html">native scroll</a>, 
 						<a href="./index2.html">hand-written drag</a>
 					</p>
@@ -1016,17 +1016,9 @@ $(document).ready(function(){
 					loadSettings()
 
 					// setup download link...
-					/*
-					$('#downloader')
-						.attr('href','data:text/octet-stream;base64,'+btoa(
-							JSON.stringify(buildJSON(true, true))
-								// this is a really odd one, Chrome seems to replace some 
-								// entities with actual chars...
-								.replace(/–/g, '&ndash;')))
-					*/
 					var USE_ZIP = true
 					var USE_DATA_URL = true
-					function generateMagazineZip(){
+					function generateMagazineDownload(){
 						var zip = new JSZip()
 						var json = JSON.stringify(buildJSON(true, true))
 										// this is a really odd one, Chrome seems to replace some 
@@ -1055,9 +1047,8 @@ $(document).ready(function(){
 							location.href="data:application/zip;base64,"+content
 						}
 					}
-					$('#downloader')
-						.click(generateMagazineZip)
 
+					/*
 					// util...
 					// from: http://stackoverflow.com/a/11058858
 					function ab2str(buf) {
@@ -1072,6 +1063,7 @@ $(document).ready(function(){
 					  }
 					  return buf;
 					}
+					*/
 					
 
 					// upload...
@@ -1113,9 +1105,6 @@ $(document).ready(function(){
 							//reader.readAsText(f)
 						}
 					}
-
-					$('#upload').on('change', handleFileSelect);
-
 
 					</script>
 				</div>
