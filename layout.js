@@ -170,12 +170,12 @@ function handleScrollRelease(evt, data){
 	} else {
 		if(at > first){
 			setTransitionEasing(mag, 'ease-in')
-			setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
+			setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION/2)
 			setElementTransform(mag, first)
 
 		} else if(at < last){
 			setTransitionEasing(mag, 'ease-in')
-			setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
+			setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION/2)
 			setElementTransform(mag, last)
 		}
 	}

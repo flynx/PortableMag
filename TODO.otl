@@ -1,6 +1,5 @@
 [_] 37% Priority work
-	[_] 65% general todo
-		[X] JSON load/save
+	[_] 66% general todo
 		[_] 0% Version 1.0 checklist (migration to layout.html)
 			[_] page scaling for full page view
 			[_] top/bottom toolbars
@@ -174,6 +173,8 @@
 			[_] try using the scroll event to see of we reached the limit...
 			| and move the limit accordingly
 			[_] BUG: scrool seems to do odd things on refresh...
+		[X] JSON load/save
+		[X] BUG: navigator indicator does not scroll
 		[X] check if scrollTo knows about element scaling...
 		| if not update the code....
 		[X] Editor: make the editor switchable...

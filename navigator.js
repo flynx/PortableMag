@@ -77,8 +77,9 @@ function updateNavigator(n){
 	var pW = bar.width()/pn
 
 	if(n == null){
+		var left = getMagazineShift()
 		// XXX this behaves erratically if the page is zoomed...
-		var res = (-parseFloat(mag.css('left'))/(mW-PW)) * (bW-pW)
+		var res = (Math.abs(left)/(mW-PW)) * (bW-pW)
 	} else {
 		res = pW*n
 	}
@@ -88,6 +89,7 @@ function updateNavigator(n){
 	res = res < (bW-pW) ? res: (bW-pW)
 
 	// set indicator position...
+	console.log('>>>', res)
 	pos.css({
 		left: res 
 	})
