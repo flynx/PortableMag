@@ -188,6 +188,8 @@ body {
 	/* XXX change to relative units... */
 	margin-left: -400px;
 
+	z-index: 5000;
+
 	-webkit-transition: all 0.1s ease;
 	-moz-transition: all 0.1s ease;
 	-o-transition: all 0.1s ease;
@@ -238,7 +240,7 @@ body {
 }
 .magazine:before {
 	content: 'COVER';
-	left: -300px;
+	left: -320px;
 }
 .magazine:after {
 	content: 'END';
