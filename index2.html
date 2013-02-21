@@ -158,6 +158,7 @@ $(document).ready(function(){
 		*/
 		.on('swipeLeft', function(evt, data){
 			// ribbon mode...
+			// XXX make this in a better, more event-oriented way...
 			if(isNavigationViewRelative()){
 				setTimeout(function(){
 					data.scroller.root.trigger('screenReleased', data)}, 2)
@@ -172,6 +173,7 @@ $(document).ready(function(){
 		})
 		.on('swipeRight', function(evt, data){
 			// ribbon mode...
+			// XXX make this in a better, more event-oriented way...
 			if(isNavigationViewRelative()){
 				setTimeout(function(){
 					data.scroller.root.trigger('screenReleased', data)}, 2)
@@ -186,14 +188,16 @@ $(document).ready(function(){
 		})
 
 		// do snap and innertia...
+		// NOTE: this will also handle swipeUp/swopeDown as we do not 
+		//		explicitly bind them...
 		.on('screenReleased', function(evt, data){
 			// this makes things snap...
-			if(SNAP_TO_PAGES_IN_RIBBON){
+			if(SNAP_TO_PAGES_IN_RIBBON || !isNavigationViewRelative()){
 				setCurrentPage()
 				return
 			}
 
-			var speed = data.speed
+			var speed = data.speed.x
 			var pages = $('.page')
 			var mag = $('.magazine')
 			// innertial scroll...
