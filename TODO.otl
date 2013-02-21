@@ -1,6 +1,6 @@
-[_] 36% Priority work
-	[_] 63% general todo
-		[_] JSON load/save
+[_] 37% Priority work
+	[_] 65% general todo
+		[X] JSON load/save
 		[_] 0% Version 1.0 checklist (migration to layout.html)
 			[_] page scaling for full page view
 			[_] top/bottom toolbars
@@ -18,13 +18,13 @@
 			[_] issue selection & related navigation
 			| essentially a special magazine that will load other magazines 
 			| instead of going into a full page view...
-		[_] 0% Editor version 1.0 checklist
+		[_] 50% Editor version 1.0 checklist
 			[_] editor toolbar
 			| this can take two forms:
 			| 	- global
 			| 	- relative to page
 			| 	- mixed (preferred)
-			[_] save/load JSON
+			[X] save/load JSON
 		[_] 60% build a custom scroll lib...
 			[X] 100% features:
 				[X] drag/scroll
