@@ -6,6 +6,10 @@
 
 var PAGES_IN_RIBBON = 4
 
+var SNAP_TO_PAGES_IN_RIBBON = false
+var DEFAULT_TRANSITION_DURATION = 200
+var INNERTIA_SCALE = 0.25
+
 
 
 /********************************************************** layout ***/
@@ -72,7 +76,110 @@ var togglePageView = createCSSClassToggler(
 
 /************************************************** event handlers ***/
 
+function handleClick(evt, data){
+	// get page target and select it if it's within a page...
+	var target = $(data.orig_event.target)
+	target = getPageNumber(
+				target.hasClass('page') ? target 
+					: target.parents('.page'))
+	if(target != -1){
+		var mag = $('.magazine')
+		setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
+		setTransitionEasing(mag, 'ease')
 
+		togglePageView()
+		setCurrentPage(target)
+	}
+}
+
+function makeSwipeHandler(action){
+	return function(evt, data){
+		// ribbon mode...
+		if(isNavigationViewRelative()){
+			return handleScrollRelease(evt, data)
+		}
+		// full page view...
+		var mag = $('.magazine')
+		setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
+		setTransitionEasing(mag, 'ease-out')
+
+		action($('.current.page'))
+	}
+}
+var handleSwipeLeft = makeSwipeHandler(prevPage)
+var handleSwipeRight = makeSwipeHandler(nextPage)
+
+// do snap and innertia...
+// NOTE: this will also handle swipeUp/swopeDown as we do not 
+//		explicitly bind them...
+// XXX restore all the changed values...
+function handleScrollRelease(evt, data){
+	// this makes things snap...
+	if(SNAP_TO_PAGES_IN_RIBBON || !isNavigationViewRelative()){
+		setCurrentPage()
+		return
+	}
+
+	var speed = data.speed.x
+	var pages = $('.page')
+	var mag = $('.magazine')
+	// innertial scroll...
+	// XXX make this generic...
+	var t = DEFAULT_TRANSITION_DURATION * (1+Math.abs(speed))
+	// XXX this is only horisontal at this point...
+	var at = getElementShift(mag).left
+	var to = (at + (t*speed*INNERTIA_SCALE))
+	var first = getMagazineOffset(pages.first(), null, 'center')
+	var last = getMagazineOffset(pages.last(), null, 'center')
+
+	// filter out really small speeds...
+	if(Math.abs(speed) > 0.5){
+		// check bounds...
+		// NOTE: need to cut the distance and time if we are going the 
+		//		hit the bounds...
+		if(to > first){
+			// trim the time proportionally...
+			var _t = t
+			t = Math.abs(t * ((at-first)/(at-to)))
+			to = first
+			setTransitionEasing(mag, 'linear')
+		} else if(to < last){
+			// trim the time proportionally...
+			var _t = t
+			t = Math.abs(t * ((at-last)/(at-to)))
+			to = last
+			setTransitionEasing(mag, 'linear')
+
+		} else {
+			setTransitionEasing(mag, 'ease-out')
+		}
+
+		setTransitionDuration(mag, t)
+		setElementTransform(mag, to)
+
+		// restore defaults...
+		// XXX this is a bit dumb at this point...
+		// XXX run this as a transition end handler...
+		setTimeout(function(){
+			setTransitionEasing(mag, 'ease-out')
+			setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
+		}, t+10)
+
+	// check scroll bounds...
+	// do not let the user scroll out of view...
+	} else {
+		if(at > first){
+			setTransitionEasing(mag, 'ease-in')
+			setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
+			setElementTransform(mag, first)
+
+		} else if(at < last){
+			setTransitionEasing(mag, 'ease-in')
+			setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
+			setElementTransform(mag, last)
+		}
+	}
+}
 
 
 

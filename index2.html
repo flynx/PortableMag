@@ -113,161 +113,29 @@ $(document).ready(function(){
 		function(k){console.log(k)}))
 
 
-	window.SNAP_TO_PAGES_IN_RIBBON = false
-	window.INITIAL_TIME = 200
-	window.INNERTIA_SCALE = 0.25
-
 	// XXX make this a default setup in the lib...
 	window.MagazineScroller = makeScrollHandler($('.viewer'), {
 		hScroll: true,
 		vScroll: false,
-
 		//enableMultiClicks: true,
 	}).start()
 
-
 	$('.viewer')
-		.on('scrollCancelled', function(){
-			setCurrentPage()
-		})
-		.on('shortClick', function(evt, data){
-			// get page target and select it if it's within a page...
-			var target = $(data.orig_event.target)
-			target = getPageNumber(
-						target.hasClass('page') ? target 
-							: target.parents('.page'))
-			if(target != -1){
-				var mag = $('.magazine')
-				setTransitionDuration(mag, INITIAL_TIME)
-				setTransitionEasing(mag, 'ease')
-
-				togglePageView()
-				setCurrentPage(target)
-			}
-		})
-		/* XXX to use these set the enableMultiClicks to true in makeScrollHandler
-		.on('multiClick', function(evt, data){
-			alert('multiple clicks... ('+data.clicks+')')
-		})
-		.on('doubleClick', function(evt, data){
-			alert('double click...')
-		})
-		.on('longClick', function(evt, data){
-			alert('long click...')
-		})
-		*/
-		.on('swipeLeft', function(evt, data){
-			// ribbon mode...
-			// XXX make this in a better, more event-oriented way...
-			if(isNavigationViewRelative()){
-				setTimeout(function(){
-					data.scroller.root.trigger('screenReleased', data)}, 2)
-				return
-			}
-			// full page view...
-			var mag = $('.magazine')
-			setTransitionDuration(mag, INITIAL_TIME)
-			setTransitionEasing(mag, 'ease-out')
-
-			prevPage($('.current.page'))
-		})
-		.on('swipeRight', function(evt, data){
-			// ribbon mode...
-			// XXX make this in a better, more event-oriented way...
-			if(isNavigationViewRelative()){
-				setTimeout(function(){
-					data.scroller.root.trigger('screenReleased', data)}, 2)
-				return
-			}
-			// full page view...
-			var mag = $('.magazine')
-			setTransitionDuration(mag, INITIAL_TIME)
-			setTransitionEasing(mag, 'ease-out')
-
-			nextPage($('.current.page'))
-		})
-
-		// do snap and innertia...
-		// NOTE: this will also handle swipeUp/swopeDown as we do not 
-		//		explicitly bind them...
-		.on('screenReleased', function(evt, data){
-			// this makes things snap...
-			if(SNAP_TO_PAGES_IN_RIBBON || !isNavigationViewRelative()){
-				setCurrentPage()
-				return
-			}
-
-			var speed = data.speed.x
-			var pages = $('.page')
-			var mag = $('.magazine')
-			// innertial scroll...
-			// XXX make this generic...
-			var t = INITIAL_TIME * (1+Math.abs(speed))
-			// XXX this is only horisontal at this point...
-			var at = getElementShift(mag).left
-			var to = (at + (t*speed*INNERTIA_SCALE))
-			var first = getMagazineOffset(pages.first(), null, 'center')
-			var last = getMagazineOffset(pages.last(), null, 'center')
-
-			// filter out really small speeds...
-			if(Math.abs(speed) > 0.5){
-				// check bounds...
-				// NOTE: need to cut the distance and time if we are going the 
-				//		hit the bounds...
-				if(to > first){
-					// trim the time proportionally...
-					var _t = t
-					t = Math.abs(t * ((at-first)/(at-to)))
-					to = first
-					setTransitionEasing(mag, 'linear')
-				} else if(to < last){
-					// trim the time proportionally...
-					var _t = t
-					t = Math.abs(t * ((at-last)/(at-to)))
-					to = last
-					setTransitionEasing(mag, 'linear')
-
-				} else {
-					setTransitionEasing(mag, 'ease-out')
-				}
-
-				setTransitionDuration(mag, t)
-				setElementTransform(mag, to)
-
-				// restore defaults...
-				// XXX this is a bit dumb at this point...
-				// XXX run this as a transition end handler...
-				setTimeout(function(){
-					setTransitionEasing(mag, 'ease-out')
-					setTransitionDuration(mag, INITIAL_TIME)
-				}, t+10)
-
-			// check scroll bounds...
-			// do not let the user scroll out of view...
-			} else {
-				if(at > first){
-					setTransitionEasing(mag, 'ease-in')
-					setTransitionDuration(mag, INITIAL_TIME)
-					//setCurrentPage(0)
-					setElementTransform(mag, first)
-
-				} else if(at < last){
-					setTransitionEasing(mag, 'ease-in')
-					setTransitionDuration(mag, INITIAL_TIME)
-					//setCurrentPage(-1)
-					setElementTransform(mag, last)
-				}
-			}
-		})
+		.on('scrollCancelled', function(){ setCurrentPage() })
+		.on('shortClick', handleClick)
+		.on('swipeLeft', handleSwipeLeft) 
+		.on('swipeRight', handleSwipeRight)
+		.on('screenReleased', handleScrollRelease)
 
 
 	// XXX stub...
 	setTransitionEasing($('.magazine'), 'ease-out')
 
-	// expand the templates...
 	runMagazineTemplates()
-
 	setCurrentPage(0)
+
+	// XXX for some reason this does not work correctly on android the 
+	//		first time...
 	togglePageView('on')
 })
 
