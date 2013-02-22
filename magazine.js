@@ -227,10 +227,8 @@ function getMagazineShift(){
 }
 
 function getPageTargetScale(n, fit_to_content){
-
 	var view = $('.viewer')
 	var content = $('.content')
-	var page = $('.page')
 
 	var W = view.width()
 	var H = view.height()
