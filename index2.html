@@ -126,16 +126,6 @@ $(document).ready(function(){
 
 	//setTransformOrigin($('.magazine'))
 
-	window.myScroll = new iScroll('viewer', {
-		vScroll: false,
-		//snap: '.page',
-		//momentum: false,
-		momentum: true,
-		hScrollbar: false,
-	})
-	myScroll.disable()
-
-
 	window.MagazineScroller = makeScrollHandler($('.viewer'), {
 		hScroll: true,
 		vScroll: false,
