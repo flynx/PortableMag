@@ -628,6 +628,7 @@ iScroll.prototype = {
 		that.moved = true;
 		
 		if (that.options.useTransition) {
+			console.log('transition move...')
 			that._transitionTime(step.time);
 			that._pos(step.x, step.y);
 			that.animating = false;
@@ -635,6 +636,8 @@ iScroll.prototype = {
 			else that._resetPos(0);
 			return;
 		}
+
+			console.log('animate move...')
 
 		animate = function () {
 			var now = Date.now(),
