@@ -64,11 +64,12 @@ function handleClick(evt, data){
 					: target.parents('.page'))
 	if(target != -1){
 		var mag = $('.magazine')
-		setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
-		setTransitionEasing(mag, 'ease')
 
 		togglePageView()
 		setCurrentPage(target)
+
+		setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
+		setTransitionEasing(mag, 'ease')
 	}
 }
 
