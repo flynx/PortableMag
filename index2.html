@@ -209,62 +209,67 @@ $(document).ready(function(){
 			</div>
 			<div class="page">
 				<div class="content">
-					<h1 name="navigation">PortableMag Navigation and Linking</h1>
-					<div style="float:left; width: 40%; height: 100%; margin: 10px;">
-						<h2>Finger controls</h2>
-						<ul>
-							<li> Single finger swipe left/right &ndash; prev/next page.
-							<li> Two finger swipe left/right &ndash; prev/next article.
-							<li> Single finger swipe up/down &ndash; toggle thumbnail view.
-							<li> Pinch in/out &ndash; go in/out of thumbnail view.
-						</ul>
-						<h2>Navigation via #URLs</h2>
-						<h3>The basics</h3>
-						<a href="#1">Page #1</a><br>
-						<a href="#ArticleAnchorExample">Named page</a><br>
-						<p>
-							<s><a href="#page-3-anchor" style="pointer-events:none">Anchor on page #3</a></s><br>
-							<i> currently navigation via existing anchors
-								will break the layout, so use the name attribute
-								on any other tags (see example).
-							</i>
-						</p>
+					<div class="header">
+						<h1 name="navigation">PortableMag Navigation and Linking</h1>
 					</div>
+					<div class="body two-column">
+						<div class="no-column-break">
+							<h2>Finger controls</h2>
+							<ul>
+								<li> Single finger swipe left/right &ndash; prev/next page.
+								<li> Two finger swipe left/right &ndash; prev/next article.
+								<li> Single finger swipe up/down &ndash; toggle thumbnail view.
+								<li> Pinch in/out &ndash; go in/out of thumbnail view.
+							</ul>
+							<h2>Navigation via #URLs</h2>
+							<h3>The basics</h3>
+							<a href="#1">Page #1</a><br>
+							<a href="#ArticleAnchorExample">Named page</a><br>
+							<p>
+								<s><a href="#page-3-anchor" style="pointer-events:none">Anchor on page #3</a></s><br>
+								<i> currently navigation via existing anchors
+									will break the layout, so use the name attribute
+									on any other tags (see example).
+								</i>
+							</p>
+						</div>
 
-					<div style="float:left; width: 40%; height: 100%; padding: 10px;">
-						<h3>Special anchors</h3>
-						<p>These show up in the page URL</p>
-						<a href="#home">Magazine cover</a><br>
-						<a href="#end">Last page</a><br>
-						<a href="#thumbnails">Thumbnail view</a><br>
-						<a href="#example-layer">Toggle a hidden layer</a><br>
-						<span name="example-layer" class="hidden">
-							<a href="#hideLayers">Hide all layers</a><br>
-						</span>
-						<a href="#bookmark">Toggle bookmark</a><br>
+						<div class="no-column-break">
+							<h3>Special anchors</h3>
+							<p>These show up in the page URL</p>
+							<a href="#home">Magazine cover</a><br>
+							<a href="#end">Last page</a><br>
+							<a href="#thumbnails">Thumbnail view</a><br>
+							<a href="#example-layer">Toggle a hidden layer</a><br>
+							<span name="example-layer" class="hidden">
+								<a href="#hideLayers">Hide all layers</a><br>
+							</span>
+							<a href="#bookmark">Toggle bookmark</a><br>
+							<h3>Relative special anchors</h3>
+							<p>These will get replaced by corresponding page numbers in the URL</p>
+							<a href="#next">Next page</a><br>
+							<a href="#prev">Previous page</a><br>
+							<a href="#nextArticle">Next article</a><br>
+							<a href="#prevArticle">Previous article</a><br>
+							<h3>History support</h3>
+							<i>NOTE: this is still a bit flaky...</i><br>
+							<a href="#back">Go back</a><br>
+							<a href="#forward">Go forward</a><br>
 
-						<h3>Relative special anchors</h3>
-						<p>These will get replaced by corresponding page numbers in the URL</p>
-						<a href="#next">Next page</a><br>
-						<a href="#prev">Previous page</a><br>
-						<a href="#nextArticle">Next article</a><br>
-						<a href="#prevArticle">Previous article</a><br>
-						<h3>History support</h3>
-						<i>NOTE: this is still a bit flaky...</i><br>
-						<a href="#back">Go back</a><br>
-						<a href="#forward">Go forward</a><br>
+							<div name="example-layer" class="hidden" onclick="window.location='#example-layer'" style="position:absolute; left:450px; top:250px; width: 300px; height:50px; text-align: center; padding: 15px; border: solid gray 5px; background: white; color: gray; cursor: hand; opacity: 0.8">
+								<h3>This is an example layer</h3>
+								<i>click or tap to hide</i>
+							</div>
+
+							<p>
+								<a href="#config">configuration demo</a>
+							</p>
+						</div>
+
 					</div>
-					<div style="position:absolute; right: 30px; bottom:10px;">
-						<a href="#config">configuration demo</a> <a href="#next">next page...</a><br>
+					<div class="footer">
+						<div class="page-number-text">[PAGE NUMBER]</div>
 					</div>
-
-
-					<div name="example-layer" class="hidden" onclick="window.location='#example-layer'" style="position:absolute; left:450px; top:250px; width: 300px; height:50px; text-align: center; padding: 15px; border: solid gray 5px; background: white; color: gray; cursor: hand; opacity: 0.8">
-						<h3>This is an example layer</h3>
-						<i>click or tap to hide</i>
-					</div>
-
-					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 
@@ -383,35 +388,92 @@ $(document).ready(function(){
 		<div class="article">
 			<div class="cover page">
 				<div class="content" name="ArticleAnchorExample">
-					<h1>Page Templates</h1>
+					<div class="header">
+						<h1>Page Templates</h1>
+					</div>
+					<div class="body">
 
-					<p>
-					This page contains several examples of template fields,
-					the first one is the simplest, the magazine name 
-					(<span class="magazine-title-text">[MAGAZINE NAME]</span>),
-					then we'll have the index (see next) and in the bottom-right
-					corner is the page number...
-					</p>
+						<h2>Inline basic macros</h2>
+						<p>
+						This page contains several examples of inline template/macro fields,
+						these are HTML elements whos content will get replaced depending on 
+						their class.
+						</p>
 
-					<div class="article-index">[ARTICLE INDEX]</div>
+						<h3>Magazine title</h3>
+						<p>
+						Any element with the class <i>"magazine-title-text"</i> 
+						will be replaced with the magazine title (example:
+						<span class="magazine-title-text">[MAGAZINE NAME]</span>)
+						</p>
 
-					<div class="page-number-text">[PAGE NUMBER]</div>
+						<h3>Page Numer</h3>
+						<p>
+						Any element with a class <i>"page-number-text"</i> will 
+						get replaced with the page number (example: 
+						<span class="page-number-text">#</span>)
+						</p>
+						<p>
+						NOTE: the selector <i>div.page-number-text</i> will
+						put the number at the bottom of the page, this page 
+						number is a good example of this.
+						</p>
+
+						<h3>Article Index</h3>
+						<p>
+						Any element with the class <i>"article-index"</i> will
+						be replaced with the links to all the articles in the 
+						current magazine.
+						</p>
+						<p>
+						Example:<br>
+							<div class="article-index">[ARTICLE INDEX]</div>
+						</p>
+
+					</div>
+					<div class="footer">
+						<div class="page-number-text">[PAGE NUMBER]</div>
+					</div>
 				</div>
 			</div>
 
-			<div class="page" style="background: black; color: white;">
+			<div class="page dark">
 				<div class="content">
-					<h1>Two column</h1>
-					<div style="float:left; width: 45%; height: 100%; margin: 10px;">
-						Column 1
+					<div class="header">
+						<h1>Two column</h1>
 					</div>
-					<div style="float:left; width: 45%; height: 100%; padding: 10px;">
-						Column 2
-					</div>
+					<div class="body two-column">
 
-					<div class="page-number-text">[PAGE NUMBER]</div>
+						Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
+
+					</div>
+					<div class="footer">
+						<div class="page-number-text">[PAGE NUMBER]</div>
+					</div>
 				</div>
 			</div>
+
+			<div class="page light">
+				<div class="content">
+					<div class="header">
+						<h1>Three column</h1>
+					</div>
+					<div class="body three-column">
+
+						<p>
+							Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
+						</p>
+						<p>
+							NOTE: at this point, even and odd pages are aligned slightly to the right or left respectively, book-style.
+						</p>
+
+					</div>
+					<div class="footer">
+						<div class="page-number-text">[PAGE NUMBER]</div>
+					</div>
+				</div>
+			</div>
+
 			<div class="page no-resize page-align-left">
 				<div class="content" style="background:gold">
 					Left-aligned page...

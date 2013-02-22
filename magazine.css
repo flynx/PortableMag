@@ -502,7 +502,7 @@ body {
 
 /******************************************************* templates ***/
 
-.page-number-text {
+div.page-number-text {
 	position: absolute; 
 	bottom: 10px; 
 	right: 10px;
@@ -538,6 +538,85 @@ body {
 .caption.shown {
 	opacity: 0.8;
 }
+
+
+
+/************************************************** page templates ***/
+
+.page .content .header,
+.page .content .body,
+.page .content .footer {
+	position: relative;
+	width: 80%;
+	left: 13%
+}
+.page:nth-child(even) .content .header,
+.page:nth-child(even) .content .body,
+.page:nth-child(even) .content .footer {
+	left: 7%;
+}
+
+.page .content .header {
+	margin-top: 5%;
+	min-height: 5%;
+	max-height: 15%;
+	top: 0px;
+}
+.page .content .body {
+	max-height: 80%;
+	padding-top: 1%;
+	padding-bottom: 1%;
+}
+.page .content .body p:first-child {
+	margin-top: 0px;
+}
+.page .content .footer {
+	position: absolute;
+	min-height: 5%;
+	max-height: 15%;
+	bottom: 0px;
+	margin-bottom: 5%;
+}
+
+.body .no-column-break {
+	display: inline-block;
+	width: 100%;
+}
+
+.page .content .footer .page-number-text {
+	position: absolute; 
+	bottom: auto; 
+	right: 0px;
+	text-align: right;
+}
+.page:nth-child(even) .content .footer .page-number-text {
+	left: 0px;
+	text-align: left;
+}
+
+/* column layouts */
+.page .content .two-column {
+	column-count: 2;
+	-webkit-column-count: 2;
+	-moz-column-count: 2;
+
+	text-align: justify;
+}
+.page .content .three-column {
+	column-count: 3;
+	-webkit-column-count: 3;
+	-moz-column-count: 3;
+
+	text-align: justify;
+}
+.page .content .four-column {
+	column-count: 4;
+	-webkit-column-count: 4;
+	-moz-column-count: 4;
+
+	text-align: justify;
+}
+
 
 
 

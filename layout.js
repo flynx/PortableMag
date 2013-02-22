@@ -44,16 +44,7 @@ var togglePageView = createCSSClassToggler(
 				var w = page.width()
 				var h = page.height()
 
-				// XXX this is not correct...
-				// 		...need to fit one rectangel (page) into another (viewer)
-				// 		...use the implementation in magazine.js
-				if(W >= H){
-					// fit to width...
-					var scale = W/w
-				} else {
-					// fit to height...
-					var scale = H/h
-				}
+				var scale = getPageTargetScale(1)
 				setMagazineScale(scale)
 				unanimated($('.magazine, .viewer'), togglePageFitMode)('on')
 			} else {
@@ -64,7 +55,7 @@ var togglePageView = createCSSClassToggler(
 				var w = page.width()
 				var h = page.height()
 
-				scale = W/(w*PAGES_IN_RIBBON)
+				var scale = W/(w*PAGES_IN_RIBBON)
 				setMagazineScale(scale)
 			}
 			// NOTE: can't disable transitions on this one because ScrollTo

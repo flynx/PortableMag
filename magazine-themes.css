@@ -185,6 +185,12 @@
 	background: red;
 }
 
+.light.page {
+	background: white;
+	color: black;
+}
+
+
 
 /**************************************************** dark theme ****/
 
@@ -259,6 +265,10 @@
 	background: red;
 }
 
+.dark.page {
+	background: black;
+	color: white;
+}
 
 
 

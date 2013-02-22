@@ -52,6 +52,7 @@ var UPDATE_HASH_URL_POSITION = false
 // NOTE: partial history navigation over links will still work.
 var FULL_HISTORY_ENABLED = false
 
+// if true, use CSS3 transforms to scroll, of false, use left.
 var USE_TRANSFORM = true
 
 
@@ -225,6 +226,69 @@ function getMagazineShift(){
 	return getElementShift($('.magazine')).left
 }
 
+function getPageTargetScale(n, fit_to_content){
+
+	var view = $('.viewer')
+	var content = $('.content')
+	var page = $('.page')
+
+	var W = view.width()
+	var H = view.height()
+	var cW = content.width()
+	var cH = content.height()
+
+	var scale = {
+		value: getPageScale(),
+		width: null,
+		height: null,
+		result_width: cW,
+
+		valueOf: function(){return this.value},
+	}
+
+	if(fit_to_content){
+		if(USE_REAL_PAGE_SIZES){
+			scale.width = 'auto'
+			scale.height = 'auto'
+		} else {
+			scale.width = cW
+			scale.height = cH
+		}
+		if(W/H > (cW*n)/cH){
+			scale.value = H/cH
+		} else {
+			scale.value = W/(cW*n)
+		}
+
+		// resulting page width...
+		scale.result_width = cW
+
+	} else {
+		// need to calc width only...
+		if(W/H > (cW*n)/cH){
+			scale.value = H/cH
+			scale.width = W/scale
+			scale.height = cH
+
+		// need to calc height only...
+		} else if(W/H > (cW*n)/cH){
+			scale.value = W/(cW*n)
+			scale.height = H/scale
+			scale.width = cW
+
+		// set both width and height to defaults (content and page ratios match)...
+		} else {
+			scale.value = W/(cW*n)
+			scale.height = cH
+			scale.width = cW
+		}
+
+		// resulting page width...
+		scale.result_width = W/scale
+	}
+
+	return scale
+}
 
 
 /************************************************** event handlers ***/
@@ -399,54 +463,14 @@ function fitNPages(n, fit_to_content){
 	var cW = content.width()
 	var cH = content.height()
 
-	var rW = cW
-	var scale = getPageScale()
-
-	var target_width
-	var target_height
-
-
 	// to compensate for transitions, no data sampling should be beyound
 	// this point, as we will start changing things next...
-
-	if(fit_to_content){
-		if(USE_REAL_PAGE_SIZES){
-			target_width = 'auto'
-			target_height = 'auto'
-		} else {
-			target_width = cW
-			target_height = cH
-		}
-		if(W/H > (cW*n)/cH){
-			scale = H/cH
-		} else {
-			scale = W/(cW*n)
-		}
-		// resulting page width...
-		var rW = cW
-
-	} else {
-		// need to calc width only...
-		if(W/H > (cW*n)/cH){
-			scale = H/cH
-			target_width = W/scale
-			target_height = cH
-
-		// need to calc height only...
-		} else if(W/H > (cW*n)/cH){
-			scale = W/(cW*n)
-			target_height = H/scale
-			target_width = cW
-
-		// set both width and height to defaults (content and page ratios match)...
-		} else {
-			scale = W/(cW*n)
-			target_height = cH
-			target_width = cW
-		}
-		// resulting page width...
-		var rW = W/scale
-	}
+	
+	var scale = getPageTargetScale(n, fit_to_content)
+	// cache some data...
+	var target_width = scale.width
+	var target_height = scale.height
+	var rW = scale.result_width
 
 	// NOTE: we need to calculate the offset as the actual widths during 
 	// 		the animation are not correct... so just looking at .position()
