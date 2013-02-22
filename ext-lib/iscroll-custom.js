@@ -404,6 +404,7 @@ iScroll.prototype = {
 
 		if (that.options.onBeforeScrollEnd) that.options.onBeforeScrollEnd.call(that, e);
 
+		/*
 		// XXX do we need this?
 		if (that.zoomed) {
 			scale = that.scale * that.lastScale;
@@ -424,6 +425,7 @@ iScroll.prototype = {
 			if (that.options.onZoomEnd) that.options.onZoomEnd.call(that, e);
 			return;
 		}
+		*/
 
 		if (!that.moved) {
 			if (hasTouch) {

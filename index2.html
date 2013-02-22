@@ -133,9 +133,10 @@ $(document).ready(function(){
 	$('.viewer')
 		.on('scrollCancelled', function(){ setCurrentPage() })
 		//.on('shortClick', handleClick)
-		.on('swipeLeft', handleSwipeLeft) 
-		.on('swipeRight', handleSwipeRight)
-		.on('screenReleased', handleScrollRelease)
+		//.on('swipeLeft', handleSwipeLeft) 
+		//.on('swipeRight', handleSwipeRight)
+		//.on('screenReleased', handleScrollRelease)
+		.on('screenReleased swipeRight swipeLeft', handleScrollRelease)
 
 	/*
 	// try a way of cheating...

@@ -77,6 +77,13 @@ function makeSwipeHandler(action){
 	return function(evt, data){
 		// ribbon mode...
 		if(isNavigationViewRelative()){
+
+			// this makes things snap...
+			if(SNAP_TO_PAGES_IN_RIBBON){
+				setCurrentPage()
+				return
+			}
+
 			return handleScrollRelease(evt, data)
 		}
 		// full page view...
@@ -95,11 +102,13 @@ var handleSwipeRight = makeSwipeHandler(nextPage)
 //		explicitly bind them...
 // XXX restore all the changed values...
 function handleScrollRelease(evt, data){
+	/*
 	// this makes things snap...
 	if(SNAP_TO_PAGES_IN_RIBBON || !isNavigationViewRelative()){
 		setCurrentPage()
 		return
 	}
+	*/
 
 	var speed = data.speed.x
 	var pages = $('.page')
