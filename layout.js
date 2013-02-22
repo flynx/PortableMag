@@ -39,23 +39,12 @@ var togglePageView = createCSSClassToggler(
 			var page = $('.page')
 
 			if(action == 'on'){
-				var W = view.width()
-				var H = view.height()
-				var w = page.width()
-				var h = page.height()
-
 				var scale = getPageTargetScale(1)
 				setMagazineScale(scale)
 				unanimated($('.magazine, .viewer'), togglePageFitMode)('on')
 			} else {
 				unanimated($('.magazine, .viewer'), togglePageFitMode)('off')
-
-				var W = view.width()
-				var H = view.height()
-				var w = page.width()
-				var h = page.height()
-
-				var scale = W/(w*PAGES_IN_RIBBON)
+				var scale = getPageTargetScale(PAGES_IN_RIBBON)
 				setMagazineScale(scale)
 			}
 			// NOTE: can't disable transitions on this one because ScrollTo
