@@ -69,7 +69,8 @@ function handleClick(evt, data){
 		setCurrentPage(target)
 
 		setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
-		setTransitionEasing(mag, 'ease')
+		//setTransitionEasing(mag, 'ease')
+		setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
 	}
 }
 
@@ -89,7 +90,8 @@ function makeSwipeHandler(action){
 		// full page view...
 		var mag = $('.magazine')
 		setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
-		setTransitionEasing(mag, 'ease-out')
+		//setTransitionEasing(mag, 'ease-out')
+		setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
 
 		action($('.current.page'))
 	}
@@ -132,16 +134,19 @@ function handleScrollRelease(evt, data){
 			var _t = t
 			t = Math.abs(t * ((at-first)/(at-to)))
 			to = first
-			setTransitionEasing(mag, 'linear')
+			//setTransitionEasing(mag, 'linear')
+			setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
 		} else if(to < last){
 			// trim the time proportionally...
 			var _t = t
 			t = Math.abs(t * ((at-last)/(at-to)))
 			to = last
-			setTransitionEasing(mag, 'linear')
+			//setTransitionEasing(mag, 'linear')
+			setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
 
 		} else {
-			setTransitionEasing(mag, 'ease-out')
+			//setTransitionEasing(mag, 'ease-out')
+			setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
 		}
 
 		setTransitionDuration(mag, t)
@@ -151,7 +156,8 @@ function handleScrollRelease(evt, data){
 		// XXX this is a bit dumb at this point...
 		// XXX run this as a transition end handler...
 		setTimeout(function(){
-			setTransitionEasing(mag, 'ease-out')
+			//setTransitionEasing(mag, 'ease-out')
+			setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
 			setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
 		}, t+10)
 
@@ -159,12 +165,14 @@ function handleScrollRelease(evt, data){
 	// do not let the user scroll out of view...
 	} else {
 		if(at > first){
-			setTransitionEasing(mag, 'ease-in')
+			//setTransitionEasing(mag, 'ease-in')
+			setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
 			setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION/2)
 			setElementTransform(mag, first)
 
 		} else if(at < last){
-			setTransitionEasing(mag, 'ease-in')
+			//setTransitionEasing(mag, 'ease-in')
+			setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
 			setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION/2)
 			setElementTransform(mag, last)
 		}
