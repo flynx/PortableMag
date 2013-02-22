@@ -75,6 +75,8 @@
 <script src="ext-lib/jquery.scrollto.js"></script>
 <script src="ext-lib/jquery.scrollstop.js"></script>
 
+<script src="ext-lib/iscroll-custom.js"></script>
+
 <script src="lib/jli.js"></script>
 
 <script src="magazine.js"></script>
@@ -123,6 +125,16 @@ $(document).ready(function(){
 		function(k){console.log(k)}))
 
 	//setTransformOrigin($('.magazine'))
+
+	window.myScroll = new iScroll('viewer', {
+		vScroll: false,
+		//snap: '.page',
+		//momentum: false,
+		momentum: true,
+		hScrollbar: false,
+	})
+	myScroll.disable()
+
 
 	window.MagazineScroller = makeScrollHandler($('.viewer'), {
 		hScroll: true,
