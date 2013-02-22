@@ -145,6 +145,7 @@ $(document).ready(function(){
 	//setTransitionEasing($('.magazine'), 'ease-out')
 	setTransitionEasing($('.magazine'), 'cubic-bezier(0.33,0.66,0.66,1)')
 	prepareTransitions($('.magazine'))
+	$('.viewer').css('overflow', 'hidden')
 
 	runMagazineTemplates()
 	setCurrentPage(0)
