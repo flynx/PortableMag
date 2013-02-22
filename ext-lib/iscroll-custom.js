@@ -613,6 +613,8 @@ iScroll.prototype = {
 			step, easeOut,
 			animate;
 
+		console.log('steps:', that.steps.length)
+
 		if (that.animating) return;
 		
 		if (!that.steps.length) {
