@@ -73,6 +73,8 @@
 <script src="ext-lib/jquery.scrollto.js"></script>
 <script src="ext-lib/jquery.scrollstop.js"></script>
 
+<script src="ext-lib/iscroll.js"></script>
+
 <script src="lib/jli.js"></script>
 
 <script src="magazine.js"></script>
@@ -110,34 +112,25 @@ $(document).ready(function(){
 		}, 
 		function(k){console.log(k)}))
 
-	window.MagazineScroller = makeScrollHandler($('.viewer'), {
-		hScroll: true,
+	window.myScroll = new iScroll('viewer', {
 		vScroll: false,
-		//enableMultiClicks: true,
-	}).start()
-
-	$('.viewer')
-		.on('scrollCancelled', function(){ setCurrentPage() })
-		.on('shortClick', handleClick)
-		.on('swipeLeft', handleSwipeLeft) 
-		.on('swipeRight', handleSwipeRight)
-		.on('screenReleased', handleScrollRelease)
+		//snap: '.page',
+		//momentum: false,
+		momentum: true,
+		hScrollbar: false,
+	})
 
 	/*
-	// try a way of cheating...
-	var w = $('.viewer').width()
-	var h = $('.viewer').height()
-	$('.content').each(function(_, e){
-		var e = $(e)
-		var ew = e.width()
-		var eh = e.height()
-		var ratio = ew/eh
-		e.height(h)
-		e.width(ratio * h)
-	})
-	$('.magazine').css({
-		'margin-top': -h/2,
-		height: h,
+	$('.page').click(function(){
+		if(togglePageView('?') == 'off'){
+			togglePageView('on')
+			myScroll.options.snap = '.page'
+			myScroll.refresh()
+		} else {
+			togglePageView('off')
+			myScroll.options.snap = false
+			myScroll.refresh()
+		}
 	})
 	*/
 
@@ -149,7 +142,7 @@ $(document).ready(function(){
 
 	// XXX for some reason this does not work correctly on android the 
 	//		first time...
-	togglePageView('on')
+	//togglePageView('on')
 })
 
 
