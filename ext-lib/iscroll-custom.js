@@ -521,7 +521,7 @@ iScroll.prototype = {
 		if (that.options.onTouchEnd) that.options.onTouchEnd.call(that, e);
 	},
 	
-	// XXX
+	// XXX go back into bounds...
 	_resetPos: function (time) {
 		var that = this,
 			resetX = that.x >= 0 ? 0 : that.x < that.maxScrollX ? that.maxScrollX : that.x,

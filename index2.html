@@ -84,13 +84,13 @@
 
 <script>
 
-function setTransformOrigin(elem){
+function prepareTransitions(elem){
 	return $(elem).css({
-		'-webkit-transform-origin': '0 0',
-		'-moz-transform-origin': '0 0',
-		'-o-transform-origin': '0 0',
-		'-ms-transform-origin': '0 0',	
-		'transform-origin': '0 0',
+		'-webkit-transition-property': '-webkit-transform',
+		'-moz-transition-property': '-moz-transform',
+		'-o-transition-property': '-o-transform',
+		'-ms-transition-property': '-ms-transform',
+		'transition-property': 'transform',
 	})
 }
 
@@ -160,6 +160,7 @@ $(document).ready(function(){
 	// XXX stub...
 	//setTransitionEasing($('.magazine'), 'ease-out')
 	setTransitionEasing($('.magazine'), 'cubic-bezier(0.33,0.66,0.66,1)')
+	prepareTransitions($('.magazine'))
 
 	runMagazineTemplates()
 	setCurrentPage(0)
