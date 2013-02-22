@@ -129,92 +129,16 @@ $(document).ready(function(){
 		function(k){console.log(k)}))
 
 	/*
-	window.myScroll = new iScroll('viewer', {
-		snap: true,
-		momentum: false,
-		hScrollbar: false,
-		//onScrollEnd: function () {
-		//	document.querySelector('#indicator > li.active').className = '';
-		//	document.querySelector('#indicator > li:nth-child(' + (this.currPageX+1) + ')').className = 'active';
-		//}
-	})
-	*/
-	
-
-
-	/*
-	var touching = false
-	var t = null
-	$('.viewer')
-		.on('mousedown touchstart', function(){
-			touching = true
-			clearTimeout(t)
-		})
-		.on('mouseup touchend', function(){
-			touching = false
-		})
-		.on('scrollstop', function(evt){
-			//log('scrollstop...')
-			// XXX for some reason, on android, this sets the page but 
-			//		does not actually scroll to it -- no animation and/or
-			//		.ScrollTo does notwork...
-			//limit_scroll()
-			if(!touching){
-				t = setTimeout(function(){
-					var n = getPageNumber()
-					var page = $($('.page')[n])
-					$('.current.page').removeClass('current')
-					page.addClass('current')
-					// attempt to make it without using .ScrollTo(...)
-					// XXX the problem appears to be in the .scrollLeft(...)
-					//		that does not work on some webkit browser versions
-					//		namely on android it's "odd" to say the least...
-					//$('.viewer').scrollLeft(page.position().left)
-					$('.viewer')[0].scrollLeft = page.position().left
-				}, 100)
-			}
-		})
-	*/
-
 	if(!NAVIGATE_RELATIVE_TO_VISIBLE){
 		$('.viewer').css({overflow: 'hidden'})
 	}
+	*/
 
 	// expand the templates...
 	runMagazineTemplates()
 
 	//setCurrentPage(0)
-	//limit_scroll()
 })
-
-var SCROLL_LIMIT = 800 * 1.5
-
-function setup_scroll_limiter(){
-	$('.magazine').wrapAll($('<div class="scroller">'))
-	limit_scroll()
-}
-
-// XXX set the limit to next/prev page alignment...
-function limit_scroll(){
-	var W = $('.viewer').width()
-	var ml = parseFloat($('.scroller').css('margin-left')) || 0
-	var pos = $('.viewer').scrollLeft()
-	var c = -ml + pos + W/2
-	$('.scroller').css({
-		'margin-left': -(c-SCROLL_LIMIT),
-		'width': c+SCROLL_LIMIT
-	})
-	$('.viewer').scrollLeft(pos-ml-(c-SCROLL_LIMIT))
-}
-function clear_limits(){
-	var pos = $('.viewer').scrollLeft()
-	var l = parseFloat($('.scroller').css('margin-left'))
-	$('.scroller').css({
-		'margin-left': '',
-		'width': ''
-	})
-	$('.viewer').scrollLeft(pos - l)
-}
 
 </script>
 
