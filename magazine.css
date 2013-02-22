@@ -54,8 +54,8 @@ body {
 
 	/* these set the "safe" marks for page content */
 	/* XXX change to relative units... */
-	width: 1024px;
-	height: 768px;
+	width: 800px;
+	height: 600px;
 
 
 	-webkit-transition: all 0.2s ease;
@@ -180,9 +180,9 @@ body {
 
 	min-width: 200px;
 	/* XXX has to be the same as default page height */
-	height: 768px;
+	height: 600px;
 	/* XXX has to pe half of page height */
-	margin-top: -384px;
+	margin-top: -300px;
 
 	/* this is minus half the page width */
 	/* XXX change to relative units... */
