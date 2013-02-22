@@ -19,11 +19,6 @@
 	margin-left: 0px;
 
 	/* magic */
-	-webkit-transform-origin: 0 0;
-	-moz-transform-origin: 0 0;
-	-o-transform-origin: 0 0;
-	-ms-transform-origin: 0 0;	
-	transform-origin: 0 0;
 }
 
 .current.page {
@@ -89,6 +84,16 @@
 
 <script>
 
+function setTransformOrigin(elem){
+	return $(elem).css({
+		'-webkit-transform-origin': '0 0',
+		'-moz-transform-origin': '0 0',
+		'-o-transform-origin': '0 0',
+		'-ms-transform-origin': '0 0',	
+		'transform-origin': '0 0',
+	})
+}
+
 $(document).ready(function(){
 	// keyboard...
 	$(document)
@@ -116,6 +121,8 @@ $(document).ready(function(){
 			}
 		}, 
 		function(k){console.log(k)}))
+
+	setTransformOrigin($('.magazine'))
 
 	window.MagazineScroller = makeScrollHandler($('.viewer'), {
 		hScroll: true,
