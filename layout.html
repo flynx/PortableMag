@@ -18,11 +18,11 @@
 	margin-left: 0px;
 }
 
+/*
 .current.page {
 	z-index: 9000;
 	box-shadow: 10px 10px 150px -50px black;
 }
-/*
 .page:hover {
 	z-index: 9000;
 	box-shadow: 10px 10px 150px 0px black;
@@ -78,31 +78,6 @@
 <script>
 
 $(document).ready(function(){
-	// log...
-	/*
-	var _log = $('<div id="log"></div>')
-		.css({
-			position: 'fixed',
-			background: 'silver',
-			opacity: 0.5,
-			width: 200,
-			height: '80%',
-			top: 10,
-			left: 10,
-			'z-index': 90000,
-			overflow: 'hidden',
-			padding: 10,
-		})
-		.text('log')
-		.appendTo($('body'))
-	function log(text){
-		_log.html(_log.html() + '<br>' + text + '')
-		_log.scrollTop(_log.prop('scrollHeight'))
-	}
-	function clear_log(){
-		_log.html('')
-	}
-	*/
 
 	// keyboard...
 	$(document)
@@ -128,16 +103,9 @@ $(document).ready(function(){
 		}, 
 		function(k){console.log(k)}))
 
-	/*
-	if(!NAVIGATE_RELATIVE_TO_VISIBLE){
-		$('.viewer').css({overflow: 'hidden'})
-	}
-	*/
-
 	// expand the templates...
 	runMagazineTemplates()
 
-	//setCurrentPage(0)
 })
 
 </script>
