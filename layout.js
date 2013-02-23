@@ -178,6 +178,7 @@ function handleScrollRelease(evt, data){
 
 
 var USE_TRANSITIONS_FOR_ANIMATION = false
+var MIN_STEP = 24
 
 var animationFrame = function(){
   return (window.requestAnimationFrame
@@ -189,6 +190,7 @@ var animationFrame = function(){
 }()
 
 
+// XXX make this interruptable...
 function animateElementTo(elem, to, duration, easing){
 	// use transition for animation...
 	if(USE_TRANSITIONS_FOR_ANIMATION){
@@ -212,6 +214,7 @@ function animateElementTo(elem, to, duration, easing){
 			top: to.top - from.top,
 			left: to.left - from.left,
 		}
+		var prev_t = now
 
 		function animate(t){
 			/*
@@ -220,25 +223,28 @@ function animateElementTo(elem, to, duration, easing){
 				return
 			}
 			*/
+			// try and not render things too often...
+			if(t - prev_t > MIN_STEP){
+				// set position for current step...
+				if(t < then){
+					prev_t = t
+					var rem = then - t
+					var r = rem/duration
 
-			// set position for current step...
-			if(t < then){
-				var rem = then - t
-				var r = rem/duration
+					// this is brain-dead linear spacing...
+					// XXX revise...
+					var pos = {
+						top: to.top - (dist.top * r),
+						left: to.left - (dist.left * r),
+					}
+					
+					setElementTransform(elem, pos)
 
-				// this is brain-dead linear spacing...
-				// XXX revise...
-				var pos = {
-					top: to.top - (dist.top * r),
-					left: to.left - (dist.left * r),
+				// finishup the animation...
+				} else if(t > then){
+					setElementTransform(elem, to)
+					return
 				}
-				
-				setElementTransform(elem, pos)
-
-			// finishup the animation...
-			} else if(t > then){
-				setElementTransform(elem, to)
-				return
 			}
 			// sched next frame...
 			animationFrame(animate)
