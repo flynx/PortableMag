@@ -38,13 +38,18 @@ var togglePageView = createCSSClassToggler(
 			var view = $('.viewer')
 			var page = $('.page')
 
+			// XXX
+			setTransitionDuration($('.magazine'), 0)
+
 			if(action == 'on'){
-				var scale = getPageTargetScale(1)
+				var scale = getPageTargetScale(1).value
 				setMagazineScale(scale)
-				unanimated($('.magazine, .viewer'), togglePageFitMode)('on')
+				//unanimated($('.magazine, .viewer'), togglePageFitMode)('on')
+				togglePageFitMode('on')
 			} else {
-				unanimated($('.magazine, .viewer'), togglePageFitMode)('off')
-				var scale = getPageTargetScale(PAGES_IN_RIBBON)
+				//unanimated($('.magazine, .viewer'), togglePageFitMode)('off')
+				togglePageFitMode('off')
+				var scale = getPageTargetScale(PAGES_IN_RIBBON).value
 				setMagazineScale(scale)
 			}
 			// NOTE: can't disable transitions on this one because ScrollTo
@@ -177,8 +182,10 @@ function handleScrollRelease(evt, data){
 }
 
 
-var USE_TRANSITIONS_FOR_ANIMATION = false
-var MIN_STEP = 24
+// XXX this affects only the innertial part, not setCurrentPage...
+var USE_TRANSITIONS_FOR_ANIMATION = true
+//var MIN_STEP = 24
+var MIN_STEP = 1
 
 var animationFrame = function(){
   return (window.requestAnimationFrame
@@ -217,14 +224,13 @@ function animateElementTo(elem, to, duration, easing){
 		var prev_t = now
 
 		function animate(t){
-			/*
 			// XXX check if we are interrupted...
-			if(scroller.animating){
-				return
-			}
-			*/
+			//if(scroller.animating){
+			//	return
+			//}
+
 			// try and not render things too often...
-			if(t - prev_t > MIN_STEP){
+			if(t - prev_t >= MIN_STEP){
 				// set position for current step...
 				if(t < then){
 					prev_t = t

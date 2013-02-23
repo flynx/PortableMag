@@ -89,7 +89,6 @@ function updateNavigator(n){
 	res = res < (bW-pW) ? res: (bW-pW)
 
 	// set indicator position...
-	console.log('>>>', res)
 	pos.css({
 		left: res 
 	})
