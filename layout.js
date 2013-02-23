@@ -103,6 +103,7 @@ var handleSwipeRight = makeSwipeHandler(nextPage)
 // NOTE: this will also handle swipeUp/swopeDown as we do not 
 //		explicitly bind them...
 // XXX restore all the changed values...
+// XXX add an animate loop, to make the browser paint the page better...
 function handleScrollRelease(evt, data){
 	/*
 	// this makes things snap...
@@ -123,6 +124,7 @@ function handleScrollRelease(evt, data){
 	var to = (at + (t*speed*INNERTIA_SCALE))
 	var first = getMagazineOffset(pages.first(), null, 'center')
 	var last = getMagazineOffset(pages.last(), null, 'center')
+	var easing
 
 	// filter out really small speeds...
 	if(Math.abs(speed) > 0.5){
@@ -134,23 +136,22 @@ function handleScrollRelease(evt, data){
 			var _t = t
 			t = Math.abs(t * ((at-first)/(at-to)))
 			to = first
-			//setTransitionEasing(mag, 'linear')
-			setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
+			//easing = 'linear'
+			easing = 'cubic-bezier(0.33,0.66,0.66,1)'
 		} else if(to < last){
 			// trim the time proportionally...
 			var _t = t
 			t = Math.abs(t * ((at-last)/(at-to)))
 			to = last
-			//setTransitionEasing(mag, 'linear')
-			setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
+			//easing = 'linear'
+			easing = 'cubic-bezier(0.33,0.66,0.66,1)'
 
 		} else {
-			//setTransitionEasing(mag, 'ease-out')
-			setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
+			//easing = 'ease-out'
+			easing = 'cubic-bezier(0.33,0.66,0.66,1)'
 		}
 
-		setTransitionDuration(mag, t)
-		setElementTransform(mag, to)
+		animateElementTo(mag, to, t, easing)
 
 		// restore defaults...
 		// XXX this is a bit dumb at this point...
@@ -165,17 +166,85 @@ function handleScrollRelease(evt, data){
 	// do not let the user scroll out of view...
 	} else {
 		if(at > first){
-			//setTransitionEasing(mag, 'ease-in')
-			setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
-			setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION/2)
-			setElementTransform(mag, first)
+			//animateElementTo(mag, first, DEFAULT_TRANSITION_DURATION, 'ease-in')
+			animateElementTo(mag, first, DEFAULT_TRANSITION_DURATION, 'cubic-bezier(0.33,0.66,0.66,1)')
 
 		} else if(at < last){
-			//setTransitionEasing(mag, 'ease-in')
-			setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
-			setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION/2)
-			setElementTransform(mag, last)
+			//animateElementTo(mag, last, DEFAULT_TRANSITION_DURATION, 'ease-in')
+			animateElementTo(mag, last, DEFAULT_TRANSITION_DURATION, 'cubic-bezier(0.33,0.66,0.66,1)')
 		}
+	}
+}
+
+
+var USE_TRANSITIONS_FOR_ANIMATION = false
+
+var animationFrame = function(){
+  return (window.requestAnimationFrame
+		  || window.webkitRequestAnimationFrame 
+		  || window.mozRequestAnimationFrame
+		  || window.oRequestAnimationFrame
+		  || window.msRequestAnimationFrame
+		  || function(callback){ window.setTimeout(callback, 1000 / 60) })
+}()
+
+
+function animateElementTo(elem, to, duration, easing){
+	// use transition for animation...
+	if(USE_TRANSITIONS_FOR_ANIMATION){
+		setTransitionEasing(elem, easing)
+		setTransitionDuration(elem, duration)
+		setElementTransform(elem, to)
+
+	// manually animate...
+	} else {
+		if(typeof(to) == typeof(1)){
+			to = {
+				left: to,
+				top: 0,
+			}
+		}
+		setTransitionDuration(elem, 0)
+		var now = Date.now()
+		var then = now + duration
+		var from = getElementShift(elem)
+		var dist = {
+			top: to.top - from.top,
+			left: to.left - from.left,
+		}
+
+		function animate(t){
+			/*
+			// XXX check if we are interrupted...
+			if(scroller.animating){
+				return
+			}
+			*/
+
+			// set position for current step...
+			if(t < then){
+				var rem = then - t
+				var r = rem/duration
+
+				// this is brain-dead linear spacing...
+				// XXX revise...
+				var pos = {
+					top: to.top - (dist.top * r),
+					left: to.left - (dist.left * r),
+				}
+				
+				setElementTransform(elem, pos)
+
+			// finishup the animation...
+			} else if(t > then){
+				setElementTransform(elem, to)
+				return
+			}
+			// sched next frame...
+			animationFrame(animate)
+		}
+
+		animate()
 	}
 }
 
