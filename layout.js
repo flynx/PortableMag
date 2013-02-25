@@ -61,15 +61,32 @@ var togglePageView = createCSSClassToggler(
 /************************************************** event handlers ***/
 
 function handleClick(evt, data){
-	// get page target and select it if it's within a page...
-	var target = $(data.orig_event.target)
-	target = getPageNumber(
-				target.hasClass('page') ? target 
-					: target.parents('.page'))
+	var target = getPageNumber(data.orig_event.target)
 	if(target != -1){
 		var mag = $('.magazine')
 
-		togglePageView()
+		if(togglePageView('?') == 'on'){
+			setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
+		} else {
+			togglePageView('on')
+		}
+		setCurrentPage(target)
+
+		//setTransitionEasing(mag, 'ease')
+		setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
+	}
+}
+
+function handleLongClick(evt, data){
+	var target = getPageNumber(data.orig_event.target)
+	if(target != -1){
+		var mag = $('.magazine')
+
+		if(togglePageView('?') == 'on'){
+			togglePageView('off')
+		} else {
+			setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
+		}
 		setCurrentPage(target)
 
 		//setTransitionEasing(mag, 'ease')
@@ -354,9 +371,13 @@ function getMagazineOffset(page, scale, align){
 
 
 function getPageNumber(page){
+	page = $(page)
+	if(!page.hasClass('page')){
+		page = page.parents('.page')
+	}
 	// a page is given explicitly, get the next one...
 	if(page != null){
-		return $('.page').index($(page))
+		return $('.page').index(page)
 	}
 
 	// get the next page relative to the current... 

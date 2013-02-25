@@ -122,6 +122,7 @@ $(document).ready(function(){
 	$('.viewer')
 		.on('scrollCancelled swipeUp swipeDown', function(){ setCurrentPage() })
 		.on('shortClick', handleClick)
+		.on('longClick', handleLongClick)
 		.on('swipeLeft', handleSwipeLeft) 
 		.on('swipeRight', handleSwipeRight)
 		.on('screenReleased', handleScrollRelease)
