@@ -189,7 +189,7 @@ function getMagazineTitle(){
 }
 
 
-function getPageScale(){
+function getMagazineScale(){
 	return getElementScale($('.scaler'))
 }
 function setPageScale(scale){
@@ -236,7 +236,7 @@ function getPageTargetScale(n, fit_to_content){
 	var cH = content.height()
 
 	var scale = {
-		value: getPageScale(),
+		value: getMagazineScale(),
 		width: null,
 		height: null,
 		result_width: cW,
@@ -380,7 +380,7 @@ function makeSwipeHandler(){
 			pages = $('.page')
 			cur = $('.current.page')
 			n = pages.index(cur)
-			scale = getPageScale()
+			scale = getMagazineScale()
 			mag = $('.magazine')
 			pos = $('.navigator .bar .indicator')
 
@@ -619,7 +619,7 @@ function setCurrentPage(n, offset, width){
 		width = cur.width()
 		if(USE_REAL_PAGE_SIZES && togglePageView('?') == 'on'){
 			var align = getPageAlign(cur)
-			var scale = getPageScale()
+			var scale = getMagazineScale()
 			if(align == 'center'){
 				width = cur.width()
 
@@ -638,7 +638,7 @@ function setCurrentPage(n, offset, width){
 
 	// NOTE: this will be wrong during a transition, that's why we 
 	// 		can pass the pre-calculated offset as an argument...
-	shiftMagazineTo(-(offset == null ? cur.position()['left']/getPageScale() : offset))
+	shiftMagazineTo(-(offset == null ? cur.position()['left']/getMagazineScale() : offset))
 
 	// center the pages correctly...
 	// NOTE: this is the main reason we need width, and we can get it 

@@ -72,7 +72,6 @@ function handleClick(evt, data){
 		togglePageView()
 		setCurrentPage(target)
 
-		setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
 		//setTransitionEasing(mag, 'ease')
 		setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
 	}
@@ -93,7 +92,6 @@ function makeSwipeHandler(action){
 		}
 		// full page view...
 		var mag = $('.magazine')
-		setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
 		//setTransitionEasing(mag, 'ease-out')
 		setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
 
@@ -157,6 +155,7 @@ function handleScrollRelease(evt, data){
 
 		animateElementTo(mag, to, t, easing, speed)
 
+		/*
 		// restore defaults...
 		// XXX this is a bit dumb at this point...
 		// XXX run this as a transition end handler...
@@ -165,6 +164,7 @@ function handleScrollRelease(evt, data){
 			setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
 			setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
 		}, t+10)
+		*/
 
 	// check scroll bounds...
 	// do not let the user scroll out of view...
@@ -186,23 +186,13 @@ var USE_TRANSITIONS_FOR_ANIMATION = false
 //var MIN_STEP = 24
 var MIN_STEP = 0
 
-var animationFrame = (window.requestAnimationFrame
-		  || window.webkitRequestAnimationFrame 
-		  || window.mozRequestAnimationFrame
-		  || window.oRequestAnimationFrame
-		  || window.msRequestAnimationFrame
-		  || function(callback){ 
-			  window.setTimeout(callback, 1000 / 60) 
-		  })
-
-
 // XXX make this a drop-in replacement for setElementTransform...
 // XXX cleanup, still flacky...
 function animateElementTo(elem, to, duration, easing, speed){
 	// use transition for animation...
 	if(USE_TRANSITIONS_FOR_ANIMATION){
 		setTransitionEasing(elem, easing)
-		setTransitionDuration(elem, duration)
+		duration == null && setTransitionDuration(elem, duration)
 		setElementTransform(elem, to)
 
 	// manually animate...
@@ -219,6 +209,10 @@ function animateElementTo(elem, to, duration, easing, speed){
 				y: 0,
 			}
 		}
+		if(duration == null){
+			duration = getElementTransitionDuration(elem)
+		}
+
 		setTransitionDuration(elem, 0)
 
 		var start = Date.now()
@@ -292,7 +286,7 @@ function animateElementTo(elem, to, duration, easing, speed){
 			}
 			setElementTransform(elem, cur)
 			// sched next frame...
-			animationFrame(animate)
+			elem.next_frame = getAnimationFrame(animate)
 		}
 
 		animate()
@@ -300,8 +294,8 @@ function animateElementTo(elem, to, duration, easing, speed){
 }
 
 function stopAnimation(elem){
-	if(elem.animating){
-		delete elem.animating
+	if(elem.next_frame){
+		cancelAnimationFrame(elem.next_frame)
 	}
 }
 
@@ -322,6 +316,10 @@ function isNavigationViewRelative(){
 function getMagazineOffset(page, scale, align){
 	if(page == null){
 		page = $('.current.page')
+		// if no current page get the first...
+		if(page.length == 0){
+			page = $('.page').first()
+		}
 	}
 	if(scale == null){
 		scale = getMagazineScale()
@@ -391,6 +389,9 @@ function getMagazineScale(){
 function setMagazineScale(scale){
 	var mag = $('.magazine')
 	var cur = $('.current.page')
+	if(cur.length == 0){
+		cur = $('.page').first()
+	}
 
 	// center-align ribbon view pages...
 	var align = isNavigationViewRelative() ? 'center' : null
@@ -425,11 +426,10 @@ function setCurrentPage(n){
 	var left = getMagazineOffset(cur, null, align)
 
 	if(USE_TRANSITIONS_FOR_ANIMATION){
-		setTransitionDuration($('.magazine'), DEFAULT_TRANSITION_DURATION)
 		setElementTransform($('.magazine'), left)
 
 	} else {
-		animateElementTo($('.magazine'), left, DEFAULT_TRANSITION_DURATION)
+		animateElementTo($('.magazine'), left)
 	}
 
 	return cur
@@ -437,9 +437,13 @@ function setCurrentPage(n){
 
 
 function nextPage(page){
+	// XXX is this the right place for this?
+	setTransitionDuration($('.magazine'), DEFAULT_TRANSITION_DURATION)
 	setCurrentPage(getPageNumber(page)+1)
 }
 function prevPage(page){
+	// XXX is this the right place for this?
+	setTransitionDuration($('.magazine'), DEFAULT_TRANSITION_DURATION)
 	var n = getPageNumber(page)-1
 	n = n < 0 ? 0 : n
 	setCurrentPage(n)
@@ -447,9 +451,13 @@ function prevPage(page){
 
 
 function firstPage(){
+	// XXX is this the right place for this?
+	setTransitionDuration($('.magazine'), DEFAULT_TRANSITION_DURATION)
 	setCurrentPage(0)
 }
 function lastPage(){
+	// XXX is this the right place for this?
+	setTransitionDuration($('.magazine'), DEFAULT_TRANSITION_DURATION)
 	setCurrentPage(-1)
 }
 

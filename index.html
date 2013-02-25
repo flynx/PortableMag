@@ -17,23 +17,7 @@
 .magazine {
 	left: 150px;
 	margin-left: 0px;
-
-	/* magic */
 }
-
-.current.page {
-	/*
-	z-index: 9000;
-	box-shadow: 10px 10px 150px -50px black;
-	border-bottom: solid yellow 10px;
-	*/
-}
-/*
-.page:hover {
-	z-index: 9000;
-	box-shadow: 10px 10px 150px 0px black;
-}
-*/
 
 .page {
 
@@ -130,13 +114,13 @@ $(document).ready(function(){
 		hScroll: true,
 		vScroll: false,
 		// XXX still a bit flacky...
-		//preCallback: function(){stopAnimation($('.magazine'))},
+		preCallback: function(){stopAnimation($('.magazine'))},
 		//enableMultiClicks: true,
 		transitionEasing: 'cubic-bezier(0.33,0.66,0.66,1)',
 	}).start()
 
 	$('.viewer')
-		.on('scrollCancelled', function(){ setCurrentPage() })
+		.on('scrollCancelled swipeUp swipeDown', function(){ setCurrentPage() })
 		.on('shortClick', handleClick)
 		.on('swipeLeft', handleSwipeLeft) 
 		.on('swipeRight', handleSwipeRight)
@@ -145,18 +129,11 @@ $(document).ready(function(){
 		.on('screenReleased swipeRight swipeLeft', handleScrollRelease)
 		*/
 
-	// XXX stub...
-	//setTransitionEasing($('.magazine'), 'ease-out')
-	//setTransitionEasing($('.magazine'), 'cubic-bezier(0.33,0.66,0.66,1)')
-	prepareTransitions($('.magazine'))
 	$('.viewer').css('overflow', 'hidden')
 
 	runMagazineTemplates()
-	setCurrentPage(0)
-
-	// XXX for some reason this does not work correctly on android the 
-	//		first time...
 	togglePageView('on')
+	setCurrentPage(0)
 })
 
 
