@@ -371,12 +371,12 @@ function getMagazineOffset(page, scale, align){
 
 
 function getPageNumber(page){
-	page = $(page)
-	if(!page.hasClass('page')){
-		page = page.parents('.page')
-	}
 	// a page is given explicitly, get the next one...
 	if(page != null){
+		page = $(page)
+		if(!page.hasClass('page')){
+			page = page.parents('.page')
+		}
 		return $('.page').index(page)
 	}
 
