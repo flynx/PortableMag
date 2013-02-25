@@ -129,7 +129,8 @@ $(document).ready(function(){
 	window.MagazineScroller = makeScrollHandler($('.viewer'), {
 		hScroll: true,
 		vScroll: false,
-		preCallback: function(){stopAnimation($('.magazine'))},
+		// XXX still a bit flacky...
+		//preCallback: function(){stopAnimation($('.magazine'))},
 		//enableMultiClicks: true,
 		transitionEasing: 'cubic-bezier(0.33,0.66,0.66,1)',
 	}).start()
