@@ -156,7 +156,7 @@ function handleScrollRelease(evt, data){
 			easing = 'cubic-bezier(0.33,0.66,0.66,1)'
 		}
 
-		animateElementTo(mag, to, t, easing)
+		animateElementTo(mag, to, t, easing, speed)
 
 		// restore defaults...
 		// XXX this is a bit dumb at this point...
@@ -183,22 +183,22 @@ function handleScrollRelease(evt, data){
 
 
 // XXX this affects only the innertial part, not setCurrentPage...
-var USE_TRANSITIONS_FOR_ANIMATION = true
+var USE_TRANSITIONS_FOR_ANIMATION = false
 //var MIN_STEP = 24
-var MIN_STEP = 1
+var MIN_STEP = 0
 
-var animationFrame = function(){
-  return (window.requestAnimationFrame
+var animationFrame = (window.requestAnimationFrame
 		  || window.webkitRequestAnimationFrame 
 		  || window.mozRequestAnimationFrame
 		  || window.oRequestAnimationFrame
 		  || window.msRequestAnimationFrame
-		  || function(callback){ window.setTimeout(callback, 1000 / 60) })
-}()
+		  || function(callback){ 
+			  window.setTimeout(callback, 1000 / 60) 
+		  })
 
 
 // XXX make this interruptable...
-function animateElementTo(elem, to, duration, easing){
+function animateElementTo(elem, to, duration, easing, speed){
 	// use transition for animation...
 	if(USE_TRANSITIONS_FOR_ANIMATION){
 		setTransitionEasing(elem, easing)
@@ -213,50 +213,86 @@ function animateElementTo(elem, to, duration, easing){
 				top: 0,
 			}
 		}
+		if(typeof(speed) == typeof(2)){
+			speed = {
+				x: speed,
+				y: 0,
+			}
+		}
+
 		setTransitionDuration(elem, 0)
-		var now = Date.now()
-		var then = now + duration
+
+		var start = Date.now()
+		var then = start + duration
 		var from = getElementShift(elem)
+		var cur = {
+			top: from.top,
+			left: from.left
+		}
 		var dist = {
 			top: to.top - from.top,
 			left: to.left - from.left,
 		}
-		var prev_t = now
 
-		function animate(t){
-			// XXX check if we are interrupted...
-			//if(scroller.animating){
-			//	return
-			//}
-
-			// try and not render things too often...
-			if(t - prev_t >= MIN_STEP){
-				// set position for current step...
-				if(t < then){
-					prev_t = t
-					var rem = then - t
-					var r = rem/duration
-
-					// this is brain-dead linear spacing...
-					// XXX revise...
-					var pos = {
-						top: to.top - (dist.top * r),
-						left: to.left - (dist.left * r),
-					}
-					
-					setElementTransform(elem, pos)
-
-				// finishup the animation...
-				} else if(t > then){
-					setElementTransform(elem, to)
-					return
-				}
+		function animate(){
+			var t = Date.now()
+			// end of the animation...
+			if(t >= then){
+				setElementTransform(elem, to)
+				return
 			}
+
+			// do an intermediate step...
+			// XXX do propper easing...
+			// XXX sometimes results in jumping around...
+			// 		...result of jumping over the to position...
+			if(speed != null){
+
+				// XXX the folowing two blocks are the same...
+				// XXX looks a bit too complex, revise...
+				if(Math.abs(dist.top) >= 1){
+					dy = ((t - start) * speed.y)
+					if(Math.abs(dist.top) > Math.abs(dy)){
+						dist.top -= dy
+						cur.top = Math.round(cur.top + dy)
+						// normalize...
+						cur.top = Math.abs(dist.top) <= 1 ? to.top : cur.top
+						// calc speed for next step...
+						speed.x = dist.top / (duration - (t - start))
+					} else {
+						cur.top = to.top
+					}
+				}
+
+				// XXX looks a bit too complex, revise...
+				if(Math.abs(dist.left) >= 1){
+					dx = ((t - start) * speed.x)
+					if(Math.abs(dist.left) > Math.abs(dx)){
+						dist.left -= dx
+						cur.left = Math.round(cur.left + dx)
+						// normalize...
+						cur.left = Math.abs(dist.left) <= 1 ? to.left : cur.left
+						// calc speed for next step...
+						speed.x = dist.left / (duration - (t - start))
+					} else {
+						cur.left = to.left
+					}
+				}
+
+			// XXX this is a staright forward linear function...
+			} else {
+				var r = (t - start) / duration
+				cur.top = Math.round(from.top + (dist.top * r))
+				cur.left = Math.round(from.left + (dist.left * r)) 
+			}
+			setElementTransform(elem, cur)
 			// sched next frame...
 			animationFrame(animate)
 		}
 
 		animate()
+
+		console.log(from.left, to.left, getElementShift(elem).left)
 	}
 }
 
