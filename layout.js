@@ -400,7 +400,6 @@ function setCurrentPage(n){
 	if(n == null){
 		n = getPageNumber()
 	}
-	var scale = getMagazineScale()
 	var l = $('.page').length
 	// normalize the number...
 	n = n < 0 ? l - n : n
@@ -416,7 +415,13 @@ function setCurrentPage(n){
 	var align = isNavigationViewRelative() ? 'center' : null
 	var left = getMagazineOffset(cur, null, align)
 
-	setElementTransform($('.magazine'), left, scale)
+	if(USE_TRANSITIONS_FOR_ANIMATION){
+		setTransitionDuration($('.magazine'), DEFAULT_TRANSITION_DURATION)
+		setElementTransform($('.magazine'), left)
+
+	} else {
+		animateElementTo($('.magazine'), left, DEFAULT_TRANSITION_DURATION)
+	}
 
 	return cur
 }
