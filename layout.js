@@ -5,7 +5,6 @@
 **********************************************************************/
 
 var PAGES_IN_RIBBON = 4
-
 var SNAP_TO_PAGES_IN_RIBBON = false
 var DEFAULT_TRANSITION_DURATION = 200
 var INNERTIA_SCALE = 0.25
@@ -197,7 +196,8 @@ var animationFrame = (window.requestAnimationFrame
 		  })
 
 
-// XXX make this interruptable...
+// XXX make this a drop-in replacement for setElementTransform...
+// XXX cleanup, still flacky...
 function animateElementTo(elem, to, duration, easing, speed){
 	// use transition for animation...
 	if(USE_TRANSITIONS_FOR_ANIMATION){
@@ -219,7 +219,6 @@ function animateElementTo(elem, to, duration, easing, speed){
 				y: 0,
 			}
 		}
-
 		setTransitionDuration(elem, 0)
 
 		var start = Date.now()
@@ -233,12 +232,18 @@ function animateElementTo(elem, to, duration, easing, speed){
 			top: to.top - from.top,
 			left: to.left - from.left,
 		}
+		elem.animating = true
 
 		function animate(){
 			var t = Date.now()
 			// end of the animation...
 			if(t >= then){
 				setElementTransform(elem, to)
+				return
+			}
+			if(!elem.animating){
+				// XXX jittery...
+				setElementTransform(elem, cur)
 				return
 			}
 
@@ -258,7 +263,7 @@ function animateElementTo(elem, to, duration, easing, speed){
 						// normalize...
 						cur.top = Math.abs(dist.top) <= 1 ? to.top : cur.top
 						// calc speed for next step...
-						speed.x = dist.top / (duration - (t - start))
+						speed.y = dist.top / (duration - (t - start))
 					} else {
 						cur.top = to.top
 					}
@@ -291,8 +296,12 @@ function animateElementTo(elem, to, duration, easing, speed){
 		}
 
 		animate()
+	}
+}
 
-		console.log(from.left, to.left, getElementShift(elem).left)
+function stopAnimation(elem){
+	if(elem.animating){
+		delete elem.animating
 	}
 }
 
