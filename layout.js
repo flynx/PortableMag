@@ -112,8 +112,8 @@ function makeSwipeHandler(actionA, actionB){
 		//setTransitionEasing(mag, 'ease-out')
 		setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
 
-		if(data.fingers == 2){
-			actionA($('.current.page'))
+		if(data.touches >= 2){
+			actionB($('.current.page'))
 		} else {
 			actionA($('.current.page'))
 		}
