@@ -4,405 +4,171 @@
 <head>
 <title>PortableMag</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 
 <link rel="stylesheet" href="magazine.css">
 <link rel="stylesheet" href="magazine-themes.css">
 <link rel="stylesheet" href="magazine-custom.css">
+<style>
+
+.viewer {
+	overflow: hidden;
+}
+.magazine {
+	left: 150px;
+	margin-left: 0px;
+
+	/* magic */
+}
+
+.current.page {
+	/*
+	z-index: 9000;
+	box-shadow: 10px 10px 150px -50px black;
+	border-bottom: solid yellow 10px;
+	*/
+}
+/*
+.page:hover {
+	z-index: 9000;
+	box-shadow: 10px 10px 150px 0px black;
+}
+*/
+
+.page {
+
+	vertical-align:top;
+
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: all 0 ease;
+	-ms-transition: none;	
+	transition: none;
+}
+
+.scroller {
+	position: relative;
+	display: inline-block;
+	text-align: center;
+	width: auto;
+	height: 100%;
+
+	overflow: hidden;
+}
+
+
+/* vertical */
+.vertical.magazine,
+.vertical.article,
+.vertical.group {
+	vertical-align: top;
+}
+.vertical .article,
+.vertical .group,
+.vertical .page {
+	display: block;
+}
+
+</style>
 
 <script src="ext-lib/jquery.js"></script>
-<script src="ext-lib/jquery.touchSwipe.js"></script>
-<script src="ext-lib/jstorage.js"></script>
-<script src="ext-lib/spin.js"></script>
-<script src="ext-lib/jquery.spin.js"></script>
-<!-- zip functionality -->
-<script src="ext-lib/jszip.js"></script>
-<script src="ext-lib/jszip-load.js"></script>
-<script src="ext-lib\jszip-inflate.js"></script>
-<!--script src="ext-lib\jszip-deflate.js"></script-->
-<!-- EXPERIMENTAL -->
-<!-- 
-XXX scrollTo is a cool and a powerfull tool but it needs a sustantial code reorganization 
-	this might be a good idea/exersize sometime in the future...
--->
-<!--script src="ext-lib/jquery.scrollto.js"></script-->
+<script src="ext-lib/jquery.scrollto.js"></script>
+<script src="ext-lib/jquery.scrollstop.js"></script>
+
+<script src="ext-lib/iscroll-custom.js"></script>
 
 <script src="lib/jli.js"></script>
 
 <script src="magazine.js"></script>
-<script src="navigator.js"></script>
-<script src="editor.js"></script>
+<script src="layout.js"></script>
 
-<!-- configuration, keep this last... -->
 <script src="platform.js"></script>
-<script src="keybindings.js"></script>
-<script src="config.js"></script>
 
 <script>
 
-var DEBUG = true
+function prepareTransitions(elem){
+	return $(elem).css({
+		'-webkit-transition-property': '-webkit-transform',
+		'-moz-transition-property': '-moz-transform',
+		'-o-transition-property': '-o-transform',
+		'-ms-transition-property': '-ms-transform',
+		'transition-property': 'transform',
+	})
+}
 
 $(document).ready(function(){
-
-	if(DEBUG){
-		$('.splash').click(function(){
-			$('.splash').fadeOut()
-		})
-	}
-
-	$(window)
-		.resize(viewResizeHandler)
-		.bind('hashchange', hashChangeHandler)
-
+	// keyboard...
 	$(document)
-		.keydown(makeKeyboardHandler(keybindings))
+		.keydown(makeKeyboardHandler({
+			'*': {
+				title: 'Global',
+				doc: '',
+
+				36: firstPage, 											//	Home
+				35: lastPage, 											//	End
+				37: prevPage,											//	Left
+				39: nextPage,											//	Right
+				32:	{
+					'default': nextPage,								//	Space
+					'shift': prevPage									//	shift-Space
+				},
+				// combined navigation with actions..
+				38: function(){togglePageView()},						//	Up
+				40: function(){togglePageView()},						//	Down
+
+				70: function(){											//	F
+					togglePageFitMode()
+				}
+
+			}
+		}, 
+		function(k){console.log(k)}))
+
+	//setTransformOrigin($('.magazine'))
+
+	window.MagazineScroller = makeScrollHandler($('.viewer'), {
+		hScroll: true,
+		vScroll: false,
+		// XXX still a bit flacky...
+		//preCallback: function(){stopAnimation($('.magazine'))},
+		//enableMultiClicks: true,
+		transitionEasing: 'cubic-bezier(0.33,0.66,0.66,1)',
+	}).start()
 
 	$('.viewer')
-		// setup internal events...
-		.on('pageChanged bookmarkAdded bookmarkRemoved bookmarksCleared', saveState)
-		.on('pageChanged', updatePageNumberIndicator)
-		.on('magazineDataLoaded', loadMagazineChrome)
+		.on('scrollCancelled', function(){ setCurrentPage() })
+		.on('shortClick', handleClick)
+		.on('swipeLeft', handleSwipeLeft) 
+		.on('swipeRight', handleSwipeRight)
+		.on('screenReleased', handleScrollRelease)
+		/*
+		.on('screenReleased swipeRight swipeLeft', handleScrollRelease)
+		*/
 
-		// user interactions...
-		.swipe({
-			swipeStatus: makeSwipeHandler(),
+	// XXX stub...
+	//setTransitionEasing($('.magazine'), 'ease-out')
+	//setTransitionEasing($('.magazine'), 'cubic-bezier(0.33,0.66,0.66,1)')
+	prepareTransitions($('.magazine'))
+	$('.viewer').css('overflow', 'hidden')
 
-			// XXX these get called instead of pinches...
-			swipeUp: function(event, direction, distance, duration, fingerCount){
-				if(fingerCount == 2){
-					toggleBookmark()
-				} else {
-					togglePageView()
-				}
-			},
-			// XXX these get called instead of pinches...
-			swipeDown: function(event, direction, distance, duration, fingerCount){
-				if(fingerCount == 2){
-					toggleBookmark()
-				} else {
-					togglePageView()
-				}
-			},
+	runMagazineTemplates()
+	setCurrentPage(0)
 
-
-			// XXX for some reasons these lose the competition with swipes...
-			pinchIn: function(event, direction, distance, duration, fingerCount, pinchZoom) {
-				if(pinchZoom < distance){
-					return
-				}
-				if(fingerCount == 2){
-					togglePageView('on')
-				}
-			},
-			// XXX for some reasons these lose the competition with swipes...
-			pinchOut: function(event, direction, distance, duration, fingerCount, pinchZoom) {
-				if(pinchZoom < distance){
-					return
-				}
-				if(fingerCount == 2){
-					togglePageView('off')
-				}
-			},
-
-			// XXX for some reason this deos not bubble up the nested elements...
-			// XXX just stopped working....
-			//		...works if we double click but not on a single click...
-			click: function(evt, elem){
-				elem = $(elem)
-				// bubble up to nearest page...
-				if(!elem.hasClass('page') 
-						&& elem.parents('.page').length != 0){
-					elem = elem.parents('.page').first()
-				}
-
-				// click current page to toggle full page view...
-				if(elem.hasClass('current', 'page') 
-						&& togglePageView('?') == 'off'){
-					togglePageView('on')
-				// click any page to set it to current...
-				} else if(elem.hasClass('page')){
-					setCurrentPage(elem)
-				}
-				return true
-			},
-
-			excludedElements: $.fn.swipe.defaults.excludedElements + ', [contenteditable=true]',
-			fingers: $.fn.swipe.fingers.ALL
-			//fingers: $.fn.swipe.fingers.THREE
-		})
-
-
-	// load state and setup everything that depends on it...
-	// XXX load the data with loadJSON()
-	loadState()
-	// need to call this once per whole page load....
-	setupNavigator()
-	// XXX STUB, needed untill we load everything frim JSON...
-	$('.viewer').trigger('magazineDataLoaded')
-
-	// set default view...
+	// XXX for some reason this does not work correctly on android the 
+	//		first time...
 	togglePageView('on')
-
-	// hide the splash screen...
-	$(window).one('webkitTransitionEnd oTransitionEnd msTransitionEnd transitionend',
-		function(){
-			// NOTE: this will fix a bug on android -- the pages appear 
-			//		to rendering quite a bit longer than loading, so on
-			//		loadState() above the current page is set well before
-			//		it is alligned correctly, so this will reset the 
-			//		current page after everything is aligned...
-			setTimeout(function(){
-				//updateView()
-				setCurrentPage()
-			}, 300)
-			// hide the splash...
-			setTimeout(function(){
-				$('.splash').fadeOut()
-			}, 350)
-			// remove the spinner...
-			setTimeout(function(){
-				$('#spinner').spin(false)
-			}, 500)
-		})
-
 })
 
+
 </script>
+
 </head>
 <body>
 
-<div class="viewer dark">
+<div id="viewer" class="viewer">
 
-	<!-- Splash screen -->
-	<div class="splash noSwipe">
-		<!-- XXX replace this with a background-image logo... -->
-		<table width="100%" height="100%"><tr><td align="center" valign="middle">
-			<!--h2><div id="spinner" style="position:relative; display:inline-block; width:50px; height:50px; vertical-align:middle;"></div><i>loading...</i></h2-->
-			<div id="spinner" style="position:relative; display:inline-block; width:50px; height:50px; vertical-align:middle;"></div>
-			<script>
-			// add a spinner to the splash...
-			var opts = {
-				lines: 11, // The number of lines to draw
-				length: 6, // The length of each line
-				width: 4, // The line thickness
-				radius: 8, // The radius of the inner circle
-				corners: 1, // Corner roundness (0..1)
-				rotate: 0, // The rotation offset
-				color: $('.splash #spinner').css('color'), // #rgb or #rrggbb
-				speed: 1, // Rounds per second
-				trail: 64, // Afterglow percentage
-				shadow: false, // Whether to render a shadow
-				hwaccel: true, // Whether to use hardware acceleration
-				className: 'spinner', // The CSS class to assign to the spinner
-				zIndex: 2e9, // The z-index (defaults to 2000000000)
-				top: 'auto', // Top position relative to parent in px
-				left: 'auto' // Left position relative to parent in px
-			}
-			$('#spinner').spin(opts)
-			</script>
-		</td></tr></table>
-	</div>
-
-
-	<!-- Toolbars -->
-
-	<div class="left-toolbar">
-
-		<svg id="new-magazine" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-		 <g>
-		  <title>New Magazine</title>
-		  <g id="svg_47">
-		   <g id="svg_33">
-			<g id="svg_34">
-			 <circle fill="#000000" stroke="#ffffff" fill-opacity="0" cx="28.671385" cy="30.356987" r="7.062921" id="svg_35"/>
-			 <text fill="#ffffff" stroke="#000000" stroke-width="0" x="28.820414" y="36.240832" font-size="18" font-family="serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_36">+</text>
-			</g>
-			<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m22.8386,34.497002l-13.95876,0.052097l-0.06013,-28.683099l24.052891,0l-0.060101,18.821401" id="svg_37"/>
-		   </g>
-		   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.923339" y="17.539691" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_38">M</text>
-		  </g>
-		 </g>
-		</svg>
-
-		<hr>
-
-		<div>
-			<svg id="new-article" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-			 <g>
-			  <title>New Article</title>
-			  <g id="svg_48">
-			   <g id="svg_26">
-				<g id="svg_27">
-				 <circle fill="#000000" stroke="#ffffff" fill-opacity="0" cx="28.671385" cy="30.356987" r="7.062921" id="svg_28"/>
-				 <text fill="#ffffff" stroke="#000000" stroke-width="0" x="28.820414" y="36.240832" font-size="18" font-family="serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_29">+</text>
-				</g>
-				<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m22.83856,34.49699l-13.95872,0.052139l-0.06013,-28.683129l24.052921,0l-0.06015,18.82142" id="svg_30"/>
-			   </g>
-			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.68281" y="17.539691" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_31">A</text>
-			  </g>
-			 </g>
-			</svg>
-
-
-			<svg id="shift-article-left" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-			 <g>
-			  <title>Shift Article Left</title>
-			  <g id="svg_76">
-			   <g id="svg_70">
-				<g id="svg_71">
-				 <path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m28.62114,34.492649l-19.73146,0.052151l-0.06013,-28.68306l24.052919,0l-0.000019,17.438419" id="svg_72"/>
-				 <path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m32.840248,24.30155l0.05212,10.154291l-1.082369,0.060139" id="svg_73"/>
-				</g>
-				<path d="m30.587009,30.33219l-4.3314,-7.037199l2.8526,0l4.331209,7.037199l-4.331209,7.037241l-2.8526,0l4.3314,-7.037241z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000" stroke="#ffffff" transform="rotate(180 29.8475 30.3322)" id="svg_74"/>
-			   </g>
-			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.692654" y="17.535428" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_75">A</text>
-			  </g>
-			 </g>
-			</svg>
-
-
-			<svg id="shift-article-right" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-			 <g>
-			  <title>Shift Article Right</title>
-			  <g id="svg_89">
-			   <g id="svg_85">
-				<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m29.583229,34.612888l-20.693559,-0.007988l-0.06013,-28.6831l24.052921,0l-0.000023,20.86595" id="svg_86"/>
-				<path d="m32.27066,30.392269l-4.33132,-7.037249l2.852549,0l4.33123,7.037249l-4.33123,7.03727l-2.852549,0l4.33132,-7.03727z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000" stroke="#ffffff" id="svg_87"/>
-			   </g>
-			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.692638" y="17.595492" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_88">A</text>
-			  </g>
-			 </g>
-			</svg>
-		</div>
-
-		<hr>
-
-		<div>
-			<svg id="new-page" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-			 <g>
-			  <title>New Page</title>
-			  <g id="svg_24">
-			   <g id="svg_16">
-				<g id="svg_9">
-				 <circle fill="#000000" stroke="#ffffff" fill-opacity="0" cx="28.691122" cy="30.383944" r="7.062921" id="svg_7"/>
-				 <text fill="#ffffff" stroke="#000000" stroke-width="0" x="28.840151" y="36.267789" id="svg_8" font-size="18" font-family="serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0">+</text>
-				</g>
-				<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m22.85829,34.523949l-13.95871,0.052132l-0.06013,-28.68312l24.05293,0l-0.06015,18.82142" id="svg_15"/>
-			   </g>
-			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.281621" y="17.566648" id="svg_17" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0">P</text>
-			  </g>
-			 </g>
-			</svg>
-
-
-			<svg id="shift-page-left" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-			 <g>
-			  <title>Shift Page Left</title>
-			  <g id="svg_68">
-			   <g id="svg_67">
-				<g id="svg_66">
-				 <path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m28.621111,34.492619l-19.731441,0.052151l-0.06013,-28.683099l24.052921,0l-0.000011,17.4384" id="svg_61"/>
-				 <path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m32.840248,24.30146l0.05212,10.15435l-1.082397,0.060131" id="svg_65"/>
-				</g>
-				<path d="m30.586981,30.3321l-4.3314,-7.037199l2.852598,0l4.331251,7.037199l-4.331251,7.0373l-2.852598,0l4.3314,-7.0373z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000" stroke="#ffffff" id="svg_62" transform="rotate(180 29.8475 30.3321)"/>
-			   </g>
-			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.271712" y="17.535359" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_63">P</text>
-			  </g>
-			 </g>
-			</svg>
-
-
-			<svg id="shift-page-right" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-			 <g>
-			  <title>Shift Page Right</title>
-			  <g id="svg_58">
-			   <g id="svg_57">
-				<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m29.57338,34.557121l-20.69354,-0.007992l-0.06013,-28.683129l24.052929,0l-0.000019,20.86593" id="svg_54"/>
-				<path d="m32.260818,30.336451l-4.331329,-7.037251l2.852551,0l4.331299,7.037251l-4.331299,7.037321l-2.852551,0l4.331329,-7.037321z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000" id="svg_56" stroke="#ffffff"/>
-			   </g>
-			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.261884" y="17.539691" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_55">P</text>
-			  </g>
-			 </g>
-			</svg>
-		</div>
-
-	</div>
-
-
-	<div class="top-toolbar">
-		<div class="left-set">
-			<div class="button title"><a href="#home" class="magazine-title-text">Magazine Title</a></div>
-		</div>
-		<div class="right-set">
-			<div class="button prev-bookmark">
-				<a href="#prevBookmark">
-					<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-					 <g>
-					  <title>Previous bookmark (S-Left)</title>
-					  <path transform="rotate(-180 18.9697 20.1122)" id="svg_13" stroke="#ffffff" d="m20.467497,20.112247l-8.773763,-14.254913l5.778195,0l8.773788,14.254913l-8.773788,14.25491l-5.778195,0l8.773763,-14.25491z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
-					 </g>
-					</svg>
-				</a>
-			</div>
-			<div class="button toggle-bookmark">
-				<a href="#bookmark">
-					<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-					 <g>
-					  <title>Toggle bookmark (B)</title>
-					  <rect stroke="#ffffff" id="svg_1" height="28.604868" width="24.052915" y="5.858955" x="8.807377" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
-					  <path stroke="#ffffff" id="svg_4" d="m21.762226,3.651895l8.416584,0l0,14.510554l-4.124887,-2.792193l-4.291697,2.792193l0,-14.510554l0,0z" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" fill="#ff0000"/>
-					 </g>
-					</svg>
-				</a>
-			</div>
-			<div class="button next-bookmark">
-				<a href="#nextBookmark">
-					<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-					 <g>
-					  <title>Next bookmark (S-Right)</title>
-					  <path stroke="#ffffff" id="svg_11" d="m23.175751,20.132858l-8.773797,-14.254913l5.77823,0l8.773788,14.254913l-8.773788,14.254913l-5.77823,0l8.773797,-14.254913z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
-					 </g>
-					</svg>
-				</a>
-			</div>
-			<div class="button info">
-				<a href="javascript:alert('not implemented yet...')">
-					<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-					 <g>
-					  <title>Info</title>
-					  <g id="svg_6">
-					   <circle fill="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" cx="20.762543" cy="20.120354" r="14.302816" id="svg_2" stroke="#ffffff"/>
-					   <text fill="#ffffff" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="21.029904" y="21.833322" id="svg_5" font-size="24" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" transform="matrix(0.894143 0 0 0.894143 1.91526 8.19192)" stroke="#000000">i</text>
-					  </g>
-					 </g>
-					</svg>
-				</a>
-			</div>
-		</div>
-	</div>
-	<div class="bottom-toolbar">
-		<!-- this is just an example-->
-		<div class="controls">
-			<a href="#home" title="(Home)">Cover</a>
-			<a href="#prevBookmark" title="(S-Left)">&lt; Bookmark</a>
-			<a href="#prevArticle" title="(C-Left)">&lt; Article</a>
-			<a href="#prev" title="Previous page (Left)">&lt; Pa</a><a href="#next" title="Next page (Right)">ge &gt;</a>
-			<a href="#nextArticle" title="(C-Right)">Article &gt;</a>
-			<a href="#nextBookmark" title="(S-Right)">Bookmark &gt;</a>
-			<a href="#end" title="(End)">End</a>
-		</div>
-		<!-- position indicator -->
-		<div class="navigator">
-			<div class="bar">
-				<div class="indicator"></div>
-			</div>
-		</div>
-		<div class="page-number">0/0</div>
-	</div>
-
-<div class="scaler">
-<div class="aligner">
 	<div class="magazine" name="PortableMag">
-		<div class="cover page current">
+		<div class="cover page">
 			<div class="content">
 				<!--h1 style="color:gray;font-size:125px;margin-bottom:-35px; margin-top: 160px">PortableMag</h1>
 				<h1 style="color:silver; font-size: 20px; margin-left:10px">A suit for publishing portable periodic magazines on mobile platforms.</h1-->
@@ -434,8 +200,8 @@ $(document).ready(function(){
 
 		<div class="article">
 			<div class="cover page">
-				<div class="content">
-					<h1 name="basics" style="color:gray;font-size:100px;">The Basics...</h1>
+				<div class="content" style="">
+					<h1 name="basics" style="color:gray;font-size:100px;margin-bottom: 0px;">The Basics...</h1>
 					<big>
 						<h2>Main features</h2>
 						<ul>
@@ -465,62 +231,67 @@ $(document).ready(function(){
 			</div>
 			<div class="page">
 				<div class="content">
-					<h1 name="navigation">PortableMag Navigation and Linking</h1>
-					<div style="float:left; width: 40%; height: 100%; margin: 10px;">
-						<h2>Finger controls</h2>
-						<ul>
-							<li> Single finger swipe left/right &ndash; prev/next page.
-							<li> Two finger swipe left/right &ndash; prev/next article.
-							<li> Single finger swipe up/down &ndash; toggle thumbnail view.
-							<li> Pinch in/out &ndash; go in/out of thumbnail view.
-						</ul>
-						<h2>Navigation via #URLs</h2>
-						<h3>The basics</h3>
-						<a href="#1">Page #1</a><br>
-						<a href="#ArticleAnchorExample">Named page</a><br>
-						<p>
-							<s><a href="#page-3-anchor" style="pointer-events:none">Anchor on page #3</a></s><br>
-							<i> currently navigation via existing anchors
-								will break the layout, so use the name attribute
-								on any other tags (see example).
-							</i>
-						</p>
+					<div class="header">
+						<h1 name="navigation">PortableMag Navigation and Linking</h1>
 					</div>
+					<div class="body two-column">
+						<div class="no-column-break">
+							<h2>Finger controls</h2>
+							<ul>
+								<li> Single finger swipe left/right &ndash; prev/next page.
+								<li> Two finger swipe left/right &ndash; prev/next article.
+								<li> Single finger swipe up/down &ndash; toggle thumbnail view.
+								<li> Pinch in/out &ndash; go in/out of thumbnail view.
+							</ul>
+							<h2>Navigation via #URLs</h2>
+							<h3>The basics</h3>
+							<a href="#1">Page #1</a><br>
+							<a href="#ArticleAnchorExample">Named page</a><br>
+							<p>
+								<s><a href="#page-3-anchor" style="pointer-events:none">Anchor on page #3</a></s><br>
+								<i> currently navigation via existing anchors
+									will break the layout, so use the name attribute
+									on any other tags (see example).
+								</i>
+							</p>
+						</div>
 
-					<div style="float:left; width: 40%; height: 100%; padding: 10px;">
-						<h3>Special anchors</h3>
-						<p>These show up in the page URL</p>
-						<a href="#home">Magazine cover</a><br>
-						<a href="#end">Last page</a><br>
-						<a href="#thumbnails">Thumbnail view</a><br>
-						<a href="#example-layer">Toggle a hidden layer</a><br>
-						<span name="example-layer" class="hidden">
-							<a href="#hideLayers">Hide all layers</a><br>
-						</span>
-						<a href="#bookmark">Toggle bookmark</a><br>
+						<div class="no-column-break">
+							<h3>Special anchors</h3>
+							<p>These show up in the page URL</p>
+							<a href="#home">Magazine cover</a><br>
+							<a href="#end">Last page</a><br>
+							<a href="#thumbnails">Thumbnail view</a><br>
+							<a href="#example-layer">Toggle a hidden layer</a><br>
+							<span name="example-layer" class="hidden">
+								<a href="#hideLayers">Hide all layers</a><br>
+							</span>
+							<a href="#bookmark">Toggle bookmark</a><br>
+							<h3>Relative special anchors</h3>
+							<p>These will get replaced by corresponding page numbers in the URL</p>
+							<a href="#next">Next page</a><br>
+							<a href="#prev">Previous page</a><br>
+							<a href="#nextArticle">Next article</a><br>
+							<a href="#prevArticle">Previous article</a><br>
+							<h3>History support</h3>
+							<i>NOTE: this is still a bit flaky...</i><br>
+							<a href="#back">Go back</a><br>
+							<a href="#forward">Go forward</a><br>
 
-						<h3>Relative special anchors</h3>
-						<p>These will get replaced by corresponding page numbers in the URL</p>
-						<a href="#next">Next page</a><br>
-						<a href="#prev">Previous page</a><br>
-						<a href="#nextArticle">Next article</a><br>
-						<a href="#prevArticle">Previous article</a><br>
-						<h3>History support</h3>
-						<i>NOTE: this is still a bit flaky...</i><br>
-						<a href="#back">Go back</a><br>
-						<a href="#forward">Go forward</a><br>
+							<div name="example-layer" class="hidden" onclick="window.location='#example-layer'" style="position:absolute; left:450px; top:250px; width: 300px; height:50px; text-align: center; padding: 15px; border: solid gray 5px; background: white; color: gray; cursor: hand; opacity: 0.8">
+								<h3>This is an example layer</h3>
+								<i>click or tap to hide</i>
+							</div>
+
+							<p>
+								<a href="#config">configuration demo</a>
+							</p>
+						</div>
+
 					</div>
-					<div style="position:absolute; right: 30px; bottom:10px;">
-						<a href="#config">configuration demo</a> <a href="#next">next page...</a><br>
+					<div class="footer">
+						<div class="page-number-text">[PAGE NUMBER]</div>
 					</div>
-
-
-					<div name="example-layer" class="hidden" onclick="window.location='#example-layer'" style="position:absolute; left:450px; top:250px; width: 300px; height:50px; text-align: center; padding: 15px; border: solid gray 5px; background: white; color: gray; cursor: hand; opacity: 0.8">
-						<h3>This is an example layer</h3>
-						<i>click or tap to hide</i>
-					</div>
-
-					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
 
@@ -639,35 +410,92 @@ $(document).ready(function(){
 		<div class="article">
 			<div class="cover page">
 				<div class="content" name="ArticleAnchorExample">
-					<h1>Page Templates</h1>
+					<div class="header">
+						<h1>Page Templates</h1>
+					</div>
+					<div class="body">
 
-					<p>
-					This page contains several examples of template fields,
-					the first one is the simplest, the magazine name 
-					(<span class="magazine-title-text">[MAGAZINE NAME]</span>),
-					then we'll have the index (see next) and in the bottom-right
-					corner is the page number...
-					</p>
+						<h2>Inline basic macros</h2>
+						<p>
+						This page contains several examples of inline template/macro fields,
+						these are HTML elements whos content will get replaced depending on 
+						their class.
+						</p>
 
-					<div class="article-index">[ARTICLE INDEX]</div>
+						<h3>Magazine title</h3>
+						<p>
+						Any element with the class <i>"magazine-title-text"</i> 
+						will be replaced with the magazine title (example:
+						<span class="magazine-title-text">[MAGAZINE NAME]</span>)
+						</p>
 
-					<div class="page-number-text">[PAGE NUMBER]</div>
+						<h3>Page Numer</h3>
+						<p>
+						Any element with a class <i>"page-number-text"</i> will 
+						get replaced with the page number (example: 
+						<span class="page-number-text">#</span>)
+						</p>
+						<p>
+						NOTE: the selector <i>div.page-number-text</i> will
+						put the number at the bottom of the page, this page 
+						number is a good example of this.
+						</p>
+
+						<h3>Article Index</h3>
+						<p>
+						Any element with the class <i>"article-index"</i> will
+						be replaced with the links to all the articles in the 
+						current magazine.
+						</p>
+						<p>
+						Example:<br>
+							<div class="article-index">[ARTICLE INDEX]</div>
+						</p>
+
+					</div>
+					<div class="footer">
+						<div class="page-number-text">[PAGE NUMBER]</div>
+					</div>
 				</div>
 			</div>
 
-			<div class="page" style="background: black; color: white;">
+			<div class="page dark">
 				<div class="content">
-					<h1>Two column</h1>
-					<div style="float:left; width: 45%; height: 100%; margin: 10px;">
-						Column 1
+					<div class="header">
+						<h1>Two column</h1>
 					</div>
-					<div style="float:left; width: 45%; height: 100%; padding: 10px;">
-						Column 2
-					</div>
+					<div class="body two-column">
 
-					<div class="page-number-text">[PAGE NUMBER]</div>
+						Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
+
+					</div>
+					<div class="footer">
+						<div class="page-number-text">[PAGE NUMBER]</div>
+					</div>
 				</div>
 			</div>
+
+			<div class="page light">
+				<div class="content">
+					<div class="header">
+						<h1>Three column</h1>
+					</div>
+					<div class="body three-column">
+
+						<p>
+							Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
+						</p>
+						<p>
+							NOTE: at this point, even and odd pages are aligned slightly to the right or left respectively, book-style.
+						</p>
+
+					</div>
+					<div class="footer">
+						<div class="page-number-text">[PAGE NUMBER]</div>
+					</div>
+				</div>
+			</div>
+
 			<div class="page no-resize page-align-left">
 				<div class="content" style="background:gold">
 					Left-aligned page...
@@ -697,7 +525,7 @@ $(document).ready(function(){
 				</div>
 			</div>
 		</div>
-		<div class="article">
+		<!--div class="article vertical">
 			<div class="cover page">
 				<div class="content">
 					<h1>Article Cover</h1>
@@ -707,22 +535,32 @@ $(document).ready(function(){
 				</div>
 			</div>
 
-			<div class="page">
-				<div class="content">
-					Page
+			<div class="group">
+				<div class="page">
+					<div class="content">
+						Page
 
-					<div class="page-number-text">[PAGE NUMBER]</div>
+						<div class="page-number-text">[PAGE NUMBER]</div>
+					</div>
+				</div>
+				<div class="page">
+					<div class="content">
+						Page
+
+						<div class="page-number-text">[PAGE NUMBER]</div>
+					</div>
+				</div>
+				<div class="page">
+					<div class="content">
+						Page<br>
+						<a href="#home">home</a><br>
+
+						<div class="page-number-text">[PAGE NUMBER]</div>
+					</div>
 				</div>
 			</div>
-			<div class="page">
-				<div class="content">
-					Page<br>
-					<a href="#home">home</a><br>
 
-					<div class="page-number-text">[PAGE NUMBER]</div>
-				</div>
-			</div>
-		</div>
+		</div-->
 		<div class="article">
 			<!-- page set -->
 			<div class="group" style="background: url(img.jpg) no-repeat right top; background-size: 100% auto; color: white;">
@@ -749,373 +587,9 @@ $(document).ready(function(){
 				</div>
 			</div>
 		</div>
-		<div class="article">
-			<div class="cover page">
-				<div class="content">
-					<h1 name="config">Configuration demo</h1>
-
-					<p>
-					NOTE: this is not an actual configuration page, just a live demo 
-					of some of the available configuration option effects.
-					</p>
-					<p>
-						<button onclick="generateMagazineDownload()">build the magazine...</button>
-						<a id="data_download" style="display:none">download...</a>
-						<input type="file" id="upload" name="file" multiple onchange="handleFileSelect(event)"/>
-						Alternative layouts: <a href="./layout.html">native scroll</a>, 
-						<a href="./index-iscroll.html">iscroll</a>
-						<a href="./index2.html">hand-written drag</a>
-					</p>
-
-					<hr noshade color="silver">
-
-					<style>
-						.settings tr td:first-child {
-							text-align: right;
-							vertical-align: middle;
-							padding-right: 10px;
-						}
-						.settings tr {
-							height: 30px;
-						}
-						.settings button, .settings input {
-							background: white;
-							height: 25px;
-						}
-						.settings input {
-							border: solid silver 1px;
-						}
-						.settings button {
-							border: solid gray 1px;
-							cursor: hand;
-							padding-top: 3px;
-							padding-bottom: 3px;
-							padding-left: 15px;
-							padding-right: 15px;
-						}
-						#RESET {
-							background: red;
-							color: white;
-							font-weight: bold;
-						}
-					</style>
-
-					<table class="settings" width="100%">
-						<tr>
-							<td width="50%">
-								Pages in ribbon: 
-							</td>
-							<td>
-								<input id="PAGES_IN_RIBBON" type="text" size="8" style="text-align:center" disabled>
-								<button onclick="$('#PAGES_IN_RIBBON').attr('value', parseFloat($('#PAGES_IN_RIBBON').attr('value'))+0.5); saveSettings()">+</button>
-								<button onclick="$('#PAGES_IN_RIBBON').attr('value', parseFloat($('#PAGES_IN_RIBBON').attr('value'))-0.5); saveSettings()">-</button>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Transition duration: 
-							</td>
-							<td>
-								<input id="transition_duration" type="text" size="8" style="text-align:center" disabled>
-								<button onclick="$('#transition_duration').attr('value', parseInt($('#transition_duration').attr('value'))*2); saveSettings()">+</button>
-								<button onclick="$('#transition_duration').attr('value', parseInt($('#transition_duration').attr('value'))/2); saveSettings()">-</button>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Fit page to view: 
-							</td>
-							<td>
-								<button id="FIT_PAGE_TO_VIEW" onclick="toggleSetting(this)"></button>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Enable different size pages (still flaky): 
-							</td>
-							<td>
-								<button id="USE_REAL_PAGE_SIZES" onclick="toggleSetting(this)"></button>
-							</td>
-						</tr>
-						<!--tr>
-							<td>
-								Animate window resize: 
-							</td>
-							<td>
-								<button id="ANIMATE_WINDOW_RESIZE" onclick="toggleSetting(this)"></button>
-							</td>
-						</tr-->
-						<tr>
-							<td>
-								Drag in full page view: 
-							</td>
-							<td>
-								<button id="DRAG_FULL_PAGE" onclick="toggleSetting(this)"></button>
-							</td>
-						</tr>
-						<!--tr>
-							<td>
-								Toggle viewer animation (affects transition to and from full page view): 
-							</td>
-							<td>
-								<button id="viewer_transition_state" onclick="toggleViewerAnimation()"></button>
-							</td>
-						</tr-->
-						<tr>
-							<td>
-								Use transform to drag: 
-							</td>
-							<td>
-								<button id="USE_TRANSFORM" onclick="toggleSetting(this); setCurrentPage()"></button>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Enable #URL updating on page flip: 
-							</td>
-							<td>
-								<button id="UPDATE_HASH_URL_POSITION" onclick="toggleSetting(this)"></button>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Toggele viewer themes: 
-							</td>
-							<td>
-								<button id="theme_toggler" onclick="toggleThemes(); $(this).text(toggleThemes('?'))"></button>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Toggele theme shadowless mode: 
-							</td>
-							<td>
-								<button id="theme_shadow_toggler" onclick="toggleShadows(); $(this).text(toggleShadows('?'))"></button>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Full navigation gistory: 
-							</td>
-							<td>
-								<button id="FULL_HISTORY_ENABLED" onclick="toggleSetting(this)"></button>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Reset stored data:
-							</td>
-							<td>
-								<button id="RESET" onclick="confirm('You really want to reset?')&&resetState()">Reset</button>
-							</td>
-						</tr>
-					<table/>
-
-					<hr noshade color="silver">
-
-					<table class="settings" width="100%" style="font-size:x-small">
-						<tr>
-							<td width="50%">
-								Fingers supported: 
-							</td>
-							<td id="FingersSupported">
-							</td>
-						</tr>
-						<tr>
-							<td>
-								User Agent: 
-							</td>
-							<td id="UserAgent">
-							</td>
-						</tr>
-					<table/>
-
-
-					<div style="position:absolute; width:100%; bottom:10px; text-align: right;">
-						<a href="#back">go back</a>, or return to <a href="#home">magazine cover...</a><br>
-					</div>
-
-					<script>
-
-					var TRANSITION_DURATION = 100
-
-					var toggleViewerAnimation = function(){
-						var toggler = createCSSClassToggler(
-							// XXX this will turn off magazine animations...
-							'.scaler, .page, .magazine',
-							//'.scaler, .page',
-							'unanimated',
-							function(action){
-								$('#viewer_transition_state').text(action == 'on' ? 'off' : 'on')
-							})
-						return function(action){
-							if(action == null || action == '?'){
-								var res = toggler(action)
-							} else {
-								var res = toggler(action == 'on' ? 'off' : 'on')
-							}
-							return res == 'on' ? 'off' : 'on'
-						}
-					}()
-					toggleViewerAnimation('on')
-
-					function saveSettings(){
-						var v = parseFloat($('#PAGES_IN_RIBBON').attr('value'))
-						// ignore bad values...
-						v = v == null ? PAGES_IN_RIBBON : v
-						// can't be less that 1...
-						v = v < 1 ? 1 : v
-						PAGES_IN_RIBBON = v
-						// we need to reset the visible value in case it was wrong...
-						$('#PAGES_IN_RIBBON').attr('value', PAGES_IN_RIBBON)
-
-						// transition duration...
-						var t = parseInt($('#transition_duration').attr('value'))
-						t = t == null ? TRANSITION_DURATION : t
-						t = t < 25 ? 25 : t
-						TRANSITION_DURATION = t
-						setTransitionDuration($('.scaler'), t)
-						setTransitionDuration($('.magazine'), t)
-
-
-						FIT_PAGE_TO_VIEW = $('#FIT_PAGE_TO_VIEW').text() == 'true' ? true : false
-						//ANIMATE_WINDOW_RESIZE = $('#ANIMATE_WINDOW_RESIZE').text() == 'true' ? true : false
-						DRAG_FULL_PAGE = $('#DRAG_FULL_PAGE').text() == 'true' ? true : false
-						USE_REAL_PAGE_SIZES = $('#USE_REAL_PAGE_SIZES').text() == 'true' ? true : false
-						UPDATE_HASH_URL_POSITION = $('#UPDATE_HASH_URL_POSITION').text() == 'true' ? true : false
-						FULL_HISTORY_ENABLED = $('#FULL_HISTORY_ENABLED').text() == 'true' ? true : false
-						USE_TRANSFORM = $('#USE_TRANSFORM').text() == 'true' ? true : false
-
-					}
-					function loadSettings(){
-						$('#transition_duration').attr('value', TRANSITION_DURATION)
-						$('#PAGES_IN_RIBBON').attr('value', PAGES_IN_RIBBON)
-						$('#FIT_PAGE_TO_VIEW').text(FIT_PAGE_TO_VIEW)
-						//$('#ANIMATE_WINDOW_RESIZE').text(ANIMATE_WINDOW_RESIZE)
-						$('#DRAG_FULL_PAGE').text(DRAG_FULL_PAGE)
-						$('#USE_REAL_PAGE_SIZES').text(USE_REAL_PAGE_SIZES)
-						$('#UPDATE_HASH_URL_POSITION').text(UPDATE_HASH_URL_POSITION)
-						$('#FULL_HISTORY_ENABLED').text(FULL_HISTORY_ENABLED)
-						$('#USE_TRANSFORM').text(USE_TRANSFORM)
-						$('#theme_toggler').text(toggleThemes('?'))
-						$('#theme_shadow_toggler').text(toggleShadows('?'))
-
-						$('#FingersSupported').text($.fn.swipe.fingers.ALL)
-						var b = $('#BrowserInfo')
-						$.each($.browser, function(i, e){$('<div>'+i+': '+e+'</div>').appendTo(b)})
-						$('#UserAgent').text(navigator.userAgent)
-
-					}
-					function toggleSetting(obj){
-						obj = $(obj)
-						obj.text() == 'true' ? obj.text('false') : obj.text('true')
-						saveSettings()
-						updateView()	
-					}
-
-
-					loadSettings()
-
-					// setup download link...
-					var USE_ZIP = true
-					var USE_DATA_URL = true
-					function generateMagazineDownload(){
-						var zip = new JSZip()
-						var json = JSON.stringify(buildJSON(true, true))
-										// this is a really odd one, Chrome seems to replace some 
-										// entities with actual chars...
-										// what is even more odd, this then confuses some unicode
-										// readers/wwriters...
-										.replace(/–/g, '&ndash;')
-						if(USE_ZIP){
-							zip.file('magazine.json', json)
-							var content = zip.generate()
-						} else {
-							var content = btoa(json)
-						}
-						if(USE_DATA_URL){
-							$('#data_download')
-								.attr('href','data:text/octet-stream;base64,'+content)
-								.css('display', 'inline')
-							if(USE_ZIP){
-								$('#data_download')
-									.attr('download','magazine.zip')
-							} else {
-								$('#data_download')
-									.attr('download','magazine.json')
-							}
-						} else {
-							location.href="data:application/zip;base64,"+content
-						}
-					}
-
-					/*
-					// util...
-					// from: http://stackoverflow.com/a/11058858
-					function ab2str(buf) {
-					  return String.fromCharCode.apply(null, new Uint16Array(buf));
-					}
-
-					function str2ab(str) {
-					  var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
-					  var bufView = new Uint16Array(buf);
-					  for (var i=0, strLen=str.length; i<strLen; i++) {
-						bufView[i] = str.charCodeAt(i);
-					  }
-					  return buf;
-					}
-					*/
-					
-
-					// upload...
-					function handleFileSelect(evt) {
-						var files = evt.target.files; // FileList object
-
-						// Loop through the FileList and render image files as thumbnails.
-						for (var i = 0, f; f = files[i]; i++) {
-
-							var reader = new FileReader();
-
-							// Closure to capture the file information.
-							reader.onload = (function(theFile) {
-								return function(e) {
-										console.log('loading...')
-										var raw_data = e.target.result
-										window.JSON_DATA = raw_data
-
-										if(USE_ZIP){
-											var zip = new JSZip(raw_data)
-											console.log('zip loaded...')
-											var json = zip.file('magazine.json').data
-										} else {
-											var json = raw_data
-										}
-
-
-										loadJSON($.parseJSON(json), true)
-										console.log('done.')
-									};
-							})(f);
-
-							// Read in the image file as a data URL.
-							if(USE_ZIP){
-								reader.readAsArrayBuffer(f)
-							} else {
-								reader.readAsBinaryString(f)
-							}
-							//reader.readAsText(f)
-						}
-					}
-
-					</script>
-				</div>
-			</div>
-		</div>
 	</div>
-</div>
-</div>
-</div>
 
+</div>
 
 </body>
 </html>
