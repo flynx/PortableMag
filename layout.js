@@ -94,7 +94,7 @@ function handleLongClick(evt, data){
 	}
 }
 
-function makeSwipeHandler(action){
+function makeSwipeHandler(actionA, actionB){
 	return function(evt, data){
 		// ribbon mode...
 		if(isNavigationViewRelative()){
@@ -112,11 +112,15 @@ function makeSwipeHandler(action){
 		//setTransitionEasing(mag, 'ease-out')
 		setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
 
-		action($('.current.page'))
+		if(data.fingers == 2){
+			actionA($('.current.page'))
+		} else {
+			actionA($('.current.page'))
+		}
 	}
 }
-var handleSwipeLeft = makeSwipeHandler(prevPage)
-var handleSwipeRight = makeSwipeHandler(nextPage)
+var handleSwipeLeft = makeSwipeHandler(prevPage, prevArticle)
+var handleSwipeRight = makeSwipeHandler(nextPage, nextArticle)
 
 // do snap and innertia...
 // NOTE: this will also handle swipeUp/swopeDown as we do not 
@@ -311,6 +315,9 @@ function setMagazineScale(scale){
 function setCurrentPage(n){
 	if(n == null){
 		n = getPageNumber()
+	}
+	if(typeof(n) != typeof(3)){
+		n = getPageNumber(n)
 	}
 	var l = $('.page').length
 	// normalize the number...

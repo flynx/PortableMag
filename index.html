@@ -85,6 +85,11 @@ function prepareTransitions(elem){
 }
 
 $(document).ready(function(){
+	$(window)
+		//.resize(viewResizeHandler)
+		.resize(updateView)
+		.bind('hashchange', hashChangeHandler)
+
 	// keyboard...
 	$(document)
 		.keydown(makeKeyboardHandler({
