@@ -637,7 +637,9 @@ function setCurrentPage(n, offset, width){
 
 	// NOTE: this will be wrong during a transition, that's why we 
 	// 		can pass the pre-calculated offset as an argument...
-	shiftMagazineTo(-(offset == null ? cur.position()['left']/getMagazineScale() : offset))
+	shiftMagazineTo(-(offset == null ? 
+				cur.position()['left']/getMagazineScale() 
+				: offset))
 
 	// center the pages correctly...
 	// NOTE: this is the main reason we need width, and we can get it 
@@ -661,10 +663,17 @@ function goToMagazineEnd(){
 }
 function goToArticleCover(){
 	// try and get the actual first cover...
-	var cover = $('.current.page').parents('.article').find('.cover.page').first()
+	var cover = $('.current.page')
+					.parents('.article')
+					.find('.cover.page')
+					.first()
 	if(cover.length == 0){
 		// no cover, get the first page...
-		return setCurrentPage($('.current.page').parents('.article').find('.page').first())
+		return setCurrentPage(
+				$('.current.page')
+					.parents('.article')
+					.find('.page')
+					.first())
 	} else {
 		return setCurrentPage(cover)
 	}
@@ -1227,7 +1236,10 @@ function buildJSON(export_bookmarks, export_position){
 			var res = {
 				type: 'group',
 				'class': elem.attr('class'),
-				pages: elem.children('.page').map(_getContent).toArray()
+				pages: elem
+						.children('.page')
+						.map(_getContent)
+						.toArray()
 			}
 
 		// article...
@@ -1235,7 +1247,10 @@ function buildJSON(export_bookmarks, export_position){
 			var res = {
 				type: 'article',
 				'class': elem.attr('class'),
-				pages: elem.children('.page, .group').map(_getContent).toArray()
+				pages: elem
+						.children('.page, .group')
+						.map(_getContent)
+						.toArray()
 			}
 
 		// other...
@@ -1256,7 +1271,9 @@ function buildJSON(export_bookmarks, export_position){
 	}
 	// read the basic metadata set for the magazine...
 	var res = readMetadata($('.magazine'))
-	res.pages = $('.magazine > .page, .magazine > .article').map(_getContent).toArray(),
+	res.pages = $('.magazine > .page, .magazine > .article')
+					.map(_getContent)
+					.toArray(),
 	res.bookmarks = export_bookmarks ? buildBookmarkList() : []
 
 	res['format-version'] = JSON_FORMAT_VERSION
@@ -1439,9 +1456,11 @@ var MagazineTemplates = {
 		$('.magazine .article .cover h1').each(function(i, e){
 			e = $(e)
 			var lnk = $('<a/>')
-							.attr('href', '#' + getPageNumber(e.parents('.page').first()))
+							.attr('href', '#' + 
+								getPageNumber(e.parents('.page').first()))
 							// XXX is this the right way to go?
-							.text(e.text() || 'No title')
+							.text(e.text() 
+								|| 'No title')
 
 			list.append(
 				$('<li/>')
@@ -1450,7 +1469,8 @@ var MagazineTemplates = {
 		var root = $('<ul/>')
 			.append($('<li/>')
 				.append($('<a/>')
-					.attr('href', '#' + getPageNumber($('.magazine > .cover').first()))
+					.attr('href', '#' + 
+						getPageNumber($('.magazine > .cover').first()))
 					// XXX is this the right way to go?
 					.text(getMagazineTitle()
 						|| 'Magazine')))

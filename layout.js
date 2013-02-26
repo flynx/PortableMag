@@ -28,7 +28,8 @@ var togglePageFitMode = createCSSClassToggler(
 			if(action == 'on'){
 				var n = getPageNumber()
 				var scale = getMagazineScale()
-				$('.page:not(.no-resize)').width($('.viewer').width()/scale)
+				$('.page:not(.no-resize)')
+					.width($('.viewer').width() / scale)
 			} else {
 				var n = getPageNumber()
 				$('.page:not(.no-resize)').width('')
@@ -205,11 +206,15 @@ function handleScrollRelease(evt, data){
 	} else {
 		if(at > first){
 			//animateElementTo(mag, first, DEFAULT_TRANSITION_DURATION, 'ease-in')
-			animateElementTo(mag, first, DEFAULT_TRANSITION_DURATION, 'cubic-bezier(0.33,0.66,0.66,1)')
+			animateElementTo(mag, first, 
+					DEFAULT_TRANSITION_DURATION, 
+					'cubic-bezier(0.33,0.66,0.66,1)')
 
 		} else if(at < last){
 			//animateElementTo(mag, last, DEFAULT_TRANSITION_DURATION, 'ease-in')
-			animateElementTo(mag, last, DEFAULT_TRANSITION_DURATION, 'cubic-bezier(0.33,0.66,0.66,1)')
+			animateElementTo(mag, last, 
+					DEFAULT_TRANSITION_DURATION, 
+					'cubic-bezier(0.33,0.66,0.66,1)')
 		}
 	}
 }
@@ -317,7 +322,7 @@ function setMagazineScale(scale){
 
 /********************************************************* actions ***/
 
-function setCurrentPage(n){
+function setCurrentPage(n, use_transitions){
 	if(n == null){
 		n = getPageNumber()
 	}
@@ -329,6 +334,9 @@ function setCurrentPage(n){
 	n = n < 0 ? l - n : n
 	n = n < -l ? 0 : n
 	n = n >= l ? l - 1 : n
+	use_transitions = use_transitions != null ? 
+						use_transitions 
+						: USE_TRANSITIONS_FOR_ANIMATION
 
 	$('.current.page').removeClass('current')
 	$($('.page')[n]).addClass('current')
@@ -339,7 +347,7 @@ function setCurrentPage(n){
 	var align = togglePageView('?') == 'off' ? 'center' : null
 	var left = getMagazineOffset(cur, null, align)
 
-	if(USE_TRANSITIONS_FOR_ANIMATION){
+	if(use_transitions){
 		setElementTransform($('.magazine'), left)
 
 	} else {
