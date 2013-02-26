@@ -23,7 +23,7 @@ var toggleThemes = createCSSClassToggler('.chrome', [
 
 var togglePageFitMode = createCSSClassToggler(
 		'.chrome', 
-		'.page-fit-to-viewer', 
+		'page-fit-to-viewer', 
 		function(action){
 			if(action == 'on'){
 				var n = getPageNumber()
@@ -39,7 +39,7 @@ var togglePageFitMode = createCSSClassToggler(
 
 var togglePageView = createCSSClassToggler(
 		'.chrome',
-		'.full-page-view-mode',
+		'full-page-view-mode',
 		function(action){
 			var view = $('.viewer')
 			var page = $('.page')

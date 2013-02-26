@@ -1,5 +1,5 @@
 [_] 37% Priority work
-	[_] 65% general todo
+	[_] 66% general todo
 		[_] 37% Version 1.0 checklist (migration to layout.html)
 			[X] page scaling for full page view
 			[X] top/bottom toolbars
@@ -88,7 +88,7 @@
 					[_] scrollend
 				[_] 0% snap
 					[_] snapped
-		[_] BUG: full-page-view-mode class does not apply to some elements...
+		[X] BUG: full-page-view-mode class does not apply to some elements...
 		| - toolbars
 		| - bookmarks
 		[_] BUG: #URLs do not all work in the new index...
