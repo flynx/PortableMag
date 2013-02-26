@@ -141,11 +141,13 @@ $(document).ready(function(){
 	}).start()
 
 	$('.viewer')
-		.on('scrollCancelled swipeUp swipeDown', function(){ setCurrentPage() })
+		//.on('scrollCancelled swipeUp swipeDown', function(){ setCurrentPage() })
+		.on('scrollCancelled', function(){ setCurrentPage() })
 		.on('shortClick', handleClick)
 		.on('longClick', handleLongClick)
 		.on('swipeLeft', handleSwipeLeft) 
 		.on('swipeRight', handleSwipeRight)
+		.on('swipeUp swipeDown', function(){ togglePageView('off') })
 		.on('screenReleased', handleScrollRelease)
 		/*
 		.on('screenReleased swipeRight swipeLeft', handleScrollRelease)
