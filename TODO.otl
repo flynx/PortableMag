@@ -1,13 +1,14 @@
 [_] 37% Priority work
-	[_] 66% general todo
-		[_] 0% Version 1.0 checklist (migration to layout.html)
-			[_] page scaling for full page view
-			[_] top/bottom toolbars
-			[_] splash screen w. logo
-			[_] 0% bells 'n' whistles
+	[_] 65% general todo
+		[_] 37% Version 1.0 checklist (migration to layout.html)
+			[X] page scaling for full page view
+			[X] top/bottom toolbars
+			[X] splash screen w. logo
+			[_] logo on splash screen
+			[_] 33% bells 'n' whistles
 				[_] navigator
 				[_] bookmarks
-				[_] article navigation
+				[X] article navigation
 			[_] URL navigation
 			[_] layers (URL-activated)
 			[_] 0% overlay pages
@@ -87,6 +88,10 @@
 					[_] scrollend
 				[_] 0% snap
 					[_] snapped
+		[_] BUG: full-page-view-mode class does not apply to some elements...
+		| - toolbars
+		| - bookmarks
+		[_] BUG: #URLs do not all work in the new index...
 		[_] BUG: loading a magazine with position set to 0 will align it incorrectly.
 		| needs testing with the rewritten fitNPages()...
 		[_] Editor: might be a good idea to prevent deleting the last page...
