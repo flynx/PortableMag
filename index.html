@@ -94,8 +94,8 @@ function prepareTransitions(elem){
 }
 
 $(document).ready(function(){
+	// general window behavior...
 	$(window)
-		//.resize(viewResizeHandler)
 		.resize(updateView)
 		.bind('hashchange', hashChangeHandler)
 
@@ -129,8 +129,6 @@ $(document).ready(function(){
 		}, 
 		function(k){console.log(k)}))
 
-	//setTransformOrigin($('.magazine'))
-
 	window.MagazineScroller = makeScrollHandler($('.viewer'), {
 		hScroll: true,
 		vScroll: false,
@@ -149,9 +147,6 @@ $(document).ready(function(){
 		.on('swipeRight', handleSwipeRight)
 		.on('swipeUp swipeDown', function(){ togglePageView('off') })
 		.on('screenReleased', handleScrollRelease)
-		/*
-		.on('screenReleased swipeRight swipeLeft', handleScrollRelease)
-		*/
 
 		.on('pageChanged', updatePageNumberIndicator)
 		.on('magazineDataLoaded', loadMagazineChrome)
@@ -192,247 +187,255 @@ $(document).ready(function(){
 </head>
 <body>
 
+<!-- Magazine Chrome -->
 <div class="chrome">
 
 
-	<!-- Splash screen -->
-	<div class="splash noSwipe">
-		<!-- XXX replace this with a background-image logo... -->
-		<table width="100%" height="100%"><tr><td align="center" valign="middle">
-			<!--h2><div id="spinner" style="position:relative; display:inline-block; width:50px; height:50px; vertical-align:middle;"></div><i>loading...</i></h2-->
-			<div id="spinner" style="position:relative; display:inline-block; width:50px; height:50px; vertical-align:middle;"></div>
-			<script>
-			// add a spinner to the splash...
-			var opts = {
-				lines: 11, // The number of lines to draw
-				length: 6, // The length of each line
-				width: 4, // The line thickness
-				radius: 8, // The radius of the inner circle
-				corners: 1, // Corner roundness (0..1)
-				rotate: 0, // The rotation offset
-				color: $('.splash #spinner').css('color'), // #rgb or #rrggbb
-				speed: 1, // Rounds per second
-				trail: 64, // Afterglow percentage
-				shadow: false, // Whether to render a shadow
-				hwaccel: true, // Whether to use hardware acceleration
-				className: 'spinner', // The CSS class to assign to the spinner
-				zIndex: 2e9, // The z-index (defaults to 2000000000)
-				top: 'auto', // Top position relative to parent in px
-				left: 'auto' // Left position relative to parent in px
-			}
-			$('#spinner').spin(opts)
-			</script>
-		</td></tr></table>
-	</div>
+<!-- Splash screen -->
+<div class="splash noSwipe">
+	<!-- XXX replace this with a background-image logo... -->
+	<table width="100%" height="100%"><tr><td align="center" valign="middle">
+		<!--h2><div id="spinner" style="position:relative; display:inline-block; width:50px; height:50px; vertical-align:middle;"></div><i>loading...</i></h2-->
+		<div id="spinner" style="position:relative; display:inline-block; width:50px; height:50px; vertical-align:middle;"></div>
+		<script>
+		// add a spinner to the splash...
+		$('#spinner').spin({
+			lines: 11, // The number of lines to draw
+			length: 6, // The length of each line
+			width: 4, // The line thickness
+			radius: 8, // The radius of the inner circle
+			corners: 1, // Corner roundness (0..1)
+			rotate: 0, // The rotation offset
+			color: $('.splash #spinner').css('color'), // #rgb or #rrggbb
+			speed: 1, // Rounds per second
+			trail: 64, // Afterglow percentage
+			shadow: false, // Whether to render a shadow
+			hwaccel: true, // Whether to use hardware acceleration
+			className: 'spinner', // The CSS class to assign to the spinner
+			zIndex: 2e9, // The z-index (defaults to 2000000000)
+			top: 'auto', // Top position relative to parent in px
+			left: 'auto' // Left position relative to parent in px
+		})
+		</script>
+	</td></tr></table>
+</div>
 
 
-	<!-- Toolbars -->
+<!-- Toolbars -->
 
-	<div class="left-toolbar">
 
-		<svg id="new-magazine" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+<!-- Editor Toolbar -->
+<div class="left-toolbar">
+
+	<svg id="new-magazine" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+	 <g>
+	  <title>New Magazine</title>
+	  <g id="svg_47">
+	   <g id="svg_33">
+		<g id="svg_34">
+		 <circle fill="#000000" stroke="#ffffff" fill-opacity="0" cx="28.671385" cy="30.356987" r="7.062921" id="svg_35"/>
+		 <text fill="#ffffff" stroke="#000000" stroke-width="0" x="28.820414" y="36.240832" font-size="18" font-family="serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_36">+</text>
+		</g>
+		<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m22.8386,34.497002l-13.95876,0.052097l-0.06013,-28.683099l24.052891,0l-0.060101,18.821401" id="svg_37"/>
+	   </g>
+	   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.923339" y="17.539691" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_38">M</text>
+	  </g>
+	 </g>
+	</svg>
+
+	<hr>
+
+	<div>
+		<svg id="new-article" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
 		 <g>
-		  <title>New Magazine</title>
-		  <g id="svg_47">
-		   <g id="svg_33">
-			<g id="svg_34">
-			 <circle fill="#000000" stroke="#ffffff" fill-opacity="0" cx="28.671385" cy="30.356987" r="7.062921" id="svg_35"/>
-			 <text fill="#ffffff" stroke="#000000" stroke-width="0" x="28.820414" y="36.240832" font-size="18" font-family="serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_36">+</text>
+		  <title>New Article</title>
+		  <g id="svg_48">
+		   <g id="svg_26">
+			<g id="svg_27">
+			 <circle fill="#000000" stroke="#ffffff" fill-opacity="0" cx="28.671385" cy="30.356987" r="7.062921" id="svg_28"/>
+			 <text fill="#ffffff" stroke="#000000" stroke-width="0" x="28.820414" y="36.240832" font-size="18" font-family="serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_29">+</text>
 			</g>
-			<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m22.8386,34.497002l-13.95876,0.052097l-0.06013,-28.683099l24.052891,0l-0.060101,18.821401" id="svg_37"/>
+			<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m22.83856,34.49699l-13.95872,0.052139l-0.06013,-28.683129l24.052921,0l-0.06015,18.82142" id="svg_30"/>
 		   </g>
-		   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.923339" y="17.539691" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_38">M</text>
+		   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.68281" y="17.539691" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_31">A</text>
 		  </g>
 		 </g>
 		</svg>
 
-		<hr>
 
-		<div>
-			<svg id="new-article" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-			 <g>
-			  <title>New Article</title>
-			  <g id="svg_48">
-			   <g id="svg_26">
-				<g id="svg_27">
-				 <circle fill="#000000" stroke="#ffffff" fill-opacity="0" cx="28.671385" cy="30.356987" r="7.062921" id="svg_28"/>
-				 <text fill="#ffffff" stroke="#000000" stroke-width="0" x="28.820414" y="36.240832" font-size="18" font-family="serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_29">+</text>
-				</g>
-				<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m22.83856,34.49699l-13.95872,0.052139l-0.06013,-28.683129l24.052921,0l-0.06015,18.82142" id="svg_30"/>
-			   </g>
-			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.68281" y="17.539691" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_31">A</text>
-			  </g>
-			 </g>
-			</svg>
+		<svg id="shift-article-left" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+		 <g>
+		  <title>Shift Article Left</title>
+		  <g id="svg_76">
+		   <g id="svg_70">
+			<g id="svg_71">
+			 <path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m28.62114,34.492649l-19.73146,0.052151l-0.06013,-28.68306l24.052919,0l-0.000019,17.438419" id="svg_72"/>
+			 <path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m32.840248,24.30155l0.05212,10.154291l-1.082369,0.060139" id="svg_73"/>
+			</g>
+			<path d="m30.587009,30.33219l-4.3314,-7.037199l2.8526,0l4.331209,7.037199l-4.331209,7.037241l-2.8526,0l4.3314,-7.037241z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000" stroke="#ffffff" transform="rotate(180 29.8475 30.3322)" id="svg_74"/>
+		   </g>
+		   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.692654" y="17.535428" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_75">A</text>
+		  </g>
+		 </g>
+		</svg>
 
 
-			<svg id="shift-article-left" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-			 <g>
-			  <title>Shift Article Left</title>
-			  <g id="svg_76">
-			   <g id="svg_70">
-				<g id="svg_71">
-				 <path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m28.62114,34.492649l-19.73146,0.052151l-0.06013,-28.68306l24.052919,0l-0.000019,17.438419" id="svg_72"/>
-				 <path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m32.840248,24.30155l0.05212,10.154291l-1.082369,0.060139" id="svg_73"/>
-				</g>
-				<path d="m30.587009,30.33219l-4.3314,-7.037199l2.8526,0l4.331209,7.037199l-4.331209,7.037241l-2.8526,0l4.3314,-7.037241z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000" stroke="#ffffff" transform="rotate(180 29.8475 30.3322)" id="svg_74"/>
-			   </g>
-			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.692654" y="17.535428" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_75">A</text>
-			  </g>
-			 </g>
-			</svg>
-
-
-			<svg id="shift-article-right" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-			 <g>
-			  <title>Shift Article Right</title>
-			  <g id="svg_89">
-			   <g id="svg_85">
-				<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m29.583229,34.612888l-20.693559,-0.007988l-0.06013,-28.6831l24.052921,0l-0.000023,20.86595" id="svg_86"/>
-				<path d="m32.27066,30.392269l-4.33132,-7.037249l2.852549,0l4.33123,7.037249l-4.33123,7.03727l-2.852549,0l4.33132,-7.03727z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000" stroke="#ffffff" id="svg_87"/>
-			   </g>
-			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.692638" y="17.595492" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_88">A</text>
-			  </g>
-			 </g>
-			</svg>
-		</div>
-
-		<hr>
-
-		<div>
-			<svg id="new-page" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-			 <g>
-			  <title>New Page</title>
-			  <g id="svg_24">
-			   <g id="svg_16">
-				<g id="svg_9">
-				 <circle fill="#000000" stroke="#ffffff" fill-opacity="0" cx="28.691122" cy="30.383944" r="7.062921" id="svg_7"/>
-				 <text fill="#ffffff" stroke="#000000" stroke-width="0" x="28.840151" y="36.267789" id="svg_8" font-size="18" font-family="serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0">+</text>
-				</g>
-				<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m22.85829,34.523949l-13.95871,0.052132l-0.06013,-28.68312l24.05293,0l-0.06015,18.82142" id="svg_15"/>
-			   </g>
-			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.281621" y="17.566648" id="svg_17" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0">P</text>
-			  </g>
-			 </g>
-			</svg>
-
-
-			<svg id="shift-page-left" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-			 <g>
-			  <title>Shift Page Left</title>
-			  <g id="svg_68">
-			   <g id="svg_67">
-				<g id="svg_66">
-				 <path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m28.621111,34.492619l-19.731441,0.052151l-0.06013,-28.683099l24.052921,0l-0.000011,17.4384" id="svg_61"/>
-				 <path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m32.840248,24.30146l0.05212,10.15435l-1.082397,0.060131" id="svg_65"/>
-				</g>
-				<path d="m30.586981,30.3321l-4.3314,-7.037199l2.852598,0l4.331251,7.037199l-4.331251,7.0373l-2.852598,0l4.3314,-7.0373z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000" stroke="#ffffff" id="svg_62" transform="rotate(180 29.8475 30.3321)"/>
-			   </g>
-			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.271712" y="17.535359" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_63">P</text>
-			  </g>
-			 </g>
-			</svg>
-
-
-			<svg id="shift-page-right" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-			 <g>
-			  <title>Shift Page Right</title>
-			  <g id="svg_58">
-			   <g id="svg_57">
-				<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m29.57338,34.557121l-20.69354,-0.007992l-0.06013,-28.683129l24.052929,0l-0.000019,20.86593" id="svg_54"/>
-				<path d="m32.260818,30.336451l-4.331329,-7.037251l2.852551,0l4.331299,7.037251l-4.331299,7.037321l-2.852551,0l4.331329,-7.037321z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000" id="svg_56" stroke="#ffffff"/>
-			   </g>
-			   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.261884" y="17.539691" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_55">P</text>
-			  </g>
-			 </g>
-			</svg>
-		</div>
-
+		<svg id="shift-article-right" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+		 <g>
+		  <title>Shift Article Right</title>
+		  <g id="svg_89">
+		   <g id="svg_85">
+			<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m29.583229,34.612888l-20.693559,-0.007988l-0.06013,-28.6831l24.052921,0l-0.000023,20.86595" id="svg_86"/>
+			<path d="m32.27066,30.392269l-4.33132,-7.037249l2.852549,0l4.33123,7.037249l-4.33123,7.03727l-2.852549,0l4.33132,-7.03727z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000" stroke="#ffffff" id="svg_87"/>
+		   </g>
+		   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.692638" y="17.595492" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_88">A</text>
+		  </g>
+		 </g>
+		</svg>
 	</div>
 
+	<hr>
 
-	<div class="top-toolbar">
-		<div class="left-set">
-			<div class="button title"><a href="#home" class="magazine-title-text">Magazine Title</a></div>
-		</div>
-		<div class="right-set">
-			<div class="button prev-bookmark">
-				<a href="#prevBookmark">
-					<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-					 <g>
-					  <title>Previous bookmark (S-Left)</title>
-					  <path transform="rotate(-180 18.9697 20.1122)" id="svg_13" stroke="#ffffff" d="m20.467497,20.112247l-8.773763,-14.254913l5.778195,0l8.773788,14.254913l-8.773788,14.25491l-5.778195,0l8.773763,-14.25491z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
-					 </g>
-					</svg>
-				</a>
-			</div>
-			<div class="button toggle-bookmark">
-				<a href="#bookmark">
-					<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-					 <g>
-					  <title>Toggle bookmark (B)</title>
-					  <rect stroke="#ffffff" id="svg_1" height="28.604868" width="24.052915" y="5.858955" x="8.807377" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
-					  <path stroke="#ffffff" id="svg_4" d="m21.762226,3.651895l8.416584,0l0,14.510554l-4.124887,-2.792193l-4.291697,2.792193l0,-14.510554l0,0z" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" fill="#ff0000"/>
-					 </g>
-					</svg>
-				</a>
-			</div>
-			<div class="button next-bookmark">
-				<a href="#nextBookmark">
-					<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-					 <g>
-					  <title>Next bookmark (S-Right)</title>
-					  <path stroke="#ffffff" id="svg_11" d="m23.175751,20.132858l-8.773797,-14.254913l5.77823,0l8.773788,14.254913l-8.773788,14.254913l-5.77823,0l8.773797,-14.254913z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
-					 </g>
-					</svg>
-				</a>
-			</div>
-			<div class="button info">
-				<a href="javascript:alert('not implemented yet...')">
-					<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-					 <g>
-					  <title>Info</title>
-					  <g id="svg_6">
-					   <circle fill="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" cx="20.762543" cy="20.120354" r="14.302816" id="svg_2" stroke="#ffffff"/>
-					   <text fill="#ffffff" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="21.029904" y="21.833322" id="svg_5" font-size="24" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" transform="matrix(0.894143 0 0 0.894143 1.91526 8.19192)" stroke="#000000">i</text>
-					  </g>
-					 </g>
-					</svg>
-				</a>
-			</div>
-		</div>
-	</div>
-	<div class="bottom-toolbar">
-		<!-- this is just an example-->
-		<div class="controls">
-			<a href="#home" title="(Home)">Cover</a>
-			<a href="#prevBookmark" title="(S-Left)">&lt; Bookmark</a>
-			<a href="#prevArticle" title="(C-Left)">&lt; Article</a>
-			<a href="#prev" title="Previous page (Left)">&lt; Pa</a><a href="#next" title="Next page (Right)">ge &gt;</a>
-			<a href="#nextArticle" title="(C-Right)">Article &gt;</a>
-			<a href="#nextBookmark" title="(S-Right)">Bookmark &gt;</a>
-			<a href="#end" title="(End)">End</a>
-		</div>
-		<!-- position indicator -->
-		<div class="navigator">
-			<div class="bar">
-				<div class="indicator"></div>
-			</div>
-		</div>
-		<div class="page-number">0/0</div>
+	<div>
+		<svg id="new-page" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+		 <g>
+		  <title>New Page</title>
+		  <g id="svg_24">
+		   <g id="svg_16">
+			<g id="svg_9">
+			 <circle fill="#000000" stroke="#ffffff" fill-opacity="0" cx="28.691122" cy="30.383944" r="7.062921" id="svg_7"/>
+			 <text fill="#ffffff" stroke="#000000" stroke-width="0" x="28.840151" y="36.267789" id="svg_8" font-size="18" font-family="serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0">+</text>
+			</g>
+			<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m22.85829,34.523949l-13.95871,0.052132l-0.06013,-28.68312l24.05293,0l-0.06015,18.82142" id="svg_15"/>
+		   </g>
+		   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.281621" y="17.566648" id="svg_17" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0">P</text>
+		  </g>
+		 </g>
+		</svg>
+
+
+		<svg id="shift-page-left" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+		 <g>
+		  <title>Shift Page Left</title>
+		  <g id="svg_68">
+		   <g id="svg_67">
+			<g id="svg_66">
+			 <path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m28.621111,34.492619l-19.731441,0.052151l-0.06013,-28.683099l24.052921,0l-0.000011,17.4384" id="svg_61"/>
+			 <path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m32.840248,24.30146l0.05212,10.15435l-1.082397,0.060131" id="svg_65"/>
+			</g>
+			<path d="m30.586981,30.3321l-4.3314,-7.037199l2.852598,0l4.331251,7.037199l-4.331251,7.0373l-2.852598,0l4.3314,-7.0373z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000" stroke="#ffffff" id="svg_62" transform="rotate(180 29.8475 30.3321)"/>
+		   </g>
+		   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.271712" y="17.535359" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_63">P</text>
+		  </g>
+		 </g>
+		</svg>
+
+
+		<svg id="shift-page-right" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+		 <g>
+		  <title>Shift Page Right</title>
+		  <g id="svg_58">
+		   <g id="svg_57">
+			<path fill="none" stroke="#ffffff" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" d="m29.57338,34.557121l-20.69354,-0.007992l-0.06013,-28.683129l24.052929,0l-0.000019,20.86593" id="svg_54"/>
+			<path d="m32.260818,30.336451l-4.331329,-7.037251l2.852551,0l4.331299,7.037251l-4.331299,7.037321l-2.852551,0l4.331329,-7.037321z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#000000" id="svg_56" stroke="#ffffff"/>
+		   </g>
+		   <text fill="#ffffff" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="15.261884" y="17.539691" font-size="12" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" id="svg_55">P</text>
+		  </g>
+		 </g>
+		</svg>
 	</div>
 
+</div>
+<!-- Editor Toolbar (end) -->
 
 
+<!-- Top Toolbar -->
+<div class="top-toolbar">
+	<div class="left-set">
+		<div class="button title"><a href="#home" class="magazine-title-text">Magazine Title</a></div>
+	</div>
+	<div class="right-set">
+		<div class="button prev-bookmark">
+			<a href="#prevBookmark">
+				<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+				 <g>
+				  <title>Previous bookmark (S-Left)</title>
+				  <path transform="rotate(-180 18.9697 20.1122)" id="svg_13" stroke="#ffffff" d="m20.467497,20.112247l-8.773763,-14.254913l5.778195,0l8.773788,14.254913l-8.773788,14.25491l-5.778195,0l8.773763,-14.25491z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
+				 </g>
+				</svg>
+			</a>
+		</div>
+		<div class="button toggle-bookmark">
+			<a href="#bookmark">
+				<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+				 <g>
+				  <title>Toggle bookmark (B)</title>
+				  <rect stroke="#ffffff" id="svg_1" height="28.604868" width="24.052915" y="5.858955" x="8.807377" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
+				  <path stroke="#ffffff" id="svg_4" d="m21.762226,3.651895l8.416584,0l0,14.510554l-4.124887,-2.792193l-4.291697,2.792193l0,-14.510554l0,0z" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" fill="#ff0000"/>
+				 </g>
+				</svg>
+			</a>
+		</div>
+		<div class="button next-bookmark">
+			<a href="#nextBookmark">
+				<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+				 <g>
+				  <title>Next bookmark (S-Right)</title>
+				  <path stroke="#ffffff" id="svg_11" d="m23.175751,20.132858l-8.773797,-14.254913l5.77823,0l8.773788,14.254913l-8.773788,14.254913l-5.77823,0l8.773797,-14.254913z" fill-opacity="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" fill="#afafaf"/>
+				 </g>
+				</svg>
+			</a>
+		</div>
+		<div class="button info">
+			<a href="javascript:alert('not implemented yet...')">
+				<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+				 <g>
+				  <title>Info</title>
+				  <g id="svg_6">
+				   <circle fill="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" fill-opacity="0" cx="20.762543" cy="20.120354" r="14.302816" id="svg_2" stroke="#ffffff"/>
+				   <text fill="#ffffff" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="21.029904" y="21.833322" id="svg_5" font-size="24" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" stroke-opacity="0" transform="matrix(0.894143 0 0 0.894143 1.91526 8.19192)" stroke="#000000">i</text>
+				  </g>
+				 </g>
+				</svg>
+			</a>
+		</div>
+	</div>
+</div>
+<!-- Top Toolbar (end) -->
 
 
+<!-- Bottom Toolbar -->
+<div class="bottom-toolbar">
+	<!-- this is just an example-->
+	<div class="controls">
+		<a href="#home" title="(Home)">Cover</a>
+		<a href="#prevBookmark" title="(S-Left)">&lt; Bookmark</a>
+		<a href="#prevArticle" title="(C-Left)">&lt; Article</a>
+		<a href="#prev" title="Previous page (Left)">&lt; Pa</a><a href="#next" title="Next page (Right)">ge &gt;</a>
+		<a href="#nextArticle" title="(C-Right)">Article &gt;</a>
+		<a href="#nextBookmark" title="(S-Right)">Bookmark &gt;</a>
+		<a href="#end" title="(End)">End</a>
+	</div>
+	<!-- position indicator -->
+	<div class="navigator">
+		<div class="bar">
+			<div class="indicator"></div>
+		</div>
+	</div>
+	<div class="page-number">0/0</div>
+</div>
+<!-- Bottom Toolbar (end) -->
+
+
+<!-- Toolbars (end) -->
+
+
+<!-- Magazine Viewer -------------------------------------------------->
 <div id="viewer" class="viewer">
 
 	<div class="magazine" name="PortableMag">
 		<div class="cover page">
 			<div class="content">
-				<!--h1 style="color:gray;font-size:125px;margin-bottom:-35px; margin-top: 160px">PortableMag</h1>
-				<h1 style="color:silver; font-size: 20px; margin-left:10px">A suit for publishing portable periodic magazines on mobile platforms.</h1-->
 
 				<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
 				 <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
@@ -851,7 +854,11 @@ $(document).ready(function(){
 	</div>
 
 </div>
+<!-- Magazine Viewer (end) ------------------------------------------>
+
+
 </div>
+<!-- Magazine Chrome (end) -->
 
 </body>
 </html>
