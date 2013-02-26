@@ -68,6 +68,9 @@ var togglePageView = createCSSClassToggler(
 
 /************************************************** event handlers ***/
 
+// Click
+// 	- in full page do the default click, if clicked on other page, select
+// 	- in ribbon, open clicked page in full mode
 function handleClick(evt, data){
 	var target = getPageNumber(data.orig_event.target)
 	if(target != -1){
@@ -85,6 +88,10 @@ function handleClick(evt, data){
 	}
 }
 
+
+// Long Click
+// 	- in full page, go to ribbon
+// 	- in ribbon, center clicked page
 function handleLongClick(evt, data){
 	var target = getPageNumber(data.orig_event.target)
 	if(target != -1){
@@ -102,10 +109,15 @@ function handleLongClick(evt, data){
 	}
 }
 
+
+// Swipe Left/Right
+// 	- in full page, next/prev page select
+// 	- in ribbon, kinetic scroll
+// 	- with two fingers, select next/prev article
 function makeSwipeHandler(actionA, actionB){
 	return function(evt, data){
 		// ribbon mode...
-		if(isNavigationViewRelative()){
+		if(togglePageView('?') == 'off'){
 
 			// article navigation...
 			if(data.touches >= 2){
@@ -136,27 +148,25 @@ function makeSwipeHandler(actionA, actionB){
 var handleSwipeLeft = makeSwipeHandler(prevPage, prevArticle)
 var handleSwipeRight = makeSwipeHandler(nextPage, nextArticle)
 
-// do snap and innertia...
+
+// Scroll Release
+// 	- check bounds and if out center first/last page
+// 	- filter out "throw" speeds below threshold
+// 	- do inertial scroll (within check bounds)
+// 	- snap to pages
+//
 // NOTE: this will also handle swipeUp/swopeDown as we do not 
 //		explicitly bind them...
+// NOTE: at this point this ONLY handles horizontal scroll...
 // XXX restore all the changed values...
-// XXX add an animate loop, to make the browser paint the page better...
 function handleScrollRelease(evt, data){
-	/*
-	// this makes things snap...
-	if(SNAP_TO_PAGES_IN_RIBBON || !isNavigationViewRelative()){
-		setCurrentPage()
-		return
-	}
-	*/
-
 	var speed = data.speed.x
 	var pages = $('.page')
 	var mag = $('.magazine')
 	// innertial scroll...
 	// XXX make this generic...
 	var t = DEFAULT_TRANSITION_DURATION * (1+Math.abs(speed))
-	// XXX this is only horisontal at this point...
+	// XXX this is only horizontal at this point...
 	var at = getElementShift(mag).left
 	var to = (at + (t*speed*INNERTIA_SCALE))
 	var first = getMagazineOffset(pages.first(), null, 'center')
@@ -190,17 +200,6 @@ function handleScrollRelease(evt, data){
 
 		animateElementTo(mag, to, t, easing, speed)
 
-		/*
-		// restore defaults...
-		// XXX this is a bit dumb at this point...
-		// XXX run this as a transition end handler...
-		setTimeout(function(){
-			//setTransitionEasing(mag, 'ease-out')
-			setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
-			setTransitionDuration(mag, DEFAULT_TRANSITION_DURATION)
-		}, t+10)
-		*/
-
 	// check scroll bounds...
 	// do not let the user scroll out of view...
 	} else {
@@ -218,14 +217,6 @@ function handleScrollRelease(evt, data){
 
 
 /********************************************************* helpers ***/
-
-// XXX make this more acurate...
-// 		...should check mode or if we are in a ribbon...
-var NAVIGATION_MODE_THRESHOLD = 0.7
-function isNavigationViewRelative(){
-	return getMagazineScale() <= NAVIGATION_MODE_THRESHOLD
-}
-
 
 // XXX there is something here that depends on scale that is either not 
 // 		compensated, or is over compensated...
@@ -279,8 +270,8 @@ function getPageNumber(page){
 		return $('.page').index(page)
 	}
 
-	// get the next page relative to the current... 
-	if(!isNavigationViewRelative()){
+	// current page index...
+	if(togglePageView('?') == 'on'){
 		return $('.page').index($('.current.page'))
 
 	// get the closest page to view center... 
@@ -314,7 +305,7 @@ function setMagazineScale(scale){
 	}
 
 	// center-align ribbon view pages...
-	var align = isNavigationViewRelative() ? 'center' : null
+	var align = togglePageView('?') == 'off' ? 'center' : null
 	var left = getMagazineOffset(cur, scale, align)
 
 	setElementTransform(mag, left, scale)
@@ -345,7 +336,7 @@ function setCurrentPage(n){
 	var cur = $('.current.page')
 
 	// center-align pages in ribbon view...
-	var align = isNavigationViewRelative() ? 'center' : null
+	var align = togglePageView('?') == 'off' ? 'center' : null
 	var left = getMagazineOffset(cur, null, align)
 
 	if(USE_TRANSITIONS_FOR_ANIMATION){
@@ -388,5 +379,6 @@ function lastPage(){
 
 
 
-/*********************************************************************/
-// vim:set ts=4 sw=4 :
+
+/**********************************************************************
+* vim:set ts=4 sw=4 :												 */
