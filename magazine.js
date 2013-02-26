@@ -93,7 +93,6 @@ var _PAGE_VIEW
 var togglePageView = createCSSClassToggler(
 	'.viewer', 
 	'page-view-mode',
-	null,
 	// post-change callback...
 	function(action){
 		if(action == 'on'){
