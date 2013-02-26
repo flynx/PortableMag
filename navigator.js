@@ -175,8 +175,11 @@ function removeBookmarkIndicator(n){
 
 
 // NOTE: this is 1 based page number, the rest of the system is 0 based.
-function updatePageNumberIndicator(){
-	$('.page-number').text((getPageNumber()+1)+'/'+$('.page').length)
+function updatePageNumberIndicator(evt, n){
+	if(n == null){
+		n = getPageNumber()
+	}
+	$('.page-number').text((n+1)+'/'+$('.page').length)
 }
 
 

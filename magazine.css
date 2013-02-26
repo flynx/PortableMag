@@ -104,21 +104,15 @@ body {
 
 	z-index: 9999;
 }
-.page-view-mode .page {
 
-	/* XXX change to relative units... */
-	width: 800px;
-}
-
-.page-view-mode .page .content {
-}
-
-.page-view-mode .page .bookmark {
+.page-view-mode .page .bookmark,
+.full-page-view-mode .page .bookmark {
 	right: -70px;
 	top: -70px;
 	opacity: 0.5;
 }
-.page-view-mode .page .bookmark.justcreated {
+.page-view-mode .page .bookmark.justcreated,
+.full-page-view-mode .page .bookmark.justcreated {
 	opacity: 1;
 }
 
@@ -288,6 +282,8 @@ body {
 
 	font-size: 14px;
 	color: silver;
+
+	z-index: 1000;
 }
 .top-toolbar {
 	top: 0px;
@@ -299,7 +295,9 @@ body {
 	width: 100%;
 }
 .page-view-mode .top-toolbar,
-.page-view-mode .bottom-toolbar {
+.page-view-mode .bottom-toolbar,
+.full-page-view-mode .top-toolbar,
+.full-page-view-mode .bottom-toolbar {
 	display: none;
 }
 

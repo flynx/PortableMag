@@ -128,60 +128,61 @@
 }
 
 
-.light.viewer {
+.light.viewer,
+.light .viewer {
 	background: white;
 }
 
-.light.viewer .magazine:before,
-.light.viewer .magazine:after {
+.light .magazine:before,
+.light .magazine:after {
 	color: #eee;
 }
-.light.viewer .magazine {
+.light .magazine {
 	box-shadow: 10px 10px 50px 10px #ddd;
 }
 
-.light.viewer .top-toolbar,
-.light.viewer .bottom-toolbar {
+.light .top-toolbar,
+.light .bottom-toolbar {
 	font-size: 14px;
 	color: silver;
 	background: white;
 	box-shadow: 5px 5px 50px 20px #eee;
 }
-.light.viewer .top-toolbar a,
-.light.viewer .bottom-toolbar a {
+.light .top-toolbar a,
+.light .bottom-toolbar a {
 	color: silver;
 	text-decoration: none;
 }
 
-.light.viewer .bottom-toolbar .page-number {
+.light .bottom-toolbar .page-number {
 	color: silver;
 }
 
-.light.viewer .button svg * {
+.light .button svg * {
 	stroke: gray;
 }
-.light.viewer .button.info svg * {
+.light .button.info svg * {
 	stroke: silver;
 	fill: silver;
 }
 
-.light.viewer .navigator {
+.light .navigator {
 	opacity: 0.9;
 }
 
-.light.viewer .navigator .bar {
+.light .navigator .bar {
 	background: silver;
 }
 
-.light.viewer .navigator .bar .indicator {
+.light .navigator .bar .indicator {
 	background: orange;
 }
 
-.light.viewer .navigator .bar .article {
+.light .navigator .bar .article {
 	background: silver;
 }
 
-.light.viewer .navigator .bar .bookmark {
+.light .navigator .bar .bookmark {
 	background: red;
 }
 
@@ -208,60 +209,61 @@
 }
 
 
-.dark.viewer {
+.dark.viewer,
+.dark .viewer {
 	background: #111;
 }
 
-.dark.viewer .magazine {
+.dark .magazine {
 	box-shadow: 10px 10px 50px 10px #000;
 }
 
-.dark.viewer .magazine:before,
-.dark.viewer .magazine:after {
+.dark .magazine:before,
+.dark .magazine:after {
 	color: #222;
 }
 
-.dark.viewer .top-toolbar,
-.dark.viewer .bottom-toolbar {
+.dark .top-toolbar,
+.dark .bottom-toolbar {
 	font-size: 14px;
 	color: gray;
 	background: black;
 	box-shadow: none; 
 }
 
-.dark.viewer .top-toolbar a,
-.dark.viewer .bottom-toolbar a {
+.dark .top-toolbar a,
+.dark .bottom-toolbar a {
 	color: gray;
 	text-decoration: none;
 }
 
-.dark.viewer .bottom-toolbar .page-number {
+.dark .bottom-toolbar .page-number {
 	color: #555;
 }
 
-.dark.viewer .button svg * {
+.dark .button svg * {
 	stroke: gray;
 }
-.dark.viewer .button.info svg * {
+.dark .button.info svg * {
 	fill: gray;
 }
 
-.dark.viewer .navigator {
+.dark .navigator {
 }
 
-.dark.viewer .navigator .bar {
+.dark .navigator .bar {
 	background: silver;
 }
 
-.dark.viewer .navigator .bar .indicator {
+.dark .navigator .bar .indicator {
 	background: yellow;
 }
 
-.dark.viewer .navigator .bar .article {
+.dark .navigator .bar .article {
 	background: white;
 }
 
-.dark.viewer .navigator .bar .bookmark {
+.dark .navigator .bar .bookmark {
 	background: red;
 }
 

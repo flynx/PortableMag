@@ -13,8 +13,16 @@ var INNERTIA_SCALE = 0.25
 
 /********************************************************** layout ***/
 
+var toggleThemes = createCSSClassToggler('.chrome', [
+	'light',
+	// this is the default (no class set)...
+	'none',
+	'dark'
+])
+
+
 var togglePageFitMode = createCSSClassToggler(
-		'.viewer', 
+		'.chrome', 
 		'.page-fit-to-viewer', 
 		function(action){
 			if(action == 'on'){
@@ -30,15 +38,15 @@ var togglePageFitMode = createCSSClassToggler(
 
 
 var togglePageView = createCSSClassToggler(
-		'.viewer',
+		'.chrome',
 		'.full-page-view-mode',
-		// XXX make this support transitions...
 		function(action){
 			var view = $('.viewer')
 			var page = $('.page')
 
 			// XXX
 			setTransitionDuration($('.magazine'), 0)
+			var n = getPageNumber()
 
 			if(action == 'on'){
 				var scale = getPageTargetScale(1).value
@@ -53,7 +61,7 @@ var togglePageView = createCSSClassToggler(
 			}
 			// NOTE: can't disable transitions on this one because ScrollTo
 			// 		uses jQuery animation...
-			setCurrentPage()
+			setCurrentPage(n)
 		})
 
 
@@ -98,6 +106,12 @@ function makeSwipeHandler(actionA, actionB){
 	return function(evt, data){
 		// ribbon mode...
 		if(isNavigationViewRelative()){
+
+			// article navigation...
+			if(data.touches >= 2){
+				actionB($('.current.page'))
+				return
+			}
 
 			// this makes things snap...
 			if(SNAP_TO_PAGES_IN_RIBBON){
@@ -340,6 +354,8 @@ function setCurrentPage(n){
 	} else {
 		animateElementTo($('.magazine'), left)
 	}
+
+	$('.viewer').trigger('pageChanged', n)
 
 	return cur
 }
