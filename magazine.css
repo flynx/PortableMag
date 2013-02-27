@@ -70,6 +70,15 @@ body {
 
 .page .bookmark {
 	position: absolute;
+	z-index: 8888;
+	width: 60px;
+	height: 60px;
+	top: 0px;
+	right: 0px;
+	overflow: hidden;
+}
+.page .bookmark div {
+	position: absolute;
 	width: 100px;
 	height: 100px;
 
@@ -80,7 +89,6 @@ body {
 
 	cursor: hand;
 
-	z-index: 8888;
 	opacity: 0,5;
 
 	-webkit-transform: rotate(-45deg);
@@ -89,11 +97,13 @@ body {
 	-ms-transform: rotate(-45deg);
 	transform: rotate(-45deg);
 
+	/*
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-o-transition: all 0.2s ease;
 	-ms-transition: all 0.2s ease;	
 	transition: all 0.2s ease;
+	*/
 }
 .page .bookmark-toggler {
 	position: absolute;
@@ -108,8 +118,8 @@ body {
 	z-index: 9999;
 }
 
-.page-view-mode .page .bookmark,
-.full-page-view-mode .page .bookmark {
+.page-view-mode .page .bookmark div,
+.full-page-view-mode .page .bookmark div {
 	right: -70px;
 	top: -70px;
 	opacity: 0.5;

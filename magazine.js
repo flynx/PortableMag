@@ -805,7 +805,7 @@ function toggleBookmark(n){
 	var cur = getPageAt(n)
 
 	if(cur.children('.bookmark').length == 0){
-		var res = $('<div/>')
+		var res = $('<div><div/></div>')
 			.prependTo(cur)
 			.addClass('bookmark justcreated')
 			.attr({
