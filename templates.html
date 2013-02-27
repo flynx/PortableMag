@@ -15,11 +15,6 @@
 	background: white;
 	box-shadow: 5px 5px 200px 0px silver;
 	padding: 10px;
-
-	/*
-	overflow: auto;
-	max-height: 600px;
-	*/
 }
 
 .container .page-box {
@@ -79,13 +74,14 @@
 	background: white;
 	width: 20px;
 	height: 20px;
-	top: 10px;
-	right: 10px;
+	top: 5px;
+	right: 5px;
 	overflow: hidden;
 	border: solid white 2px;
 
 	box-shadow: 3px 3px 20px 0px gray;
 }
+
 .container .light.theme-toggle div,
 .container .theme-toggle div {
 	position: absolute;
@@ -101,10 +97,12 @@
 	-ms-transform: rotate(45deg);
 	transform: rotate(45deg);
 }
+
 .container .dark.theme-toggle {
 	border: solid black 2px;
 	background: black;
 }
+
 .container .dark.theme-toggle div {
 	background: white;
 }
@@ -133,7 +131,7 @@ function addThemeToggleZones(){
 	$('<div><div/></div>')
 		.addClass('theme-toggle')
 		.attr('title', 'Toggle dark/light theme')
-		.appendTo($('.page-box'))
+		.appendTo($('.page-box:not(.no-themes)'))
 		.click(toggleTheme)
 }
 
@@ -184,6 +182,26 @@ $(function(){
 
 
 	<div class="page-box">
+		<div class="title">Two Column</div>
+		<div class="page">
+			<div class="content">
+				<div class="header">
+					<h1>Three column</h1>
+				</div>
+				<div class="body three-column">
+
+					Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
+
+				</div>
+				<div class="footer">
+					<div class="page-number-text">[PAGE NUMBER]</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="page-box">
 		<div class="title">Caption</div>
 		<div class="page caption-bottom-arrow">
 			<div class="content">
@@ -205,7 +223,7 @@ $(function(){
 	</div>
 
 
-	<div class="page-box">
+	<div class="page-box no-themes">
 		<div class="title">Blank Template</div>
 	</div>
 
