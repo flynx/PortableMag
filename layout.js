@@ -10,7 +10,6 @@ var DEFAULT_TRANSITION_DURATION = 200
 var INNERTIA_SCALE = 0.25
 
 
-
 /********************************************************** layout ***/
 
 var toggleThemes = createCSSClassToggler('.chrome', [
@@ -28,11 +27,11 @@ var togglePageFitMode = createCSSClassToggler(
 			if(action == 'on'){
 				var n = getPageNumber()
 				var scale = getMagazineScale()
-				$('.page:not(.no-resize)')
+				$(RESIZABLE_PAGES)
 					.width($('.viewer').width() / scale)
 			} else {
 				var n = getPageNumber()
-				$('.page:not(.no-resize)').width('')
+				$(RESIZABLE_PAGES).width('')
 			}
 			setCurrentPage(n)
 		})

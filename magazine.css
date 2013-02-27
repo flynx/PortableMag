@@ -617,6 +617,58 @@ div.page-number-text {
 
 
 
+.page.caption-top-arrow,
+.page.caption-bottom-arrow {
+	overflow: visible;
+}
+.page.caption-top-arrow .content,
+.page.caption-bottom-arrow .content {
+	background: white;
+}
+.page.caption-top-arrow:before,
+.page.caption-bottom-arrow:before {
+	position: absolute;
+	content: "";
+	font-size: 0px;
+	width: 50px;
+	height: 50px;
+
+	left:-25px;
+
+	background: white;
+
+	cursor: hand;
+
+	box-shadow: 20px -20px 50px 0px #000;
+
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+.page.caption-top-arrow:before {
+	/* this is for when we do not need to care about bookmarks...
+	top: 10px;*/
+	top: 50px;
+}
+.page.caption-bottom-arrow:before {
+	/*bottom: 10px;*/
+	bottom: 50px;
+	
+}
+
+.current.page.caption-top-arrow,
+.current.page.caption-bottom-arrow {
+	box-shadow: 30px 0px 100px 0px #000;
+}
+.current.page.caption-top-arrow:before,
+.current.page.caption-bottom-arrow:before {
+	box-shadow: 20px -20px 30px 10px #000;
+}
+
+
+
 
 /*********************************************************************/
 

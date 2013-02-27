@@ -12,8 +12,8 @@
 var PAGES_IN_RIBBON = 4.0
 
 // if true, expand a page to fit the whole view in single page mode...
-// NOTE: if .no-resize is set on a page then this will not have effect
-// 		on the that page...
+// NOTE: if one of the NO_RESIZE_CLASSES is set on a page then this 
+// 		will not have effect on the that page...
 var FIT_PAGE_TO_VIEW = true
 
 // if false, this will force all pages to be fit to screen size in full 
@@ -28,7 +28,7 @@ var USE_REAL_PAGE_SIZES = true
 // NOTE: page local align values take priority over this.
 // NOTE: this has no effect on thumbnail view.
 // NOTE: this has no effect if FIT_PAGE_TO_VIEW is true and a page has 
-// 		no-resize class set.
+// 		one of the NO_RESIZE_CLASSES classes set.
 // 		also, USE_REAL_PAGE_SIZES if set to false will make this have 
 // 		no effect.
 var FULL_PAGE_ALIGN = 'center'
@@ -54,6 +54,25 @@ var FULL_HISTORY_ENABLED = false
 
 // if true, use CSS3 transforms to scroll, of false, use left.
 var USE_TRANSFORM = true
+
+// list of css classes of pages that will not allow page fitting.
+var NO_RESIZE_CLASSES = [
+	'no-resize',
+	'page-align-left',
+	'page-align-center',
+	'page-align-right',
+	'caption-top-arrow',
+	'caption-bottom-arrow'
+]
+// NOTE: to alter the following, just update the NO_RESIZE_CLASSES above...
+var RESIZABLE_PAGES = '.page' + ($(NO_RESIZE_CLASSES)
+							.map(function(_, e){ return ':not(.' + e + ')' })
+							.toArray()
+							.join(''))
+var NON_RESIZABLE_PAGES = $(NO_RESIZE_CLASSES)
+							.map(function(_, e){ return '.page.' + e + '' })
+							.toArray()
+							.join(', ')
 
 
 
@@ -129,7 +148,10 @@ function isPageResizable(page){
 	var article = page.parents('.article').first()
 
 	// first check the page...
-	return (page.hasClass('no-resize') ? false 
+	// NOTE: check for all classes that make the page unresizable...
+	return ($(NO_RESIZE_CLASSES)
+				.filter(function(){ return page.hasClass(this) })
+				.length > 0 ? false 
 			// then the group...
 			: group.hasClass('no-resize') ? false
 			// then the article...
@@ -448,7 +470,7 @@ function fitNPages(n, fit_to_content){
 	}
 	var view = $('.viewer')
 	if(USE_REAL_PAGE_SIZES){
-		var page = $('.page:not(.no-resize)')
+		var page = $(RESIZABLE_PAGES)
 	} else {
 		var page = $('.page')
 	}
@@ -477,7 +499,7 @@ function fitNPages(n, fit_to_content){
 	} else {
 		// calculate the target offset...
 		if(USE_REAL_PAGE_SIZES){
-			var rpages = $('.page:not(.no-resize), .current.page')
+			var rpages = $(RESIZABLE_PAGES+', .current.page')
 		} else {
 			var rpages = page 
 		}
@@ -485,7 +507,7 @@ function fitNPages(n, fit_to_content){
 		var offset = rW * i-1
 		// now do the no-resize elements...
 		if(USE_REAL_PAGE_SIZES){
-			var nrpages = $('.page.no-resize, .current.page')
+			var nrpages = $(NON_RESIZABLE_PAGES+', .current.page')
 			i = nrpages.index(cur) 
 			nrpages.splice(i)
 			nrpages.each(function(_, e){
@@ -496,7 +518,7 @@ function fitNPages(n, fit_to_content){
 
 	// align the magazine...
 	if(USE_REAL_PAGE_SIZES){
-		if(cur.hasClass('no-resize')){
+		if(!isPageResizable(cur)){
 			var align = getPageAlign(cur)
 
 			// center align if explicitly required or if we are in a ribbon...
@@ -526,7 +548,7 @@ function fitNPages(n, fit_to_content){
 	//	.width(target_width)
 	//	.height(target_height)
 	//if(USE_REAL_PAGE_SIZES){
-	//	$('.page.no-resize').width('auto')
+	//	$(NON_RESIZABLE_PAGES).width('auto')
 	//}
 
 	// NOTE: we only need the .scaler animated, the rest just plays havoc with
@@ -548,8 +570,8 @@ function fitNPages(n, fit_to_content){
 			}
 		})
 		if(USE_REAL_PAGE_SIZES){
-			//$('.page.no-resize').width('auto')
-			$('.page.no-resize').each(function(_, e){
+			//$(NON_RESIZABLE_PAGES).width('auto')
+			$(NON_RESIZABLE_PAGES).each(function(_, e){
 				e.style.width = 'auto'
 			})
 		}
