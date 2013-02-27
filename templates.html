@@ -1,0 +1,148 @@
+<html>
+<head>
+
+<link rel="stylesheet" href="magazine.css">
+<link rel="stylesheet" href="magazine-themes.css">
+<link rel="stylesheet" href="magazine-custom.css">
+
+<style>
+
+.container {
+	border: solid 1px silver;
+	width: 750px;
+	max-height: 600px;
+	min-height: 300px;
+	margin: 25px;
+	overflow: auto;
+}
+
+.container .page {
+	box-shadow: 5px 5px 200px 30px gray;
+
+
+	margin: 5%;
+
+	-webkit-transform-origin: 0 0;
+	-moz-transform-origin: 0 0;
+	-o-transform-origin: 0 0;
+	-ms-transform-origin: 0 0;
+	transform-origin: 0 0;
+
+	-webkit-transform: scale(0.25);
+	-moz-transform: scale(0.25);
+	-o-transform: scale(0.25);
+	-ms-transform: scale(0.25);	
+	transform: scale(0.25);
+}
+
+.container .page-box {
+	position: relative;
+	text-align: center;
+	display: inline-block;
+	width: 225px;
+	height: 175px;
+	margin: 10px;
+	border: solid 1px silver;
+	overflow: hidden;
+	background: silver;
+
+	box-shadow: 5px 5px 200px 30px gray inset;
+}
+
+.container .title {
+	position: absolute;
+	color: white;
+	bottom: 10%;
+	right: 10%;
+	z-index: 1000;
+	text-shadow: black 0.1em 0.1em 0.3em;
+}
+
+
+</style>
+
+</head>
+<body>
+
+
+<div class="container">
+
+
+
+	<div class="page-box">
+		<div class="title">Two Column</div>
+		<div class="page dark">
+			<div class="content">
+				<div class="header">
+					<h1>Two column</h1>
+				</div>
+				<div class="body two-column">
+
+					Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
+
+				</div>
+				<div class="footer">
+					<div class="page-number-text">[PAGE NUMBER]</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="page-box">
+		<div class="title">Three Column</div>
+		<div class="page light">
+			<div class="content">
+				<div class="header">
+					<h1>Three column</h1>
+				</div>
+				<div class="body three-column">
+
+					<p>
+						Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
+					</p>
+					<p>
+						NOTE: at this point, even and odd pages are aligned slightly to the right or left respectively, book-style.
+					</p>
+
+				</div>
+				<div class="footer">
+					<div class="page-number-text">[PAGE NUMBER]</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="page-box">
+		<div class="title">Caption</div>
+		<div class="page caption-bottom-arrow dark">
+			<div class="content">
+				<h2>Caption Text</h2>
+				<p>
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
+				</p>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="page-box">
+		<div class="title">Caption</div>
+		<div class="page caption-bottom-arrow light">
+			<div class="content">
+				<h2>Caption Text</h2>
+				<p>
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
+				</p>
+			</div>
+		</div>
+	</div>
+
+
+
+
+</div>
+
+
+</body>
+</html>
