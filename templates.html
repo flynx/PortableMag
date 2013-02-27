@@ -185,11 +185,16 @@ $(function(){
 				.clone()
 					.appendTo($('.container .preview'))
 					.click(function(){
-						alert(this.outerHTML)
+						$('.container').trigger('templateSelected', this)
 						return false
 					})
 			$('.container .preview')
 				.css('display', 'block')
+		})
+
+	$('.container')
+		.on('templateSelected', function(evt, elem){
+			alert(elem.outerHTML)
 		})
 
 })
