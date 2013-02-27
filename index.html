@@ -94,8 +94,14 @@ $(document).ready(function(){
 
 				36: firstPage, 											//	Home
 				35: lastPage, 											//	End
-				37: prevPage,											//	Left
-				39: nextPage,											//	Right
+				37: {
+					'default': prevPage,								//	Left
+					'ctrl': prevArticle,								//	ctrl-Left
+				},
+				39: {
+					'default': nextPage,								//	Right
+					'ctrl': nextArticle,								//	ctrl-Right
+				},
 				32:	{
 					'default': nextPage,								//	Space
 					'shift': prevPage									//	shift-Space
