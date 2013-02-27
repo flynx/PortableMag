@@ -8,6 +8,7 @@
 <style>
 
 .container {
+	position: relative;
 	border: solid 1px silver;
 	width: 750px;
 	min-height: 300px;
@@ -15,6 +16,35 @@
 	background: white;
 	box-shadow: 5px 5px 200px 0px silver;
 	padding: 10px;
+}
+.container .preview {
+	position: absolute;
+	display: none;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	background: white;
+
+	overflow: hidden;
+}
+.container .preview .page {
+
+	margin: 10%;
+
+	-webkit-transform-origin: 0 0;
+	-moz-transform-origin: 0 0;
+	-o-transform-origin: 0 0;
+	-ms-transform-origin: 0 0;
+	transform-origin: 0 0;
+
+	-webkit-transform: scale(0.7);
+	-moz-transform: scale(0.7);
+	-o-transform: scale(0.7);
+	-ms-transform: scale(0.7);	
+	transform: scale(0.7);
+
+	box-shadow: 5px 5px 300px 0px gray;
 }
 
 .container .page-box {
@@ -33,7 +63,7 @@
 	cursor: hand;
 }
 
-.container .page {
+.page-box .page {
 	box-shadow: 5px 5px 200px 30px gray;
 
 	margin: 5%;
@@ -49,14 +79,14 @@
 	-o-transform: scale(0.25);
 	-ms-transform: scale(0.25);	
 	transform: scale(0.25);
+}
 
-	/*
+.container .page {
 	-webkit-transition: none;
 	-moz-transition: none;
 	-o-transition: all 0 ease;
 	-ms-transition: none;	
 	transition: none;
-	*/
 }
 
 .container .title {
@@ -64,7 +94,7 @@
 	color: white;
 	bottom: 10%;
 	right: 10%;
-	z-index: 1000;
+	/*z-index: 1000;*/
 	text-shadow: black 0.1em 0.1em 0.4em, black 0.1em 0.1em;
 }
 
@@ -115,7 +145,7 @@
 <script>
 
 function toggleTheme(){
-	var page = $(this).parents('.page-box').children('.page')
+	var page = $(this).parents('.page-box, .preview').children('.page')
 	if(page.hasClass('dark')){
 		page.add(this)
 			.removeClass('dark')
@@ -125,18 +155,43 @@ function toggleTheme(){
 			.removeClass('light')
 			.addClass('dark')
 	}
+	return false
 }
 
 function addThemeToggleZones(){
 	$('<div><div/></div>')
 		.addClass('theme-toggle')
 		.attr('title', 'Toggle dark/light theme')
-		.appendTo($('.page-box:not(.no-themes)'))
+		.appendTo($('.page-box:not(.no-themes), .preview'))
 		.click(toggleTheme)
 }
 
 $(function(){
+
 	addThemeToggleZones()
+
+	$('.preview')
+		.click(function(){
+			$(this)
+				.css('display', 'none')
+				.children('.page')
+					.remove()
+		})
+
+	$('.page-box')
+		.click(function(){
+			$(this)
+				.children('.page')
+				.clone()
+					.appendTo($('.container .preview'))
+					.click(function(){
+						alert(this.outerHTML)
+						return false
+					})
+			$('.container .preview')
+				.css('display', 'block')
+		})
+
 })
 
 
@@ -162,7 +217,6 @@ $(function(){
 
 
 	<div class="page-box">
-		<div class="title">Two Column</div>
 		<div class="page">
 			<div class="content">
 				<div class="header">
@@ -178,6 +232,8 @@ $(function(){
 				</div>
 			</div>
 		</div>
+		<!-- keep this last -->
+		<div class="title">Two Column</div>
 	</div>
 
 
@@ -198,11 +254,12 @@ $(function(){
 				</div>
 			</div>
 		</div>
+		<!-- keep this last -->
+		<div class="title">Three Column</div>
 	</div>
 
 
 	<div class="page-box">
-		<div class="title">Caption</div>
 		<div class="page caption-bottom-arrow">
 			<div class="content">
 				<h2>Caption Text</h2>
@@ -211,26 +268,32 @@ $(function(){
 				</p>
 			</div>
 		</div>
+		<!-- keep this last -->
+		<div class="title">Caption</div>
 	</div>
 
 
 	<div class="page-box">
-		<div class="title">Raw Page</div>
 		<div class="page">
 			<div class="content">
 			</div>
 		</div>
+		<!-- keep this last -->
+		<div class="title">Raw Page</div>
 	</div>
 
 
 	<div class="page-box no-themes">
+		<!-- keep this last -->
 		<div class="title">Blank Template</div>
 	</div>
 
 
+	<!-- keep this last -->
+	<div class="preview">
+	</div>
 
 </div>
-
 
 </body>
 </html>
