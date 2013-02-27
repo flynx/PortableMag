@@ -632,6 +632,9 @@ div.page-number-text {
 	/* XXX get rid of paddings... */
 	padding-right: 7%;
 	padding-left: 10%;
+
+	/*  */
+	width: 200px;
 }
 .page.caption-top-arrow:before,
 .page.caption-bottom-arrow:before {

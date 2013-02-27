@@ -25,6 +25,9 @@
 .cover {
 }
 
+.page.caption-top-arrow .content,
+.page.caption-bottom-arrow .content {
+}
 
 
 /**************************************************** UI elements ****/

@@ -4,10 +4,12 @@
 *
 **********************************************************************/
 
-var PAGES_IN_RIBBON = 4
 var SNAP_TO_PAGES_IN_RIBBON = false
+
 var DEFAULT_TRANSITION_DURATION = 200
+
 var INNERTIA_SCALE = 0.25
+
 
 
 /********************************************************** layout ***/

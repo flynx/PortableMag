@@ -185,6 +185,9 @@ function getPageAlign(page){
 	return (page.hasClass('page-align-center') ? 'center' 
 			: page.hasClass('page-align-left') ? 'left' 
 			: page.hasClass('page-align-right') ? 'right' 
+			// page captions...
+			: page.hasClass('caption-top-arrow') ? 'right' 
+			: page.hasClass('caption-bottom-arrow') ? 'right' 
 			// then the group...
 			: group.hasClass('page-align-center') ? 'center' 
 			: group.hasClass('page-align-left') ? 'left' 
