@@ -10,13 +10,32 @@
 .container {
 	border: solid 1px silver;
 	width: 750px;
-	max-height: 600px;
 	min-height: 300px;
 	margin: 25px;
-	overflow: auto;
 	background: white;
 	box-shadow: 5px 5px 200px 0px silver;
 	padding: 10px;
+
+	/*
+	overflow: auto;
+	max-height: 600px;
+	*/
+}
+
+.container .page-box {
+	position: relative;
+	text-align: center;
+	display: inline-block;
+	width: 225px;
+	height: 175px;
+	margin: 10px;
+	border: solid 1px silver;
+	overflow: hidden;
+	background: white;
+
+	box-shadow: 5px 5px 200px 30px gray inset;
+
+	cursor: hand;
 }
 
 .container .page {
@@ -38,20 +57,6 @@
 	transform: scale(0.25);
 }
 
-.container .page-box {
-	position: relative;
-	text-align: center;
-	display: inline-block;
-	width: 225px;
-	height: 175px;
-	margin: 10px;
-	border: solid 1px silver;
-	overflow: hidden;
-	background: white;
-
-	box-shadow: 5px 5px 200px 30px gray inset;
-}
-
 .container .title {
 	position: absolute;
 	color: white;
@@ -69,6 +74,18 @@
 
 
 <div class="container">
+
+	<div class="page-box">
+		<div class="title">Article</div>
+	</div>
+
+	<div class="page-box">
+		<div class="title">Page Group</div>
+	</div>
+
+	<div class="page-box">
+		<div class="title">Cover Page</div>
+	</div>
 
 
 
