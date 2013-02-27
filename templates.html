@@ -54,6 +54,14 @@
 	-o-transform: scale(0.25);
 	-ms-transform: scale(0.25);	
 	transform: scale(0.25);
+
+	/*
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: all 0 ease;
+	-ms-transition: none;	
+	transition: none;
+	*/
 }
 
 .container .title {
@@ -65,14 +73,82 @@
 	text-shadow: black 0.1em 0.1em 0.4em, black 0.1em 0.1em;
 }
 
+.container .light.theme-toggle,
+.container .theme-toggle {
+	position: absolute;
+	background: white;
+	width: 20px;
+	height: 20px;
+	top: 10px;
+	right: 10px;
+	overflow: hidden;
+	border: solid white 2px;
+
+	box-shadow: 3px 3px 20px 0px gray;
+}
+.container .light.theme-toggle div,
+.container .theme-toggle div {
+	position: absolute;
+	background: black;
+	width: 40px;
+	height: 40px;
+	top: 8px;
+	left: 0px;
+
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+.container .dark.theme-toggle {
+	border: solid black 2px;
+	background: black;
+}
+.container .dark.theme-toggle div {
+	background: white;
+}
+
 
 </style>
+
+<script src="ext-lib/jquery.js"></script>
+<script src="lib/jli.js"></script>
+<script>
+
+function toggleTheme(){
+	var page = $(this).parents('.page-box').children('.page')
+	if(page.hasClass('dark')){
+		page.add(this)
+			.removeClass('dark')
+			.addClass('light')
+	} else {
+		page.add(this)
+			.removeClass('light')
+			.addClass('dark')
+	}
+}
+
+function addThemeToggleZones(){
+	$('<div><div/></div>')
+		.addClass('theme-toggle')
+		.attr('title', 'Toggle dark/light theme')
+		.appendTo($('.page-box'))
+		.click(toggleTheme)
+}
+
+$(function(){
+	addThemeToggleZones()
+})
+
+
+</script>
 
 </head>
 <body>
 
 
-<div class="container">
+<div class="container light">
 
 	<div class="page-box">
 		<div class="title">Article</div>
@@ -89,7 +165,7 @@
 
 	<div class="page-box">
 		<div class="title">Two Column</div>
-		<div class="page dark">
+		<div class="page">
 			<div class="content">
 				<div class="header">
 					<h1>Two column</h1>
@@ -106,34 +182,10 @@
 		</div>
 	</div>
 
-	<div class="page-box">
-		<div class="title">Three Column</div>
-		<div class="page light">
-			<div class="content">
-				<div class="header">
-					<h1>Three column</h1>
-				</div>
-				<div class="body three-column">
-
-					<p>
-						Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
-					</p>
-					<p>
-						NOTE: at this point, even and odd pages are aligned slightly to the right or left respectively, book-style.
-					</p>
-
-				</div>
-				<div class="footer">
-					<div class="page-number-text">[PAGE NUMBER]</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
 
 	<div class="page-box">
 		<div class="title">Caption</div>
-		<div class="page caption-bottom-arrow dark">
+		<div class="page caption-bottom-arrow">
 			<div class="content">
 				<h2>Caption Text</h2>
 				<p>
@@ -145,32 +197,13 @@
 
 
 	<div class="page-box">
-		<div class="title">Caption</div>
-		<div class="page caption-bottom-arrow light">
-			<div class="content">
-				<h2>Caption Text</h2>
-				<p>
-				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
-				</p>
-			</div>
-		</div>
-	</div>
-
-	<div class="page-box">
 		<div class="title">Raw Page</div>
-		<div class="page dark">
+		<div class="page">
 			<div class="content">
 			</div>
 		</div>
 	</div>
 
-	<div class="page-box">
-		<div class="title">Raw Page</div>
-		<div class="page light">
-			<div class="content">
-			</div>
-		</div>
-	</div>
 
 	<div class="page-box">
 		<div class="title">Blank Template</div>
@@ -183,3 +216,4 @@
 
 </body>
 </html>
+<!-- vim:set sw=4 ts=4 nowrap : -->

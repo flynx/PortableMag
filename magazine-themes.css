@@ -186,16 +186,21 @@
 	background: red;
 }
 
+.light .page,
 .light.page {
 	background: white;
 	color: black;
 }
 
 
+.light .page.caption-top-arrow:before,
+.light .page.caption-bottom-arrow:before,
 .light.page.caption-top-arrow:before,
 .light.page.caption-bottom-arrow:before {
 	background: white;
 }
+.light .page.caption-top-arrow .content,
+.light .page.caption-bottom-arrow .content,
 .light.page.caption-top-arrow .content,
 .light.page.caption-bottom-arrow .content {
 	color: black;
@@ -278,15 +283,20 @@
 	background: red;
 }
 
+.dark .page,
 .dark.page {
 	background: black;
 	color: white;
 }
 
+.dark .page.caption-top-arrow:before,
+.dark .page.caption-bottom-arrow:before,
 .dark.page.caption-top-arrow:before,
 .dark.page.caption-bottom-arrow:before {
 	background: black;
 }
+.dark .page.caption-top-arrow .content,
+.dark .page.caption-bottom-arrow .content,
 .dark.page.caption-top-arrow .content,
 .dark.page.caption-bottom-arrow .content {
 	color: white;
