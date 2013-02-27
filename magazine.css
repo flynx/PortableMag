@@ -57,7 +57,10 @@ body {
 	width: 800px;
 	height: 600px;
 
-
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-o-transition: all 0.2s ease;
@@ -548,6 +551,7 @@ div.page-number-text {
 	width: 80%;
 	left: 13%
 }
+/* print-like content align */
 .page:nth-child(even) .content .header,
 .page:nth-child(even) .content .body,
 .page:nth-child(even) .content .footer {
@@ -616,7 +620,7 @@ div.page-number-text {
 }
 
 
-
+/* caption pages... */
 .page.caption-top-arrow,
 .page.caption-bottom-arrow {
 	overflow: visible;
@@ -624,6 +628,10 @@ div.page-number-text {
 .page.caption-top-arrow .content,
 .page.caption-bottom-arrow .content {
 	background: white;
+	text-align: justify;
+	/* XXX get rid of paddings... */
+	padding-right: 7%;
+	padding-left: 10%;
 }
 .page.caption-top-arrow:before,
 .page.caption-bottom-arrow:before {

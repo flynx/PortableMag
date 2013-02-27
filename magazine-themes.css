@@ -192,6 +192,17 @@
 }
 
 
+.light.page.caption-top-arrow:before,
+.light.page.caption-bottom-arrow:before {
+	background: white;
+}
+.light.page.caption-top-arrow .content,
+.light.page.caption-bottom-arrow .content {
+	color: black;
+	background: white;
+}
+
+
 
 /**************************************************** dark theme ****/
 
@@ -272,6 +283,18 @@
 	color: white;
 }
 
+.dark.page.caption-top-arrow:before,
+.dark.page.caption-bottom-arrow:before {
+	background: black;
+}
+.dark.page.caption-top-arrow .content,
+.dark.page.caption-bottom-arrow .content {
+	color: white;
+	background: black;
+}
+
+
+
 
 
 /*********************************************************************/
@@ -304,8 +327,6 @@
 .page-number-text {
 	color: gray;
 }
-
-
 
 /*********************************************************************/
 
