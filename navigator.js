@@ -179,7 +179,7 @@ function updatePageNumberIndicator(evt, n){
 	if(n == null){
 		n = getPageNumber()
 	}
-	$('.page-number').text((n+1)+'/'+$('.page').length)
+	$('.page-number').text((n)+'/'+($('.page').length-1))
 }
 
 
