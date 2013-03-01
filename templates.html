@@ -100,6 +100,7 @@ body {
 	text-shadow: black 0.1em 0.1em 0.4em, black 0.1em 0.1em;
 }
 
+.container .column-toggle,
 .container .light.theme-toggle,
 .container .theme-toggle {
 	position: absolute;
@@ -139,6 +140,17 @@ body {
 	background: white;
 }
 
+.container .column-toggle div {
+	width: 8px;
+	height: 18px;
+	margin: 1px;
+	background: gray;
+	float: left;
+}
+.container .column-toggle {
+	right: 40px;
+}
+
 
 </style>
 
@@ -160,6 +172,21 @@ function toggleTheme(){
 	return false
 }
 
+var togglePageColumns = createCSSClassToggler('', [
+	'one-column',
+	'two-column',
+	'three-column',
+	'four-column',
+])
+
+function toggleColumns(){
+	var page = $(this)
+				.parents('.page-box, .preview')
+				.find('.one-column, .two-column, .three-column, .four-column')
+	togglePageColumns(page, 'next')
+	return false
+}
+
 function addThemeToggleZones(){
 	$('<div><div/></div>')
 		.addClass('theme-toggle')
@@ -168,9 +195,18 @@ function addThemeToggleZones(){
 		.click(toggleTheme)
 }
 
+function addColumnToggleZones(){
+	$('<div><div/><div/></div>')
+		.addClass('column-toggle')
+		.attr('title', 'Toggle columns theme')
+		.appendTo($('.one-column, .two-column, .three-column, .four-column').parents('.page-box').add($('.preview')))
+		.click(toggleColumns)
+}
+
 $(function(){
 
 	addThemeToggleZones()
+	addColumnToggleZones()
 
 	$('.preview')
 		.click(function(){
@@ -222,34 +258,12 @@ $(function(){
 		<div class="title">Page Group</div>
 	</div>
 
-
-	<div class="page-box">
-		<div class="page">
-			<div class="content">
-				<div class="header">
-					<h1>Two column</h1>
-				</div>
-				<div class="body two-column">
-
-					Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
-
-				</div>
-				<div class="footer">
-					<div class="page-number-text">[PAGE NUMBER]</div>
-				</div>
-			</div>
-		</div>
-		<!-- keep this last -->
-		<div class="title">Two Column</div>
-	</div>
-
-
 	<div class="page-box">
 		<div class="title">Two Column</div>
 		<div class="page">
 			<div class="content">
 				<div class="header">
-					<h1>Three column</h1>
+					<h1>Page with columns</h1>
 				</div>
 				<div class="body three-column">
 
@@ -262,7 +276,7 @@ $(function(){
 			</div>
 		</div>
 		<!-- keep this last -->
-		<div class="title">Three Column</div>
+		<div class="title">Columns</div>
 	</div>
 
 
