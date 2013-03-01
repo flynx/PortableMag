@@ -100,6 +100,7 @@ body {
 	text-shadow: black 0.1em 0.1em 0.4em, black 0.1em 0.1em;
 }
 
+.container .preview-toggle,
 .container .column-toggle,
 .container .light.theme-toggle,
 .container .theme-toggle {
@@ -108,7 +109,7 @@ body {
 	width: 20px;
 	height: 20px;
 	top: 5px;
-	right: 5px;
+	right: 40px;
 	overflow: hidden;
 	border: solid white 2px;
 
@@ -148,8 +149,17 @@ body {
 	float: left;
 }
 .container .column-toggle {
-	right: 40px;
+	right: 75px;
 }
+
+.container .preview-toggle div {
+	height: 16px;
+	border: solid black 2px;
+}
+.container .preview-toggle {
+	right: 5px;
+}
+
 
 
 </style>
@@ -195,6 +205,33 @@ function addThemeToggleZones(){
 		.click(toggleTheme)
 }
 
+function addPreviewToggleZones(){
+	$('<div><div/></div>')
+		.addClass('preview-toggle')
+		.attr('title', 'Toggle preview')
+		.appendTo($('.page-box, .preview'))
+		.click(function(){
+			if($('.container .preview').css('display') == 'block'){
+				$('.container .preview')
+					.css('display', 'none')
+					.children('.page')
+						.remove()
+			}
+			$(this)
+				.parents('.page-box')
+				.children('.page')
+				.clone()
+					.appendTo($('.container .preview'))
+					.click(function(){
+						$('.container').trigger('templateSelected', this)
+						return false
+					})
+			$('.container .preview')
+				.css('display', 'block')
+			return false
+		})
+}
+
 function addColumnToggleZones(){
 	$('<div><div/><div/></div>')
 		.addClass('column-toggle')
@@ -207,6 +244,7 @@ $(function(){
 
 	addThemeToggleZones()
 	addColumnToggleZones()
+	addPreviewToggleZones()
 
 	$('.preview')
 		.click(function(){
@@ -218,6 +256,12 @@ $(function(){
 
 	$('.page-box')
 		.click(function(){
+			var page = $(this)
+			if(!page.hasClass('page')){
+				page = page.children('.page')
+			}
+			$('.container').trigger('templateSelected', page[0])
+			/*
 			$(this)
 				.children('.page')
 				.clone()
@@ -228,6 +272,7 @@ $(function(){
 					})
 			$('.container .preview')
 				.css('display', 'block')
+			*/
 		})
 
 	$('.container')
