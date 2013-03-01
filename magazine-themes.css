@@ -186,21 +186,27 @@
 	background: red;
 }
 
-.light .page,
+/* XXX we do not want this to be inherited from the viewer */
+.magazine .light .page,
+.magazine.light .page,
 .light.page {
 	background: white;
 	color: black;
 }
 
 
-.light .page.caption-top-arrow:before,
-.light .page.caption-bottom-arrow:before,
+.magazine .light .page.caption-top-arrow:before,
+.magazine .light .page.caption-bottom-arrow:before,
+.magazine.light .page.caption-top-arrow:before,
+.magazine.light .page.caption-bottom-arrow:before,
 .light.page.caption-top-arrow:before,
 .light.page.caption-bottom-arrow:before {
 	background: white;
 }
-.light .page.caption-top-arrow .content,
-.light .page.caption-bottom-arrow .content,
+.magazine .light .page.caption-top-arrow .content,
+.magazine .light .page.caption-bottom-arrow .content,
+.magazine.light .page.caption-top-arrow .content,
+.magazine.light .page.caption-bottom-arrow .content,
 .light.page.caption-top-arrow .content,
 .light.page.caption-bottom-arrow .content {
 	color: black;
@@ -244,7 +250,7 @@
 	font-size: 14px;
 	color: gray;
 	background: black;
-	box-shadow: none; 
+	box-shadow: none;
 }
 
 .dark .top-toolbar a,
@@ -283,20 +289,25 @@
 	background: red;
 }
 
-.dark .page,
+.magazine .dark .page,
+.magazine.dark .page,
 .dark.page {
 	background: black;
 	color: white;
 }
 
-.dark .page.caption-top-arrow:before,
-.dark .page.caption-bottom-arrow:before,
+.magazine .dark .page.caption-top-arrow:before,
+.magazine .dark .page.caption-bottom-arrow:before,
+.magazine.dark .page.caption-top-arrow:before,
+.magazine.dark .page.caption-bottom-arrow:before,
 .dark.page.caption-top-arrow:before,
 .dark.page.caption-bottom-arrow:before {
 	background: black;
 }
-.dark .page.caption-top-arrow .content,
-.dark .page.caption-bottom-arrow .content,
+.magazine .dark .page.caption-top-arrow .content,
+.magazine .dark .page.caption-bottom-arrow .content,
+.magazine.dark .page.caption-top-arrow .content,
+.magazine.dark .page.caption-bottom-arrow .content,
 .dark.page.caption-top-arrow .content,
 .dark.page.caption-bottom-arrow .content {
 	color: white;

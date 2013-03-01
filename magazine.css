@@ -41,7 +41,7 @@ body {
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-o-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;	
+	-ms-transition: all 0.2s ease;
 	transition: all 0.2s ease;
 }
 
@@ -64,7 +64,7 @@ body {
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-o-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;	
+	-ms-transition: all 0.2s ease;
 	transition: all 0.2s ease;
 }
 
@@ -101,7 +101,7 @@ body {
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-o-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;	
+	-ms-transition: all 0.2s ease;
 	transition: all 0.2s ease;
 	*/
 }
@@ -148,7 +148,7 @@ body {
 	-webkit-transition: all 0.6s ease;
 	-moz-transition: all 0.6s ease;
 	-o-transition: all 0.6s ease;
-	-ms-transition: all 0.6s ease;	
+	-ms-transition: all 0.6s ease;
 	transition: all 0.6s ease;
 }
 
@@ -161,13 +161,13 @@ body {
 	-webkit-transform: scale(1);
 	-moz-transform: scale(1);
 	-o-transform: scale(1);
-	-ms-transform: scale(1);	
+	-ms-transform: scale(1);
 	transform: scale(1);
 
 	-webkit-transition: all 0.1s ease;
 	-moz-transition: all 0.1s ease;
 	-o-transition: all 0.1s ease;
-	-ms-transition: all 0.1s ease;	
+	-ms-transition: all 0.1s ease;
 	transition: all 0.1s ease;
 }
 /* element used to center and align the magazine... */
@@ -200,7 +200,7 @@ body {
 	-webkit-transition: all 0.1s ease;
 	-moz-transition: all 0.1s ease;
 	-o-transition: all 0.1s ease;
-	-ms-transition: all 0.1s ease;	
+	-ms-transition: all 0.1s ease;
 	transition: all 0.1s ease;
 }
 /* XXX does not appear to work... (likely because :before/:after mess things up) */
@@ -211,7 +211,7 @@ body {
 	-webkit-transition: none;
 	-moz-transition: none;
 	-o-transition: none;
-	-ms-transition: none;	
+	-ms-transition: none;
 	transition: none;
 }
 .dragging * {
@@ -401,7 +401,7 @@ body {
 	-webkit-transition: all 0.1s ease;
 	-moz-transition: all 0.1s ease;
 	-o-transition: all 0.1s ease;
-	-ms-transition: all 0.1s ease;	
+	-ms-transition: all 0.1s ease;
 	transition: all 0.1s ease;
 }
 
@@ -448,7 +448,7 @@ body {
 	-webkit-transition: all 0.1s ease;
 	-moz-transition: all 0.1s ease;
 	-o-transition: all 0.1s ease;
-	-ms-transition: all 0.1s ease;	
+	-ms-transition: all 0.1s ease;
 	transition: all 0.1s ease;
 }
 
@@ -456,7 +456,7 @@ body {
 	-webkit-transition: none;
 	-moz-transition: none;
 	-o-transition: all 0 ease;
-	-ms-transition: none;	
+	-ms-transition: none;
 	transition: none;
 }
 .navigator .bar .bookmark {
@@ -519,8 +519,8 @@ body {
 /******************************************************* templates ***/
 
 div.page-number-text {
-	position: absolute; 
-	bottom: 10px; 
+	position: absolute;
+	bottom: 10px;
 	right: 10px;
 	text-align: right;
 
@@ -544,7 +544,7 @@ div.page-number-text {
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-o-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;	
+	-ms-transition: all 0.2s ease;
 	transition: all 0.2s ease;
 }
 .caption.hidden {
@@ -564,7 +564,7 @@ div.page-number-text {
 .page .content .footer {
 	position: relative;
 	width: 80%;
-	left: 13%
+	left: 13%;
 }
 /* print-like content align */
 .page:nth-child(even) .content .header,
@@ -601,8 +601,8 @@ div.page-number-text {
 }
 
 .page .content .footer .page-number-text {
-	position: absolute; 
-	bottom: auto; 
+	position: absolute;
+	bottom: auto;
 	right: 0px;
 	text-align: right;
 }
@@ -719,7 +719,7 @@ body {
 	-webkit-transition: none;
 	-moz-transition: none;
 	-o-transition: all 0 ease;
-	-ms-transition: none;	
+	-ms-transition: none;
 	transition: none;
 }
 
