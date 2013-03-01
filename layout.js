@@ -15,10 +15,10 @@ var INNERTIA_SCALE = 0.25
 /********************************************************** layout ***/
 
 var toggleThemes = createCSSClassToggler('.chrome', [
-	'light',
+	'light-viewer',
 	// this is the default (no class set)...
 	'none',
-	'dark'
+	'dark-viewer'
 ])
 
 

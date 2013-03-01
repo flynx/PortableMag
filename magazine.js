@@ -91,10 +91,10 @@ var toggleInlineEditorMode = createCSSClassToggler('.viewer', 'inline-editor-mod
 
 // toggle between viewer themes...
 var toggleThemes = createCSSClassToggler('.viewer', [
-	'light',
+	'light-viewer',
 	// this is the default (no class set)...
 	'none',
-	'dark'
+	'dark-viewer'
 ])
 
 // toggle box-shadows, this is here mostly for performance reasons...

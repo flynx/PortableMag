@@ -3,7 +3,7 @@
 *
 **********************************************************************/
 
-/*************************************** main structural elements ****/
+/********************************************************* Viewer ****/
 
 .splash {
 	background: gray;
@@ -21,9 +21,9 @@
 }
 
 .magazine {
-	background: transparent;
 	box-shadow: 10px 10px 50px 10px #555;
 }
+
 
 .magazine:before,
 .magazine:after {
@@ -112,213 +112,159 @@
 
 
 
-/**************************************************** light theme ****/
+/**************************************************** light-viewer ***/
 
-.light {
+.light-viewer {
 }
 
-.light .splash {
+.light-viewer .splash {
 	background: white;
 }
-.light .splash * {
+.light-viewer .splash * {
 	color: gray;
 }
-.light .splash #spinner {
+.light-viewer .splash #spinner {
 	color: gray;
 }
 
 
-.light.viewer,
-.light .viewer {
+.light-viewer.viewer,
+.light-viewer .viewer {
 	background: white;
 }
 
-.light .magazine:before,
-.light .magazine:after {
+.light-viewer .magazine:before,
+.light-viewer .magazine:after {
 	color: #eee;
 }
-.light .magazine {
+.light-viewer .magazine {
 	box-shadow: 10px 10px 50px 10px #ddd;
 }
 
-.light .top-toolbar,
-.light .bottom-toolbar {
+.light-viewer .top-toolbar,
+.light-viewer .bottom-toolbar {
 	font-size: 14px;
 	color: silver;
 	background: white;
 	box-shadow: 5px 5px 50px 20px #eee;
 }
-.light .top-toolbar a,
-.light .bottom-toolbar a {
+.light-viewer .top-toolbar a,
+.light-viewer .bottom-toolbar a {
 	color: silver;
 	text-decoration: none;
 }
 
-.light .bottom-toolbar .page-number {
+.light-viewer .bottom-toolbar .page-number {
 	color: silver;
 }
 
-.light .button svg * {
+.light-viewer .button svg * {
 	stroke: gray;
 }
-.light .button.info svg * {
+.light-viewer .button.info svg * {
 	stroke: silver;
 	fill: silver;
 }
 
-.light .navigator {
+.light-viewer .navigator {
 	opacity: 0.9;
 }
 
-.light .navigator .bar {
+.light-viewer .navigator .bar {
 	background: silver;
 }
 
-.light .navigator .bar .indicator {
+.light-viewer .navigator .bar .indicator {
 	background: orange;
 }
 
-.light .navigator .bar .article {
+.light-viewer .navigator .bar .article {
 	background: silver;
 }
 
-.light .navigator .bar .bookmark {
+.light-viewer .navigator .bar .bookmark {
 	background: red;
 }
 
-/* XXX we do not want this to be inherited from the viewer */
-.magazine .light .page,
-.magazine.light .page,
-.light.page {
-	background: white;
-	color: black;
+
+
+/***************************************************** dark viewer ***/
+
+.dark-viewer {
 }
 
-
-.magazine .light .page.caption-top-arrow:before,
-.magazine .light .page.caption-bottom-arrow:before,
-.magazine.light .page.caption-top-arrow:before,
-.magazine.light .page.caption-bottom-arrow:before,
-.light.page.caption-top-arrow:before,
-.light.page.caption-bottom-arrow:before {
-	background: white;
-}
-.magazine .light .page.caption-top-arrow .content,
-.magazine .light .page.caption-bottom-arrow .content,
-.magazine.light .page.caption-top-arrow .content,
-.magazine.light .page.caption-bottom-arrow .content,
-.light.page.caption-top-arrow .content,
-.light.page.caption-bottom-arrow .content {
-	color: black;
-	background: white;
-}
-
-
-
-/**************************************************** dark theme ****/
-
-.dark {
-}
-
-.dark .splash {
+.dark-viewer .splash {
 	background: black;
 }
-.dark .splash * {
+.dark-viewer .splash * {
 	color: silver;
 }
-.dark .splash #spinner {
+.dark-viewer .splash #spinner {
 	color: white;
 }
 
 
-.dark.viewer,
-.dark .viewer {
+.dark-viewer.viewer,
+.dark-viewer .viewer {
 	background: #111;
 }
 
-.dark .magazine {
+.dark-viewer .magazine {
 	box-shadow: 10px 10px 50px 10px #000;
 }
 
-.dark .magazine:before,
-.dark .magazine:after {
+.dark-viewer .magazine:before,
+.dark-viewer .magazine:after {
 	color: #222;
 }
 
-.dark .top-toolbar,
-.dark .bottom-toolbar {
+.dark-viewer .top-toolbar,
+.dark-viewer .bottom-toolbar {
 	font-size: 14px;
 	color: gray;
 	background: black;
 	box-shadow: none;
 }
 
-.dark .top-toolbar a,
-.dark .bottom-toolbar a {
+.dark-viewer .top-toolbar a,
+.dark-viewer .bottom-toolbar a {
 	color: gray;
 	text-decoration: none;
 }
 
-.dark .bottom-toolbar .page-number {
+.dark-viewer .bottom-toolbar .page-number {
 	color: #555;
 }
 
-.dark .button svg * {
+.dark-viewer .button svg * {
 	stroke: gray;
 }
-.dark .button.info svg * {
+.dark-viewer .button.info svg * {
 	fill: gray;
 }
 
-.dark .navigator {
+.dark-viewer .navigator {
 }
 
-.dark .navigator .bar {
+.dark-viewer .navigator .bar {
 	background: silver;
 }
 
-.dark .navigator .bar .indicator {
+.dark-viewer .navigator .bar .indicator {
 	background: yellow;
 }
 
-.dark .navigator .bar .article {
+.dark-viewer .navigator .bar .article {
 	background: white;
 }
 
-.dark .navigator .bar .bookmark {
+.dark-viewer .navigator .bar .bookmark {
 	background: red;
 }
 
-.magazine .dark .page,
-.magazine.dark .page,
-.dark.page {
-	background: black;
-	color: white;
-}
-
-.magazine .dark .page.caption-top-arrow:before,
-.magazine .dark .page.caption-bottom-arrow:before,
-.magazine.dark .page.caption-top-arrow:before,
-.magazine.dark .page.caption-bottom-arrow:before,
-.dark.page.caption-top-arrow:before,
-.dark.page.caption-bottom-arrow:before {
-	background: black;
-}
-.magazine .dark .page.caption-top-arrow .content,
-.magazine .dark .page.caption-bottom-arrow .content,
-.magazine.dark .page.caption-top-arrow .content,
-.magazine.dark .page.caption-bottom-arrow .content,
-.dark.page.caption-top-arrow .content,
-.dark.page.caption-bottom-arrow .content {
-	color: white;
-	background: black;
-}
 
 
-
-
-
-/*********************************************************************/
+/******************************************************* Magazine ****/
 
 .magazine {
 	background: transparent;
@@ -348,6 +294,59 @@
 .page-number-text {
 	color: gray;
 }
+
+
+/*********************************************************** light ***/
+
+.light .page,
+.light.page {
+	background: white;
+	color: black;
+}
+
+.light .page.caption-top-arrow:before,
+.light .page.caption-bottom-arrow:before,
+.light.page.caption-top-arrow:before,
+.light.page.caption-bottom-arrow:before {
+	background: white;
+}
+.light .page.caption-top-arrow .content,
+.light .page.caption-bottom-arrow .content,
+.light.page.caption-top-arrow .content,
+.light.page.caption-bottom-arrow .content {
+	color: black;
+	background: white;
+}
+
+
+
+/*********************************************************** dark ***/
+
+.dark .page,
+.dark.page {
+	background: black;
+	color: white;
+}
+
+.dark .page.caption-top-arrow:before,
+.dark .page.caption-bottom-arrow:before,
+.dark.page.caption-top-arrow:before,
+.dark.page.caption-bottom-arrow:before {
+	background: black;
+}
+.dark .page.caption-top-arrow .content,
+.dark .page.caption-bottom-arrow .content,
+.dark.page.caption-top-arrow .content,
+.dark.page.caption-bottom-arrow .content {
+	color: white;
+	background: black;
+}
+
+
+
+
+
+/*********************************************************************/
 
 /*********************************************************************/
 
