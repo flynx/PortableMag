@@ -66,13 +66,11 @@
 	box-sizing:border-box;
 	opacity: 0.8;
 
-
 	-webkit-transition: all 0.3s ease;
 	-moz-transition: all 0.3s ease;
 	-o-transition: all 0.3s ease;
 	-ms-transition: all 0.3s ease;
 	transition: all 0.3s ease;
-
 }
 .editor .current-page-indicator {
 	display: block;
@@ -95,6 +93,9 @@
 
 	box-shadow: 2px 2px 7px 0px black;
 }
+.editor .current-page-indicator .button:hover {
+	box-shadow: 2px 2px 9px 1px black;
+}
 .editor.page-fit-to-viewer .current-page-indicator .button {
 	width: 50px;
 	height: 50px;
@@ -106,11 +107,15 @@
 
 .editor .current-page-indicator .button.remove {
 	position: absolute;
+	background: red;
+	color: white;
+	font-size: 72px;
 	margin: -50px;
 	top: 0px;
 	right: 0px;
 }
 .editor.page-fit-to-viewer .current-page-indicator .button.remove {
+	font-size: 36px;
 	margin: -25px;
 	margin: 15px;
 }
@@ -207,7 +212,7 @@ function setupEditor(){
 
 
 
-	$('<button class="button remove">X</button>')
+	$('<button class="button remove">&times;</button>')
 		.appendTo(indicator)
 		.click(function(){
 			setTransitionDuration($('.magazine'), 0)
