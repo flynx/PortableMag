@@ -371,10 +371,12 @@ body {
 }
 
 
+/*
 .inline-editor-mode .left-toolbar,
 .left-toolbar {
 	display: none;
 }
+*/
 .settings.page {
 	display: none;
 }
@@ -382,6 +384,7 @@ body {
 	display: inline-block;
 }
 
+/*
 .editor-mode .left-toolbar {
 	position: absolute;
 	display: block;
@@ -409,7 +412,7 @@ body {
 	display: block;
 	cursor: hand;
 }
-
+*/
 
 
 /* navigator... */

@@ -172,7 +172,7 @@ function movePageTo(page, position){
 	} else {
 			page.insertAfter(target)
 	}
-	setCurrentPage()
+	setCurrentPage(page)
 	$('.viewer').trigger('pageMoved', page)
 	return page
 }
