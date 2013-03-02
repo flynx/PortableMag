@@ -67,11 +67,11 @@
 	opacity: 0.8;
 
 
-	-webkit-transition: all 0.2s ease;
-	-moz-transition: all 0.2s ease;
-	-o-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;
-	transition: all 0.2s ease;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	transition: all 0.3s ease;
 
 }
 .editor .current-page-indicator {
@@ -292,7 +292,27 @@ $(document).ready(function(){
 
 				// XXX this should not be in the production viewer...
 				E: function(){ toggleEditor() },
-			}
+			},
+			/*
+			'.editor': {
+				Left: {
+					default: prevPage,
+					ctrl: prevArticle,
+					shift: function(){
+						alert('<<<')
+						shiftPageLeft($('.current.page'))
+					},
+				},
+				Right: {
+					default: nextPage,
+					ctrl: nextArticle,
+					shift: function(){
+						alert('>>>')
+						shiftPageRight($('.current.page'))
+					},
+				},
+			},
+			*/
 		}, 
 		function(k){console.log(k)}))
 
