@@ -61,20 +61,16 @@
 
 
 .current-page-indicator {
+	display: none;
 	position: absolute;
 	box-sizing:border-box;
 	opacity: 0.8;
+}
+.editor .current-page-indicator {
+	display: block;
 
 	/*
 	border: solid blue 10px;
-	*/
-
-	/*
-	-webkit-transition: all 0.2s ease;
-	-moz-transition: all 0.2s ease;
-	-o-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;
-	transition: all 0.2s ease;
 	*/
 }
 
@@ -124,16 +120,7 @@ function clearEditor(){
 	$('.current-page-indicator').children().remove()
 }
 
-var toggleEditor = createCSSClassToggler(
-	'.chrome', 
-	'editor', 
-	function(action){
-		if(action == 'on'){
-			setupEditor()
-		} else {
-			clearEditor()
-		}
-	})
+var toggleEditor = createCSSClassToggler('.chrome', 'editor')
 
 
 $(document).ready(function(){
@@ -233,6 +220,9 @@ $(document).ready(function(){
 	setCurrentPage(0)
 
 	toggleThemes('dark-viewer')
+
+
+	setupEditor()
 
 
 	// hide the splash...
