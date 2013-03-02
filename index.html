@@ -204,7 +204,7 @@
 <script>
 
 function setupEditor(){
-	var indicator = $('.current-page-indicator')
+	var indicator = $('<div class="current-page-indicator"/>').appendTo($('.magazine'))
 
 	// the toolbars...
 	var left_bar = $('<div class="left-toolbar"/>').appendTo(indicator)
@@ -951,10 +951,6 @@ $(document).ready(function(){
 		</div>
 
 
-		<!-- current indicator - used for the editor -->
-		<div class="current-page-indicator">
-		</div>
-		<!-- current indicator (end)-->
 
 
 	</div>
