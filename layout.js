@@ -224,6 +224,17 @@ function handleScrollRelease(evt, data){
 
 /********************************************************* helpers ***/
 
+function getPageInMagazineOffset(page, scale){
+	if(page == null){
+		page = $('.current.page') 
+	} else if(typeof(page) == typeof(7)){
+		page = $($('.page')[page])
+	}
+
+	return page.position().left / (scale == null ? getMagazineScale() : scale) 
+}
+
+
 // XXX there is something here that depends on scale that is either not 
 // 		compensated, or is over compensated...
 function getMagazineOffset(page, scale, align){
@@ -258,6 +269,7 @@ function getMagazineOffset(page, scale, align){
 	// 		the viewer...
 	var w = mag.outerWidth(true)
 	// XXX this depends on scale...
+	//var pos = getPageInMagazineOffset(page, scale)
 	var pos = page.position().left//*scale
 
 	var l = 0

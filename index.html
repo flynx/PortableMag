@@ -59,6 +59,25 @@
 	display: block;
 }
 
+
+.current-page-indicator {
+	position: absolute;
+	box-sizing:border-box;
+	opacity: 0.8;
+
+	/*
+	border: solid blue 10px;
+	*/
+
+	/*
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+	*/
+}
+
 </style>
 
 <script src="ext-lib/jquery.js"></script>
@@ -74,10 +93,48 @@
 <script src="magazine.js"></script>
 <script src="layout.js"></script>
 <script src="navigator.js"></script>
+<script src="editor.js"></script>
 
 <script src="platform.js"></script>
 
 <script>
+
+function setupEditor(){
+	var indicator = $('.current-page-indicator')
+	// remove
+	$('<button>Remove</button>')
+		.appendTo(indicator)
+		.click(function(){
+			removePage()
+		})
+
+	$('<button>Shift Left</button>')
+		.appendTo(indicator)
+		.click(function(){
+			shiftPageLeft()
+		})
+	$('<button>Shift Right</button>')
+		.appendTo(indicator)
+		.click(function(){
+			shiftPageRight()
+		})
+
+}
+function clearEditor(){
+	$('.current-page-indicator').children().remove()
+}
+
+var toggleEditor = createCSSClassToggler(
+	'.chrome', 
+	'editor', 
+	function(action){
+		if(action == 'on'){
+			setupEditor()
+		} else {
+			clearEditor()
+		}
+	})
+
 
 $(document).ready(function(){
 	// general window behavior...
@@ -92,30 +149,29 @@ $(document).ready(function(){
 				title: 'Global',
 				doc: '',
 
-				36: firstPage, 											//	Home
-				35: lastPage, 											//	End
-				37: {
-					'default': prevPage,								//	Left
-					'ctrl': prevArticle,								//	ctrl-Left
+				Home: firstPage,
+				End: lastPage, 
+				Left: {
+					default: prevPage,
+					ctrl: prevArticle,
 				},
-				39: {
-					'default': nextPage,								//	Right
-					'ctrl': nextArticle,								//	ctrl-Right
+				Right: {
+					default: nextPage,
+					ctrl: nextArticle,
 				},
-				32:	{
-					'default': nextPage,								//	Space
-					'shift': prevPage									//	shift-Space
+				Space:	{
+					default: nextPage,
+					shift: prevPage	
 				},
 				// combined navigation with actions..
-				38: function(){togglePageView()},						//	Up
-				40: function(){togglePageView()},						//	Down
+				Up: function(){togglePageView()},
+				Down: function(){togglePageView()},
 
-				70: function(){											//	F
-					togglePageFitMode()
-				},
-				66: {
-					'default': toggleBookmark,							//	B
-					'ctrl': function(){toggleThemes()},					//	ctrl-B
+				F: function(){ togglePageFitMode() },
+				E: function(){ toggleEditor() },
+				B: {
+					default: toggleBookmark,
+					ctrl: function(){ toggleThemes() },
 				},
 			}
 		}, 
@@ -144,6 +200,24 @@ $(document).ready(function(){
 		.on('magazineDataLoaded', loadMagazineChrome)
 
 
+		// move the page indicator...
+		// NOTE: this is to be used for page-specific toolbars etc.
+		.on('pageChanged', function(){
+			var cur = $('.current.page')
+			var indicator = $('.current-page-indicator')
+			var shift = getElementShift($('.magazine'))
+			// XXX this is a stub...
+			// reverse the align...
+			indicator
+				.width(cur.width())
+				.height(cur.height())
+				.css({
+					left: getPageInMagazineOffset(cur),
+					top: 0,
+				})
+		})
+
+
 	$('.viewer').css('overflow', 'hidden')
 
 	//loadState()
@@ -159,7 +233,6 @@ $(document).ready(function(){
 	setCurrentPage(0)
 
 	toggleThemes('dark-viewer')
-
 
 
 	// hide the splash...
@@ -181,6 +254,7 @@ $(document).ready(function(){
 
 <!-- Magazine Chrome -->
 <div class="chrome">
+
 
 
 <!-- Splash screen -->
@@ -853,6 +927,13 @@ $(document).ready(function(){
 				</div>
 			</div>
 		</div>
+
+
+		<!-- current indicator - used for the editor -->
+		<div class="current-page-indicator"></div>
+		<!-- current indicator (end)-->
+
+
 	</div>
 
 </div>
