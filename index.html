@@ -245,6 +245,17 @@ function setupEditor(){
 		})
 
 
+	window.toggleEditor = createCSSClassToggler(
+		'.chrome', 
+		'editor', 
+		function(){
+			setTransitionDuration($('.magazine'), 0)
+		},
+		function(){
+			setCurrentPage($('.current.page'))
+		})
+
+
 	// move the page indicator...
 	// NOTE: this is to be used for page-specific toolbars etc.
 	$('.viewer')
@@ -263,19 +274,12 @@ function setupEditor(){
 				})
 		})
 }
+
+
 function clearEditor(){
 	$('.current-page-indicator').children().remove()
 }
 
-var toggleEditor = createCSSClassToggler(
-	'.chrome', 
-	'editor', 
-	function(){
-		setTransitionDuration($('.magazine'), 0)
-	},
-	function(){
-		setCurrentPage($('.current.page'))
-	})
 
 
 $(document).ready(function(){
