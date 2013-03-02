@@ -245,6 +245,23 @@ function setupEditor(){
 		})
 
 
+	// move the page indicator...
+	// NOTE: this is to be used for page-specific toolbars etc.
+	$('.viewer')
+		.on('pageChanged', function(){
+			var cur = $('.current.page')
+			var indicator = $('.current-page-indicator')
+			var shift = getElementShift($('.magazine'))
+			// XXX this is a stub...
+			// reverse the align...
+			indicator
+				.width(cur.width())
+				.height(cur.height())
+				.css({
+					left: getPageInMagazineOffset(cur),
+					top: 0,
+				})
+		})
 }
 function clearEditor(){
 	$('.current-page-indicator').children().remove()
@@ -346,23 +363,6 @@ $(document).ready(function(){
 		.on('pageChanged', updatePageNumberIndicator)
 		.on('magazineDataLoaded', loadMagazineChrome)
 
-
-		// move the page indicator...
-		// NOTE: this is to be used for page-specific toolbars etc.
-		.on('pageChanged', function(){
-			var cur = $('.current.page')
-			var indicator = $('.current-page-indicator')
-			var shift = getElementShift($('.magazine'))
-			// XXX this is a stub...
-			// reverse the align...
-			indicator
-				.width(cur.width())
-				.height(cur.height())
-				.css({
-					left: getPageInMagazineOffset(cur),
-					top: 0,
-				})
-		})
 
 
 	$('.viewer').css('overflow', 'hidden')
