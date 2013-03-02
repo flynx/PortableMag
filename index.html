@@ -65,13 +65,46 @@
 	position: absolute;
 	box-sizing:border-box;
 	opacity: 0.8;
+
+
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+
 }
 .editor .current-page-indicator {
 	display: block;
+}
 
-	/*
-	border: solid blue 10px;
-	*/
+.editor .right-button,
+.editor .left-button {
+	display: block;
+	position: relative;
+	width: 100px;
+	height: 100px;
+}
+.editor.page-fit-to-viewer .right-button,
+.editor.page-fit-to-viewer .left-button {
+	width: 50px;
+	height: 50px;
+}
+
+.editor .left-button {
+	float: left;
+	left: -50px;
+}
+.editor.page-fit-to-viewer .left-button {
+	left: 0px;
+}
+
+.editor .right-button {
+	float: right;
+	right: -50px;
+}
+.editor.page-fit-to-viewer .right-button {
+	right: 0px;
 }
 
 </style>
@@ -98,21 +131,21 @@
 function setupEditor(){
 	var indicator = $('.current-page-indicator')
 	// remove
-	$('<button>Remove</button>')
-		.appendTo(indicator)
-		.click(function(){
-			removePage()
-		})
-
-	$('<button>Shift Left</button>')
+	$('<button class="left-button">Shift Left</button>')
 		.appendTo(indicator)
 		.click(function(){
 			shiftPageLeft()
 		})
-	$('<button>Shift Right</button>')
+	$('<button class="right-button">Shift Right</button>')
 		.appendTo(indicator)
 		.click(function(){
 			shiftPageRight()
+		})
+
+	$('<button class="right-button">Remove</button>')
+		.appendTo(indicator)
+		.click(function(){
+			removePage()
 		})
 
 }
@@ -151,15 +184,17 @@ $(document).ready(function(){
 					shift: prevPage	
 				},
 				// combined navigation with actions..
-				Up: function(){togglePageView()},
-				Down: function(){togglePageView()},
+				Up: function(){ togglePageView() },
+				Down: function(){ togglePageView() },
 
 				F: function(){ togglePageFitMode() },
-				E: function(){ toggleEditor() },
 				B: {
 					default: toggleBookmark,
 					ctrl: function(){ toggleThemes() },
 				},
+
+				// XXX this should not be in the production viewer...
+				E: function(){ toggleEditor() },
 			}
 		}, 
 		function(k){console.log(k)}))
