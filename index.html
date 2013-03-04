@@ -265,16 +265,10 @@
 <script src="lib/scroller.js"></script>
 <script src="lib/keyboard.js"></script>
 
-<!-- CKEDITOR -->
-<script>
-// NOTE: do not remove the next line if the CKEditor not important, or remove 
-//		all references to this in the code...
-var CKEDITOR_ENABLED = false
-</script>
+<!-- CKEditor -->
 <script src="ckeditor/ckeditor.js"></script>
 <script>
 CKEDITOR.disableAutoInline = true
-CKEDITOR_ENABLED = true
 </script>
 
 
@@ -289,6 +283,7 @@ CKEDITOR_ENABLED = true
 
 <script>
 
+// XXX split this code off...
 // XXX need better separation between full screen and ribbon modes...
 function setupEditor(){
 	function setupEditorToolbars(){
@@ -391,7 +386,7 @@ function setupEditor(){
 				MagazineScroller.stop()
 				$('[contenteditable]').attr({contenteditable: 'true'})
 				// ckeditor...
-				if(CKEDITOR_ENABLED){
+				if(window.CKEDITOR){
 					CKEDITOR.inlineAll()
 				}
 			} else {
@@ -400,7 +395,7 @@ function setupEditor(){
 					.attr({contenteditable: 'false'})
 				MagazineScroller.start()
 				// ckeditor...
-				if(CKEDITOR_ENABLED){
+				if(window.CKEDITOR){
 					for( var i in CKEDITOR.instances){
 						CKEDITOR.instances[i].destroy()
 					}
