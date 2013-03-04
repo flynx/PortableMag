@@ -295,6 +295,12 @@
 	color: gray;
 }
 
+::selection {
+}
+::-moz-selection {
+}
+
+
 
 /*********************************************************** light ***/
 
@@ -342,7 +348,14 @@
 	background: black;
 }
 
-
+.dark ::selection {
+	background: yellow;
+	color: white;
+}
+.dark ::-moz-selection {
+	background: yellow;
+	color: white;
+}
 
 
 
