@@ -389,7 +389,7 @@ $(document).ready(function(){
 	// keyboard...
 	$(document)
 		.keydown(makeKeyboardHandler({
-			// ignore all keys here...
+			// ignore all keys except Esc here...
 			'.inline-editor-mode': {
 				//ignore: '*'
 				Esc: function(){
@@ -397,8 +397,6 @@ $(document).ready(function(){
 				},
 			},
 
-			//'*': {
-			// everything except overlays...
 			'.chrome:not(.inline-editor-mode)': {
 				title: 'Global',
 				doc: '',
