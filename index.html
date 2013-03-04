@@ -37,20 +37,9 @@
 	transition: none;
 }
 
-/*
-.scroller {
-	position: relative;
-	display: inline-block;
-	text-align: center;
-	width: auto;
-	height: 100%;
-
-	overflow: hidden;
-}
-*/
-
 
 /* vertical */
+/* XXX this is not in the direct priorities...
 .vertical.magazine,
 .vertical.article,
 .vertical.group {
@@ -61,6 +50,7 @@
 .vertical .page {
 	display: block;
 }
+*/
 
 </style>
 
@@ -94,8 +84,6 @@ CKEDITOR.disableAutoInline = true
 <script src="platform.js"></script>
 
 <script>
-
-
 
 
 $(document).ready(function(){
@@ -169,7 +157,6 @@ $(document).ready(function(){
 	}).start()
 
 	$('.viewer')
-		//.on('scrollCancelled swipeUp swipeDown', function(){ setCurrentPage() })
 		.on('scrollCancelled', function(){ setCurrentPage() })
 		.on('shortClick', handleClick)
 		.on('longClick', handleLongClick)
@@ -182,8 +169,6 @@ $(document).ready(function(){
 		.on('magazineDataLoaded', loadMagazineChrome)
 
 
-
-	$('.viewer').css('overflow', 'hidden')
 
 	//loadState()
 

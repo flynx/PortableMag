@@ -333,6 +333,7 @@ var toggleInlineEditor = createCSSClassToggler(
 	
 
 
+// this will set up the main editor event handlers and data...
 function setupEditor(){
 	// editable focus...
 	$('[contenteditable]')
