@@ -209,4 +209,179 @@ function removePage(page){
 
 
 /*********************************************************************/
-// vim:set ts=4 sw=4 :
+
+// XXX this needs revision...
+// XXX need better separation between full screen and ribbon modes...
+// XXX need to split this into more generic parts...
+
+function setupEditorToolbars(){
+	var indicator = $('<div class="current-page-indicator"/>')
+			.appendTo($('.magazine'))
+			.click(function(){
+				// NOTE: this does the same thing as handleClick...
+				togglePageView('on')
+				setCurrentPage(target)
+				setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
+			})
+
+	// the toolbars...
+	var left_bar = $('<div class="left-toolbar"/>')
+			.appendTo(indicator)
+	var right_bar = $('<div class="right-toolbar"/>')
+			.appendTo(indicator)
+
+	$('<button class="button remove">&times;</button>')
+		.appendTo(indicator)
+		.click(function(){
+			setTransitionDuration($('.magazine'), 0)
+			removePage()
+			runMagazineTemplates()
+
+			return false
+		})
+
+	$('<button class="button shift">&gt;</button>')
+		.appendTo(right_bar)
+		.click(function(){
+			shiftPageRight()
+			runMagazineTemplates()
+
+			return false
+		})
+	$('<button class="button add">+</button>')
+		.appendTo(right_bar)
+		.click(function(){
+
+			return false
+		})
+
+	$('<button class="button shift">&lt;</button>')
+		.appendTo(left_bar)
+		.click(function(){
+			shiftPageLeft()
+			runMagazineTemplates()
+
+			return false
+		})
+	$('<button class="button add">+</button>')
+		.appendTo(left_bar)
+		.click(function(){
+
+			return false
+		})
+
+	$('<div class="editor-status">Editor Mode</div>')
+		.appendTo($('.chrome'))
+		.click(function(){
+			toggleEditor('off')
+		})
+}
+function clearEditorToolbars(){
+	var indicator = $('.current-page-indicator').remove()
+}
+
+
+// general editor mode...
+var toggleEditor = createCSSClassToggler(
+	'.chrome', 
+	'editor', 
+	function(){
+		setTransitionDuration($('.magazine'), 0)
+	},
+	function(action){
+		if(action == 'on'){
+			// make editable fields editable...
+			if(togglePageView('?') == 'on'){
+				toggleInlineEditor('on')
+			}
+		} else {
+			toggleInlineEditor('off')
+		}
+		setCurrentPage($('.current.page'))
+	})
+// inline editor switcher...
+var toggleInlineEditor = createCSSClassToggler(
+	'.chrome',
+	'inline-edior',
+	function(action){
+		// prevent switching on while not in editor mode...
+		if(toggleEditor('?') == 'off' && action == 'on'){
+			return false
+		}
+	},
+	function(action){
+		if(action == 'on'){
+			MagazineScroller.stop()
+			$('[contenteditable]').attr({contenteditable: 'true'})
+			// ckeditor...
+			if(window.CKEDITOR){
+				CKEDITOR.inlineAll()
+			}
+		} else {
+			$('[contenteditable]')
+				.blur()
+				.attr({contenteditable: 'false'})
+			MagazineScroller.start()
+			// ckeditor...
+			if(window.CKEDITOR){
+				for( var i in CKEDITOR.instances){
+					CKEDITOR.instances[i].destroy()
+				}
+			}
+		}
+	})
+	
+
+
+function setupEditor(){
+	// editable focus...
+	$('[contenteditable]')
+		.on('focus', function(){
+			if(toggleInlineEditor('?') == 'off'){
+				$(':focus').blur()
+			} else {
+				toggleInlineEditorMode('on')
+			}
+		})
+		.on('blur', function(){
+			toggleInlineEditorMode('off')
+		})
+
+	$('.viewer')
+		// move the page indicator...
+		// NOTE: this is to be used for page-specific toolbars etc.
+		.on('pageChanged', function(){
+			var cur = $('.current.page')
+			var indicator = $('.current-page-indicator')
+			var shift = getElementShift($('.magazine'))
+			// XXX this is a stub...
+			// reverse the align...
+			indicator
+				.width(cur.width())
+				.height(cur.height())
+				.css({
+					left: getPageInMagazineOffset(cur),
+					top: 0,
+				})
+		})
+		// switch between editor modes...
+		.on('fullScreenMode', function(){
+			$(':focus').blur()
+			if(toggleEditor('?') == 'on'){
+				toggleInlineEditor('on')
+			}
+		})
+		.on('ribbonMode', function(){
+			$(':focus').blur()
+			if(toggleEditor('?') == 'on'){
+				toggleInlineEditor('off')
+			}
+		})
+	setupEditorToolbars()
+}
+
+
+
+
+/**********************************************************************
+* vim:set ts=4 sw=4 :												 */
