@@ -209,6 +209,9 @@
 
 	cursor: hand;
 }
+.editor.inline-editor-mode .editor-status {
+	opacity: 0.4;
+}
 
 </style>
 
@@ -396,7 +399,7 @@ $(document).ready(function(){
 
 			//'*': {
 			// everything except overlays...
-			'.viewer:not(.inline-editor-mode)': {
+			'.chrome:not(.inline-editor-mode)': {
 				title: 'Global',
 				doc: '',
 

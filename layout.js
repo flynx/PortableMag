@@ -69,6 +69,9 @@ var togglePageView = createCSSClassToggler(
 		})
 
 
+var toggleInlineEditorMode = createCSSClassToggler('.chrome', 'inline-editor-mode')
+
+
 
 /************************************************** event handlers ***/
 
