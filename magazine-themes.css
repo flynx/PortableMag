@@ -17,17 +17,17 @@
 
 
 .viewer {
-	background: gray;
+	background: #555;
 }
 
 .magazine {
-	box-shadow: 10px 10px 50px 10px #555;
+	box-shadow: 10px 10px 50px 10px #444;
 }
 
 
 .magazine:before,
 .magazine:after {
-	color: #888;
+	color: #666;
 }
 
 .button svg * {
