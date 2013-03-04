@@ -55,11 +55,13 @@ var togglePageView = createCSSClassToggler(
 				setMagazineScale(scale)
 				//unanimated($('.magazine, .viewer'), togglePageFitMode)('on')
 				togglePageFitMode('on')
+				$('.viewer').trigger('fullScreenMode')
 			} else {
 				//unanimated($('.magazine, .viewer'), togglePageFitMode)('off')
 				togglePageFitMode('off')
 				var scale = getPageTargetScale(PAGES_IN_RIBBON).value
 				setMagazineScale(scale)
+				$('.viewer').trigger('ribbonMode')
 			}
 			// NOTE: can't disable transitions on this one because ScrollTo
 			// 		uses jQuery animation...

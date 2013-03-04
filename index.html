@@ -206,6 +206,7 @@
 
 <script>
 
+// XXX need better separation between full screen and ribbon modes...
 function setupEditor(){
 	var indicator = $('<div class="current-page-indicator"/>')
 			.appendTo($('.magazine'))
@@ -216,15 +217,12 @@ function setupEditor(){
 	var right_bar = $('<div class="right-toolbar"/>')
 			.appendTo(indicator)
 
-
-
 	$('<button class="button remove">&times;</button>')
 		.appendTo(indicator)
 		.click(function(){
 			setTransitionDuration($('.magazine'), 0)
 			removePage()
 		})
-
 
 	$('<button class="button shift">&gt;</button>')
 		.appendTo(right_bar)
@@ -235,7 +233,6 @@ function setupEditor(){
 		.appendTo(right_bar)
 		.click(function(){
 		})
-
 
 	$('<button class="button shift">&lt;</button>')
 		.appendTo(left_bar)
@@ -254,10 +251,29 @@ function setupEditor(){
 		function(){
 			setTransitionDuration($('.magazine'), 0)
 		},
-		function(){
+		function(action){
+			if(action == 'on'){
+				// make editable fields editable...
+				$('[contenteditable]').attr({contenteditable:"true"})
+				MagazineScroller.stop()
+			} else {
+				$('[contenteditable]').attr({contenteditable:"false"})
+				MagazineScroller.start()
+			}
 			setCurrentPage($('.current.page'))
 		})
-
+	
+	$('[contenteditable]')
+		.on('focus', function(){
+			if(togglePageView('?') == 'off'){
+				$(':focus').blur()
+			} else if(toggleEditor('?') == 'on'){
+				toggleInlineEditorMode('on')
+			}
+		})
+		.on('blur', function(){
+			toggleInlineEditorMode('off')
+		})
 
 	// move the page indicator...
 	// NOTE: this is to be used for page-specific toolbars etc.
@@ -276,11 +292,28 @@ function setupEditor(){
 					top: 0,
 				})
 		})
+
+		.on('fullScreenMode', function(){
+			$(':focus').blur()
+			if(toggleEditor('?') == 'on'){
+				toggleInlineEditorMode('on')
+				$('[contenteditable]').attr({contenteditable: 'true'})
+			}
+		})
+		.on('ribbonMode', function(){
+			$(':focus').blur()
+			if(toggleEditor('?') == 'on'){
+				toggleInlineEditorMode('off')
+				$('[contenteditable]').attr({contenteditable: 'false'})
+			}
+		})
 }
 
 
 function clearEditor(){
 	$('.current-page-indicator').children().remove()
+	$('[contenteditable]').attr({contenteditable:"false"})
+	MagazineScroller.start()
 }
 
 
@@ -294,7 +327,17 @@ $(document).ready(function(){
 	// keyboard...
 	$(document)
 		.keydown(makeKeyboardHandler({
-			'*': {
+			// ignore all keys here...
+			'.inline-editor-mode': {
+				//ignore: '*'
+				Esc: function(){
+					$(':focus').blur()
+				},
+			},
+
+			//'*': {
+			// everything except overlays...
+			'.viewer:not(.inline-editor-mode)': {
 				title: 'Global',
 				doc: '',
 
@@ -325,26 +368,6 @@ $(document).ready(function(){
 				// XXX this should not be in the production viewer...
 				E: function(){ toggleEditor() },
 			},
-			/*
-			'.editor': {
-				Left: {
-					default: prevPage,
-					ctrl: prevArticle,
-					shift: function(){
-						alert('<<<')
-						shiftPageLeft($('.current.page'))
-					},
-				},
-				Right: {
-					default: nextPage,
-					ctrl: nextArticle,
-					shift: function(){
-						alert('>>>')
-						shiftPageRight($('.current.page'))
-					},
-				},
-			},
-			*/
 		}, 
 		function(k){console.log(k)}))
 
@@ -823,10 +846,10 @@ $(document).ready(function(){
 
 			<div class="page dark">
 				<div class="content">
-					<div class="header">
+					<div class="header" contenteditable="false">
 						<h1>Two column</h1>
 					</div>
-					<div class="body two-column">
+					<div class="body two-column" contenteditable="false">
 
 						Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
 
@@ -839,10 +862,10 @@ $(document).ready(function(){
 
 			<div class="page light">
 				<div class="content">
-					<div class="header">
+					<div class="header" contenteditable="false">
 						<h1>Three column</h1>
 					</div>
-					<div class="body three-column">
+					<div class="body three-column" contenteditable="false">
 
 						<p>
 							Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
@@ -859,7 +882,7 @@ $(document).ready(function(){
 			</div>
 
 			<div class="page caption-bottom-arrow dark">
-				<div class="content">
+				<div class="content" contenteditable="false">
 					<h2>Caption Text</h2>
 					<p>
 					Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
@@ -888,7 +911,7 @@ $(document).ready(function(){
 					<div class="page-number-text">[PAGE NUMBER]</div>
 				</div>
 			</div>
-			<div class="page caption-bottom-arrow light">
+			<div class="page caption-bottom-arrow light" contenteditable="false">
 				<div class="content">
 					<h2>Caption Text</h2>
 					<p>
