@@ -15,82 +15,10 @@
 				[_] credits & copyright
 				[_] basic user config
 				[_] help and instructions
+				[_] Editor: select template...
 			[_] issue selection & related navigation
 			| essentially a special magazine that will load other magazines 
 			| instead of going into a full page view...
-		[_] 50% Editor version 1.0 checklist
-			[_] editor toolbar
-			| this can take two forms:
-			| 	- global
-			| 	- relative to page
-			| 	- mixed (preferred)
-			[X] save/load JSON
-		[_] 60% build a custom scroll lib...
-			[X] 100% features:
-				[X] drag/scroll
-				[X] inertial
-				[X] snap
-				| if enabled, on release, detect nearest snap-point and scroll to it.
-			[X] 100% tragets
-				[X] smooth scroll on devices (iscroll)
-				| adaptive transitions, etc.
-				[X] snap scroll to markers (a-la iscroll)
-					[X] snap align
-						[X] left (iscroll)
-						[X] center
-						[X] right
-				[X] flexible event system
-					[X] pre/post events
-					[X] ability to cancel current action
-					| like stop scrolling at a given point.
-				[X] both x and y axis support (x is a priority)
-			[X] scroll phases
-				[X] user scroll phase
-				| from mousedown/touchstart and to mouseup/touchend
-				[X] auto scroll phase
-				| from mouseup/touchend and untill scrollend
-				|
-				| must account for speed...
-					[X] momentum
-					[X] snap
-			[_] 0% actions
-				[_] 0% .scrollTo(target)
-				| must accept:
-					[_] element
-					[_] px
-					[_] name
-			[_] 0% events
-				basic anatomy
-				|
-				| 	user scroll				+-------------------+
-				| +-------------------------+		auto scroll
-				|
-				| touchstart				touchend
-				| |							|
-				| scrollstart				userscrollend		scrollend
-				| userscrollstart			|					|
-				| |							|					|
-				| v							v					v
-				| o----+--+-+-+--+-+---+-+--o----+--+-+-+---+---+
-				|	   ^  ^ ^ ^	 ^ ^   ^ ^		 ^	^ ^ ^	^
-				| 	   +-----------------+		 +----------+
-				| 	   scroll					 scroll
-				|
-				[_] 0% scroll
-					[_] scrollstart / userscrollstart
-					| on mousedown/touchstart
-					[_] scroll
-					| mousemove/touchmove
-					|
-					| also triggered by lib on auto-scroll...
-					[_] userscrollend
-					| on mouseup/touchend
-					[_] scrollend
-				[_] 0% snap
-					[_] snapped
-		[X] BUG: full-page-view-mode class does not apply to some elements...
-		| - toolbars
-		| - bookmarks
 		[_] BUG: #URLs do not all work in the new index...
 		[_] BUG: loading a magazine with position set to 0 will align it incorrectly.
 		| needs testing with the rewritten fitNPages()...
@@ -178,6 +106,79 @@
 			[_] try using the scroll event to see of we reached the limit...
 			| and move the limit accordingly
 			[_] BUG: scrool seems to do odd things on refresh...
+		[_] 60% build a custom scroll lib...
+			[X] 100% features:
+				[X] drag/scroll
+				[X] inertial
+				[X] snap
+				| if enabled, on release, detect nearest snap-point and scroll to it.
+			[X] 100% tragets
+				[X] smooth scroll on devices (iscroll)
+				| adaptive transitions, etc.
+				[X] snap scroll to markers (a-la iscroll)
+					[X] snap align
+						[X] left (iscroll)
+						[X] center
+						[X] right
+				[X] flexible event system
+					[X] pre/post events
+					[X] ability to cancel current action
+					| like stop scrolling at a given point.
+				[X] both x and y axis support (x is a priority)
+			[X] scroll phases
+				[X] user scroll phase
+				| from mousedown/touchstart and to mouseup/touchend
+				[X] auto scroll phase
+				| from mouseup/touchend and untill scrollend
+				|
+				| must account for speed...
+					[X] momentum
+					[X] snap
+			[_] 0% actions
+				[_] 0% .scrollTo(target)
+				| must accept:
+					[_] element
+					[_] px
+					[_] name
+			[_] 0% events
+				basic anatomy
+				|
+				| 	user scroll				+-------------------+
+				| +-------------------------+		auto scroll
+				|
+				| touchstart				touchend
+				| |							|
+				| scrollstart				userscrollend		scrollend
+				| userscrollstart			|					|
+				| |							|					|
+				| v							v					v
+				| o----+--+-+-+--+-+---+-+--o----+--+-+-+---+---+
+				|	   ^  ^ ^ ^	 ^ ^   ^ ^		 ^	^ ^ ^	^
+				| 	   +-----------------+		 +----------+
+				| 	   scroll					 scroll
+				|
+				[_] 0% scroll
+					[_] scrollstart / userscrollstart
+					| on mousedown/touchstart
+					[_] scroll
+					| mousemove/touchmove
+					|
+					| also triggered by lib on auto-scroll...
+					[_] userscrollend
+					| on mouseup/touchend
+					[_] scrollend
+				[_] 0% snap
+					[_] snapped
+		[X] 100% Editor version 1.0 checklist
+			[X] editor toolbar
+			| this can take two forms:
+			| 	- global
+			| 	- relative to page
+			| 	- mixed (preferred)
+			[X] save/load JSON
+		[X] BUG: full-page-view-mode class does not apply to some elements...
+		| - toolbars
+		| - bookmarks
 		[X] JSON load/save
 		[X] BUG: navigator indicator does not scroll
 		[X] check if scrollTo knows about element scaling...
