@@ -185,14 +185,12 @@
 	border-bottom: solid 50px silver;
 }
 
+
 .editor-status {
-	display: none;
-}
-.editor .editor-status {
-	position: fixed;
 	display: block;
-	top: 15px;
-	left: -20px;
+	position: fixed;
+	top: 30px;
+	left: -200px;
 	z-index: 99999;
 	padding: 5px;
 	padding-left: 60px;
@@ -202,22 +200,66 @@
 	color: white;
 
 	font-size: 14px;
-	font-style: italic;
 	font-weight: bold;
 
 	box-shadow: 5px 5px 25px 0px black;
 
 	cursor: hand;
+
+	-webkit-transform: skewX(10deg);
+	-moz-transform: skewX(10deg);
+	-o-transform: skewX(10deg);
+	-ms-transform: skewX(10deg);
+	transform: skewX(10deg);
+
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+.editor-status:before {
+	content: "Editor Mode";
+	display: block;
+	position: absolute;
+	top: -1px;
+	left: 0px;
+	z-index: 99998;
+	padding: 5px;
+	padding-left: 60px;
+	padding-right: 15px;
+
+	background: red;
+
+	cursor: hand;
+
+	-webkit-transform: skewX(-30deg);
+	-moz-transform: skewX(-30deg);
+	-o-transform: skewX(-30deg);
+	-ms-transform: skewX(-30deg);
+	transform: skewX(-30deg);
+}
+
+
+.editor .editor-status {
+	display: block;
+	left: -30px;
 }
 .editor.inline-editor-mode .editor-status {
 	opacity: 0.4;
 }
+
 
 </style>
 
 <script src="ext-lib/jquery.js"></script>
 <script src="ext-lib/spin.js"></script>
 <script src="ext-lib/jquery.spin.js"></script>
+<!-- zip functionality -->
+<script src="ext-lib/jszip.js"></script>
+<script src="ext-lib/jszip-load.js"></script>
+<script src="ext-lib/jszip-inflate.js"></script>
+<!--script src="ext-lib\jszip-deflate.js"></script-->
 
 <script src="lib/jli.js"></script>
 <script src="lib/scroller.js"></script>
@@ -239,6 +281,12 @@ function setupEditor(){
 	function setupEditorToolbars(){
 		var indicator = $('<div class="current-page-indicator"/>')
 				.appendTo($('.magazine'))
+				.click(function(){
+					// NOTE: this does the same thing as handleClick...
+					togglePageView('on')
+					setCurrentPage(target)
+					setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
+				})
 
 		// the toolbars...
 		var left_bar = $('<div class="left-toolbar"/>')
@@ -251,26 +299,45 @@ function setupEditor(){
 			.click(function(){
 				setTransitionDuration($('.magazine'), 0)
 				removePage()
+				runMagazineTemplates()
+
+				return false
 			})
 
 		$('<button class="button shift">&gt;</button>')
 			.appendTo(right_bar)
 			.click(function(){
 				shiftPageRight()
+				runMagazineTemplates()
+
+				return false
 			})
 		$('<button class="button add">+</button>')
 			.appendTo(right_bar)
 			.click(function(){
+
+				return false
 			})
 
 		$('<button class="button shift">&lt;</button>')
 			.appendTo(left_bar)
 			.click(function(){
 				shiftPageLeft()
+				runMagazineTemplates()
+
+				return false
 			})
 		$('<button class="button add">+</button>')
 			.appendTo(left_bar)
 			.click(function(){
+
+				return false
+			})
+
+		$('<div class="editor-status">Editor Mode</div>')
+			.appendTo($('.chrome'))
+			.click(function(){
+				toggleEditor('off')
 			})
 	}
 	function clearEdiorToolbars(){
@@ -291,13 +358,7 @@ function setupEditor(){
 				if(togglePageView('?') == 'on'){
 					toggleInlineEditor('on')
 				}
-				$('<div class="editor-status">Editor Mode</div>')
-					.appendTo($('.chrome'))
-					.click(function(){
-						toggleEditor('off')
-					})
 			} else {
-				$('.editor-status').remove()
 				toggleInlineEditor('off')
 			}
 			setCurrentPage($('.current.page'))
@@ -396,7 +457,11 @@ $(document).ready(function(){
 				doc: '',
 
 				Esc: function(){
-					toggleEditor('?') == 'on' && toggleEditor('off')
+					if(toggleEditor('?') == 'on'){
+						toggleEditor('off')
+					} else {
+						togglePageView('off')
+					}
 				},
 
 				Home: firstPage,
@@ -413,6 +478,7 @@ $(document).ready(function(){
 					default: nextPage,
 					shift: prevPage	
 				},
+				Enter: function(){ togglePageView('on') },
 				// combined navigation with actions..
 				Up: function(){ togglePageView() },
 				Down: function(){ togglePageView() },
