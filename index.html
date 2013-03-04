@@ -254,20 +254,35 @@ function setupEditor(){
 		function(action){
 			if(action == 'on'){
 				// make editable fields editable...
-				$('[contenteditable]').attr({contenteditable:"true"})
-				MagazineScroller.stop()
+				if(togglePageView('?') == 'on'){
+					toggleInlineEditor('on')
+				}
 			} else {
-				$('[contenteditable]').attr({contenteditable:"false"})
-				MagazineScroller.start()
+				toggleInlineEditor('off')
 			}
 			setCurrentPage($('.current.page'))
+		})
+
+	var toggleInlineEditor = createCSSClassToggler(
+		'.chrome',
+		'inline-edior',
+		function(action){
+			if(action == 'on'){
+				MagazineScroller.stop()
+				$('[contenteditable]').attr({contenteditable: 'true'})
+			} else {
+				$('[contenteditable]')
+					.blur()
+					.attr({contenteditable: 'false'})
+				MagazineScroller.start()
+			}
 		})
 	
 	$('[contenteditable]')
 		.on('focus', function(){
-			if(togglePageView('?') == 'off'){
+			if(toggleInlineEditor('?') == 'off'){
 				$(':focus').blur()
-			} else if(toggleEditor('?') == 'on'){
+			} else {
 				toggleInlineEditorMode('on')
 			}
 		})
@@ -296,15 +311,13 @@ function setupEditor(){
 		.on('fullScreenMode', function(){
 			$(':focus').blur()
 			if(toggleEditor('?') == 'on'){
-				toggleInlineEditorMode('on')
-				$('[contenteditable]').attr({contenteditable: 'true'})
+				toggleInlineEditor('on')
 			}
 		})
 		.on('ribbonMode', function(){
 			$(':focus').blur()
 			if(toggleEditor('?') == 'on'){
-				toggleInlineEditorMode('off')
-				$('[contenteditable]').attr({contenteditable: 'false'})
+				toggleInlineEditor('off')
 			}
 		})
 }
