@@ -372,13 +372,6 @@ function setupEditor(){
 }
 
 
-function clearEditor(){
-	$('.current-page-indicator').children().remove()
-	$('[contenteditable]').attr({contenteditable:"false"})
-	MagazineScroller.start()
-}
-
-
 
 $(document).ready(function(){
 	// general window behavior...
@@ -394,6 +387,7 @@ $(document).ready(function(){
 				//ignore: '*'
 				Esc: function(){
 					$(':focus').blur()
+					return false
 				},
 			},
 
@@ -401,11 +395,9 @@ $(document).ready(function(){
 				title: 'Global',
 				doc: '',
 
-				/*
 				Esc: function(){
 					toggleEditor('?') == 'on' && toggleEditor('off')
 				},
-				*/
 
 				Home: firstPage,
 				End: lastPage, 
