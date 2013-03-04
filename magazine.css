@@ -694,6 +694,18 @@ div.page-number-text {
 	
 }
 
+/* set a fixed shadow...
+ * NOTE: use .noshadow to disable shadows.
+ */
+.page.caption-top-arrow,
+.page.caption-bottom-arrow {
+	box-shadow: 35px 0px 100px 0px #000;
+}
+.page.caption-top-arrow:before,
+.page.caption-bottom-arrow:before {
+	box-shadow: 20px -20px 30px 10px #000;
+}
+/* XXX changing shdows makes things a bit gittery on devices...
 .current.page.caption-top-arrow,
 .current.page.caption-bottom-arrow {
 	box-shadow: 30px 0px 100px 0px #000;
@@ -702,7 +714,17 @@ div.page-number-text {
 .current.page.caption-bottom-arrow:before {
 	box-shadow: 20px -20px 30px 10px #000;
 }
+*/
 
+/* addind noshadow will disable shadows compleatly */
+.page.caption-top-arrow.noshadow,
+.page.caption-bottom-arrow.noshadow {
+	box-shadow: none; 
+}
+.page.caption-top-arrow.noshadow:before,
+.page.caption-bottom-arrow.noshadow:before {
+	box-shadow: none; 
+}
 
 
 
