@@ -185,6 +185,31 @@
 	border-bottom: solid 50px silver;
 }
 
+.editor-status {
+	display: none;
+}
+.editor .editor-status {
+	position: fixed;
+	display: block;
+	top: 15px;
+	left: -20px;
+	z-index: 99999;
+	padding: 5px;
+	padding-left: 60px;
+	padding-right: 15px;
+
+	background: red;
+	color: white;
+
+	font-size: 14px;
+	font-style: italic;
+	font-weight: bold;
+
+	box-shadow: 5px 5px 25px 0px black;
+
+	cursor: hand;
+}
+
 </style>
 
 <script src="ext-lib/jquery.js"></script>
@@ -263,7 +288,13 @@ function setupEditor(){
 				if(togglePageView('?') == 'on'){
 					toggleInlineEditor('on')
 				}
+				$('<div class="editor-status">Editor Mode</div>')
+					.appendTo($('.chrome'))
+					.click(function(){
+						toggleEditor('off')
+					})
 			} else {
+				$('.editor-status').remove()
 				toggleInlineEditor('off')
 			}
 			setCurrentPage($('.current.page'))
@@ -368,6 +399,12 @@ $(document).ready(function(){
 			'.viewer:not(.inline-editor-mode)': {
 				title: 'Global',
 				doc: '',
+
+				/*
+				Esc: function(){
+					toggleEditor('?') == 'on' && toggleEditor('off')
+				},
+				*/
 
 				Home: firstPage,
 				End: lastPage, 
