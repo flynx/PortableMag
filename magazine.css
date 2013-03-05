@@ -286,7 +286,8 @@ body {
 /************************************************ utility elements ***/
 
 /* toolbars... */
-.top-toolbar, .bottom-toolbar {
+.top-toolbar,
+.bottom-toolbar {
 	display: block;
 	position: absolute;
 	text-align: center;
@@ -519,6 +520,12 @@ body {
 
 	cursor: hand;
 
+	color: silver;
+	font-size: 32px;
+	text-align: right;
+	padding-right: 15px;
+
+	box-sizing:border-box;
 }
 .overlay > div:last-child {
 	position: absolute;

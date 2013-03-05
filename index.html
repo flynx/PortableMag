@@ -87,10 +87,10 @@ CKEDITOR.disableAutoInline = true
 
 function showInOverlay(text){
 	$('.overlay').remove()
-	var overlay = $('<div class="overlay"><div/><div/></div>')
+	var overlay = $('<div class="overlay"><div>&times;</div><div/></div>')
 		.css({display: 'none'})
 	overlay.children().first().click(function(){
-		overlay.fadeOut()
+		removeOverlay()
 	})
 
 	overlay.children().last().append(text)
@@ -99,6 +99,12 @@ function showInOverlay(text){
 	overlay
 		.appendTo($('.chrome'))
 		.fadeIn()
+}
+function removeOverlay(){
+	$('.overlay').fadeOut() 
+	setTimeout(function(){
+		$('.overlay').remove()
+	}, 300)
 }
 
 function showInfo(){
@@ -121,7 +127,7 @@ $(document).ready(function(){
 		.keydown(makeKeyboardHandler({
 			'.overlay': {
 				Esc: function(){
-					$('.overlay').fadeOut() 
+					removeOverlay()
 					return false
 				},
 			},
@@ -213,7 +219,7 @@ $(document).ready(function(){
 	//setupNavigator()
 	setCurrentPage(0)
 
-	toggleThemes('dark-viewer')
+	toggleThemes('none')
 
 
 	setupEditor()

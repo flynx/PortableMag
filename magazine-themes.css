@@ -6,7 +6,7 @@
 /********************************************************* Viewer ****/
 
 .splash {
-	background: gray;
+	background: #444;
 }
 .splash * {
 	color: white;
@@ -111,6 +111,7 @@
 
 .overlay > div:first-child {
 	background: #555;
+	color: silver;
 }
 .overlay > div:last-child {
 	color: white;
@@ -196,6 +197,7 @@
 
 .light-viewer .overlay > div:first-child {
 	background: white;
+	color: #ccc;
 }
 .light-viewer .overlay > div:last-child {
 	color: gray;
@@ -280,6 +282,7 @@
 
 .dark-viewer .overlay > div:first-child {
 	background: black;
+	color: gray;
 }
 .dark-viewer .overlay > div:last-child {
 	color: white;
