@@ -107,13 +107,79 @@ function removeOverlay(){
 	}, 300)
 }
 
+// XXX make this more sensible...
 function showInfo(){
 	showInOverlay($(
 		'<div>'+
-			'<h1>Portable Mag</h1>'+
+			'<h1>PortableMag</h1>'+
 			'<p>licence and copyright info goes here...</p>'+
 		'</div>'))
 }
+
+var keyboard_config = {
+	'.overlay': {
+		title: 'Overlay mode.',
+		doc: '',
+
+		Esc: function(){
+			removeOverlay()
+			return false
+		},
+	},
+
+	// ignore all keys except Esc here...
+	'.inline-editor-mode': {
+		title: 'Inline editor mode.',
+		doc: '',
+
+		//ignore: '*'
+		Esc: function(){
+			$(':focus').blur()
+			return false
+		},
+	},
+
+	'.chrome:not(.inline-editor-mode)': {
+		title: 'Global bindings.',
+		doc: '',
+
+		Esc: function(){
+			if(toggleEditor('?') == 'on'){
+				toggleEditor('off')
+			} else {
+				togglePageView('off')
+			}
+		},
+
+		Home: firstPage,
+		End: lastPage, 
+		Left: {
+			default: prevPage,
+			ctrl: prevArticle,
+		},
+		Right: {
+			default: nextPage,
+			ctrl: nextArticle,
+		},
+		Space:	{
+			default: nextPage,
+			shift: prevPage	
+		},
+		Enter: function(){ togglePageView('on') },
+		// combined navigation with actions..
+		Up: function(){ togglePageView() },
+		Down: function(){ togglePageView() },
+
+		F: function(){ togglePageFitMode() },
+		B: {
+			default: toggleBookmark,
+			ctrl: function(){ toggleThemes() },
+		},
+
+		// XXX this should not be in the production viewer...
+		E: function(){ toggleEditor() },
+	},
+} 
 
 
 $(document).ready(function(){
@@ -124,64 +190,7 @@ $(document).ready(function(){
 
 	// keyboard...
 	$(document)
-		.keydown(makeKeyboardHandler({
-			'.overlay': {
-				Esc: function(){
-					removeOverlay()
-					return false
-				},
-			},
-
-			// ignore all keys except Esc here...
-			'.inline-editor-mode': {
-				//ignore: '*'
-				Esc: function(){
-					$(':focus').blur()
-					return false
-				},
-			},
-
-			'.chrome:not(.inline-editor-mode)': {
-				title: 'Global',
-				doc: '',
-
-				Esc: function(){
-					if(toggleEditor('?') == 'on'){
-						toggleEditor('off')
-					} else {
-						togglePageView('off')
-					}
-				},
-
-				Home: firstPage,
-				End: lastPage, 
-				Left: {
-					default: prevPage,
-					ctrl: prevArticle,
-				},
-				Right: {
-					default: nextPage,
-					ctrl: nextArticle,
-				},
-				Space:	{
-					default: nextPage,
-					shift: prevPage	
-				},
-				Enter: function(){ togglePageView('on') },
-				// combined navigation with actions..
-				Up: function(){ togglePageView() },
-				Down: function(){ togglePageView() },
-
-				F: function(){ togglePageFitMode() },
-				B: {
-					default: toggleBookmark,
-					ctrl: function(){ toggleThemes() },
-				},
-
-				// XXX this should not be in the production viewer...
-				E: function(){ toggleEditor() },
-			},
-		}, 
+	.keydown(makeKeyboardHandler(keyboard_config,
 		function(k){console.log(k)}))
 
 	window.MagazineScroller = makeScrollHandler($('.viewer'), {
@@ -284,6 +293,7 @@ $(document).ready(function(){
 <div class="top-toolbar">
 	<div class="left-set">
 		<div class="button title"><a href="#home" class="magazine-title-text">Magazine Title</a></div>
+		<!--div class="button title magazine-title-text" contenteditable="false">Magazine Title</div-->
 	</div>
 	<div class="right-set">
 		<div class="button prev-bookmark">
