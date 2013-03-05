@@ -109,6 +109,14 @@
 	color: gray;
 }
 
+.overlay > div:first-child {
+	background: #555;
+}
+.overlay > div:last-child {
+	color: white;
+	background: #555;
+	box-shadow: 5px 5px 200px 30px #555;
+}
 
 
 
@@ -186,6 +194,14 @@
 	background: red;
 }
 
+.light-viewer .overlay > div:first-child {
+	background: white;
+}
+.light-viewer .overlay > div:last-child {
+	color: gray;
+	background: white;
+	box-shadow: 5px 5px 200px 30px #eee;
+}
 
 
 /***************************************************** dark viewer ***/
@@ -262,6 +278,14 @@
 	background: red;
 }
 
+.dark-viewer .overlay > div:first-child {
+	background: black;
+}
+.dark-viewer .overlay > div:last-child {
+	color: white;
+	background: black;
+	box-shadow: 5px 5px 200px 30px black;
+}
 
 
 /******************************************************* Magazine ****/
