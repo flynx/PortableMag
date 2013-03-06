@@ -677,28 +677,28 @@ div.page-number-text {
 }
 
 /* column layouts */
-.page .content .one-column {
+.one-column {
 	column-count: 1;
 	-webkit-column-count: 1;
 	-moz-column-count: 1;
 
 	text-align: justify;
 }
-.page .content .two-column {
+.two-column {
 	column-count: 2;
 	-webkit-column-count: 2;
 	-moz-column-count: 2;
 
 	text-align: justify;
 }
-.page .content .three-column {
+.three-column {
 	column-count: 3;
 	-webkit-column-count: 3;
 	-moz-column-count: 3;
 
 	text-align: justify;
 }
-.page .content .four-column {
+.four-column {
 	column-count: 4;
 	-webkit-column-count: 4;
 	-moz-column-count: 4;
