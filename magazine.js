@@ -874,6 +874,70 @@ function prevBookmark(){
 *
 **********************************************************************/
 
+URL_HANDLERS = {
+	// basic navigation...
+	home: function(){
+		return 0
+	},
+	end: function(){
+		return $('.page').length-1
+	},
+
+	// relative URLs...
+	next: function(){
+		nextPage()
+		return getPageNumber()
+	},
+	prev: function(){
+		prevPage()
+		return getPageNumber()
+	},
+	nextArticle: function(){
+		nextArticle()
+		return getPageNumber()
+	},
+	prevArticle: function(){
+		prevArticle()
+		return getPageNumber()
+	},
+	nextBookmark: function(){
+		nextBookmark()
+		return getPageNumber()
+	},
+	prevBookmark: function(){
+		prevBookmark()
+		return getPageNumber()
+	},
+
+	// actions...
+	// XXX this scrolls someplace odd...
+	thumbnails: function(){
+		n = getPageNumber()
+		togglePageView('off')
+		return n
+	},
+	bookmark: function(){
+		toggleBookmark()
+		return getPageNumber()
+	},
+	// hide all visible layers on current page...
+	hideLayers: function(){
+		$('.current.page .shown')
+			.addClass('hidden')
+			.removeClass('shown')
+		return getPageNumber()
+	},
+
+	// history...
+	// NOTE: these are handled by hashChangeHandler()
+	back: function(){
+		return 'back'
+	},
+	forward: function(){
+		return anchor
+	},
+}
+
 // XXX make URLs magazine-specific...
 // 		...for extrnal linking we'll need the magazine ID, or make each 
 // 		magazine a seporate path...
@@ -899,75 +963,24 @@ function loadURLState(){
 		return n
 	}
 
-	// XXX add real external aliases...
-	if(anchor == 'thumbnails') {
-		togglePageView('off')
-		return getPageNumber()
+	if(anchor in URL_HANDLERS){
+		return URL_HANDLERS[anchor]()
+	}
 
-	} else if(anchor == 'home') {
-		return 0
-
-	} else if(anchor == 'end') {
-		return $('.page').length-1
-
-	// history...
-	// NOTE: these are handled by hashChangeHandler()
-	} else if(anchor == 'back') {
-		return anchor
-	} else if(anchor == 'forward') {
-		return anchor
-
-	// relative URLs...
-	} else if(anchor == 'next') {
-		nextPage()
-		return getPageNumber()
-
-	} else if(anchor == 'prev') {
-		prevPage()
-		return getPageNumber()
-
-	} else if(anchor == 'nextArticle') {
-		nextArticle()
-		return getPageNumber()
-
-	} else if(anchor == 'prevArticle') {
-		prevArticle()
-		return getPageNumber()
-
-	} else if(anchor == 'nextBookmark') {
-		nextBookmark()
-		return getPageNumber()
-
-	} else if(anchor == 'prevBookmark') {
-		prevBookmark()
-		return getPageNumber()
-
-	} else if(anchor == 'bookmark'){
-		toggleBookmark()
-		return getPageNumber()
-
-	// hide all visible layers on current page...
-	} else if(anchor == 'hideLayers') {
-		$('.current.page .shown')
+	// show a layer...
+	var elem = $('[name='+anchor+']')
+	n = getPageNumber(elem.parents('.page'))
+	// toggle hidden/shown elements...
+	if(elem.hasClass('hidden')){
+		elem
+			.addClass('shown')
+			.removeClass('hidden')
+	} else if(elem.hasClass('shown')){
+		elem
 			.addClass('hidden')
 			.removeClass('shown')
-		return getPageNumber()
-
-	} else {
-		var elem = $('[name='+anchor+']')
-		n = getPageNumber(elem.parents('.page'))
-		// toggle hidden/shown elements...
-		if(elem.hasClass('hidden')){
-			elem
-				.addClass('shown')
-				.removeClass('hidden')
-		} else if(elem.hasClass('shown')){
-			elem
-				.addClass('hidden')
-				.removeClass('shown')
-		}
-		return n
 	}
+	return n
 }
 // save current state to URL...
 function saveURLState(){
