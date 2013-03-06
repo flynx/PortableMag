@@ -582,15 +582,22 @@ div.page-number-text {
 .caption {
 	display: block;
 	position: absolute;
-	height: 100px;
+	height: auto;
+	min-height: 100px;
 	width: 100%;
 	bottom: 0px;
 	left: 0px;
 
+	box-sizing: border-box;
+
 	padding: 15px;
+	padding-bottom: 30px;
+
 	color: white;
 	background: black;
-	opacity: 0.5;
+
+	opacity: 0.8;
+
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-o-transition: all 0.2s ease;
@@ -771,6 +778,34 @@ div.page-number-text {
 .page.caption-top-arrow.noshadow:before,
 .page.caption-bottom-arrow.noshadow:before {
 	box-shadow: none; 
+}
+
+
+.page.vertical-image-fit,
+.page.horizontal-image-fit {
+	/* prevent link errors from messing up the mag layout... */
+	overflow: hidden;
+}
+
+.page.vertical-image-fit .content {
+	width: auto;
+}
+.page.vertical-image-fit .content img {
+	height: 100%;
+	cursor: hand;
+}
+
+.page.horizontal-image-fit .content {
+	display: table-cell;
+	vertical-align: middle;
+}
+.page.horizontal-image-fit .content img {
+	width: 100%;
+	cursor: hand;
+}
+
+.page.horizontal-image-fit .caption,
+.page.vertical-image-fit .caption {
 }
 
 

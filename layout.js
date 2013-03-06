@@ -72,6 +72,11 @@ var togglePageView = createCSSClassToggler(
 var toggleInlineEditorMode = createCSSClassToggler('.chrome', 'inline-editor-mode')
 
 
+function toggleCaption(img){
+	img.parent().find('.caption').toggleClass('hidden')
+}
+
+
 
 /************************************************** event handlers ***/
 
