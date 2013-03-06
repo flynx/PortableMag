@@ -1,0 +1,92 @@
+
+
+.gear {
+	position: relative;
+	width: 35px;
+	height: 35px;
+
+	overflow: hidden;
+
+	border: solid black 1px;
+	border-radius: 50%;
+
+	cursor: hand;
+}
+
+.gear > div {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	
+
+	-webkit-transform-origin: 50% 50%;
+	-moz-transform-origin: 50% 50%;
+	-o-transform-origin: 50% 50%;
+	-ms-transform-origin: 50% 50%;
+	transform-origin: 50% 50%;
+
+	-webkit-transform: rotate(15deg);
+	-moz-transform: rotate(15deg);
+	-o-transform: rotate(15deg);
+	-ms-transform: rotate(15deg);
+	transform: rotate(15deg);
+}
+
+.gear .spoke {
+	position: absolute;
+	width: 20%;
+	height: 15%;
+	right: 5%;
+	top: 42.5%;
+	background: blue;
+}
+
+.gear .spoke div {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	right: 0;
+	top: 0;
+	background: red;
+
+	-webkit-transform-origin: -125% 50%;
+	-moz-transform-origin: -125% 50%;
+	-o-transform-origin: -125% 50%;
+	-ms-transform-origin: -125% 50%;
+	transform-origin: -125% 50%;
+
+	-webkit-transform: rotate(40deg);
+	-moz-transform: rotate(40deg);
+	-o-transform: rotate(40deg);
+	-ms-transform: rotate(40deg);
+	transform: rotate(40deg);
+}
+.gear .spoke div:after {
+	display: block;
+	content: "";
+	position: absolute;
+	width: 75%;
+	height: 120%;
+	right: 25%;
+	top: 0;
+	background: red;
+
+	-webkit-transform-origin: -125% 50%;
+	-moz-transform-origin: -125% 50%;
+	-o-transform-origin: -125% 50%;
+	-ms-transform-origin: -125% 50%;
+	transform-origin: -125% 50%;
+
+	-webkit-transform: rotate(20deg);
+	-moz-transform: rotate(20deg);
+	-o-transform: rotate(20deg);
+	-ms-transform: rotate(20deg);
+	transform: rotate(20deg);
+}
+
+.gear .spoke,
+.gear .spoke div,
+.gear .spoke div:after {
+	background: black;
+}
+

@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 
 <link rel="stylesheet" href="magazine.css">
+<link rel="stylesheet" href="gear.css">
 <link rel="stylesheet" href="magazine-themes.css">
 <link rel="stylesheet" href="magazine-custom.css">
 <link rel="stylesheet" href="magazine-editor.css">
@@ -60,6 +61,22 @@
 	display: block;
 }
 */
+
+.gear {
+	display: none;
+	border-color: silver;
+}
+
+.editor .gear {
+	display: inline-block;
+	opacity: 0.4;
+}
+
+.editor .gear .spoke,
+.editor .gear .spoke div,
+.editor .gear .spoke div:after {
+	background: silver;
+}
 
 </style>
 
@@ -230,6 +247,11 @@ $(document).ready(function(){
 		.on('pageChanged', updatePageNumberIndicator)
 		.on('magazineDataLoaded', loadMagazineChrome)
 
+	$('.settings.button')
+		.click(function(){
+			showInOverlay('<h1>Not Yey Implemented...</h1>')
+		})
+
 
 
 	//loadState()
@@ -357,6 +379,16 @@ $(document).ready(function(){
 				</svg>
 			</a>
 		</div>
+
+		<div class="gear button settings">
+			<div>
+				<div class="spoke">
+					<div><div><div><div><div><div><div><div><div>
+					</div></div></div></div></div></div></div></div></div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 </div>
 <!-- Top Toolbar (end) -->
@@ -390,6 +422,8 @@ $(document).ready(function(){
 
 <!-- Magazine Viewer -------------------------------------------------->
 <div id="viewer" class="viewer">
+
+	
 
 	<div class="magazine" name="PortableMag">
 		<div class="cover page">
