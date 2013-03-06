@@ -415,6 +415,7 @@ function setCurrentPage(n, use_transitions){
 
 	$('.viewer').trigger('pageChanged', n)
 
+	$(':focus').blur()
 	return cur
 }
 
