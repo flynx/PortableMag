@@ -788,9 +788,14 @@ div.page-number-text {
 	box-shadow: none; 
 }
 
+.image-with-caption {
+	position: relative;
+	display: inline-block;
+}
 
-.page.vertical-image-fit,
-.page.horizontal-image-fit {
+
+.page.image-fit,
+.page.image-fit-height {
 	/* prevent link errors from messing up the mag layout... */
 	overflow: hidden;
 }

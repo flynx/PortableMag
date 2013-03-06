@@ -203,5 +203,13 @@
 }
 
 
+/* the captions are always dark so we need to keep them correctly 
+ * colored here... */
+.caption ::selection {
+	background: yellow;
+	color: white;
+}
+
+
 
 /*********************************************************************/

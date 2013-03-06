@@ -252,6 +252,7 @@ $(document).ready(function(){
 
 	// hide the splash...
 	setTimeout(function(){
+		//setCurrentPage(0)
 		$('.splash').fadeOut()
 	}, 350)
 	// remove the spinner...
@@ -591,7 +592,7 @@ $(document).ready(function(){
 			<div class="page">
 				<div class="content">
 					<a name="page-3-anchor"></a>
-					<img src="img.jpg" height="100%" align="left" style="margin-right: 15px"/>
+					<img src="img.jpg" title="Image caption..." height="100%" align="left" style="margin-right: 15px"/>
 					<h1>Using the content block...</h1>
 					<p>
 					The content block can contain any HTML.
@@ -787,7 +788,7 @@ $(document).ready(function(){
 				</div>
 			</div>
 
-			<div class="page image-fit-height no-resize dark">
+			<div class="page image-fit-height no-resize dark page-align-right">
 				<div class="content">
 					<img src="img.jpg">
 					<div class="caption hidden" contenteditable="false">

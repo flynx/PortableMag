@@ -79,6 +79,14 @@ var togglePageView = createCSSClassToggler(
 var toggleInlineEditorMode = createCSSClassToggler('.chrome', 'inline-editor-mode')
 
 
+// XXX this is neither final nor usable...
+function prepareInlineCaptions(){
+	$('.page img[title]').each(function(){
+		// XXX make this add same style captions to images without changing 
+		// 		layout...
+	})
+}
+
 
 
 /************************************************** event handlers ***/
@@ -104,11 +112,11 @@ function handleClick(evt, data){
 }
 
 // Click on caption...
-// XXX add inline captions...
+// XXX add inline caption support...
 function handleCaption(evt, data){
 	elem = $(data.orig_event.target)
-	if(elem.is('.image-fit-height, .image-fit') 
-			|| elem.parents('.image-fit-height, .image-fit').length > 0){
+	if(elem.is('.image-fit-height, .image-fit, .image-with-caption') 
+			|| elem.parents('.image-fit-height, .image-fit, .image-with-caption').length > 0){
 
 		// prevent doing anything in ribbon mode..
 		if(togglePageView('?') == 'off'){
