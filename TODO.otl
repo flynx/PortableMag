@@ -1,5 +1,7 @@
 [_] 37% Priority work
 	[_] 66% general todo
+		[_] BUG: after moving pages around in the editor captions do not appear...
+		| ...until the editor is cycled on and off.
 		[_] 37% Version 1.0 checklist (migration to layout.html)
 			[X] page scaling for full page view
 			[X] top/bottom toolbars
