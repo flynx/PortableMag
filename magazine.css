@@ -813,8 +813,11 @@ div.page-number-text {
 	cursor: hand;
 }
 
-.page.horizontal-image-fit .content {
+.page.horizontal-image-fit .content > div {
 	display: table-cell;
+	/* XXX this is ugly... */
+	width: 800px;
+	height: 600px;
 	vertical-align: middle;
 }
 .page.horizontal-image-fit .content img {
