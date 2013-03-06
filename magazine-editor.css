@@ -1,3 +1,7 @@
+/**********************************************************************
+* 
+**********************************************************************/
+
 .current-page-indicator {
 	display: none;
 	position: absolute;
@@ -188,3 +192,13 @@
 }
 
 
+/* allways show captions in editor's full page mode */
+.full-page-view-mode.editor .current.page.horizontal-image-fit .caption,
+.full-page-view-mode.editor .current.page.vertical-image-fit .caption {
+	opacity: 0.8;
+	height: auto;
+}
+
+
+
+/*********************************************************************/

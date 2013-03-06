@@ -72,10 +72,6 @@ var togglePageView = createCSSClassToggler(
 var toggleInlineEditorMode = createCSSClassToggler('.chrome', 'inline-editor-mode')
 
 
-function toggleCaption(img){
-	img.parent().find('.caption').toggleClass('hidden')
-}
-
 
 
 /************************************************** event handlers ***/
@@ -97,6 +93,26 @@ function handleClick(evt, data){
 
 		//setTransitionEasing(mag, 'ease')
 		setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
+	}
+}
+
+// Click on caption...
+function handleCaption(evt, data){
+	elem = $(data.orig_event.target)
+	if(elem.is('.vertical-image-fit, .horizontal-image-fit') 
+			|| elem.parents('.vertical-image-fit, .horizontal-image-fit').length > 0){
+
+		// prevent doing anything in ribbon mode..
+		if(togglePageView('?') == 'off'){
+			return
+		}
+
+		if(elem.hasClass('caption')){
+			elem.toggleClass('hidden')
+			return
+		}
+
+		elem.parents('.page').find('.caption').toggleClass('hidden')
 	}
 }
 

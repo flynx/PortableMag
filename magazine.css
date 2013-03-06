@@ -787,6 +787,24 @@ div.page-number-text {
 	overflow: hidden;
 }
 
+/* XXX fin a universal way to do this...
+.page.image-fit .content {
+	display: table-cell;
+	vertical-align: middle;
+	width: auto;
+	min-width: 400px;
+	max-width: 800px;
+}
+.page.image-fit .content img {
+	height: auto;
+	max-height: 100%;
+	width: auto;
+	max-width: 100%;
+
+	cursor: hand;
+}
+*/
+
 .page.vertical-image-fit .content {
 	width: auto;
 }
@@ -802,10 +820,6 @@ div.page-number-text {
 .page.horizontal-image-fit .content img {
 	width: 100%;
 	cursor: hand;
-}
-
-.page.horizontal-image-fit .caption,
-.page.vertical-image-fit .caption {
 }
 
 

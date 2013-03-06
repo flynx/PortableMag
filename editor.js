@@ -220,8 +220,9 @@ function setupEditorToolbars(){
 			.click(function(){
 				// NOTE: this does the same thing as handleClick...
 				togglePageView('on')
-				setCurrentPage(target)
-				setTransitionEasing(mag, 'cubic-bezier(0.33,0.66,0.66,1)')
+				// XXX for some reason this does not work...
+				setCurrentPage()
+				setTransitionEasing($('.magazien'), 'cubic-bezier(0.33,0.66,0.66,1)')
 			})
 
 	// the toolbars...
