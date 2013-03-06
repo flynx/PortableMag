@@ -38,11 +38,13 @@ body {
 
 	background: white;
 
+	/*
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-o-transition: all 0.2s ease;
 	-ms-transition: all 0.2s ease;
 	transition: all 0.2s ease;
+	*/
 }
 
 .page .content {
@@ -61,11 +63,13 @@ body {
 	-moz-box-sizing:border-box;
 	-webkit-box-sizing:border-box;
 	
+	/*
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-o-transition: all 0.2s ease;
 	-ms-transition: all 0.2s ease;
 	transition: all 0.2s ease;
+	*/
 }
 
 .page .bookmark {
@@ -526,6 +530,8 @@ body {
 	padding-right: 15px;
 
 	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
 }
 .overlay > div:last-child {
 	position: absolute;
@@ -589,6 +595,8 @@ div.page-number-text {
 	left: 0px;
 
 	box-sizing: border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
 
 	padding: 15px;
 	padding-bottom: 30px;
@@ -787,41 +795,21 @@ div.page-number-text {
 	overflow: hidden;
 }
 
-/* XXX fin a universal way to do this...
+/* image-fit */
 .page.image-fit .content {
-	display: table-cell;
-	vertical-align: middle;
-	width: auto;
-	min-width: 400px;
-	max-width: 800px;
-}
-.page.image-fit .content img {
-	height: auto;
-	max-height: 100%;
-	width: auto;
-	max-width: 100%;
-
-	cursor: hand;
-}
-*/
-
-.page.vertical-image-fit .content {
-	width: auto;
-}
-.page.vertical-image-fit .content img {
+	width: 100%;
 	height: 100%;
 	cursor: hand;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
 }
 
-.page.horizontal-image-fit .content > div {
-	display: table-cell;
-	/* XXX this is ugly... */
-	width: 800px;
-	height: 600px;
-	vertical-align: middle;
+.page.image-fit-height .content {
+	width: auto;
 }
-.page.horizontal-image-fit .content img {
-	width: 100%;
+.page.image-fit-height .content img {
+	height: 100%;
 	cursor: hand;
 }
 

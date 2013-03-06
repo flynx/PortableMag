@@ -6,6 +6,8 @@
 	display: none;
 	position: absolute;
 	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
 	opacity: 0.8;
 
 	-webkit-transition: all 0.3s ease;
@@ -193,10 +195,12 @@
 
 
 /* allways show captions in editor's full page mode */
+.full-page-view-mode.editor .current.page.image-fit .caption,
 .full-page-view-mode.editor .current.page.horizontal-image-fit .caption,
 .full-page-view-mode.editor .current.page.vertical-image-fit .caption {
 	opacity: 0.8;
 	height: auto;
+	min-height: 100px;
 }
 
 

@@ -11,7 +11,6 @@ var DEFAULT_TRANSITION_DURATION = 200
 var INNERTIA_SCALE = 0.25
 
 
-
 /********************************************************** layout ***/
 
 var toggleThemes = createCSSClassToggler('.chrome', [
@@ -21,6 +20,13 @@ var toggleThemes = createCSSClassToggler('.chrome', [
 	'dark-viewer'
 ])
 
+
+// NOTE: this should not change anything unless the screen size changes...
+function fitScreenSizedPages(){
+	var s = getPageTargetScale(1)
+	var W = $('.viewer').width()
+	$(SCREEN_SIZED_PAGES).width(W / s)
+}
 
 var togglePageFitMode = createCSSClassToggler(
 		'.chrome', 
@@ -35,6 +41,7 @@ var togglePageFitMode = createCSSClassToggler(
 				var n = getPageNumber()
 				$(RESIZABLE_PAGES).width('')
 			}
+			fitScreenSizedPages()
 			setCurrentPage(n)
 		})
 
@@ -99,20 +106,24 @@ function handleClick(evt, data){
 // Click on caption...
 function handleCaption(evt, data){
 	elem = $(data.orig_event.target)
-	if(elem.is('.vertical-image-fit, .horizontal-image-fit') 
-			|| elem.parents('.vertical-image-fit, .horizontal-image-fit').length > 0){
+	if(elem.is('.image-fit-height, .image-fit') 
+			|| elem.parents('.image-fit-height, .image-fit').length > 0){
 
 		// prevent doing anything in ribbon mode..
 		if(togglePageView('?') == 'off'){
 			return
 		}
 
-		if(elem.hasClass('caption')){
-			elem.toggleClass('hidden')
-			return
+		if(!elem.hasClass('caption')){
+			elem = elem.parents('.page').find('.caption')
 		}
 
-		elem.parents('.page').find('.caption').toggleClass('hidden')
+		// hide and do not show empty captions...
+		if(elem.text().trim() != ''){
+			elem.toggleClass('hidden')
+		} else {
+			elem.addClass('hidden')
+		}
 	}
 }
 

@@ -74,6 +74,15 @@ var NON_RESIZABLE_PAGES = $(NO_RESIZE_CLASSES)
 							.toArray()
 							.join(', ')
 
+var SCREEN_SIZED_PAGE_CLASSES = [
+	'screen-size',
+	'image-fit',
+]
+var SCREEN_SIZED_PAGES = $(SCREEN_SIZED_PAGE_CLASSES)
+							.map(function(_, e){ return '.page.' + e + '' })
+							.toArray()
+							.join(', ')
+
 
 
 /*********************************************************** modes ***/
