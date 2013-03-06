@@ -104,6 +104,7 @@ function handleClick(evt, data){
 }
 
 // Click on caption...
+// XXX add inline captions...
 function handleCaption(evt, data){
 	elem = $(data.orig_event.target)
 	if(elem.is('.image-fit-height, .image-fit') 

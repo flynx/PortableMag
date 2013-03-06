@@ -183,6 +183,12 @@ var keyboard_config = {
 
 
 $(document).ready(function(){
+
+	// this is to fix some sort of bug baking things align in a wrong 
+	// way at startup...
+	// XXX make this fix in the CSS -- most likely stray transition somewhere...
+	setTransitionDuration($('.magazine, .page'), 0)
+
 	// general window behavior...
 	$(window)
 		.resize(updateView)

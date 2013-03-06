@@ -196,11 +196,10 @@
 
 /* allways show captions in editor's full page mode */
 .full-page-view-mode.editor .current.page.image-fit .caption,
-.full-page-view-mode.editor .current.page.horizontal-image-fit .caption,
-.full-page-view-mode.editor .current.page.vertical-image-fit .caption {
-	opacity: 0.8;
+.full-page-view-mode.editor .current.page.image-fit-height .caption {
+	opacity: 1;
 	height: auto;
-	min-height: 100px;
+	min-height: 30px;
 }
 
 
