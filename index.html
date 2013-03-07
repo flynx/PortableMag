@@ -148,9 +148,9 @@ var keyboard_config = {
 		doc: '',
 
 		Esc: function(){
-			removeOverlay()
-			return false
-		},
+				removeOverlay()
+				return false
+			},
 	},
 
 	// ignore all keys except Esc here...
@@ -160,9 +160,9 @@ var keyboard_config = {
 
 		//ignore: '*'
 		Esc: function(){
-			$(':focus').blur()
-			return false
-		},
+				$(':focus').blur()
+				return false
+			},
 	},
 
 	'.chrome:not(.inline-editor-mode)': {
@@ -170,27 +170,27 @@ var keyboard_config = {
 		doc: '',
 
 		Esc: function(){
-			if(toggleEditor('?') == 'on'){
-				toggleEditor('off')
-			} else {
-				togglePageView('off')
-			}
-		},
+				if(toggleEditor('?') == 'on'){
+					toggleEditor('off')
+				} else {
+					togglePageView('off')
+				}
+			},
 
 		Home: firstPage,
 		End: lastPage, 
 		Left: {
-			default: prevPage,
-			ctrl: prevArticle,
-		},
+				default: prevPage,
+				ctrl: prevArticle,
+			},
 		Right: {
-			default: nextPage,
-			ctrl: nextArticle,
-		},
+				default: nextPage,
+				ctrl: nextArticle,
+			},
 		Space:	{
-			default: nextPage,
-			shift: prevPage	
-		},
+				default: nextPage,
+				shift: prevPage	
+			},
 		Tab: 'Space',
 		Enter: function(){ togglePageView('on') },
 		// combined navigation with actions..
@@ -199,9 +199,9 @@ var keyboard_config = {
 
 		F: function(){ togglePageFitMode() },
 		B: {
-			default: toggleBookmark,
-			ctrl: function(){ toggleThemes() },
-		},
+				default: toggleBookmark,
+				ctrl: function(){ toggleThemes() },
+			},
 
 		// XXX this should not be in the production viewer...
 		E: function(){ toggleEditor() },
