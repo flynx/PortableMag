@@ -5,6 +5,8 @@
 			[_] add page via template
 			[_] load/save from JSON
 			[_] basic instructions/docs...
+			[_] page settngs in full view editor
+			| could even be fixed...
 		[_] 37% Version 1.0 checklist (migration to layout.html)
 			[X] page scaling for full page view
 			[X] top/bottom toolbars
