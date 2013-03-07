@@ -232,6 +232,7 @@ function setupEditorToolbars(){
 			.appendTo(indicator)
 
 	$('<button class="button remove">&times;</button>')
+		.attr('title', 'Remove')
 		.appendTo(indicator)
 		.click(function(){
 			setTransitionDuration($('.magazine'), 0)
@@ -242,14 +243,27 @@ function setupEditorToolbars(){
 		})
 
 	$('<button class="button shift">&gt;</button>')
+		.attr('title', 'Move (w. Shift - Clone)')
 		.appendTo(right_bar)
 		.click(function(){
-			shiftPageRight()
-			runMagazineTemplates()
-
+			// if shift is pressed duplicate current page...
+			if(event.shiftKey){
+				var n = getPageNumber()
+				setTransitionDuration($('.magazine'), 0)
+				$('.current.page')
+					.clone(true, true)
+					.removeClass('current')
+					.insertAfter($('.current.page'))
+				setCurrentPage(n)
+			// simply move...
+			} else {
+				shiftPageRight()
+				runMagazineTemplates()
+			}
 			return false
 		})
 	$('<button class="button add">+</button>')
+		.attr('title', 'New page')
 		.appendTo(right_bar)
 		.click(function(){
 
@@ -257,14 +271,27 @@ function setupEditorToolbars(){
 		})
 
 	$('<button class="button shift">&lt;</button>')
+		.attr('title', 'Move (w. Shift - Clone)')
 		.appendTo(left_bar)
 		.click(function(){
-			shiftPageLeft()
-			runMagazineTemplates()
-
+			// if shift is pressed duplicate current page...
+			if(event.shiftKey){
+				var n = getPageNumber()
+				setTransitionDuration($('.magazine'), 0)
+				$('.current.page')
+					.clone(true, true)
+					.removeClass('current')
+					.insertBefore($('.current.page'))
+				setCurrentPage(n+1)
+			// simply move...
+			} else {
+				shiftPageLeft()
+				runMagazineTemplates()
+			}
 			return false
 		})
 	$('<button class="button add">+</button>')
+		.attr('title', 'New page')
 		.appendTo(left_bar)
 		.click(function(){
 
