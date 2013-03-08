@@ -76,9 +76,6 @@ var togglePageView = createCSSClassToggler(
 		})
 
 
-var toggleInlineEditorMode = createCSSClassToggler('.chrome', 'inline-editor-mode')
-
-
 // XXX this is neither final nor usable...
 function prepareInlineCaptions(){
 	$('.page img[title]').each(function(){

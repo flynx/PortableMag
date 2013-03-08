@@ -153,6 +153,41 @@ var keyboard_config = {
 			},
 	},
 
+	'.editor:not(.inline-editor-mode)': {
+		title: 'Editor mode.',
+		doc: '',
+
+		// 0
+		48: function(){
+				var n = getPageNumber()
+				if(togglePageView('?') == 'on'){
+					setMagazineScale(getPageTargetScale(1))
+				} else {
+					setMagazineScale(getPageTargetScale(PAGES_IN_RIBBON))
+				}
+				setCurrentPage(n)
+			},
+		Esc: 48,
+
+		// +
+		187: function(){
+				var n = getPageNumber()
+				setMagazineScale(Math.min(
+						getMagazineScale() * 1.2, 
+						getPageTargetScale(1)))
+				setCurrentPage(n)
+			},
+		// -
+		189: function(){
+				var n = getPageNumber()
+				setMagazineScale(Math.max(
+						getMagazineScale() * 0.8, 
+						getPageTargetScale(PAGES_IN_RIBBON*2)))
+				setCurrentPage(n)
+			},
+
+	},
+
 	// ignore all keys except Esc here...
 	'.inline-editor-mode': {
 		title: 'Inline editor mode.',

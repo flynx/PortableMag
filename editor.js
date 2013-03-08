@@ -359,6 +359,9 @@ var toggleInlineEditor = createCSSClassToggler(
 		}
 	})
 	
+var toggleInlineEditorMode = createCSSClassToggler('.chrome', 'inline-editor-mode')
+
+
 
 
 // this will set up the main editor event handlers and data...
