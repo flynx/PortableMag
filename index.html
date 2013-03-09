@@ -157,8 +157,7 @@ var keyboard_config = {
 		title: 'Editor mode.',
 		doc: '',
 
-		// 0
-		48: function(){
+		'0': function(){
 				var n = getPageNumber()
 				if(togglePageView('?') == 'on'){
 					setMagazineScale(getPageTargetScale(1))
@@ -167,25 +166,22 @@ var keyboard_config = {
 				}
 				setCurrentPage(n)
 			},
-		Esc: 48,
+		Esc: '0',
 
-		// +
-		187: function(){
+		'=': function(){
 				var n = getPageNumber()
 				setMagazineScale(Math.min(
 						getMagazineScale() * 1.2, 
 						getPageTargetScale(1)))
 				setCurrentPage(n)
 			},
-		// -
-		189: function(){
+		'-': function(){
 				var n = getPageNumber()
 				setMagazineScale(Math.max(
 						getMagazineScale() * 0.8, 
 						getPageTargetScale(PAGES_IN_RIBBON*2)))
 				setCurrentPage(n)
 			},
-
 	},
 
 	// ignore all keys except Esc here...
