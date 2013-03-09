@@ -54,9 +54,6 @@ function Content(content, classes, style, attrs){
 
 
 /*********************************************************************/
-// XXX for some reason in these pages in inline-editor-mode Esc will both
-// 		exit the inline editor and the editor mode, when only the earlier
-// 		should happen...
 
 function RawPage(text){
 	text = text != null ? text : 'Raw Page' 
@@ -68,9 +65,9 @@ function TextPage(title, text){
 	title = title != null ? title : 'Text Page'
 	text = text != null ? text : STUB_TEXT 
 	return Page(Content($(
-		'<div class"header" contenteditable="false"><h1>'+title+'</h1></div>'+
-		'<div class"body two-column" contenteditable="false">'+text+'</div>'+
-		'<div class"footer"><div class="page-number-text">[PAGE NUMBER]</div></div>')))
+		'<div class="header" contenteditable="false"><h1>'+title+'</h1></div>'+
+		'<div class="body two-column" contenteditable="false">'+text+'</div>'+
+		'<div class="footer"><div class="page-number-text">[PAGE NUMBER]</div></div>')))
 }
 
 
@@ -80,25 +77,26 @@ function CaptionPage(text){
 }
 
 
+// XXX this needs a togglePageView(..) after attaching to get visible...
 function ImagePage(url, caption){
 	url = url != null ? url : STUB_HORIZONTAL_IMAGE_URL
 	caption = caption != null ? caption : '<h3>Image Caption</h3>' + STUB_TEXT 
 	return Page(Content($(
-			'<div class"caption hidden" contenteditable="false">'+caption+'</div>'+
-			'<div class="page-number-text">[PAGE NUMBER]</div>'),
-		null,
-		{'background-image': 'url('+url+')'}), 
+				'<div class="caption hidden" contenteditable="false">'+caption+'</div>'+
+				'<div class="page-number-text">[PAGE NUMBER]</div>'),
+			null,
+			{'background-image': 'url('+url+')'}), 
 		'image-fit')
 }
 
 
 function ImageFitHeightPage(url, caption){
-	url = url != null ? url : STUB_HORIZONTAL_IMAGE_URL
+	url = url != null ? url : STUB_VERTICAL_IMAGE_URL
 	caption = caption != null ? caption : '<h3>Image Caption</h3>' + STUB_TEXT 
 	return Page(Content($(
 			'<img src="'+url+'">'+
-			'<div class"caption hidden" contenteditable="false">'+caption+'</div>'+
-			'<div class="page-number-text">[PAGE NUMBER]</div>'),
+			'<div class="caption hidden" contenteditable="false">'+caption+'</div>'+
+			'<div class="page-number-text">[PAGE NUMBER]</div>')),
 		'image-fit-height')
 }
 

@@ -340,7 +340,13 @@ var toggleInlineEditor = createCSSClassToggler(
 	function(action){
 		if(action == 'on'){
 			MagazineScroller.stop()
-			$('[contenteditable]').attr({contenteditable: 'true'})
+			$('[contenteditable]')
+				.attr({contenteditable: 'true'})
+				// setup focus/blur events for [contenteditable] elements...
+				// XXX might get a tad slow...
+				.on('focus', handleEditableFocus)
+				.on('blur', handleEditableBlur) 
+
 			// ckeditor...
 			if(window.CKEDITOR){
 				CKEDITOR.inlineAll()
@@ -349,6 +355,10 @@ var toggleInlineEditor = createCSSClassToggler(
 			$('[contenteditable]')
 				.blur()
 				.attr({contenteditable: 'false'})
+				// remove handlers...
+				// XXX might get a tad slow...
+				.off('focus', handleEditableFocus)
+				.off('blur', handleEditableBlur) 
 			MagazineScroller.start()
 			// ckeditor...
 			if(window.CKEDITOR){
@@ -358,27 +368,32 @@ var toggleInlineEditor = createCSSClassToggler(
 			}
 		}
 	})
+// XXX is this good?
+function refreshInlineEditor(){
+	toggleInlineEditor()
+	toggleInlineEditor()
+}
 	
 var toggleInlineEditorMode = createCSSClassToggler('.chrome', 'inline-editor-mode')
 
 
 
+// XXX move these to the handler...
+function handleEditableFocus(){
+	if(toggleInlineEditor('?') == 'off'){
+		$(':focus').blur()
+	} else {
+		toggleInlineEditorMode('on')
+	}
+}
+function handleEditableBlur(){
+	toggleInlineEditorMode('off')
+}
+
+
 
 // this will set up the main editor event handlers and data...
 function setupEditor(){
-	// editable focus...
-	$('[contenteditable]')
-		.on('focus', function(){
-			if(toggleInlineEditor('?') == 'off'){
-				$(':focus').blur()
-			} else {
-				toggleInlineEditorMode('on')
-			}
-		})
-		.on('blur', function(){
-			toggleInlineEditorMode('off')
-		})
-
 	$('.viewer')
 		// move the page indicator...
 		// NOTE: this is to be used for page-specific toolbars etc.
