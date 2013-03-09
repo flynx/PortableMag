@@ -214,6 +214,30 @@ function removePage(page){
 // XXX need better separation between full screen and ribbon modes...
 // XXX need to split this into more generic parts...
 
+// XXX STUB
+// XXX setCurrentPage after each action...
+function _finalize(direction, n){
+	refreshInlineEditor()
+	setCurrentPage(direction == 'before'? n : n+1)
+	removeOverlay()
+}
+function addPage(direction){
+	var n = getPageNumber()
+	return function(){
+		showInOverlay($(
+			'<div>'+
+				'<h1>Templates</h1>'+
+				'<a href="javascript:$(\'.current.page\').'+direction+'(RawPage());_finalize(\''+direction+'\', '+n+')"><h3>Raw Page</h3></a>'+
+				'<a href="javascript:$(\'.current.page\').'+direction+'(TextPage());_finalize(\''+direction+'\', '+n+')"><h3>Text Page</h3></a>'+
+				'<a href="javascript:$(\'.current.page\').'+direction+'(CaptionPage());_finalize(\''+direction+'\', '+n+')"><h3>Caption Page</h3></a>'+
+				'<a href="javascript:$(\'.current.page\').'+direction+'(ImagePage());_finalize(\''+direction+'\', '+n+')"><h3>Image Page</h3></a>'+
+				'<a href="javascript:$(\'.current.page\').'+direction+'(ImageFitHeightPage());_finalize(\''+direction+'\', '+n+'))"><h3>Vertical Image Page</h3></a>'+
+			'</div>'))
+	}
+}
+
+
+
 function setupEditorToolbars(){
 	var indicator = $('<div class="current-page-indicator"/>')
 			.appendTo($('.magazine'))
@@ -266,7 +290,7 @@ function setupEditorToolbars(){
 		.attr('title', 'New page')
 		.appendTo(right_bar)
 		.click(function(){
-
+			addPage('after')()
 			return false
 		})
 
@@ -294,7 +318,7 @@ function setupEditorToolbars(){
 		.attr('title', 'New page')
 		.appendTo(left_bar)
 		.click(function(){
-
+			addPage('before')()
 			return false
 		})
 
