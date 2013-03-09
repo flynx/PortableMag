@@ -1,8 +1,8 @@
 [_] 39% Priority work
 	[_] 77% general todo
-		[_] 0% Priority work for 10.03.13
+		[_] 16% Priority work for 10.03.13
 			[_] change image
-			[_] add page via template
+			[X] add page via template
 			[_] load/save state (migrate)
 			[_] load/save from JSON (migrate)
 			[_] basic instructions/docs...
