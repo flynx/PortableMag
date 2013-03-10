@@ -211,27 +211,26 @@ function removePage(page){
 /*********************************************************************/
 
 // XXX this needs revision...
-// XXX need better separation between full screen and ribbon modes...
 // XXX need to split this into more generic parts...
 
 // XXX STUB
-// XXX setCurrentPage after each action...
-function _finalize(direction, n){
+function _finalize(n){
 	refreshInlineEditor()
-	setCurrentPage(direction == 'before'? n : n+1)
+	setCurrentPage(n)
 	removeOverlay()
 }
 function addPage(direction){
 	var n = getPageNumber()
+	n = direction == 'before'? n : n+1
 	return function(){
 		showInOverlay($(
 			'<div>'+
 				'<h1>Templates</h1>'+
-				'<a href="javascript:$(\'.current.page\').'+direction+'(RawPage());_finalize(\''+direction+'\', '+n+')"><h3>Raw Page</h3></a>'+
-				'<a href="javascript:$(\'.current.page\').'+direction+'(TextPage());_finalize(\''+direction+'\', '+n+')"><h3>Text Page</h3></a>'+
-				'<a href="javascript:$(\'.current.page\').'+direction+'(CaptionPage());_finalize(\''+direction+'\', '+n+')"><h3>Caption Page</h3></a>'+
-				'<a href="javascript:$(\'.current.page\').'+direction+'(ImagePage());_finalize(\''+direction+'\', '+n+')"><h3>Image Page</h3></a>'+
-				'<a href="javascript:$(\'.current.page\').'+direction+'(ImageFitHeightPage());_finalize(\''+direction+'\', '+n+'))"><h3>Vertical Image Page</h3></a>'+
+				'<a href="javascript:$(\'.current.page\').'+direction+'(RawPage());_finalize('+n+')"><h3>Raw Page</h3></a>'+
+				'<a href="javascript:$(\'.current.page\').'+direction+'(TextPage());_finalize('+n+')"><h3>Text Page</h3></a>'+
+				'<a href="javascript:$(\'.current.page\').'+direction+'(CaptionPage());_finalize('+n+')"><h3>Caption Page</h3></a>'+
+				'<a href="javascript:$(\'.current.page\').'+direction+'(ImagePage());_finalize('+n+')"><h3>Image Page</h3></a>'+
+				'<a href="javascript:$(\'.current.page\').'+direction+'(ImageFitHeightPage());_finalize('+n+'))"><h3>Vertical Image Page</h3></a>'+
 			'</div>'))
 	}
 }

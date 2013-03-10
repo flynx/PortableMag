@@ -143,10 +143,12 @@ function showInfo(){
 		'</div>'))
 }
 
-var keyboard_config = {
+var KEYBOARD_CONFIG = {
 	'.overlay': {
 		title: 'Overlay mode.',
 		doc: '',
+
+		ignore: '*',
 
 		Esc: function(){
 				removeOverlay()
@@ -255,7 +257,7 @@ $(document).ready(function(){
 
 	// keyboard...
 	$(document)
-	.keydown(makeKeyboardHandler(keyboard_config,
+	.keydown(makeKeyboardHandler(KEYBOARD_CONFIG,
 		function(k){console.log(k)}))
 
 	window.MagazineScroller = makeScrollHandler($('.viewer'), {
