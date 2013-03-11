@@ -302,6 +302,18 @@ var KEYBOARD_CONFIG = {
 					$(generateMagazineDownload)
 				},
 			},
+
+		// ?
+		'/': function(){
+				showInOverlay('<h1>Controls</h1>'+
+					'<p>NOTE: this section is a stub.<p>'+
+					'<table width="100%">'+
+						'<tr><td align="right" width="45%"> C-O </td><td> Load issue from file. </td></tr>'+
+						'<tr><td align="right"> C-S </td><td> Save issue to file. </td></tr>'+
+						'<tr><td align="right"> - / + </td><td> Zoom out/in. </td></tr>'+
+						'<tr><td align="right"> 0 </td><td> Set default zoom level. </td></tr>'+
+					'</table>')
+			},
 	},
 
 	// ignore all keys except Esc here...
