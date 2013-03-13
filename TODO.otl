@@ -1,10 +1,12 @@
 [_] 39% Priority work
 	[_] 77% general todo
-		[_] 16% Priority work for 10.03.13
+		[_] 25% Priority work for 10.03.13
 			[_] change image
 			[X] add page via template
-			[_] load/save state (migrate)
-			[_] load/save from JSON (migrate)
+			[_] load state (migrate)
+			[_] save state (migrate)
+			[_] load JSON (migrate)
+			[X] save JSON (migrate)
 			[_] basic instructions/docs...
 			[_] page settings in full view editor
 			| could even be fixed...
