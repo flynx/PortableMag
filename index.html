@@ -343,18 +343,21 @@ var KEYBOARD_CONFIG = {
 		Home: firstPage,
 		End: lastPage, 
 		Left: {
-				default: prevPage,
+				default: function(){ prevPage() },
+				shift: prevBookmark,
 				ctrl: prevArticle,
 			},
 		Right: {
-				default: nextPage,
+				default: function(){ nextPage() },
+				shift: nextBookmark,
 				ctrl: nextArticle,
 			},
 		Space:	{
-				default: nextPage,
-				shift: prevPage	
+				default: 'Right',
+				shift: 'Left'
 			},
-		Tab: 'Space',
+		//Tab: 'Space',
+		Tab: function(){ return false },
 		Enter: function(){ togglePageView('on') },
 		// combined navigation with actions..
 		Up: function(){ togglePageView() },
@@ -362,7 +365,7 @@ var KEYBOARD_CONFIG = {
 
 		F: function(){ togglePageFitMode() },
 		B: {
-				default: toggleBookmark,
+				default: function(){ toggleBookmark() },
 				ctrl: function(){ toggleThemes() },
 			},
 
@@ -386,8 +389,8 @@ $(document).ready(function(){
 
 	// keyboard...
 	$(document)
-	.keydown(makeKeyboardHandler(KEYBOARD_CONFIG,
-		function(k){console.log(k)}))
+		.keydown(makeKeyboardHandler(KEYBOARD_CONFIG,
+			function(k){console.log(k)}))
 
 	window.MagazineScroller = makeScrollHandler($('.viewer'), {
 		hScroll: true,
