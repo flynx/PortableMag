@@ -113,11 +113,16 @@ function makeArticleIndicator(i, article, width){
 			width: width,
 			left: width*n
 		})
+		.on('click', function(){
+			setCurrentPage(n)
+		})
+		/*
 		.swipe({
 			click: function(){
 				setCurrentPage(n)
 			}
 		})
+		*/
 	return article
 }
 
@@ -157,11 +162,16 @@ function makeBookmarkIndicator(n){
 		.attr({
 			page: n
 		})
+		.on('click', function(){
+			setCurrentPage(n)
+		})
+		/*
 		.swipe({
 			click: function(){
 				setCurrentPage(n)
 			}
 		})
+		*/
 
 	return res
 }
