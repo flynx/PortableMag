@@ -262,6 +262,8 @@ $(document).ready(function(){
 		vScroll: false,
 		// XXX still a bit flacky...
 		preCallback: function(){stopAnimation($('.magazine'))},
+		// XXX...
+		//scrollCallback: function(){ updateNavigator() },
 		//enableMultiClicks: true,
 		transitionEasing: 'cubic-bezier(0.33,0.66,0.66,1)',
 	}).start()
@@ -298,6 +300,8 @@ $(document).ready(function(){
 	setupNavigator()
 	loadMagazineChrome()
 	setCurrentPage(0)
+	// XXX STUB...
+	SNAP_TO_PAGES_IN_RIBBON = true
 
 	toggleThemes('none')
 
