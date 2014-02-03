@@ -10,6 +10,8 @@ var DEFAULT_TRANSITION_DURATION = 200
 
 var INNERTIA_SCALE = 0.25
 
+var MAX_DISTANCE_TO_SCROLL = 1000
+
 
 /********************************************************** layout ***/
 
@@ -203,7 +205,9 @@ var handleSwipeRight = makeSwipeHandler(nextPage, nextArticle)
 // NOTE: this will also handle swipeUp/swopeDown as we do not 
 //		explicitly bind them...
 // NOTE: at this point this ONLY handles horizontal scroll...
+//
 // XXX restore all the changed values...
+// XXX this may kill the ipad...
 function handleScrollRelease(evt, data){
 	var speed = data.speed.x
 	var pages = $('.page')
@@ -213,7 +217,8 @@ function handleScrollRelease(evt, data){
 	var t = DEFAULT_TRANSITION_DURATION * (1+Math.abs(speed))
 	// XXX this is only horizontal at this point...
 	var at = getElementShift(mag).left
-	var to = (at + (t*speed*INNERTIA_SCALE))
+	var d = MAX_DISTANCE_TO_SCROLL != null ? MAX_DISTANCE_TO_SCROLL : Infinity
+	var to = (at + (Math.min(Math.abs(t*speed*INNERTIA_SCALE), d))) * sign(speed)
 	var first = getMagazineOffset(pages.first(), null, 'center')
 	var last = getMagazineOffset(pages.last(), null, 'center')
 	var easing
