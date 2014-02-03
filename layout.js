@@ -218,7 +218,9 @@ function handleScrollRelease(evt, data){
 	// XXX this is only horizontal at this point...
 	var at = getElementShift(mag).left
 	var d = MAX_DISTANCE_TO_SCROLL != null ? MAX_DISTANCE_TO_SCROLL : Infinity
-	var to = (at + (Math.min(Math.abs(t*speed*INNERTIA_SCALE), d))) * sign(speed)
+	var s = sign(speed)
+	s = s == 0 ? +1 : s
+	var to = (at + (Math.min(Math.abs(t*speed*INNERTIA_SCALE), d) * s))
 	var first = getMagazineOffset(pages.first(), null, 'center')
 	var last = getMagazineOffset(pages.last(), null, 'center')
 	var easing
