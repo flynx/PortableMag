@@ -770,11 +770,16 @@ function setupBookmarkTouchZones(){
 			.attr({
 				title: 'Toggle bookmark (B)'
 			})
+			.on('click tap', function(){
+				toggleBookmark($(e))
+			})
+			/*
 			.swipe({
 				click: function(){
 					toggleBookmark($(e))
 				}
 			})
+			*/
 	})	
 }
 
