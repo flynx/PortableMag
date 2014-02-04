@@ -107,7 +107,7 @@ var toggleThemes = createCSSClassToggler('.viewer', [
 ])
 
 // toggle box-shadows, this is here mostly for performance reasons...
-var toggleShadows = createCSSClassToggler('.viewer', 'shadowless')
+var toggleShadows = createCSSClassToggler('.viewer', ['none', 'shadowless'])
 
 
 

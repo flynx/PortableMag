@@ -20,6 +20,7 @@ body {
 
 
 /*********************************************************** pages ***/
+.skip,
 .page {
 	/* XXX make this browser-sized... */
 	position: relative;
@@ -47,6 +48,7 @@ body {
 	*/
 }
 
+.skip .content,
 .page .content {
 	display: inline-block;
 	text-align: left;
