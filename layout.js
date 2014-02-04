@@ -214,7 +214,8 @@ function handleScrollRelease(evt, data){
 	var mag = $('.magazine')
 	// innertial scroll...
 	// XXX make this generic...
-	var t = DEFAULT_TRANSITION_DURATION * (1+Math.abs(speed))
+	//var t = DEFAULT_TRANSITION_DURATION * (1+Math.abs(speed))
+	var t = DEFAULT_TRANSITION_DURATION
 	// XXX this is only horizontal at this point...
 	var at = getElementShift(mag).left
 	var d = MAX_DISTANCE_TO_SCROLL != null ? MAX_DISTANCE_TO_SCROLL : Infinity
@@ -222,7 +223,8 @@ function handleScrollRelease(evt, data){
 	var to = (at + (Math.min(Math.abs(t*speed*INNERTIA_SCALE), d) * s))
 	var first = getMagazineOffset(pages.first(), null, 'center')
 	var last = getMagazineOffset(pages.last(), null, 'center')
-	var easing
+
+	var easing = 'cubic-bezier(0.33,0.66,0.66,1)'
 
 	// filter out really small speeds...
 	if(Math.abs(speed) > 0.5){
@@ -235,18 +237,15 @@ function handleScrollRelease(evt, data){
 			t = Math.abs(t * ((at-first)/(at-to)))
 			to = first
 			//easing = 'linear'
-			easing = 'cubic-bezier(0.33,0.66,0.66,1)'
 		} else if(to < last){
 			// trim the time proportionally...
 			var _t = t
 			t = Math.abs(t * ((at-last)/(at-to)))
 			to = last
 			//easing = 'linear'
-			easing = 'cubic-bezier(0.33,0.66,0.66,1)'
 
 		} else {
 			//easing = 'ease-out'
-			easing = 'cubic-bezier(0.33,0.66,0.66,1)'
 		}
 
 		animateElementTo(mag, to, t, easing, speed)
@@ -258,13 +257,13 @@ function handleScrollRelease(evt, data){
 			//animateElementTo(mag, first, DEFAULT_TRANSITION_DURATION, 'ease-in')
 			animateElementTo(mag, first, 
 					DEFAULT_TRANSITION_DURATION, 
-					'cubic-bezier(0.33,0.66,0.66,1)')
+					easing)
 
 		} else if(at < last){
 			//animateElementTo(mag, last, DEFAULT_TRANSITION_DURATION, 'ease-in')
 			animateElementTo(mag, last, 
 					DEFAULT_TRANSITION_DURATION, 
-					'cubic-bezier(0.33,0.66,0.66,1)')
+					easing)
 		}
 	}
 }
