@@ -306,6 +306,8 @@ $(document).ready(function(){
 
 	setupEditor()
 
+	$('.dpi').text(getDPI())
+
 
 	// hide the splash...
 	setTimeout(function(){
@@ -514,7 +516,7 @@ $(document).ready(function(){
 						</ul>
 					</big>
 					<div style="position:absolute; bottom:10px; right:30px">
-						<a href="#next">get started...</a><br>
+						<span class="dpi">dpi</span><a href="#next">get started...</a><br>
 					</div>
 
 					<div class="page-number-text">[PAGE NUMBER]</div>
