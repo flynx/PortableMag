@@ -196,6 +196,9 @@ var handleSwipeLeft = makeSwipeHandler(prevPage, prevArticle)
 var handleSwipeRight = makeSwipeHandler(nextPage, nextArticle)
 
 
+// XXX 
+GLOBAL_SCROLL_CALLBACK = null
+
 // Scroll Release
 // 	- check bounds and if out center first/last page
 // 	- filter out "throw" speeds below threshold
@@ -209,6 +212,8 @@ var handleSwipeRight = makeSwipeHandler(nextPage, nextArticle)
 // XXX restore all the changed values...
 // XXX this may kill the ipad...
 function handleScrollRelease(evt, data){
+	console.log(callback)
+	var callback = GLOBAL_SCROLL_CALLBACK
 	var speed = data.speed.x
 	var pages = $('.page')
 	var mag = $('.magazine')
@@ -248,7 +253,7 @@ function handleScrollRelease(evt, data){
 			//easing = 'ease-out'
 		}
 
-		animateElementTo(mag, to, t, easing, speed)
+		animateElementTo(mag, to, t, easing, speed, callback)
 
 	// check scroll bounds...
 	// do not let the user scroll out of view...
@@ -257,13 +262,17 @@ function handleScrollRelease(evt, data){
 			//animateElementTo(mag, first, DEFAULT_TRANSITION_DURATION, 'ease-in')
 			animateElementTo(mag, first, 
 					DEFAULT_TRANSITION_DURATION, 
-					easing)
+					easing,
+					null,
+					callback)
 
 		} else if(at < last){
 			//animateElementTo(mag, last, DEFAULT_TRANSITION_DURATION, 'ease-in')
 			animateElementTo(mag, last, 
 					DEFAULT_TRANSITION_DURATION, 
-					easing)
+					easing,
+					null,
+					callback)
 		}
 	}
 }
