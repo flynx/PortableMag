@@ -1070,15 +1070,16 @@ function resetStorageState(title){
 // NOTE: these will only load the data, bookmarks and position are 
 // 		ignored...
 function saveJSONStorage(title){
-	if(title == null){
-		title = getMagazineTitle()
-	}
-	var data = $.jStorage.get(title, {})
+	title = title == null ? getMagazineTitle() : title
+	//var data = $.jStorage.get(title, {})
+	var data = localStorage[title]
+	data = data == null ? {} : data
 	$.extend(data, {
 		// XXX do we need to stringify this??
 		'magazine-data': buildJSON()
 	})
-	$.jStorage.set(title, data)
+	//$.jStorage.set(title, data)
+	localStorage[title] = JSON.stringify(data)
 	return data
 }
 // load JSON magazine data from storage...
@@ -1086,12 +1087,14 @@ function loadJSONStorage(title){
 	if(title == null){
 		title = getMagazineTitle()
 	}
-	var data = $.jStorage.get(title, {})
+	//var data = $.jStorage.get(title, {})
+	var data = localStorage[title]
+	data = data == null ? {} : data
 	// NOTE: we are caching the data here because the actual structure 
 	// 		is persistent and may get overwritten by loadJSON(...)
 	var bookmarks = data.bookmarks
 	var current_page = data.current_page
-	var json = data['magazine-data']
+	var json = JSON.parse(data['magazine-data'])
 	if(json != null){
 		loadJSON(json)
 		loadMagazineUserData(current_page, bookmarks)
@@ -1103,11 +1106,14 @@ function clearJSONStorage(title){
 	if(title == null){
 		title = getMagazineTitle()
 	}
-	var data = $.jStorage.get(title, {})
+	//var data = $.jStorage.get(title, {})
+	var data = localStorage[title]
+	data = data == null ? {} : data
 	var json = data['magazine-data']
 	if(json != null){
 		delete data['magazine-data']
-		$.jStorage.set(title, data)
+		//$.jStorage.set(title, data)
+		localStorage[title] = data
 	}
 }
 
@@ -1342,7 +1348,6 @@ function buildJSON(export_bookmarks, export_position){
 // 		instead.
 function loadJSON(data, load_user_data){
 	function _build(parent, data){
-
 		// page...
 		if(data.type == 'page'){
 			var res = createPage(data.content)
@@ -1417,6 +1422,38 @@ function loadJSON(data, load_user_data){
 }
 
 
+/********************************************** JSON serialization ****
+* 
+*/
+
+// XXX this depends on node-webkit...
+function dumpJSONFile(path, data){
+	path = path == null ? './'+Date.timeStamp()+'-magazine.json' : path
+	data = data == null ? buildJSON() : data
+
+	var fs = require('fs')
+	var fse = require('fs.extra')
+
+	var dirs = path.split(/[\\\/]/)
+	dirs.pop()
+	dirs = dirs.join('/')
+	// build path...
+	if(!fs.existsSync(dirs)){
+		console.log('making:', path)
+		fse.mkdirRecursiveSync(path)
+	}
+	return fs.writeFileSync(path, JSON.stringify(data), encoding='utf8')
+}
+
+
+function loadJSONFile(path){
+	return $.getJSON(path)
+		.done(function(data){
+			loadJSON(data)
+		})
+}
+
+
 
 /***************************************************** constructor ***/
 // These function will construct detached magazine building blocks...
@@ -1469,7 +1506,7 @@ function createPage(data){
 	} else {
 		return page.append($('<div/>')
 				.addClass('content')
-				.html(data))
+				.append(jdata))
 	}
 }
 function createCoverPage(data){
@@ -1550,7 +1587,7 @@ function runMagazineTemplates(){
 // load the data...
 function loadMagazineData(mag){
 	removeMagazine()
-	mag.appendTo($('.aligner'))
+	mag.appendTo($('.viewer'))
 	$('.viewer').trigger('magazineDataLoaded')
 	return mag
 }

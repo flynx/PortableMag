@@ -203,6 +203,11 @@ function str2ab(str) {
 function handleFileSelect(evt) {
 	var files = evt.target.files; // FileList object
 
+	var type = evt.target.value
+	type = type != null ? type.split('.').pop() 
+		: USE_ZIP ? 'zip' 
+		: 'json'
+
 	// Loop through the FileList and render image files as thumbnails.
 	for (var i = 0, f; f = files[i]; i++) {
 
@@ -211,11 +216,10 @@ function handleFileSelect(evt) {
 		// Closure to capture the file information.
 		reader.onload = (function(theFile) {
 			return function(e) {
-					console.log('loading...')
 					var raw_data = e.target.result
 					window.JSON_DATA = raw_data
 
-					if(USE_ZIP){
+					if(type == 'zip'){
 						var zip = new JSZip(raw_data)
 						console.log('zip loaded...')
 						var json = zip.file('magazine.json').data
@@ -223,14 +227,13 @@ function handleFileSelect(evt) {
 						var json = raw_data
 					}
 
-
 					loadJSON($.parseJSON(json), true)
 					console.log('done.')
 				};
 		})(f);
 
 		// Read in the image file as a data URL.
-		if(USE_ZIP){
+		if(type == 'zip'){
 			reader.readAsArrayBuffer(f)
 		} else {
 			reader.readAsBinaryString(f)

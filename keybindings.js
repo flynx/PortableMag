@@ -80,14 +80,17 @@ var KEYBOARD_CONFIG = {
 				// load...
 				// XXX needs testing...
 				'ctrl': function(){
-					showInOverlay('<h1>Open Issue</h1>'+
-						'<input type="file" id="upload" name="file" multiple onchange="handleFileSelect(event)"/>')
+					showInOverlay('<h1>Open Issue</h1>'
+						+'<input type="file" id="upload" name="file" multiple onchange="handleFileSelect(event)"/>')
 				},
 			},
 		'S': {
 				// save...
 				// XXX needs testing...
 				'ctrl': function(){
+					dumpJSONFile()
+				},
+				'ctrl+shift': function(){
 					showInOverlay('<h1>Save Issue</h1>'+
 						'<p>NOTE: this download will not include the actual '+
 						'images. at this point, images should be added manually.</p>'+
