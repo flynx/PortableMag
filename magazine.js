@@ -1346,6 +1346,10 @@ function buildJSON(export_bookmarks, export_position){
 // 		will not get loaded correctly.
 // 		one example is "background: none", use "background: transparent"
 // 		instead.
+// XXX this breaks:
+// 		- captions (???)
+// 		- editor (needs reset)
+// 		- navigator (???)
 function loadJSON(data, load_user_data){
 	function _build(parent, data){
 		// page...
@@ -1419,6 +1423,10 @@ function loadJSON(data, load_user_data){
 	if(load_user_data){
 		loadMagazineUserData(data.position, data.bookmarks)
 	}
+
+	// XXX do this ONLY in editor mode...
+	setupEditor()
+	resetNavigator()
 }
 
 

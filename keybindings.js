@@ -34,8 +34,8 @@ var KEYBOARD_CONFIG = {
 			}),
 	},	
 
-	'.overlay': {
-		title: 'Overlay mode.',
+	'Overlay mode.': {
+		pattern: '.overlay',
 		doc: '',
 
 		ignore: '*',
@@ -46,8 +46,8 @@ var KEYBOARD_CONFIG = {
 			},
 	},
 
-	'.editor:not(.inline-editor-mode)': {
-		title: 'Editor mode.',
+	'Editor mode.': {
+		pattern: '.editor:not(.inline-editor-mode)',
 		doc: '',
 
 		'0': function(){
@@ -115,8 +115,8 @@ var KEYBOARD_CONFIG = {
 	},
 
 	// ignore all keys except Esc here...
-	'.inline-editor-mode': {
-		title: 'Inline editor mode.',
+	'Inline editor mode.': {
+		pattern: '.inline-editor-mode',
 		doc: '',
 
 		//ignore: '*'
@@ -126,8 +126,8 @@ var KEYBOARD_CONFIG = {
 			},
 	},
 
-	'.chrome:not(.inline-editor-mode)': {
-		title: 'Global bindings.',
+	'Global bindings.': {
+		pattern: '.chrome:not(.inline-editor-mode)',
 		doc: '',
 
 		Esc: function(){
