@@ -206,11 +206,14 @@ function str2ab(str) {
 function loadMagazineDOM(data){
 	var data = $(data)
 	// get the .magazine element...
-	data = data.hasClass('magazine') ? data.children() : data.find('.magazine').children()
+	data = data.hasClass('magazine') ? data : data.find('.magazine')
+	var title = data.attr('name')
 
 	var mag = $('.magazine')
 	mag.children().remove()
-	mag.append(data)
+	mag
+		.append(data.children())
+		.attr('name', title)
 
 	runMagazineTemplates()
 	togglePageView(togglePageView('?'))

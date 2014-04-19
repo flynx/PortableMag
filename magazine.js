@@ -1625,6 +1625,12 @@ function createCoverPage(data){
 // NOTE: for these to be self-aplicable they must only replace the content
 // 		of the matched elements and not touch the element itself.
 var MagazineTemplates = {
+	/*
+	'.magazine[name]': function(elem){
+		$('.magazine-title-text').text($(elem).attr('name'))
+	},
+	*/
+
 	'.image-fit': function(elem){
 		var w = $('.content').width()
 		var h = $('.content').height()
@@ -1635,7 +1641,6 @@ var MagazineTemplates = {
 			e.height() == 0 ? e.height(h) : 0
 		})
 	},
-
 
 	// set dpi value...
 	'.dpi': function(elem){
