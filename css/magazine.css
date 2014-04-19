@@ -299,7 +299,8 @@ body {
 	text-align: center;
 	overflow: hidden;
 
-	background: #555;
+	/*background: #555;*/
+	background: transparent;
 	opacity: 0.9;
 
 	height: 50px;
@@ -318,12 +319,6 @@ body {
 .bottom-toolbar {
 	bottom: 0px;
 	width: 100%;
-}
-.page-view-mode .top-toolbar,
-.page-view-mode .bottom-toolbar,
-.full-page-view-mode .top-toolbar,
-.full-page-view-mode .bottom-toolbar {
-	display: none;
 }
 
 /* title */
@@ -560,6 +555,7 @@ body {
 
 .page-view-mode .top-toolbar,
 .page-view-mode .bottom-toolbar {
+	display: none;
 }
 
 .page-view-mode .page .content {

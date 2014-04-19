@@ -34,6 +34,7 @@
 .magazine {
 	left: 150px;
 	margin-left: 0px;
+	background-color: black;
 }
 
 .page {
@@ -88,6 +89,9 @@
 <script src="ext-lib/jszip-load.js"></script>
 <script src="ext-lib/jszip-inflate.js"></script>
 <!--script src="ext-lib\jszip-deflate.js"></script-->
+
+<script src="ext-lib/iscroll.js"></script>
+<script src="ext-lib/iscroll-zoom.js"></script>
 
 <script src="lib/jli.js"></script>
 <script src="lib/scroller.js"></script>
@@ -242,8 +246,90 @@ function handleFileSelect(evt) {
 	}
 }
 
+// XXX these stubs override the magazine API and use iScroll...
 
-$(document).ready(function(){
+// XXX need to account for page align...
+// XXX this works only for big pages...
+function getVisiblePage(){
+	var offset = $('.magazine').offset().left
+	var width = $('.viewer').width()
+	var pages = $('.page')
+		// filter the closest page to the viewer...
+		.filter(function(){
+			var page = $(this)
+			var p = page.position().left + offset 
+			return p >= 0 && p < width/2 
+				|| p < 0 && p + page.width() >= width/2
+		})
+		// select the best candidate...
+		// XXX
+	return pages
+}
+
+
+/************************************************ iScroll5 Actions ***/
+
+// XXX next/prev page work but only when BOTH:
+//		- MagazineScroller.zoom is set to 1
+//		- current page is focused
+
+// XXX zoom != 1 messes up both iScroll5 navigation AND PortableMag navigation...
+
+// XXX we do not need the snap feature, flick event is enough to do next/prev page...
+
+// XXX make centered page account for page align...
+
+
+function enableFreeScroll(){
+	MagazineScroller.options.scrollY = true
+	MagazineScroller.options.freeScroll = true
+	MagazineScroller.refresh()
+}
+
+function disableFreeScroll(){
+	MagazineScroller.options.scrollY = false
+	MagazineScroller.options.freeScroll = false
+	MagazineScroller.refresh()
+}
+
+
+// Actions...
+
+// XXX this needs correct reference point calc...
+function zoomTo(n, scale, time){
+	// calculate page projection center...
+	var page = setCurrent(n)
+
+	var sc = getMagazineScale()
+	var st = scale
+
+	var d = st / sc
+
+	var W = $('.viewer').width()
+	var w = page.width()*sc
+	var o = page.offset().left
+
+	var C = W/2
+	var c = o + w/2 
+
+	// left border	->	0
+	// centered		->	C = c	-> independent of d
+	// right border	->	W
+
+	console.log('>>>', c, C, d, (c-C)*d)
+
+	// XXX this works iff d == 2
+
+	MagazineScroller.zoom(scale, C + (c-C)*d, null, time)
+
+	//return page
+}
+
+
+
+/*********************************************************************/
+
+$(function(){
 
 	// this is to fix some sort of bug baking things align in a wrong 
 	// way at startup...
@@ -259,18 +345,166 @@ $(document).ready(function(){
 	$(document)
 		.keydown(makeKeyboardHandler(KEYBOARD_CONFIG))
 
-	window.MagazineScroller = makeScrollHandler($('.viewer'), {
-		hScroll: true,
-		vScroll: false,
-		// XXX still a bit flacky...
-		preCallback: function(){stopAnimation($('.magazine'))},
-		// XXX...
-		//scrollCallback: function(){ updateNavigator() },
-		//enableMultiClicks: true,
-		transitionEasing: 'cubic-bezier(0.33,0.66,0.66,1)',
-	}).start()
+	window.MagazineScroller = new IScroll('.viewer', {
+		tap: true,
+
+		scrollX: true,
+		scrollY: false,
+
+		scrollbars: true,
+		fadeScrollbars: true,
+		interactiveScrollbars: true,
+		shrinkScrollbars: 'clip',
+
+		//bounce: false,
+
+		zoom: true,
+		// XXX calc these dynamically depending on viewer size/resolution...
+		zoomMin: 0.2,
+		zoomMax: 2,
+	})
+
+	window.MULTI_FINGER_RELEASE_TIMEOUT = 50
 
 	$('.viewer')
+		.on('tap', function(){
+			// XXX for some reason this does not focus the page clicked 
+			//		if it's not the current and we are in page view...
+			focusPage(event.target, togglePageView('?') == 'on' ? 'auto' : 'center')
+
+			handleCaption(event.target)
+		})
+		.on('touchstart', function(){
+			// This is here to recover from touching a finger after 
+			// lifting it before the timeout...
+			if(event.touches.length > 2){
+				delete window._THIRD_FINGER_LIFTED
+			}
+			if(event.touches.length > 1){
+				delete window._SECOND_FINGER_LIFTED
+			}
+		})
+		.on('mouseup touchend', function(){
+			var now = Date.now()
+
+			// handle the touchend only if ALL fingers are lifted...
+			if(event.touches != null){
+				// count touches within a timeout to handle multytouch swipes...
+				if(event.touches.length == 2){
+					window._THIRD_FINGER_LIFTED = now
+				} else if(event.touches.length == 1){
+					window._SECOND_FINGER_LIFTED = now
+				}
+
+				// if we are still touching skip any action...
+				if(event.touches.length > 0){
+					return
+				}
+			}
+
+			// three finger action...
+			if(window._THIRD_FINGER_LIFTED != null 
+					&& now - _THIRD_FINGER_LIFTED <= MULTI_FINGER_RELEASE_TIMEOUT){
+				// first/last pages...
+				if(MagazineScroller.directionX > 0){
+					setTimeout(last, 0)
+				} else if(MagazineScroller.directionX < 0){
+					setTimeout(first, 0)
+				}
+
+			// two finger action...
+			} else if(window._SECOND_FINGER_LIFTED != null 
+					&& now - _SECOND_FINGER_LIFTED <= MULTI_FINGER_RELEASE_TIMEOUT){
+				// next/prev cover...
+				if(MagazineScroller.directionX > 0){
+					setTimeout(nextCover, 0)
+				} else if(MagazineScroller.directionX < 0){
+					setTimeout(prevCover, 0)
+				}
+
+			// single finger action...
+			} else {
+				if(togglePageView('?') == 'on'){
+					// next/prev page...
+					if(MagazineScroller.directionX > 0){
+						setTimeout(nextPage, 0)
+					} else if(MagazineScroller.directionX < 0){
+						setTimeout(prevPage, 0)
+					}
+
+				} else {
+					setCurrent()
+				}
+			}
+		})
+
+	/*
+	// XXX do we really need this???
+	window.MagazineScroller
+		.on('flick', function(){
+			if(togglePageView('?') == 'on'){
+				if(this.directionX > 0){
+					setTimeout(nextPage, 0)
+				} else if(this.directionX < 0){
+					setTimeout(prevPage, 0)
+				}
+			}
+		})
+	*/
+
+	window.MagazineScroller
+		.on('scrollCancel', function(){
+			if(togglePageView('?') == 'on'){
+				focusPage(setCurrent(centeredPage()))
+			}
+		})
+
+	// XXX is this needed???
+	window.MagazineScroller
+		.on('scrollEnd', function(){
+			// focus page that we end up on...
+			if(!togglePageView('?') == 'on'){
+				setCurrent()
+			}
+		})
+
+	// zooming...
+	// XXX needs testing on device...
+	window.MagazineScroller
+		.on('zoomStart', function(){
+			window._START_SCALE = getMagazineScale()
+		})
+	window.MagazineScroller
+		.on('zoomEnd', function(){
+			var s = getMagazineScale()
+
+			// XXX add issue support...
+			//var state = togglePageView('?')
+
+			// zoom in...
+			if(window._START_SCALE > s){
+				togglePageView('off')
+
+			// zoom out...
+			} else {
+				togglePageView('on')
+			}
+		})
+
+
+
+	$('.magazine')
+		.css({
+			'-webkit-transform-origin': '0px 50%',
+			'left': 0,
+		})
+
+	$('.viewer')
+		.on('mouseup tapup', function(){
+			//MagazineScroller.scrollToElement(getVisiblePage()[0], 300, true, true)
+		})
+
+		/*
 		.on('scrollCancelled', function(){ setCurrentPage() })
 		.on('shortClick', handleCaption)
 		.on('shortClick', handleClick)
@@ -279,6 +513,7 @@ $(document).ready(function(){
 		.on('swipeRight', handleSwipeRight)
 		.on('swipeUp swipeDown', function(){ togglePageView('off') })
 		.on('screenReleased', handleScrollRelease)
+		*/
 
 		.on('pageChanged', updatePageNumberIndicator)
 		.on('magazineDataLoaded', loadMagazineChrome)
@@ -299,26 +534,28 @@ $(document).ready(function(){
 
 	togglePageView('on')
 	// XXX this still depends on touchSwipe...
-	setupNavigator()
-	loadMagazineChrome()
-	setCurrentPage(0)
+	//setupNavigator()
+	//loadMagazineChrome()
+	//setCurrentPage(0)
 
-	toggleThemes('none')
+	//toggleThemes('none')
 
 
-	setupEditor()
+	//setupEditor()
 
 	$('.dpi').text(getDPI())
 
-
 	// hide the splash...
 	setTimeout(function(){
-		//setCurrentPage(0)
+
+		focusPage(0, null, 0)
+
 		$('.splash').fadeOut()
 	}, 350)
 	// remove the spinner...
 	setTimeout(function(){
 		$('#spinner').spin(false)
+		MagazineScroller.refresh()
 	}, 500)
 
 })
@@ -943,7 +1180,6 @@ $(document).ready(function(){
 
 </div>
 <!-- Magazine Viewer (end) ------------------------------------------>
-
 
 </div>
 <!-- Magazine Chrome (end) -->

@@ -138,17 +138,23 @@ var KEYBOARD_CONFIG = {
 				}
 			},
 
-		Home: firstPage,
-		End: lastPage, 
+		//Home: firstPage,
+		//End: lastPage, 
+		Home: function(){ first() },
+		End: function(){ last() }, 
 		Left: {
-				default: function(){ prevPage() },
-				shift: prevBookmark,
-				ctrl: prevArticle,
+				//default: function(){ prevPage() },
+				default: function(){ prev() },
+				//shift: prevBookmark,
+				//ctrl: prevArticle,
+				ctrl: function(){ prevCover() },
 			},
 		Right: {
-				default: function(){ nextPage() },
-				shift: nextBookmark,
-				ctrl: nextArticle,
+				//default: function(){ nextPage() },
+				default: function(){ next() },
+				//shift: nextBookmark,
+				//ctrl: nextArticle,
+				ctrl: function(){ nextCover() },
 			},
 		Space:	{
 				default: 'Right',

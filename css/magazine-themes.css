@@ -62,7 +62,7 @@
 .top-toolbar, .bottom-toolbar {
 	font-size: 14px;
 	color: silver;
-	box-shadow: 5px 5px 50px 5px #444 inset;
+	/*box-shadow: 5px 5px 50px 5px #444 inset;*/
 }
 
 .top-toolbar .title,
@@ -154,8 +154,8 @@
 .light-viewer .bottom-toolbar {
 	font-size: 14px;
 	color: silver;
-	background: white;
-	box-shadow: 5px 5px 50px 20px #eee;
+	/*background: white;
+	box-shadow: 5px 5px 50px 20px #eee;*/
 }
 .light-viewer .top-toolbar a,
 .light-viewer .bottom-toolbar a {
@@ -240,8 +240,8 @@
 .dark-viewer .bottom-toolbar {
 	font-size: 14px;
 	color: gray;
-	background: black;
-	box-shadow: none;
+	/*background: black;
+	box-shadow: none;*/
 }
 
 .dark-viewer .top-toolbar a,

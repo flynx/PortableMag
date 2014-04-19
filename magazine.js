@@ -55,6 +55,12 @@ var FULL_HISTORY_ENABLED = false
 // if true, use CSS3 transforms to scroll, of false, use left.
 var USE_TRANSFORM = true
 
+var SCROLL_TIME = 400
+
+var BOUNCE_LENGTH = 10
+var BOUNCE_TIME_DIVIDER = 5
+
+
 // list of css classes of pages that will not allow page fitting.
 var NO_RESIZE_CLASSES = [
 	'no-resize',
@@ -119,18 +125,21 @@ var _PAGE_VIEW
 // 	- single page mode (.page-view-mode)
 // 	- thumbnail/ribbon mode
 var togglePageView = createCSSClassToggler(
-	'.viewer', 
+	'.chrome', 
 	'page-view-mode',
 	// post-change callback...
 	function(action){
 		if(action == 'on'){
 			fitNPages(1, !FIT_PAGE_TO_VIEW)
+			MagazineScroller.options.momentum = false
 			_PAGE_VIEW = true
 		} else {
 			fitNPages(PAGES_IN_RIBBON)
+			MagazineScroller.options.momentum = true
 			_PAGE_VIEW = false
 		}
 	})
+
 
 
 // this will simply update the current view...
@@ -141,6 +150,68 @@ function updateView(){
 
 
 /********************************************************* helpers ***/
+
+function centeredPageNumber(){
+	var scale = getMagazineScale()
+	var o = -$($('.magazine')[0]).offset().left - $('.viewer').offset().left
+	var W = $('.viewer').width()
+	var cur = -1
+	var res = $('.page').map(function(i, e){
+		e = $(e)
+		var l = e.position().left
+		var w = e.width()*scale
+		return Math.abs((l+(w/2)) - (o+(W/2)))
+	}).toArray()
+	cur = res.indexOf(Math.min.apply(Math, res))
+	return cur
+}
+function centeredPage(){
+	return $('.page').eq(centeredPageNumber())
+}
+
+
+function visiblePages(partial){
+	var W = $('.viewer').width()
+	var scale = getMagazineScale()
+
+	return $('.page').filter(function(_, page){
+		page = $(page)
+
+		// XXX this calculates the offset from the document rather than the magazine...
+		var o = page.offset().left
+
+		// page out of view (right)...
+		if(o >= W){
+			return false
+		}
+
+		var w = page.width() * scale 
+
+		if(o < 0){
+			// partial left...
+			if(partial && o + w > 0){
+				return true
+			}
+
+			// page out of view (left)...
+			return false
+		}
+
+		// partial right...
+		if(partial && W - o < w){
+			return true
+		}
+
+		// page compleately in view...
+		if(W - o >= w){
+			return true
+		}
+
+		// NOTE: we should not get here but just in case...
+		return false
+	})
+}
+
 
 function isPageResizable(page){
 	if(page == null){
@@ -223,22 +294,50 @@ function getMagazineTitle(){
 
 
 function getMagazineScale(){
-	return getElementScale($('.scaler'))
+	return getElementScale($('.magazine'))
 }
-function setPageScale(scale){
-	return setElementTransform($('.scaler'), null, scale)
+function setMagazineScale(scale){
+	var mag = $('.magazine')
+	var cur = $('.current.page')
+	if(cur.length == 0){
+		cur = $('.page').first()
+	}
+
+	// center-align ribbon view pages...
+	var align = togglePageView('?') == 'off' ? 'center' : null
+	var left = getMagazineOffset(cur, scale, align)
+
+	//setElementTransform(mag, left, scale)
+	MagazineScroller.zoom(scale)
+
+	return mag
 }
 
 
 // NOTE: if page is not given get the current page number...
 function getPageNumber(page){
-	if(page == null){
-		page = $('.current.page')
-	} else {
+	// a page/element is given explicitly...
+	if(page != null){
 		page = $(page)
+		if(!page.hasClass('page')){
+			page = page.parents('.page')
+		}
+		return $('.page').index(page)
 	}
-	return $('.page').index(page) 
+
+	// current page index...
+	if(togglePageView('?') == 'on'){
+		return $('.page').index($('.current.page'))
+
+	// get the closest page to view center... 
+	// NOTE: this ignores page aligns and only gets the page who's center 
+	// 		is closer to view's center
+	} else {
+		return centeredPageNumber()
+	}
 }
+
+
 
 
 // NOTE: negative values will yield results from the tail...
@@ -247,11 +346,12 @@ function getPageAt(n){
 	if(n < 0){
 		n = page.length + n
 	}
-	return $(page[n])
+	return $(page).eq(n)
 }
 
 function shiftMagazineTo(offset){
-	setElementTransform($('.magazine'), offset)
+	MagazineScroller.scrollTo(offset, 0, 200)
+	//setElementTransform($('.magazine'), offset)
 }
 
 // XXX this is almost the same as getElementScale...
@@ -386,373 +486,374 @@ function viewResizeHandler(){
 }
 
 
-// swipe state handler
-// this handles single and double finger swipes and dragging
-// while draggign this triggers magazineDragging event on the viewer...
-// NOTE: this will trigger 'magazineDragging' event on the viewer on 
-// 		each call while dragging...
-// XXX for some reason with finger count of 3 and greater, touchSwipe
-// 		dies on	android...
-function makeSwipeHandler(){
-	var pages
-	var cur
-	var n
-	var scale
-	var mag
-	var pos
-	var viewer = $('.viewer')
-
-	return function(evt, phase, direction, distance, duration, fingers){
-
-		if(phase == 'start'){
-			// NOTE: this is used with the "unanimated" trick, we will make
-			//		dragging real-time...
-			togglePageDragging('on')
-
-			// setup the data for the drag...
-			pages = $('.page')
-			cur = $('.current.page')
-			n = pages.index(cur)
-			scale = getMagazineScale()
-			mag = $('.magazine')
-			pos = $('.navigator .bar .indicator')
-
-		// XXX make this drag pages that are larger than view before dragging outside...
-		} else if(phase=='move' 
-				// see if wee need to drag the page and allways drag the ribbon...
-				&& (DRAG_FULL_PAGE || !_PAGE_VIEW)
-				&& (direction=='left' || direction=='right')){
-			if(direction == 'left'){
-				shiftMagazineTo(-cur.position().left/scale - distance/scale)
-			} else if(direction == 'right') {
-				shiftMagazineTo(-cur.position().left/scale + distance/scale)
-			}
-			viewer.trigger('magazineDragging')
-
-		} else if(phase == 'cancel'){
-			togglePageDragging('off')
-			setCurrentPage()
-
-		} else if(phase =='end' ){
-			togglePageDragging('off')
-			// see which page is closer to the middle of the screen and set it...
-			// do this based on how much we dragged...
-			var p = Math.ceil((distance/scale)/cur.width())
-
-			// prev page...
-			if(direction == 'right'){
-				// 2 fingers moves to closest article...
-				if(fingers == 2){
-					prevArticle()
-				// 3+ fingers moves to bookmark...
-				} else if(fingers >= 3){
-					prevBookmark()
-				} else {
-					setCurrentPage(Math.max(n-p, 0))
-				}
-			// next page...
-			} else if(direction == 'left'){
-				if(fingers == 2){
-					nextArticle()
-				} else if(fingers >= 3){
-					nextBookmark()
-				} else {
-					setCurrentPage(Math.min(n+p, pages.length-1))
-				}
-			}
-		}
-	}
-}
-
-
 
 /********************************************************** layout ***/
+
+// mode can be:
+// 	- viewer
+// 	- content
+//
+// XXX should this calculate offset????
+function fitPagesTo(mode, cur, time, scale){
+	mode = mode == null ? 'content' : mode
+	cur = cur == null ? centeredPageNumber() : cur
+	time = time == null ? 0 : time
+	scale = scale == null ? getMagazineScale() : scale
+
+	// fit to content...
+	if(mode == 'content'){
+		var target_width = 'auto'
+		var target_height = 'auto'
+
+	// fit to viewer...
+	} else if(mode == 'viewer'){
+		var viewer = $('.viewer')
+		var W = viewer.width()
+		var H = viewer.height()
+		// XXX is this a good way to sample content size???
+		var content = $('.content')
+		var w = content.width()
+		var h = content.height()
+
+		// need to calc width only...
+		if(W/H > w/h){
+			s = H/h
+			w = W/s
+			h = h
+
+		// need to calc height only...
+		} else if(W/H > w/h){
+			s = W/w
+			h = H/s
+			w = w
+
+		// set both width and height to defaults (content and page ratios match)...
+		} else {
+			s = W/h
+			h = h
+			w = w
+		}
+		var target_width = w
+		var target_height = h
+
+	// bad mode...
+	} else {
+		return
+	}
+
+	var pages = $('.page')
+	var offset = 0 
+
+	$(RESIZABLE_PAGES)
+		.each(function(_, e){
+			var E = $(e)
+			var w = target_width == 'auto' ? E.find('.content').width() : target_width
+			var h = target_height == 'auto' ? E.find('.content').height() : target_height
+
+			// offset...
+			if(pages.index(e) < cur){
+				offset += (E.width() - w)
+			}
+			// offset half the current page...
+			if(pages.index(e) == cur){
+				// XXX to be more accurate we can use distance from page 
+				// 		center rather than 1/2...
+				offset += ((E.width() - w)/2)
+			}
+
+			if(time <= 0){
+				e.style.width = w 
+				e.style.height = h
+			} else {
+				E.animate({
+					width: w,
+					height: h,
+				}, time, 'linear')
+			}
+		})
+
+	//$(NON_RESIZABLE_PAGES).width('auto')
+	$(NON_RESIZABLE_PAGES)
+		.each(function(_, e){
+			e.style.width = 'auto'
+		})
+
+	MagazineScroller.scrollBy(offset*scale, 0, time)
+
+	setTimeout(function(){
+		MagazineScroller.refresh()
+	}, 0)
+}
+
 
 // NOTE: if n is not given then it defaults to 1
 // NOTE: if n > 1 and fit_to_content is not given it defaults to true
 // NOTE: if n is 1 then fit_to_content bool argument controls wether:
 // 			- the page will be stretched to viewer (false)
 // 			- or to content (true)
+// XXX need to align/focus the corrent page...
+//		case:
+//			when current page is pushed off center by a resized page...
 function fitNPages(n, fit_to_content){
-	if(n == null){
-		n = 1
-	}
-	if(n > 1 && fit_to_content == null){
-		fit_to_content = true
-	}
-	var view = $('.viewer')
-	if(USE_REAL_PAGE_SIZES){
-		var page = $(RESIZABLE_PAGES)
-	} else {
-		var page = $('.page')
-	}
-	var content = $('.content')
-	var cur = $('.current.page')
-
-	var W = view.width()
-	var H = view.height()
-	var cW = content.width()
-	var cH = content.height()
-
-	// to compensate for transitions, no data sampling should be beyound
-	// this point, as we will start changing things next...
-	
+	n = n == null ? 1 : n
 	var scale = getPageTargetScale(n, fit_to_content)
-	// cache some data...
-	var target_width = scale.width
-	var target_height = scale.height
-	var rW = scale.result_width
-
-	// NOTE: we need to calculate the offset as the actual widths during 
-	// 		the animation are not correct... so just looking at .position()
-	// 		will be counterproductive...
-	if(!USE_REAL_PAGE_SIZES && fit_to_content){
-		var offset = rW * getPageNumber()-1
+	if(n == 1){
+		fitPagesTo('viewer')
 	} else {
-		// calculate the target offset...
-		if(USE_REAL_PAGE_SIZES){
-			var rpages = $(RESIZABLE_PAGES+', .current.page')
-		} else {
-			var rpages = page 
-		}
-		var i = rpages.index(cur) 
-		var offset = rW * i-1
-		// now do the no-resize elements...
-		if(USE_REAL_PAGE_SIZES){
-			var nrpages = $(NON_RESIZABLE_PAGES+', .current.page')
-			i = nrpages.index(cur) 
-			nrpages.splice(i)
-			nrpages.each(function(_, e){
-				offset += $(e).children('.content').width()
-			})
-		}
+		fitPagesTo('content')
 	}
-
-	// align the magazine...
-	if(USE_REAL_PAGE_SIZES){
-		if(!isPageResizable(cur)){
-			var align = getPageAlign(cur)
-
-			// center align if explicitly required or if we are in a ribbon...
-			if(n > 1 || align == 'center'){
-				rW = cur.children('.content').width()
-
-			// align left...
-			} else if(align == 'left'){
-				rW = $('.viewer').width()/scale
-
-			// align right...
-			} else if(align == 'right'){
-				var v = $('.viewer')
-				rW = (v.width()/scale/2 - (v.width()/scale-cur.width()))*2 
-			}
-		}
-	}
-
-	// now do the actual modification...
-
-	// do the scaling... 
-	setElementScale($('.scaler'), scale)
-
-	// XXX for some reason setting size "auto" will first shrink the whole 
-	// 		page to 0 and then instantly set it to the correct size...
-	//page
-	//	.width(target_width)
-	//	.height(target_height)
-	//if(USE_REAL_PAGE_SIZES){
-	//	$(NON_RESIZABLE_PAGES).width('auto')
-	//}
-
-	// NOTE: we only need the .scaler animated, the rest just plays havoc with
-	// 		the transition...
-	// XXX this still jumps to offset on left/right aligned pages but 1) on 
-	// 		fast transitions it is not noticable and 2) it is way better than
-	// 		the effect that was before...
-	unanimated($('.page, .content, .magazine'), function(){
-		// NOTE: this is not done directly as to avoid artifacts asociated with
-		// 		setting 'auto' to all the elements, which makes them first slowly
-		// 		shrink down to 0 and then appear correctly sized in an instant.
-		page.each(function(_, e){
-			if(target_width == 'auto'){
-				e.style.width = $(e).find('.content').width()
-				e.style.height = $(e).find('.content').height()
-			} else {
-				e.style.width = target_width
-				e.style.height = target_height
-			}
-		})
-		if(USE_REAL_PAGE_SIZES){
-			//$(NON_RESIZABLE_PAGES).width('auto')
-			$(NON_RESIZABLE_PAGES).each(function(_, e){
-				e.style.width = 'auto'
-			})
-		}
-		// fix position...
-		setCurrentPage(null, offset, rW)
-	}, 200)()
+	MagazineScroller.zoom(scale)
+	MagazineScroller.refresh()
 }
 
 
 
 /********************************************************* actions ***/
 
-// NOTE: "width" is used ONLY to center the page.
-// NOTE: if n is not given it will be set to current page number
-// NOTE: if width is not given it will be set to current page width.
-// NOTE: n can be:
-// 		- page number
-// 		- page element
-// NOTE: this will fire a 'pageChanged(n)' event on the viewer each time 
-// 		it is called...
-// NOTE: this now supports negative indexes to count pages from the end...
-function setCurrentPage(n, offset, width){
-	var page = $('.page')
-	// setup n and cur...
-	// no n is given, do the defaultdance
-	if(n == null){
-		var cur = $('.current.page')
-		// no current page...
-		// try to land on the magazine cover...
-		if(cur.length == 0){
-			cur = $('.magazine > .cover')
-		}
-		// try the first cover...
-		if(cur.length == 0){
-			cur = $('.cover.page')
-		}
-		// try first page...
-		if(cur.length == 0){
-			cur = page.first()
-		}
-		// no pages to work with...
-		if(cur.length == 0){
-			return
-		}
-		n = page.index(cur) 
+// Set the .current class...
+//
+// page can be:
+// 	- null		- centered page in view
+// 	- number	- page number/index
+// 	- page		- a page element
+// 	- elem		- resolves to a containing page element
+function setCurrent(page){
+	var pages = $('.page')
+	page = page == null ? pages.eq(centeredPageNumber()) 
+		: typeof(page) == typeof(123) ? pages.eq(Math.max(0, Math.min(page, pages.length-1)))
+		: !$(page).eq(0).hasClass('page') ? $(page).eq(0).parents('.page').eq(0)
+		: $(page).eq(0)
 
-	// n is a number...
-	} else if(typeof(n) == typeof(1)) {
-		// normalize n...
-		if(n >= page.length){
-			n = page.length-1
-		} else if(-n > page.length){
-			n = 0
-		}
-		var cur = getPageAt(n)
-	
-	// n is an element, likely...
-	} else {
-		var cur = $(n)
-		n = $('.page').index(cur) 
-		//n = page.index(cur) 
+	if(page.hasClass('current')){
+		return page
 	}
 
-	// default width...
-	if(width == null){
-		width = cur.width()
-		if(USE_REAL_PAGE_SIZES && togglePageView('?') == 'on'){
-			var align = getPageAlign(cur)
-			var scale = getMagazineScale()
-			if(align == 'center'){
-				width = cur.width()
-
-			} else if(align == 'left'){
-				width = $('.viewer').width()/scale
-
-			} else if(align == 'right'){
-				var v = $('.viewer')
-				width = (v.width()/scale/2 - (v.width()/scale-cur.width()))*2 
-			}
-		}
-	}
-
+	// set the class...
 	$('.current.page').removeClass('current')
-	cur.addClass('current')
-
-	// NOTE: this will be wrong during a transition, that's why we 
-	// 		can pass the pre-calculated offset as an argument...
-	shiftMagazineTo(-(offset == null ? 
-				cur.position()['left']/getMagazineScale() 
-				: offset))
-
-	// center the pages correctly...
-	// NOTE: this is the main reason we need width, and we can get it 
-	// 		pre-calculated because of ongoing transitions make it 
-	// 		pointless to read it...
-	$('.magazine').css({
-		'margin-left': -width/2
-	})
-
-	$('.viewer').trigger('pageChanged', n)
-	
-	return cur
+	return page.addClass('current')
 }
 
 
-function goToMagazineCover(){
-	return setCurrentPage(0)
+// Focus a page...
+//
+// NOTE: n is a setCurrent(..) compatible value...
+// NOTE: if n is out of bounds (n < 0 | n >= length) this will focus the
+// 		first/last page and bounce...
+function focusPage(n, align, time){
+	// XXX the default needs to depend on the scale...
+	align = align == null ? 'auto' : align
+	time = time == null ? SCROLL_TIME : time
+
+	var page = setCurrent(n)
+	var pages = $('.page')
+
+	align = align == 'auto' ? getPageAlign(page) : align
+
+	// magazine offset...
+	var m = page.position().left
+	// base value for 'left' align...
+	var o = 0 
+
+	var w = page.width() * getMagazineScale()
+	var W = $('.viewer').width()
+
+	if(align != 'left'){
+
+		// right...
+		if(align == 'right'){
+			o = W - w
+
+		// center / default...
+		} else {
+			o = W/2 - w/2
+		}
+	}
+
+	// compensate for first/last page align to screen (optional???)...
+	var offset = page.offset().left
+	var f = pages.first().offset().left
+	if(f + o - offset >= 0){
+		o = 0
+		m = 0
+	}
+	var last = $('.page').last()
+	var l = last.offset().left
+	if(l + o - offset <= W - w){
+		o = 0
+		m = last.position().left + last.width()*getMagazineScale() - W
+	}
+
+	// do the bounce...
+	if(time > 0){
+		var i = pages.index(page)	
+		var l = pages.length
+		if(n < 0){
+			o += BOUNCE_LENGTH*getMagazineScale()
+			time /= BOUNCE_TIME_DIVIDER
+		}
+		if(n >= l){
+			o -= BOUNCE_LENGTH*getMagazineScale()
+			time /= BOUNCE_TIME_DIVIDER
+		}
+	}
+
+	// NOTE: this does not care about the zoom...
+	MagazineScroller.scrollTo(-m + o, 0, time)
+
+	return page
 }
-function goToMagazineEnd(){
-	return setCurrentPage(-1)
+
+
+// Focus first/last page...
+//
+// NOTE: if we are already at the first/last page, do a bounce...
+function first(align){
+	// visually show that we are at the start...
+	if($('.magazine').offset().left >= 0){
+		return focusPage(-1, align)
+	}
+	return focusPage(0, align)
 }
-function goToArticleCover(){
-	// try and get the actual first cover...
-	var cover = $('.current.page')
-					.parents('.article')
-					.find('.cover.page')
-					.first()
-	if(cover.length == 0){
-		// no cover, get the first page...
-		return setCurrentPage(
-				$('.current.page')
-					.parents('.article')
-					.find('.page')
-					.first())
+function last(align){
+	var mag = $('.magazine')
+	var l = mag.offset().left
+	var end = mag.offset().left + mag.width()*getMagazineScale()
+	var i = $('.page').length-1
+
+	if(end <= $('.viewer').width()+1){
+		return focusPage(i+1, align)
+	}
+	return focusPage(i, align)
+}
+
+
+// Focus a page of class cls adjacent to current in direction...
+//
+// direction can be:
+// 	- 'next'		- next page
+// 	- 'prev'		- previous page
+//
+// If cls is not given, then all pages (.page) are considered.
+//
+// NOTE: if we are already at the first/last page and direction is 
+// 		prev/next resp. then do a bounce...
+function step(direction, cls, align){
+	cls = cls == null ? '' : cls
+
+	var page = visiblePages(true).filter('.current').eq(0)
+	var pages = $('.page')
+
+	if(page.length == 0){
+		page = setCurrent()
+	}
+
+	var i = pages.index(page)
+	var l = pages.length
+
+	// if we are at the first/last page do the bounce dance...
+	// bounce first...
+	if(i == 0 && direction == 'prev'){
+		return focusPage(-1, align)
+	}
+
+	// bounce last...
+	if(i == l-1 && direction == 'next'){
+		return focusPage(l, align)
+	}
+
+	var to = page[direction+'All']('.page'+cls)
+
+	// if we have no pages on the same level, to a deeper search...
+	if(to.length == 0){
+		if(direction == 'next'){
+			to = pages.slice(i+1).filter('.page'+cls).first()
+		} else {
+			to = pages.slice(0, i).filter('.page'+cls).last()
+		}
+	}
+
+	// still no candidates, then we can't do a thing...
+	if(to.length == 0){
+		to = page
+	}
+
+	return focusPage(to.eq(0), align)
+}
+
+
+// Focus next/prev page shorthands...
+//
+function nextPage(cls, align){ return step('next', cls, align) }
+function prevPage(cls, align){ return step('prev', cls, align) }
+
+
+// Focus next/prev cover page shorthands...
+//
+function nextCover(cls, align){ 
+	cls = cls == null ? '' : cls
+	return step('next', '.cover'+cls, align) 
+}
+function prevCover(cls, align){ 
+	cls = cls == null ? '' : cls
+	return step('prev', '.cover'+cls, align) 
+}
+
+
+// Move the view a screen width (.viewer) left/right...
+//
+// NOTE: if we are at magazine start/end and try to move left/right resp.
+// 		this will do a bounce...
+function nextScreen(time){
+	time = time == null ? SCROLL_TIME : time
+	var W = $('.viewer').width()
+	var mag = $('.magazine')
+	var o = mag.position().left
+	var w = mag.width()*getMagazineScale()
+
+	// we reached the end...
+	if(w + o < 2*W){
+		// NOTE: we use focusPage(..) to handle stuff like bounces...
+		return focusPage($('.page').length)
+	}
+
+	MagazineScroller.scrollTo(o-W, 0, time)
+	return setCurrent()
+}
+function prevScreen(time){
+	time = time == null ? SCROLL_TIME : time
+	var W = $('.viewer').width()
+	var o = $('.magazine').position().left
+
+	// we reached the start...
+	if(-o < W){
+		// NOTE: we use focusPage(..) to handle stuff like bounces...
+		return focusPage(-1)
+	}
+
+	MagazineScroller.scrollTo(o+W, 0, time)
+	return setCurrent()
+}
+
+
+// Mode-aware next/prev high-level actions...
+//
+// Supported modes:
+// 	- page view		- focus next/prev page
+// 	- magazine view	- view next/prev screen
+//
+function next(){
+	if(togglePageView('?') == 'on'){
+		return nextPage()
 	} else {
-		return setCurrentPage(cover)
+		return nextScreen()
 	}
 }
-
-
-function nextPage(){
-	var pages = $('.page')
-	var cur = $('.current.page')
-	return setCurrentPage(Math.min(pages.index(cur)+1, pages.length-1))
-}
-function prevPage(){
-	var pages = $('.page')
-	var cur = $('.current.page')
-	return setCurrentPage(Math.max(pages.index(cur)-1, 0))
-}
-
-
-function nextArticle(){
-	var cur = $('.current.page').parents('.article')
-	// we are at the magazine cover...
-	if(cur.length == 0){
-		return setCurrentPage(
-			$('.magazine .article .page:first-child').first())
+function prev(){
+	if(togglePageView('?') == 'on'){
+		return prevPage()
+	} else {
+		return prevScreen()
 	}
-	// just find the next one...
-	var articles = $('.magazine .article')
-	return setCurrentPage(
-		$(articles[Math.min(articles.index(cur)+1, articles.length-1)])
-			.find('.page')
-			.first())
-}
-function prevArticle(){
-	var cur = $('.current.page').parents('.article')
-	// we are at the magazine cover...
-	if(cur.length == 0){
-		//return $('.current.page')
-		return setCurrentPage()
-	}
-	// just find the prev one...
-	var articles = $('.magazine .article')
-	return setCurrentPage(
-		$(articles[Math.max(articles.index(cur)-1, 0)])
-			.find('.page')
-			.first())
 }
 
 
@@ -809,6 +910,7 @@ function clearBookmarks(){
 // NOTE: this will trigger the folowing events on the viewer:
 // 		- bookmarkAdded(n)
 // 		- bookmarkRemoved(n)
+// XXX rewrite...
 function toggleBookmark(n){
 	if(n == null){
 		n = getPageNumber()
@@ -841,21 +943,13 @@ function toggleBookmark(n){
 	return res
 }
 
-function nextBookmark(){
-	var pages = $('.page')
-	pages = $(pages.splice(getPageNumber()+1))
-	page = pages.children('.bookmark').first().parents('.page')
-	if(page.length != 0){
-		return setCurrentPage(page)
-	}
+function nextBookmark(cls, align){ 
+	cls = cls == null ? '' : cls
+	return step('next', '.bookmark'+cls, align) 
 }
-function prevBookmark(){
-	var pages = $('.page')
-	pages.splice(getPageNumber())
-	page = pages.children('.bookmark').last().parents('.page')
-	if(page.length != 0){
-		return setCurrentPage(page)
-	}
+function prevBookmark(cls, align){ 
+	cls = cls == null ? '' : cls
+	return step('prev', '.bookmark'+cls, align) 
 }
 
 
