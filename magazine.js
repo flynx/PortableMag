@@ -305,7 +305,7 @@ function setMagazineScale(scale){
 
 	// center-align ribbon view pages...
 	var align = togglePageView('?') == 'off' ? 'center' : null
-	var left = getMagazineOffset(cur, scale, align)
+	//var left = getMagazineOffset(cur, scale, align)
 
 	//setElementTransform(mag, left, scale)
 	MagazineScroller.zoom(scale)
@@ -510,6 +510,7 @@ function fitPagesTo(mode, cur, time, scale){
 		var viewer = $('.viewer')
 		var W = viewer.width()
 		var H = viewer.height()
+
 		// XXX is this a good way to sample content size???
 		var content = $('.content')
 		var w = content.width()
@@ -576,6 +577,7 @@ function fitPagesTo(mode, cur, time, scale){
 	$(NON_RESIZABLE_PAGES)
 		.each(function(_, e){
 			e.style.width = 'auto'
+			e.style.height = 'auto'
 		})
 
 	MagazineScroller.scrollBy(offset*scale, 0, time)
@@ -1623,6 +1625,22 @@ function createCoverPage(data){
 // NOTE: for these to be self-aplicable they must only replace the content
 // 		of the matched elements and not touch the element itself.
 var MagazineTemplates = {
+	'.image-fit': function(elem){
+		var w = $('.content').width()
+		var h = $('.content').height()
+
+		elem.each(function(_, e){
+			e = $(e)
+			e.width() == 0 ? e.width(w) : 0
+			e.height() == 0 ? e.height(h) : 0
+		})
+	},
+
+
+	// set dpi value...
+	'.dpi': function(elem){
+		elem.text(getDPI())
+	},
 
 	// setup titles...
 	'.magazine-title-text': function(elem){

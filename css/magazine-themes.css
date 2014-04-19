@@ -21,7 +21,7 @@
 }
 
 .magazine {
-	box-shadow: 10px 10px 50px 10px #444;
+	box-shadow: 10px 10px 50px 10px rgba(0,0,0,0.2);
 }
 
 
@@ -147,7 +147,7 @@
 	color: #eee;
 }
 .light-viewer .magazine {
-	box-shadow: 10px 10px 50px 10px #ddd;
+	box-shadow: 10px 10px 50px 10px rgba(0,0,0,0.2);
 }
 
 .light-viewer .top-toolbar,
@@ -228,7 +228,7 @@
 }
 
 .dark-viewer .magazine {
-	box-shadow: 10px 10px 50px 10px #000;
+	box-shadow: 10px 10px 50px 10px rgba(0,0,0,0.9);
 }
 
 .dark-viewer .magazine:before,
@@ -398,6 +398,7 @@
 	color: #e8e8e8;
 }
 
+.shadowless.viewer,
 .shadowless.viewer .magazine,
 .shadowless.viewer .top-toolbar,
 .shadowless.viewer .bottom-toolbar {

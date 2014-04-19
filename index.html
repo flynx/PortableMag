@@ -203,6 +203,24 @@ function str2ab(str) {
 */
 
 
+function loadMagazineDOM(data){
+	var data = $(data)
+	// get the .magazine element...
+	data = data.hasClass('magazine') ? data.children() : data.find('.magazine').children()
+
+	var mag = $('.magazine')
+	mag.children().remove()
+	mag.append(data)
+
+	runMagazineTemplates()
+	togglePageView(togglePageView('?'))
+	MagazineScroller.refresh()
+
+	focusPage(0, null, 0)
+
+	return mag
+}
+
 // upload...
 function handleFileSelect(evt) {
 	var files = evt.target.files; // FileList object
@@ -227,11 +245,18 @@ function handleFileSelect(evt) {
 						var zip = new JSZip(raw_data)
 						console.log('zip loaded...')
 						var json = zip.file('magazine.json').data
+						loadJSON($.parseJSON(json), true)
+
+					} else if(/html|htm/.test(type)){
+						console.log('html loaded...')
+						loadMagazineDOM(raw_data)
+
 					} else {
 						var json = raw_data
+						loadJSON($.parseJSON(json), true)
 					}
 
-					loadJSON($.parseJSON(json), true)
+
 					console.log('done.')
 				};
 		})(f);
@@ -239,12 +264,16 @@ function handleFileSelect(evt) {
 		// Read in the image file as a data URL.
 		if(type == 'zip'){
 			reader.readAsArrayBuffer(f)
+
+		} else if(/html|htm/.test(type)){
+			reader.readAsText(f)
+
 		} else {
 			reader.readAsBinaryString(f)
 		}
-		//reader.readAsText(f)
 	}
 }
+
 
 // XXX these stubs override the magazine API and use iScroll...
 
@@ -541,8 +570,6 @@ $(function(){
 
 
 	//setupEditor()
-
-	$('.dpi').text(getDPI())
 
 	// hide the splash...
 	setTimeout(function(){

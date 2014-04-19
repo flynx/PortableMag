@@ -57,7 +57,7 @@ var KEYBOARD_CONFIG = {
 				} else {
 					setMagazineScale(getPageTargetScale(PAGES_IN_RIBBON))
 				}
-				setCurrentPage(n)
+				focusPage(n)
 			},
 		Esc: '0',
 
@@ -66,14 +66,14 @@ var KEYBOARD_CONFIG = {
 				setMagazineScale(Math.min(
 						getMagazineScale() * 1.2, 
 						getPageTargetScale(1)))
-				setCurrentPage(n)
+				focusPage(n)
 			},
 		'-': function(){
 				var n = getPageNumber()
 				setMagazineScale(Math.max(
 						getMagazineScale() * 0.8, 
 						getPageTargetScale(PAGES_IN_RIBBON*2)))
-				setCurrentPage(n)
+				focusPage(n)
 			},
 
 		'O': {
