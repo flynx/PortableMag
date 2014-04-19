@@ -592,6 +592,10 @@ div.page-number-text {
 	bottom: 0px;
 	left: 0px;
 
+	text-align: left;
+	overflow: visible;
+	white-space: normal;
+
 	box-sizing: border-box;
 	-moz-box-sizing:border-box;
 	-webkit-box-sizing:border-box;

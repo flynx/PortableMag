@@ -366,14 +366,20 @@ $(function(){
 
 	window.MULTI_FINGER_RELEASE_TIMEOUT = 50
 
-	$('.viewer')
+	$('.magazine')
 		.on('tap', function(){
-			// XXX for some reason this does not focus the page clicked 
-			//		if it's not the current and we are in page view...
-			focusPage(event.target, togglePageView('?') == 'on' ? 'auto' : 'center')
+			var target = $(event.target)
 
-			handleCaption(event.target)
+			// trigger this ONLY if no page change has happened...
+			if(target.hasClass('current') || target.parents('.current.page').length != 0){
+				handleCaption(target)
+			}
+
+			// focus the page...
+			focusPage(target, togglePageView('?') == 'on' ? 'auto' : 'center')
 		})
+
+	$('.viewer')
 		.on('touchstart', function(){
 			// This is here to recover from touching a finger after 
 			// lifting it before the timeout...
@@ -452,13 +458,6 @@ $(function(){
 		})
 	*/
 
-	window.MagazineScroller
-		.on('scrollCancel', function(){
-			if(togglePageView('?') == 'on'){
-				focusPage(setCurrent(centeredPage()))
-			}
-		})
-
 	// XXX is this needed???
 	window.MagazineScroller
 		.on('scrollEnd', function(){
@@ -499,12 +498,12 @@ $(function(){
 			'left': 0,
 		})
 
+	/*
 	$('.viewer')
 		.on('mouseup tapup', function(){
 			//MagazineScroller.scrollToElement(getVisiblePage()[0], 300, true, true)
 		})
 
-		/*
 		.on('scrollCancelled', function(){ setCurrentPage() })
 		.on('shortClick', handleCaption)
 		.on('shortClick', handleClick)
@@ -513,10 +512,10 @@ $(function(){
 		.on('swipeRight', handleSwipeRight)
 		.on('swipeUp swipeDown', function(){ togglePageView('off') })
 		.on('screenReleased', handleScrollRelease)
-		*/
 
 		.on('pageChanged', updatePageNumberIndicator)
 		.on('magazineDataLoaded', loadMagazineChrome)
+	*/
 
 	$('.settings.button')
 		.click(function(){
@@ -552,6 +551,7 @@ $(function(){
 
 		$('.splash').fadeOut()
 	}, 350)
+
 	// remove the spinner...
 	setTimeout(function(){
 		$('#spinner').spin(false)
@@ -1180,6 +1180,7 @@ $(function(){
 
 </div>
 <!-- Magazine Viewer (end) ------------------------------------------>
+
 
 </div>
 <!-- Magazine Chrome (end) -->
