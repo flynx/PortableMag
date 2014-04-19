@@ -1631,14 +1631,20 @@ var MagazineTemplates = {
 	},
 	*/
 
-	'.image-fit': function(elem){
+	// XXX not sure if this is correct... 
+	// 		does .image-fit mean fitting to page, viewer or image???
+	'.image-fit .content': function(elem){
 		var w = $('.content').width()
 		var h = $('.content').height()
 
 		elem.each(function(_, e){
 			e = $(e)
-			e.width() == 0 ? e.width(w) : 0
-			e.height() == 0 ? e.height(h) : 0
+			if(e.width() == 0){
+				e.css({ 'width': w })
+			}
+			if(e.height() == 0){
+				e.css({ 'height': h })
+			}
 		})
 	},
 
