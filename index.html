@@ -569,21 +569,26 @@ $(function(){
 	//toggleThemes('none')
 
 
-	//setupEditor()
+	$.get('fashion.html')
+		.done(function(data){
+			loadMagazineDOM(data)
+			//setupEditor()
+		})
+		.always(function(){
+			// hide the splash...
+			setTimeout(function(){
 
-	// hide the splash...
-	setTimeout(function(){
+				focusPage(0, null, 0)
 
-		focusPage(0, null, 0)
+				$('.splash').fadeOut()
+			}, 350)
 
-		$('.splash').fadeOut()
-	}, 350)
-
-	// remove the spinner...
-	setTimeout(function(){
-		$('#spinner').spin(false)
-		MagazineScroller.refresh()
-	}, 500)
+			// remove the spinner...
+			setTimeout(function(){
+				$('#spinner').spin(false)
+				MagazineScroller.refresh()
+			}, 500)
+		})
 
 })
 
