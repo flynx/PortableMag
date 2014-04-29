@@ -401,7 +401,8 @@ $(function(){
 
 	window.MULTI_FINGER_RELEASE_TIMEOUT = 50
 
-	var hammertime = Hammer($('.magazine')[0], {
+	//var hammertime = Hammer($('.magazine')[0], {
+	var hammertime = Hammer($('.viewer')[0], {
 		tapAlways: false,
 	})
 
@@ -431,7 +432,6 @@ $(function(){
 				// trigger this ONLY if no page change has happened...
 				if(target.hasClass('current') || target.parents('.current.page').length != 0){
 					handleCaption(target)
-
 				} 
 
 				// focus the page...
@@ -443,7 +443,8 @@ $(function(){
 	
 
 	$('.viewer')
-		.on('touchstart', function(){
+		//.on('touchstart', function(){
+		.on('touch', function(){
 			// This is here to recover from touching a finger after 
 			// lifting it before the timeout...
 			if(event.touches.length > 2){
@@ -453,7 +454,26 @@ $(function(){
 				delete window._SECOND_FINGER_LIFTED
 			}
 		})
-		.on('mouseup touchend', function(){
+		.on('swipeleft', function(){
+			if(event.touches != null){
+				if(event.touches.length == 2){
+					setTimeout(prevCover, 0)
+				} else if(event.touches.length == 3){
+					setTimeout(first, 0)
+				}
+			}
+		})
+		.on('swiperight', function(){
+			if(event.touches != null){
+				if(event.touches.length == 2){
+					setTimeout(nextCover, 0)
+				} else if(event.touches.length == 3){
+					setTimeout(last, 0)
+				}
+			}
+		})
+		//.on('mouseup touchend', function(){
+		.on('release', function(){
 			var now = Date.now()
 
 			// handle the touchend only if ALL fingers are lifted...
