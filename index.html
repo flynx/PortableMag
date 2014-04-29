@@ -93,6 +93,8 @@
 <script src="ext-lib/iscroll.js"></script>
 <script src="ext-lib/iscroll-zoom.js"></script>
 
+<script src="ext-lib/hammer.min.js"></script>
+
 <script src="lib/jli.js"></script>
 <script src="lib/scroller.js"></script>
 <script src="lib/keyboard.js"></script>
@@ -378,7 +380,8 @@ $(function(){
 		.keydown(makeKeyboardHandler(KEYBOARD_CONFIG))
 
 	window.MagazineScroller = new IScroll('.viewer', {
-		tap: true,
+		//tap: true,
+		tap: false,
 
 		scrollX: true,
 		scrollY: false,
@@ -398,18 +401,46 @@ $(function(){
 
 	window.MULTI_FINGER_RELEASE_TIMEOUT = 50
 
+	var hammertime = Hammer($('.magazine')[0], {
+		tapAlways: false,
+	})
+
 	$('.magazine')
+		.on('hold', function(){
+			var target = $(event.target)
+			setTimeout(function(){
+				if(!target.hasClass('current') && target.parents('.current.page').length == 0){
+					focusPage(target)
+				}
+				togglePageView()
+			}, 0)
+		})
+		// XXX not working correctly yet...
+		/*
+		.on('doubletap', function(){
+			setTimeout(function(){
+				if(togglePageView('?') != 'on'){
+					togglePageView('on')
+				}
+			}, 0)
+		})
+		*/
 		.on('tap', function(){
 			var target = $(event.target)
+			setTimeout(function(){
+				// trigger this ONLY if no page change has happened...
+				if(target.hasClass('current') || target.parents('.current.page').length != 0){
+					handleCaption(target)
 
-			// trigger this ONLY if no page change has happened...
-			if(target.hasClass('current') || target.parents('.current.page').length != 0){
-				handleCaption(target)
-			}
+				} 
 
-			// focus the page...
-			focusPage(target, togglePageView('?') == 'on' ? 'auto' : 'center')
+				// focus the page...
+				focusPage(target, togglePageView('?') == 'on' ? 'auto' : 'center')
+			}, 0)
 		})
+
+
+	
 
 	$('.viewer')
 		.on('touchstart', function(){
