@@ -379,6 +379,10 @@ $(function(){
 	$(document)
 		.keydown(makeKeyboardHandler(KEYBOARD_CONFIG))
 
+	window.MagazineTouch = Hammer($('.viewer')[0], {
+		tapAlways: false,
+	})
+
 	window.MagazineScroller = new IScroll('.viewer', {
 		//tap: true,
 		tap: false,
@@ -401,10 +405,6 @@ $(function(){
 
 	window.MULTI_FINGER_RELEASE_TIMEOUT = 50
 
-	//var hammertime = Hammer($('.magazine')[0], {
-	var hammertime = Hammer($('.viewer')[0], {
-		tapAlways: false,
-	})
 
 	$('.magazine')
 		.on('hold', function(){
